@@ -1,2 +1,4 @@
-# MastersThesis
-type.js - a wysiwyg editing framework
+# Type JS
+a wysiwyg editing framework
+
+Master's thesis by Lukas Bombach
