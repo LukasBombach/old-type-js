@@ -9,7 +9,6 @@ var Range = require('./range');
  * @constructor
  */
 var Cmd = function() {
-  console.log('Test in Cmd');
 };
 
 (function() {
@@ -18,7 +17,7 @@ var Cmd = function() {
    * Wraps the current selection with <strong> tags
    */
   this.bold = function() {
-
+    console.log('Bold');
   }
 
 }).call(Cmd.prototype);

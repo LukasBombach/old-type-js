@@ -12,6 +12,7 @@ var cmd = new Cmd();
  */
 var Type = function() {
   console.log('HELLO');
+  cmd.bold();
 };
 
 
