@@ -1,31 +1,40 @@
 'use strict';
 
-/**
- * Required libs
- */
+// Todo https://blog.engineyard.com/2015/client-side-javascript-project-gulp-and-browserify
+
+// Gulp Dependencies
 var gulp       = require('gulp');
 var gutil      = require('gulp-util');
+
+// Build Dependencies
 var sourcemaps = require('gulp-sourcemaps');
 var source     = require('vinyl-source-stream');
-var streamify  = require('gulp-streamify')
+var streamify  = require('gulp-streamify');
 var buffer     = require('vinyl-buffer');
 var watchify   = require('watchify');
 var browserify = require('browserify');
 var livereload = require('gulp-livereload');
 var uglify     = require('gulp-uglify');
-var notify     = require('gulp-notify');
+
+// Development Dependencies
 var jscs       = require('gulp-jscs');
 var jshint     = require('gulp-jshint');
+var notify     = require('gulp-notify');
+
+// Test Dependencies
+var mochaPhantomjs = require('gulp-mocha-phantomjs');
 
 /**
  * Variables to reuse
  */
-var srcFolder = './src';
-var srcFiles  = srcFolder+'/*.js';
-var fileName  = 'type.js';
-var minName   = 'type.min.js';
-var dist      = './dist';
-var bundler   = watchify(browserify('./src/type.js', watchify.args));
+var srcFolder  = './src';
+var srcFiles   = srcFolder+'/*.js';
+var testFolder = './test';
+var testFiles  = testFolder+'/*.js';
+var fileName   = 'type.js';
+var minName    = 'type.min.js';
+var dist       = './dist';
+var bundler    = watchify(browserify('./src/type.js', watchify.args));
 
 bundler.transform('brfs');
 
@@ -33,7 +42,7 @@ bundler.transform('brfs');
  * Will bundle the final type.js file
  */
 function bundle() {
-  bundler.bundle()
+  return bundler.bundle()
     .on('error', gutil.log.bind(gutil, 'Browserify Error'))
     .pipe(source(fileName))
     .pipe(buffer())
@@ -46,7 +55,7 @@ function bundle() {
  * Will bundle the minified type.js file
  */
 function bundleMin() {
-  bundler.bundle()
+  return bundler.bundle()
     .on('error', gutil.log.bind(gutil, 'Browserify Error'))
     .pipe(source(minName))
     .pipe(streamify(uglify()))
@@ -63,7 +72,7 @@ function bundleAtom() {
  * Will bundle type quickly using watchify and sets up live reload
  */
 function bundleDev() {
-  bundler.bundle()
+  return bundler.bundle()
     .on('error', gutil.log.bind(gutil, 'Browserify Error'))
     .pipe(source(fileName))
     .pipe(buffer())
@@ -74,10 +83,19 @@ function bundleDev() {
 }
 
 /**
+ * Will run mocha tests
+ */
+function mocha() {
+  return gulp.src('./test/index.html', {read: false})
+    .pipe(mochaPhantomjs());
+    //.pipe(mocha({reporter: 'nyan'}));
+}
+
+/**
  * Will run jshintrc
  */
 function lint() {
-  gulp.src(srcFiles)
+  return gulp.src(srcFiles)
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('jshint-stylish'))
     .pipe(jshint.reporter('fail'));
@@ -87,7 +105,7 @@ function lint() {
  * Will check the code style using jscs
  */
 function checkJscs() {
-  gulp.src(srcFiles)
+  return gulp.src(srcFiles)
     .pipe(jscs());
 }
 
@@ -96,7 +114,7 @@ function checkJscs() {
  * tests have run successfully
  */
 function notifyTest() {
-  gulp.src('/')
+  return gulp.src('/')
     .pipe(notify({
       title: 'Tests',
       message: 'Tests successful'
@@ -114,6 +132,7 @@ bundler.on('update', bundleDev);
 gulp.task('bundle', bundle);
 gulp.task('minify', bundleMin);
 gulp.task('atom', bundleAtom);
+gulp.task('mocha', mocha);
 gulp.task('lint', lint);
 gulp.task('jscs', checkJscs);
 
@@ -121,6 +140,8 @@ gulp.task('jscs', checkJscs);
  * Gulp Tasks for usage in the console
  */
 gulp.task('dev', bundleDev);
-gulp.task('test', ['lint', 'jscs'], notifyTest);
+gulp.task('test', ['mocha', 'lint', 'jscs'], notifyTest);
 gulp.task('build', ['bundle', 'minify', 'atom']);
 gulp.task('default', ['build']);
+
+// Todo https://blog.engineyard.com/2015/client-side-javascript-project-gulp-and-browserify
