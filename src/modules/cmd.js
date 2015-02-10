@@ -17,7 +17,7 @@ var Cmd = function() {
    * Wraps the current selection with <strong> tags
    */
   this.bold = function() {
-    console.log('Bold');
+    console.log('Really Strong');
   }
 
 }).call(Cmd.prototype);

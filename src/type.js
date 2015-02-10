@@ -11,7 +11,7 @@ var cmd = new Cmd();
  * @constructor
  */
 var Type = function() {
-  console.log('HELLO');
+  console.log('HELLO!');
   cmd.bold();
 };
 

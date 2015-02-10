@@ -132,7 +132,7 @@ gulp.task('watch', function() {
 
 // Dev
 
-gulp.task('dev', function() {
+function bundleDev() {
   return sourceBundler.bundle()
     .on('error', gutil.log.bind(gutil, 'Browserify Error'))
     .pipe(source(distFile))
@@ -141,7 +141,10 @@ gulp.task('dev', function() {
     .pipe(sourceMaps.write('./'))
     .pipe(gulp.dest(distFolder))
     .pipe(liveReload({start: true}));
-});
+}
+gulp.task('dev', bundleDev);
+sourceBundler.on('update', bundleDev);
+
 
 
 // High level tasks
