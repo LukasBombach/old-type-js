@@ -118,7 +118,7 @@ gulp.task('uglify', ['browserify-source'], function() {
 
 // Test
 
-gulp.task('test', ['lint-test', 'browserify-test'], function() {
+gulp.task('test', ['browserify-test'], function() {
   return gulp
     .src('test/index.html')
     .pipe(mochaPhantomJs()); //.pipe(mochaPhantomJs({reporter:'nyan'}));
