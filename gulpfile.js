@@ -125,8 +125,7 @@ gulp.task('test', ['browserify-test'], function() {
 });
 
 gulp.task('watch', function() {
-  gulp.watch('src/**/*.js', ['browserify-source', 'test']);
-  gulp.watch('test/**/*.js', ['test']);
+  gulp.watch(allTestFiles, ['test']);
 });
 
 
