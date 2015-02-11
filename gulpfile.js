@@ -99,7 +99,7 @@ gulp.task('lint-test', function() {
 
 // Browserify
 
-gulp.task('browserify-source', ['jscs-source', 'lint-source'], function() {
+gulp.task('browserify-source', [/*'jscs-source', */'lint-source'], function() {
   return sourceBundler.bundle()
     .on('error', gutil.log.bind(gutil, 'Browserify Error'))
     .pipe(source(distFile))
@@ -109,7 +109,7 @@ gulp.task('browserify-source', ['jscs-source', 'lint-source'], function() {
     .pipe(gulp.dest(distFolder));
 });
 
-gulp.task('browserify-test', ['jscs-test', 'lint-test'], function() {
+gulp.task('browserify-test', [/*'jscs-test', */'lint-test'], function() {
   return testBundler.bundle()
     .on('error', gutil.log.bind(gutil, 'Browserify Error'))
     .pipe(source(testFile))
@@ -161,4 +161,4 @@ sourceBundler.on('update', bundleDev);
 // High level tasks
 
 gulp.task('build', ['uglify']);
-gulp.task('default', ['test', 'build', 'watch']);
+gulp.task('default', ['test', 'build']);
