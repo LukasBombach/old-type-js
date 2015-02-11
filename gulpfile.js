@@ -22,7 +22,9 @@ var buffer     = require('vinyl-buffer');
 var liveReload = require('gulp-livereload');
 
 // Development Dependencies
+var jscs       = require('gulp-jscs');
 var jshint     = require('gulp-jshint');
+var notify     = require('gulp-notify');
 
 // Test Dependencies
 var mochaPhantomJs = require('gulp-mocha-phantomjs');
@@ -63,7 +65,17 @@ var testBundler = watchify(browserify('./test/type.js', watchify.args));
 testBundler.transform('brfs');
 
 
-// Todo jscs
+// Code style
+
+gulp.task('jscs-source', function() {
+  return gulp.src(allSrcFiles)
+    .pipe(jscs());
+});
+
+gulp.task('jscs-test', function() {
+  return gulp.src(allTestFiles)
+    .pipe(jscs());
+});
 
 
 // Lint
@@ -87,7 +99,7 @@ gulp.task('lint-test', function() {
 
 // Browserify
 
-gulp.task('browserify-source', ['lint-source'], function() {
+gulp.task('browserify-source', ['jscs-source', 'lint-source'], function() {
   return sourceBundler.bundle()
     .on('error', gutil.log.bind(gutil, 'Browserify Error'))
     .pipe(source(distFile))
@@ -97,7 +109,7 @@ gulp.task('browserify-source', ['lint-source'], function() {
     .pipe(gulp.dest(distFolder));
 });
 
-gulp.task('browserify-test', ['lint-test'], function() {
+gulp.task('browserify-test', ['jscs-test', 'lint-test'], function() {
   return testBundler.bundle()
     .on('error', gutil.log.bind(gutil, 'Browserify Error'))
     .pipe(source(testFile))
@@ -124,7 +136,7 @@ gulp.task('test', ['browserify-test'], function() {
     .pipe(mochaPhantomJs()); //.pipe(mochaPhantomJs({reporter:'nyan'}));
 });
 
-gulp.task('watch', function() {
+gulp.task('watch-test', function() {
   gulp.watch(allTestFiles, ['test']);
 });
 
