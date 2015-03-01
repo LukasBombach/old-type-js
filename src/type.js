@@ -1,19 +1,11 @@
 'use strict';
 
-var Cmd = require('./modules/cmd.js');
+define([
+  './modules/core',
+  './modules/range',
+  './modules/cmd'
+], function( Type ) {
 
-var cmd = new Cmd();
+  return (window.Type = Type);
 
-/**
- * The main class required to set up a Type instance in the browser.
- *
- * @class Type
- * @constructor
- */
-var Type = function() {
-  console.log('HELLO!');
-  cmd.bold();
-};
-
-
-global.Type = Type;
+});

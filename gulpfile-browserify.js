@@ -15,10 +15,11 @@ var sourceMaps = require('gulp-sourcemaps');
 var source     = require('vinyl-source-stream');
 
 // Build Dependencies
+var browserify = require('browserify');
+var watchify   = require('watchify');
 var uglify     = require('gulp-uglify');
 var buffer     = require('vinyl-buffer');
 var liveReload = require('gulp-livereload');
-var amdclean   = require('gulp-amdclean');
 
 // Development Dependencies
 var jscs       = require('gulp-jscs');
@@ -51,6 +52,14 @@ var distMin      = 'type.min.js';
  * Tasks
  *
  ********************/
+
+// Bundlers
+
+var sourceBundler = watchify(browserify('./src/type.js', watchify.args));
+sourceBundler.transform('brfs');
+
+var testBundler = watchify(browserify('./test/type.js', watchify.args));
+testBundler.transform('brfs');
 
 
 // Code style

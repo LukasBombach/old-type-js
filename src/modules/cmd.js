@@ -1,26 +1,13 @@
-"use strict";
+'use strict';
 
-var Range = require('./range');
+define([
+  './core'
+], function( Type ) {
 
-/**
- * Class to handle commands for text formatting.
- *
- * @class Cmd
- * @constructor
- */
-var Cmd = function() {
-};
+  Type.fn.cmd = function() {
+    console.log('Just testing');
+  };
 
-(function() {
+  return Type;
 
-  /**
-   * Wraps the current selection with <strong> tags
-   */
-  this.bold = function() {
-    console.log('Really Strong');
-  }
-
-}).call(Cmd.prototype);
-
-
-module.exports = Cmd;
+});
