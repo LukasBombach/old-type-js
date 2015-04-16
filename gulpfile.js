@@ -1,4 +1,3 @@
-
 'use strict';
 
 /********************
@@ -7,26 +6,31 @@
  *
  ********************/
 
+var gulp, rename, gutil, sourceMaps, source,
+  uglify, buffer, liveReload, amdclean,
+  jscs, jshint, notify;
+
+
 // Gulp Dependencies
-var gulp       = require('gulp');
-var rename     = require('gulp-rename');
-var gutil      = require('gulp-util');
-var sourceMaps = require('gulp-sourcemaps');
-var source     = require('vinyl-source-stream');
+gulp = require("gulp");
+rename = require("gulp-rename");
+gutil = require("gulp-util");
+sourceMaps = require("gulp-sourcemaps");
+source = require("vinyl-source-stream");
 
 // Build Dependencies
-var uglify     = require('gulp-uglify');
-var buffer     = require('vinyl-buffer');
-var liveReload = require('gulp-livereload');
-var amdclean   = require('gulp-amdclean');
+uglify     = require("gulp-uglify");
+buffer     = require("vinyl-buffer");
+liveReload = require("gulp-livereload");
+amdclean   = require("gulp-amdclean");
 
 // Development Dependencies
-var jscs       = require('gulp-jscs');
-var jshint     = require('gulp-jshint');
-var notify     = require('gulp-notify');
+jscs       = require("gulp-jscs");
+jshint     = require("gulp-jshint");
+notify     = require("gulp-notify");
 
 // Test Dependencies
-var mochaPhantomJs = require('gulp-mocha-phantomjs');
+var mochaPhantomJs = require("gulp-mocha-phantomjs");
 
 
 
@@ -36,13 +40,13 @@ var mochaPhantomJs = require('gulp-mocha-phantomjs');
  *
  ********************/
 
-var allSrcFiles  = './src/*.js';
-var allTestFiles = ['./test/*.js', '!./test/index.js'];
-var testFolder   = './test/';
-var distFolder   = './dist/';
-var testFile     = 'index.js';
-var distFile     = 'type.js';
-var distMin      = 'type.min.js';
+var allSrcFiles  = "./src/*.js";
+var allTestFiles = ["./test/*.js", "!./test/index.js"];
+var testFolder   = "./test/";
+var distFolder   = "./dist/";
+var testFile     = "index.js";
+var distFile     = "type.js";
+var distMin      = "type.min.js";
 
 
 
@@ -55,12 +59,12 @@ var distMin      = 'type.min.js';
 
 // Code style
 
-gulp.task('jscs-source', function() {
+gulp.task("jscs-source", function () {
   return gulp.src(allSrcFiles)
     .pipe(jscs());
 });
 
-gulp.task('jscs-test', function() {
+gulp.task("jscs-test", function () {
   return gulp.src(allTestFiles)
     .pipe(jscs());
 });
@@ -68,38 +72,38 @@ gulp.task('jscs-test', function() {
 
 // Lint
 
-gulp.task('lint-source', function() {
+gulp.task("lint-source", function () {
   return gulp
     .src(allSrcFiles)
-    .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter('jshint-stylish'))
-    .pipe(jshint.reporter('fail'));
+    .pipe(jshint(".jshintrc"))
+    .pipe(jshint.reporter("jshint-stylish"))
+    .pipe(jshint.reporter("fail"));
 });
 
-gulp.task('lint-test', function() {
+gulp.task("lint-test", function () {
   return gulp
     .src(allTestFiles)
-    .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter('jshint-stylish'))
-    .pipe(jshint.reporter('fail'));
+    .pipe(jshint(".jshintrc"))
+    .pipe(jshint.reporter("jshint-stylish"))
+    .pipe(jshint.reporter("fail"));
 });
 
 
 // Browserify
 
-gulp.task('browserify-source', [/*'jscs-source', */'lint-source'], function() {
+gulp.task("browserify-source", [/*"jscs-source", */"lint-source"], function () {
   return sourceBundler.bundle()
-    .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+    .on("error", gutil.log.bind(gutil, "Browserify Error"))
     .pipe(source(distFile))
     .pipe(buffer())
     .pipe(sourceMaps.init({loadMaps: true}))
-    .pipe(sourceMaps.write('./'))
+    .pipe(sourceMaps.write("./"))
     .pipe(gulp.dest(distFolder));
 });
 
-gulp.task('browserify-test', [/*'jscs-test', */'lint-test'], function() {
+gulp.task("browserify-test", [/*"jscs-test", */"lint-test"], function () {
   return testBundler.bundle()
-    .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+    .on("error", gutil.log.bind(gutil, "Browserify Error"))
     .pipe(source(testFile))
     .pipe(gulp.dest(testFolder));
 });
@@ -107,9 +111,9 @@ gulp.task('browserify-test', [/*'jscs-test', */'lint-test'], function() {
 
 // Build
 
-gulp.task('uglify', ['browserify-source'], function() {
+gulp.task("uglify", ["browserify-source"], function () {
    return gulp
-     .src(distFolder+distFile)
+     .src(distFolder + distFile)
     .pipe(uglify())
     .pipe(rename(distMin))
     .pipe(gulp.dest(distFolder));
@@ -118,14 +122,14 @@ gulp.task('uglify', ['browserify-source'], function() {
 
 // Test
 
-gulp.task('test', ['browserify-test'], function() {
+gulp.task("test", ["browserify-test"], function () {
   return gulp
-    .src('test/index.html')
-    .pipe(mochaPhantomJs()); //.pipe(mochaPhantomJs({reporter:'nyan'}));
+    .src("test/index.html")
+    .pipe(mochaPhantomJs()); //.pipe(mochaPhantomJs({reporter:"nyan"}));
 });
 
-gulp.task('watch-test', function() {
-  gulp.watch(allTestFiles, ['test']);
+gulp.task("watch-test", function () {
+  gulp.watch(allTestFiles, ["test"]);
 });
 
 
@@ -133,20 +137,20 @@ gulp.task('watch-test', function() {
 
 function bundleDev() {
   return sourceBundler.bundle()
-    .on('error', gutil.log.bind(gutil, 'Browserify Error'))
+    .on("error", gutil.log.bind(gutil, "Browserify Error"))
     .pipe(source(distFile))
     .pipe(buffer())
     .pipe(sourceMaps.init({loadMaps: true}))
-    .pipe(sourceMaps.write('./'))
+    .pipe(sourceMaps.write("./"))
     .pipe(gulp.dest(distFolder))
     .pipe(liveReload({start: true}));
 }
-gulp.task('dev', bundleDev);
-sourceBundler.on('update', bundleDev);
+gulp.task("dev", bundleDev);
+sourceBundler.on("update", bundleDev);
 
 
 
 // High level tasks
 
-gulp.task('build', ['uglify']);
-gulp.task('default', ['test', 'build']);
+gulp.task("build", ["uglify"]);
+gulp.task("default", ["test", "build"]);
