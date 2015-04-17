@@ -1,11 +1,7 @@
 'use strict';
 
-define([
-  './modules/core',
-  './modules/range',
-  './modules/cmd'
-], function( Type ) {
+var Type = require('./modules/core');
+//var range = require('./modules/range');
+//var cmd = require('./modules/cmd');
 
-  return (window.Type = Type);
-
-});
+window.Type = Type;

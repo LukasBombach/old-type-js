@@ -6,9 +6,6 @@
  *
  ********************/
 
-
-var fs = require('fs');
-
 // Gulp Dependencies
 var gulp = require("gulp");
 var rename = require("gulp-rename");
@@ -20,11 +17,7 @@ var source = require("vinyl-source-stream");
 var uglify     = require("gulp-uglify");
 var buffer     = require("vinyl-buffer");
 var liveReload = require("gulp-livereload");
-//var amdclean   = require("gulp-amdclean");
-//var rjs      = require("gulp-requirejs");
-var amdclean   = require('amdclean');
-var rjs        = require('requirejs');
-
+var amdclean   = require("gulp-amdclean");
 
 // Development Dependencies
 var jscs       = require("gulp-jscs");
@@ -56,14 +49,12 @@ var distMin      = "type.min.js";
 
 // Code style
 gulp.task("jscs-source", function () {
-  return gulp
-    .src(allSrcFiles)
+  return gulp.src(allSrcFiles)
     .pipe(jscs());
 });
 
 gulp.task("jscs-test", function () {
-  return gulp
-    .src(allTestFiles)
+  return gulp.src(allTestFiles)
     .pipe(jscs());
 });
 
@@ -84,69 +75,69 @@ gulp.task("lint-test", function () {
     .pipe(jshint.reporter("fail"));
 });
 
+
+// Browserify
+
+gulp.task("browserify-source", [/*"jscs-source", */"lint-source"], function () {
+  return sourceBundler.bundle()
+    .on("error", gutil.log.bind(gutil, "Browserify Error"))
+    .pipe(source(distFile))
+    .pipe(buffer())
+    .pipe(sourceMaps.init({loadMaps: true}))
+    .pipe(sourceMaps.write("./"))
+    .pipe(gulp.dest(distFolder));
+});
+
+gulp.task("browserify-test", [/*"jscs-test", */"lint-test"], function () {
+  return testBundler.bundle()
+    .on("error", gutil.log.bind(gutil, "Browserify Error"))
+    .pipe(source(distTestFile))
+    .pipe(gulp.dest(testFolder));
+});
+
+
 // Build
 
-gulp.task('concat', function (cb) {
-  var outputFile = 'dist/type2.js',
-    rjsOptions = {
-      //'findNestedDependencies': true,
-      'baseUrl': './src/',
-      'preserveLicenseComments': false,
-      'optimize': 'none',
-      'skipModuleInsertion': true,
-      'include': ['type'],
-      'out': outputFile,
-      'cjsTranslate': true
-    };
-
-  rjs.optimize(rjsOptions, function() {
-    var amdcleanOptions = {
-      'filePath': outputFile
-    };
-
-    fs.writeFileSync(outputFile, amdclean.clean(amdcleanOptions));
-    cb(); // finished task
-  }, function(err) {
-    return cb(err); // return error
-  });
-});
-
-gulp.task("build", function () {
-  console.log('rjs-ing');
-
-  return rjs({
-    baseUrl: './src/',
-    include: './src/',
-    name: 'type',
-    out: 'type-rjs.js',
-    cjsTranslate: true
-  }).pipe(gulp.dest(distFolder));
-
-
-  //return gulp
-  //  .src(['./src/type.js'])
-  //  //.pipe(source(distFile))
-  //  .pipe(amdclean.gulp({
-  //    'prefixMode': 'standard'
-  //  }))
-  //  .pipe(gulp.dest(distFolder));
-});
-
-gulp.task("uglify", ["build"], function () {
-  return gulp
-    .src(distFolder + distFile)
+gulp.task("uglify", ["browserify-source"], function () {
+   return gulp
+     .src(distFolder + distFile)
     .pipe(uglify())
     .pipe(rename(distMin))
     .pipe(gulp.dest(distFolder));
 });
 
+
 // Test
 
+gulp.task("test", ["browserify-test"], function () {
+  return gulp
+    .src("test/index.html")
+    .pipe(mochaPhantomJs()); //.pipe(mochaPhantomJs({reporter:"nyan"}));
+});
+
+gulp.task("watch-test", function () {
+  gulp.watch(allTestFiles, ["test"]);
+});
+
+
 // Dev
+
+function bundleDev() {
+  return sourceBundler.bundle()
+    .on("error", gutil.log.bind(gutil, "Browserify Error"))
+    .pipe(source(distFile))
+    .pipe(buffer())
+    .pipe(sourceMaps.init({loadMaps: true}))
+    .pipe(sourceMaps.write("./"))
+    .pipe(gulp.dest(distFolder))
+    .pipe(liveReload({start: true}));
+}
+gulp.task("dev", bundleDev);
+sourceBundler.on("update", bundleDev);
 
 
 
 // High level tasks
 
-//gulp.task("build", ["uglify"]);
+gulp.task("build", ["uglify"]);
 gulp.task("default", ["test", "build"]);

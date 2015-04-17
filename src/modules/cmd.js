@@ -1,13 +1,7 @@
 'use strict';
 
-define([
-  './core'
-], function( Type ) {
+var Type = require('./core');
 
-  Type.fn.cmd = function() {
-    console.log('Just testing');
-  };
-
-  return Type;
-
-});
+Type.fn.cmd = function () {
+  console.log('Just testing');
+};
