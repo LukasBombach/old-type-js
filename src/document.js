@@ -1,3 +1,13 @@
+'use strict';
+
 /**
- * Created by luke on 18/04/15.
+ * Holds the contents of the editor
+ *
+ * @class Document
+ * @constructor
  */
+var Document = function () {
+
+};
+
+module.exports = Document;
