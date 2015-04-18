@@ -33,9 +33,10 @@ var mochaPhantomJs = require("gulp-mocha-phantomjs");
  ********************/
 
 // Tests
-var testFolder   = "./test/";
-var allTestFiles = ['./test/**/*.js', '!./test/index.js'];
-var distTestFile = "index.js";
+var testFolder     = "./test/";
+var testDistFolder = "./test/run/";
+var allTestFiles   = ['./test/**/*.js', '!./test/run/index.js'];
+var distTestFile   = "index.js";
 
 // Sources
 var allSrcFiles = ['./src/**/*.js'];
@@ -146,7 +147,7 @@ gulp.task("uglify", ["concat-src"], function () {
 
 gulp.task('concat-test', function (callback) {
 
-  var outputFile = testFolder + distTestFile,
+  var outputFile = testDistFolder + distTestFile,
     rjsOptions = _.merge(_.clone(configs.rjs), {
       'baseUrl': testFolder,
       'include': ['type'],
@@ -166,7 +167,7 @@ gulp.task('concat-test', function (callback) {
 
 gulp.task("test", ["concat-test"], function () {
   return gulp
-    .src('test/index.html')
+    .src('test/run/index.html')
     .pipe(mochaPhantomJs());//.pipe(mochaPhantomJs({reporter:'nyan'}));
 });
 
