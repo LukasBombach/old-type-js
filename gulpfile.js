@@ -20,7 +20,7 @@ var uglify   = require("gulp-uglify");
 // Development Dependencies
 var jscs       = require("gulp-jscs");
 var jslint     = require("gulp-jslint");
-var liveReload = require("gulp-livereload");
+var livereload = require("gulp-livereload");
 var notify     = require("gulp-notify");
 
 // Test Dependencies
@@ -32,11 +32,18 @@ var mochaPhantomJs = require("gulp-mocha-phantomjs");
  *
  ********************/
 
+// Tests
 var testFolder   = "./test/";
+var allTestFiles = ['./test/**/*.js', '!./test/index.js'];
 var distTestFile = "index.js";
-var distFolder   = "./dist/";
-var distFile     = "type.js";
-var distMin      = "type.min.js";
+
+// Sources
+var allSrcFiles = ['./src/**/*.js'];
+
+// Dist
+var distFolder = "./dist/";
+var distFile   = "type.js";
+var distMin    = "type.min.js";
 
 /********************
  *
@@ -112,6 +119,9 @@ gulp.task('concat-src', function (callback) {
       'filePath': outputFile
     };
     fs.writeFileSync(outputFile, amdclean.clean(amdcleanOptions));
+    gulp
+      .src(allSrcFiles)
+      .pipe(livereload());
     callback();
   }, function (err) {
     return callback(err);
@@ -144,6 +154,9 @@ gulp.task('concat-test', function (callback) {
     });
 
   rjs.optimize(rjsOptions, function () {
+    gulp
+      .src(allTestFiles)
+      .pipe(livereload());
     callback();
   }, function (err) {
     return callback(err);
@@ -162,6 +175,12 @@ gulp.task("test", ["concat-test"], function () {
  * Development
  *
  ********************/
+
+gulp.task('dev', ["concat-src"], function () {
+  var allFiles = allSrcFiles.concat(allTestFiles);
+  livereload.listen();
+  gulp.watch(allFiles, ["test", "build"]);
+});
 
 /********************
  *
