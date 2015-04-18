@@ -1,7 +1,7 @@
 'use strict';
 
-var Type = require('./modules/core');
-//var range = require('./modules/range');
-require('./modules/cmd');
+var Type = require('./core');
+require('./range');
+require('./cmd');
 
 window.Type = Type;
