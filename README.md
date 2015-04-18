@@ -1,4 +1,6 @@
-# type
+# Type js
+
+Lets you implement your own wysiwyg editor
 
 A javascript word processing framework
 
@@ -7,6 +9,10 @@ A javascript word processing framework
 A JavaScript library by Lukas Bombach.
 
 See the [project homepage](http://LukasBombach.github.io/type).
+
+## With great power comes…
+
+…well, a lot of possibilites. Type JS lets you easily convert text from markdown to html or from html to OpenOffice or Word
 
 ## Installation
 

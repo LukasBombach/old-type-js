@@ -1,18 +1,11 @@
-bower_components/
-node_modules/
-temp/
-tmp/
-logs/
-log/
+# Project
+dev/
 dist/
+node_modules/
+test/index.js
 
-*.seed
-*.log
-*.csv
-*.dat
-*.out
-*.pid
-*.gz
-
+# Development Tools
 .idea
-dev
+
+# System
+.DS_Store

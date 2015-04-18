@@ -1,4 +1,3 @@
-
 'use strict';
 
 /********************
@@ -7,28 +6,25 @@
  *
  ********************/
 
-// Gulp Dependencies
-var gulp       = require('gulp');
-var rename     = require('gulp-rename');
-var gutil      = require('gulp-util');
-var sourceMaps = require('gulp-sourcemaps');
-var source     = require('vinyl-source-stream');
+// Basic Dependencies
+var fs   = require('fs');
+var gulp = require("gulp");
+var _    = require('lodash');
 
 // Build Dependencies
-var uglify     = require('gulp-uglify');
-var buffer     = require('vinyl-buffer');
-var liveReload = require('gulp-livereload');
-var amdclean   = require('gulp-amdclean');
+var rjs      = require('requirejs');
+var amdclean = require('amdclean');
+var rename   = require('gulp-rename');
+var uglify   = require("gulp-uglify");
 
 // Development Dependencies
-var jscs       = require('gulp-jscs');
-var jshint     = require('gulp-jshint');
-var notify     = require('gulp-notify');
+var jscs       = require("gulp-jscs");
+var jslint     = require("gulp-jslint");
+var livereload = require("gulp-livereload");
+var notify     = require("gulp-notify");
 
 // Test Dependencies
-var mochaPhantomJs = require('gulp-mocha-phantomjs');
-
-
+var mochaPhantomJs = require("gulp-mocha-phantomjs");
 
 /********************
  *
@@ -36,117 +32,163 @@ var mochaPhantomJs = require('gulp-mocha-phantomjs');
  *
  ********************/
 
-var allSrcFiles  = './src/*.js';
-var allTestFiles = ['./test/*.js', '!./test/index.js'];
-var testFolder   = './test/';
-var distFolder   = './dist/';
-var testFile     = 'index.js';
-var distFile     = 'type.js';
-var distMin      = 'type.min.js';
+// Tests
+var testFolder     = "./test/";
+var testDistFolder = "./test/run/";
+var allTestFiles   = ['./test/**/*.js', '!./test/run/index.js'];
+var distTestFile   = "index.js";
 
+// Sources
+var allSrcFiles = ['./src/**/*.js'];
 
+// Dist
+var distFolder = "./dist/";
+var distFile   = "type.js";
+var distMin    = "type.min.js";
 
 /********************
  *
- * Tasks
+ * Configs
+ * Todo https://github.com/yahoo/gifshot/blob/master/gulpfile.js
  *
  ********************/
 
+var configs = {
+  'rjs': {
+    'findNestedDependencies': true,
+    'preserveLicenseComments': false,
+    'optimize': 'none',
+    'skipModuleInsertion': true,
+    'cjsTranslate': true
+  }
+};
+
+/********************
+ *
+ * Code Quality
+ *
+ ********************/
 
 // Code style
+//gulp.task("jscs-source", function () {
+//  return gulp
+//    .src(allSrcFiles)
+//    .pipe(jscs());
+//});
 
-gulp.task('jscs-source', function() {
-  return gulp.src(allSrcFiles)
-    .pipe(jscs());
-});
-
-gulp.task('jscs-test', function() {
-  return gulp.src(allTestFiles)
-    .pipe(jscs());
-});
-
+//gulp.task("jscs-test", function () {
+//  return gulp
+//    .src(allTestFiles)
+//    .pipe(jscs());
+//});
 
 // Lint
+//gulp.task("lint-source", function () {
+//  return gulp
+//    .src(allSrcFiles)
+//    .pipe(jshint(".jshintrc"))
+//    .pipe(jshint.reporter("jshint-stylish"))
+//    .pipe(jshint.reporter("fail"));
+//});
 
-gulp.task('lint-source', function() {
+//gulp.task("lint-test", function () {
+//  return gulp
+//    .src(allTestFiles)
+//    .pipe(jshint(".jshintrc"))
+//    .pipe(jshint.reporter("jshint-stylish"))
+//    .pipe(jshint.reporter("fail"));
+//});
+
+/********************
+ *
+ * Build
+ *
+ ********************/
+
+gulp.task('concat-src', function (callback) {
+
+  var outputFile = distFolder + distFile,
+    rjsOptions = _.merge(_.clone(configs.rjs), {
+      'baseUrl': './src/',
+      'include': ['type'],
+      'out': outputFile
+    });
+
+  rjs.optimize(rjsOptions, function() {
+    var amdcleanOptions = {
+      'transformAMDChecks': false,
+      'filePath': outputFile
+    };
+    fs.writeFileSync(outputFile, amdclean.clean(amdcleanOptions));
+    gulp
+      .src(allSrcFiles)
+      .pipe(livereload());
+    callback();
+  }, function (err) {
+    return callback(err);
+  });
+
+});
+
+
+gulp.task("uglify", ["concat-src"], function () {
   return gulp
-    .src(allSrcFiles)
-    .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter('jshint-stylish'))
-    .pipe(jshint.reporter('fail'));
-});
-
-gulp.task('lint-test', function() {
-  return gulp
-    .src(allTestFiles)
-    .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter('jshint-stylish'))
-    .pipe(jshint.reporter('fail'));
-});
-
-
-// Browserify
-
-gulp.task('browserify-source', [/*'jscs-source', */'lint-source'], function() {
-  return sourceBundler.bundle()
-    .on('error', gutil.log.bind(gutil, 'Browserify Error'))
-    .pipe(source(distFile))
-    .pipe(buffer())
-    .pipe(sourceMaps.init({loadMaps: true}))
-    .pipe(sourceMaps.write('./'))
-    .pipe(gulp.dest(distFolder));
-});
-
-gulp.task('browserify-test', [/*'jscs-test', */'lint-test'], function() {
-  return testBundler.bundle()
-    .on('error', gutil.log.bind(gutil, 'Browserify Error'))
-    .pipe(source(testFile))
-    .pipe(gulp.dest(testFolder));
-});
-
-
-// Build
-
-gulp.task('uglify', ['browserify-source'], function() {
-   return gulp
-     .src(distFolder+distFile)
+    .src(distFolder + distFile)
     .pipe(uglify())
     .pipe(rename(distMin))
     .pipe(gulp.dest(distFolder));
 });
 
+/********************
+ *
+ * Tests
+ *
+ ********************/
 
-// Test
+gulp.task('concat-test', function (callback) {
 
-gulp.task('test', ['browserify-test'], function() {
+  var outputFile = testDistFolder + distTestFile,
+    rjsOptions = _.merge(_.clone(configs.rjs), {
+      'baseUrl': testFolder,
+      'include': ['type'],
+      'out': outputFile
+    });
+
+  rjs.optimize(rjsOptions, function () {
+    gulp
+      .src(allTestFiles)
+      .pipe(livereload());
+    callback();
+  }, function (err) {
+    return callback(err);
+  });
+
+});
+
+gulp.task("test", ["concat-test"], function () {
   return gulp
-    .src('test/index.html')
-    .pipe(mochaPhantomJs()); //.pipe(mochaPhantomJs({reporter:'nyan'}));
+    .src('test/run/index.html')
+    .pipe(mochaPhantomJs());//.pipe(mochaPhantomJs({reporter:'nyan'}));
 });
 
-gulp.task('watch-test', function() {
-  gulp.watch(allTestFiles, ['test']);
+/********************
+ *
+ * Development
+ *
+ ********************/
+
+gulp.task('dev', ["concat-src"], function () {
+  var allFiles = allSrcFiles.concat(allTestFiles);
+  livereload.listen();
+  gulp.watch(allFiles, ["test", "build"]);
 });
 
-
-// Dev
-
-function bundleDev() {
-  return sourceBundler.bundle()
-    .on('error', gutil.log.bind(gutil, 'Browserify Error'))
-    .pipe(source(distFile))
-    .pipe(buffer())
-    .pipe(sourceMaps.init({loadMaps: true}))
-    .pipe(sourceMaps.write('./'))
-    .pipe(gulp.dest(distFolder))
-    .pipe(liveReload({start: true}));
-}
-gulp.task('dev', bundleDev);
-sourceBundler.on('update', bundleDev);
-
-
-
-// High level tasks
-
-gulp.task('build', ['uglify']);
-gulp.task('default', ['test', 'build']);
+/********************
+ *
+ * High level tasks
+ * Intended for usage in console
+ *
+ ********************/
+gulp.task("build", ["concat-src"]);
+gulp.task("dist", ["test", "build", "uglify"]);
+gulp.task("default", ["test", "build"]);
