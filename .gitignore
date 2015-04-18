@@ -1,14 +1,11 @@
-node_modules/
-dist/
+# Project
 dev/
+dist/
+node_modules/
 test/index.js
 
-*.seed
-*.log
-*.csv
-*.dat
-*.out
-*.pid
-*.gz
-
+# Development Tools
 .idea
+
+# System
+.DS_Store
