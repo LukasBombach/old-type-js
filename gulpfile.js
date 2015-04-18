@@ -41,6 +41,7 @@ var distMin      = "type.min.js";
 /********************
  *
  * Configs
+ * Todo https://github.com/yahoo/gifshot/blob/master/gulpfile.js
  *
  ********************/
 
@@ -56,7 +57,7 @@ var configs = {
 
 /********************
  *
- * Tasks
+ * Code Quality
  *
  ********************/
 
@@ -90,8 +91,12 @@ var configs = {
 //    .pipe(jshint.reporter("fail"));
 //});
 
-// Build
-// Todo https://github.com/yahoo/gifshot/blob/master/gulpfile.js
+/********************
+ *
+ * Build
+ *
+ ********************/
+
 gulp.task('concat-src', function (callback) {
 
   var outputFile = distFolder + distFile,
@@ -114,6 +119,21 @@ gulp.task('concat-src', function (callback) {
 
 });
 
+
+gulp.task("uglify", ["concat-src"], function () {
+  return gulp
+    .src(distFolder + distFile)
+    .pipe(uglify())
+    .pipe(rename(distMin))
+    .pipe(gulp.dest(distFolder));
+});
+
+/********************
+ *
+ * Tests
+ *
+ ********************/
+
 gulp.task('concat-test', function (callback) {
 
   var outputFile = testFolder + distTestFile,
@@ -131,24 +151,24 @@ gulp.task('concat-test', function (callback) {
 
 });
 
-gulp.task("uglify", ["concat-src"], function () {
-  return gulp
-    .src(distFolder + distFile)
-    .pipe(uglify())
-    .pipe(rename(distMin))
-    .pipe(gulp.dest(distFolder));
-});
-
-// Test
 gulp.task("test", ["concat-test"], function () {
   return gulp
     .src('test/index.html')
     .pipe(mochaPhantomJs());//.pipe(mochaPhantomJs({reporter:'nyan'}));
 });
 
-// Dev
-// High level tasks
+/********************
+ *
+ * Development
+ *
+ ********************/
+
+/********************
+ *
+ * High level tasks
+ * Intended for usage in console
+ *
+ ********************/
 gulp.task("build", ["concat-src"]);
 gulp.task("dist", ["test", "build", "uglify"]);
-
 gulp.task("default", ["test", "build"]);
