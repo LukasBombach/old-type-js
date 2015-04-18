@@ -1,5 +1,3 @@
-'use strict';
-
 var Type = require('./core');
 require('./range');
 require('./cmd');

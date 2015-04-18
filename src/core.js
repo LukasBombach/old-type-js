@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * The main class and entry point to set up a Type instance in the browser.
  *

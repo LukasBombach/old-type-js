@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Holds the contents of the editor
  *
