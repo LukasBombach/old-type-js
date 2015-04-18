@@ -1,8 +1,5 @@
-var expect = require('chai').expect;
-
-describe('test setup', function() {
-  it('should work', function() {
-    //expect(false).to.be.true;
-    expect(true).to.be.true;
+describe('true', function () {
+  it('should be true', function () {
+    true.should.equal(true);
   });
 });
