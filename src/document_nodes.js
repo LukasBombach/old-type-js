@@ -2,16 +2,27 @@
 
 /**
  * Creates a DocumentNode
- * @param type
+ * @param type number
  * @constructor
  */
 function DocumentNode(type) {
-  this.type = type || null;
+  this.setType(type);
 }
 
 /**
+ * Setter for type
+ * @param type number
+ */
+DocumentNode.prototype.setType = function (type) {
+  if (!DocumentNode.TYPE.hasOwnProperty(type)) {
+    throw new Error('The type passed must be a key of DocumentNode.TYPE');
+  }
+  this.type = type;
+  return this;
+};
+
+/**
  * Reflect DOM nodeTypes
- * See https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
  * @type {{
  *   ELEMENT: number,
  *   TEXT: number,
