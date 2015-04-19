@@ -5,13 +5,20 @@
  * @param type string A key in {DocumentNode.TYPE}
  * @param value
  * @constructor
+ * @param parentNode
  */
-function DocumentNode(type, value) {
+function DocumentNode(type, value, parentNode) {
   if (type === null) {
     throw new Error('A type must be passed');
   }
+  if (value instanceof DocumentNode) {
+    parentNode = value;
+    value = null;
+  }
   this.setType(type);
   this.setValue(value);
+  this.setParentNode(parentNode);
+  this.childNodes = [];
 }
 
 /**
@@ -32,6 +39,16 @@ DocumentNode.prototype.setType = function (type) {
  */
 DocumentNode.prototype.setValue = function (value) {
   this.value = value;
+  return this;
+};
+
+/**
+ * Setter for parentNode
+ * @param parentNode
+ */
+DocumentNode.prototype.setParentNode = function (parentNode) {
+  this.parentNode = parentNode;
+  return this;
 };
 
 /**

@@ -1,6 +1,6 @@
 'use strict';
 
-var Node = require('./document_nodes');
+var Node = require('./document_node');
 
 /**
  * Holds the contents of the editor
@@ -8,8 +8,17 @@ var Node = require('./document_nodes');
  * @class Document
  * @constructor
  */
-var Document = function () {
+var Document = function (rootNode) {
+  this.setRootNode(rootNode);
+};
 
+/**
+ * Setter for rootNode
+ * @param rootNode
+ */
+Document.prototype.setRootNode = function (rootNode) {
+  this.rootNode = rootNode;
+  return this;
 };
 
 module.exports = Document;
