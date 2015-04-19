@@ -2,16 +2,21 @@
 
 /**
  * Creates a DocumentNode
- * @param type number
+ * @param type string A key in {DocumentNode.TYPE}
+ * @param value
  * @constructor
  */
-function DocumentNode(type) {
+function DocumentNode(type, value) {
+  if (type === null) {
+    throw new Error('A type must be passed');
+  }
   this.setType(type);
+  this.setValue(value);
 }
 
 /**
  * Setter for type
- * @param type number
+ * @param type string A key in {DocumentNode.TYPE}
  */
 DocumentNode.prototype.setType = function (type) {
   if (!DocumentNode.TYPE.hasOwnProperty(type)) {
@@ -19,6 +24,14 @@ DocumentNode.prototype.setType = function (type) {
   }
   this.type = type;
   return this;
+};
+
+/**
+ * Setter for value
+ * @param value
+ */
+DocumentNode.prototype.setValue = function (value) {
+  this.value = value;
 };
 
 /**
@@ -43,4 +56,7 @@ DocumentNode.TYPE = {
   DOCUMENT_FRAGMENT : 11
 };
 
+/**
+ * @type {DocumentNode}
+ */
 module.exports = DocumentNode;
