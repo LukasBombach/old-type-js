@@ -2,7 +2,12 @@
 
 var Nodes = {};
 
-function Node(type) {
+/**
+ * Creates a DocumentNode
+ * @param type
+ * @constructor
+ */
+function DocumentNode(type) {
   this.type = type || null;
 }
 
