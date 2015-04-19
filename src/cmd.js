@@ -1,3 +1,5 @@
+'use strict';
+
 var Type = require('./core');
 
 Type.fn.cmd = function () {
