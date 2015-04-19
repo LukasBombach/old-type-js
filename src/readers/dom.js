@@ -6,10 +6,14 @@ var Document = require('../Document');
  *
  * @constructor
  */
-function DomReader(markup) {
-  this.setMarkup(markup);
+function DomReader(rootNode) {
+  this.setDom(rootNode);
 }
 
+/**
+ *
+ * @returns {Document}
+ */
 DomReader.prototype.getDocument = function () {
 
   if (this.documentDirty === false) {
@@ -23,12 +27,16 @@ DomReader.prototype.getDocument = function () {
   return this.document;
 };
 
-DomReader.prototype.setMarkup = function (markup) {
-  this.markup = markup;
+/**
+ *
+ * @param rootNode
+ * @returns {DomReader}
+ */
+DomReader.prototype.setDom = function (rootNode) {
+  this.dom = rootNode;
   this.document = null;
   this.documentDirty = true;
   return this;
 };
 
 module.exports = DomReader;
-
