@@ -15,7 +15,12 @@ function Type(element, elementOut) {
   var renderer = new Renderer(document);
   var output = renderer.output();
   elementOut.appendChild(output);
-  console.log(output);
+  /*window.setInterval(function () {
+    var s = window.getSelection();
+    var oRange = s.getRangeAt(0); //get the text range
+    var oRect = oRange.getBoundingClientRect();
+    console.log(oRect);
+  }, 1000);*/
 }
 
 Type.fn = Type.prototype;
