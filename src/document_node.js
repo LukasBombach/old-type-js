@@ -93,7 +93,8 @@ DocumentNode.ELTYPE = {
   UL : 16,
   LI : 17,
   CODE : 18,
-  PRE : 19
+  PRE : 19,
+  SUP : 20
 };
 
 /**

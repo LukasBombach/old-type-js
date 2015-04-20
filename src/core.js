@@ -13,8 +13,9 @@ function Type(element, elementOut) {
   var reader = new DomReader(element);
   var document = reader.getDocument();
   var renderer = new Renderer(document);
-  //elementOut.innerHTML = renderer.output();
-  console.log(document);
+  var output = renderer.output();
+  elementOut.appendChild(output);
+  console.log(output);
 }
 
 Type.fn = Type.prototype;

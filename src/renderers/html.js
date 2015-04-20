@@ -2,6 +2,29 @@
 
 var DocumentNode = require('../document_node');
 
+var elementTypeMap = {
+  TEXT   : 'text',
+  BLOCK  : 'div',
+  INLINE : 'span',
+  IMG    : 'img',
+  H1     : 'h1',
+  H2     : 'h2',
+  H3     : 'h3',
+  H4     : 'h4',
+  H5     : 'h5',
+  H6     : 'h6',
+  P      : 'p',
+  STRONG : 'strong',
+  EM     : 'em',
+  A      : 'a',
+  OL     : 'ol',
+  UL     : 'ul',
+  LI     : 'li',
+  CODE   : 'code',
+  PRE    : 'pre',
+  SUP    : 'sup'
+};
+
 /**
  * Returns a DOM node reflecting a {DocumentNode}.
  * Will recursively generate and return nested nodes.
@@ -11,15 +34,17 @@ var DocumentNode = require('../document_node');
  */
 function renderNode(node) {
 
-  if (node.type === DocumentNode.TYPE.TEXT) {
-    return node.value;
+  if (DocumentNode.ELTYPE[node.type] === DocumentNode.ELTYPE.TEXT) {
+    return window.document.createTextNode(node.value);
   }
 
-  if (node.type === DocumentNode.TYPE.ELEMENT) {
-    for (var i = 0; i < node.childNodes.length; i++) {
-      documentNode.childNodes.push(getDocumentNodesForDomNode(domNode.childNodes[i], documentNode));
-    }
+  var element = window.document.createElement(elementTypeMap[node.type]);
+
+  for (var i = 0; i < node.childNodes.length; i++) {
+    element.appendChild(renderNode(node.childNodes[i]));
   }
+
+  return element;
 
 }
 
@@ -37,7 +62,7 @@ function HtmlRenderer(document) {
  * @returns {*}
  */
 HtmlRenderer.prototype.output = function () {
-  return renderNode(this.document);
+  return renderNode(this.document.rootNode);
 };
 
 /**

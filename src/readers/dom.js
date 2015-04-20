@@ -36,7 +36,8 @@ var elementTypeMap = {
   ul     : 'UL',
   li     : 'LI',
   code   : 'CODE',
-  pre    : 'PRE'
+  pre    : 'PRE',
+  sup    : 'SUP'
 };
 
 function getDocumentNodesForDomNode(domNode, parentDocumentNode) {
@@ -49,6 +50,7 @@ function getDocumentNodesForDomNode(domNode, parentDocumentNode) {
     type = elementTypeMap[domNode.tagName.toLowerCase()];
   } else {
     type = 'UNKNOWN';
+    console.debug('Did not find map for tag', domNode.tagName.toLowerCase());
   }
 
   var value = domNode.nodeType === Node.TEXT_NODE ? domNode.nodeValue : null;
