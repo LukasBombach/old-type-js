@@ -26,8 +26,8 @@ function DocumentNode(type, value, parentNode) {
  * @param type string A key in {DocumentNode.TYPE}
  */
 DocumentNode.prototype.setType = function (type) {
-  if (!DocumentNode.TYPE.hasOwnProperty(type)) {
-    throw new Error('The type passed must be a key of DocumentNode.TYPE');
+  if (!DocumentNode.ELTYPE.hasOwnProperty(type)) {
+    throw new Error('The type passed must be a key of DocumentNode.ELTYPE. Type passed is ' + type);
   }
   this.type = type;
   return this;
@@ -71,6 +71,29 @@ DocumentNode.TYPE = {
   DOCUMENT : 9,
   DOCUMENT_TYPE : 10,
   DOCUMENT_FRAGMENT : 11
+};
+
+DocumentNode.ELTYPE = {
+  UNKNOWN : -1,
+  TEXT : 1,
+  BLOCK : 2,
+  INLINE : 3,
+  IMG : 4,
+  H1 : 5,
+  H2 : 6,
+  H3 : 7,
+  H4 : 8,
+  H5 : 9,
+  H6 : 10,
+  P : 11,
+  STRONG : 12,
+  EM : 13,
+  A : 14,
+  OL : 15,
+  UL : 16,
+  LI : 17,
+  CODE : 18,
+  PRE : 19
 };
 
 /**

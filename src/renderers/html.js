@@ -1,5 +1,7 @@
 'use strict';
 
+var DocumentNode = require('../document_node');
+
 /**
  * Returns a DOM node reflecting a {DocumentNode}.
  * Will recursively generate and return nested nodes.
@@ -8,7 +10,17 @@
  * @returns {*}
  */
 function renderNode(node) {
-  return node;
+
+  if (node.type === DocumentNode.TYPE.TEXT) {
+    return node.value;
+  }
+
+  if (node.type === DocumentNode.TYPE.ELEMENT) {
+    for (var i = 0; i < node.childNodes.length; i++) {
+      documentNode.childNodes.push(getDocumentNodesForDomNode(domNode.childNodes[i], documentNode));
+    }
+  }
+
 }
 
 /**
