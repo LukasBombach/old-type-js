@@ -25,4 +25,8 @@ function Type(element, elementOut) {
 
 Type.fn = Type.prototype;
 
+Type.settings = {
+  prefix : 'typejs-'
+};
+
 module.exports = Type;
