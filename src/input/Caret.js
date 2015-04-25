@@ -5,14 +5,14 @@
  * @private
  * @type {Type}
  */
-var Type = require('../core');
+//var Type = require('../core');
 
 /**
  * The id attribute of the container element
  * @private
  * @type {string}
  */
-var containerId = Type.Settings.prefix + 'caret-container';
+var containerId = 'typejs-' + 'caret-container';
 
 /**
  * Returns the container which all caret divs will be appended to
@@ -25,7 +25,7 @@ function getElementContainer() {
   if (container === null) {
     container = window.document.createElement('div');
     container.setAttribute('id', containerId);
-    window.document.appendChild(container);
+    window.document.body.appendChild(container);
   }
   return container;
 }
@@ -38,7 +38,7 @@ function getElementContainer() {
 function createElement() {
   var container = getElementContainer(),
     el = window.document.createElement('div');
-  el.className = Type.settings.prefix + 'caret';
+  el.className = 'typejs-' + 'caret';
   container.appendChild(el);
   return el;
 }
@@ -78,6 +78,7 @@ function removeClass(el, className) {
  */
 function Caret() {
   this.el = createElement();
+  this.hide();
 }
 
 /**
@@ -104,6 +105,17 @@ Caret.prototype.blink = function () {
 Caret.prototype.hide = function () {
   removeClass(this.el, 'blink');
   addClass(this.el, 'hide');
+};
+
+/**
+ * Removes the caret from the dom
+ */
+Caret.prototype.destroy = function () {
+  var container = getElementContainer();
+  container.removeChild(this.el);
+  if (!container.hasChildNodes()) {
+    container.parentNode.removeChild(container);
+  }
 };
 
 /**

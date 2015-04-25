@@ -1,20 +1,65 @@
-/* Styles for type demo
- *
- * Author: Lukas Bombach
+.typejs-caret {
+  position: absolute;
+  cursor: text;
+  background: #fc4d57;
+  width: 2px;
+  height: 14px;
+}
+
+.hide {
+  display: none;
+}
+
+/**
+ * Animation mimicked from Google Docs
  */
+.typejs-caret.blink {
+  -webkit-animation-duration: 1s;
+  -moz-animation-duration: 1s;
+  -o-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-iteration-count: infinite;
+  -moz-animation-iteration-count: infinite;
+  -o-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -webkit-animation-name: typejs-caret-fadeoutin;
+  -moz-animation-name: typejs-caret-fadeoutin;
+  -o-animation-name: typejs-caret-fadeoutin;
+  animation-name: typejs-caret-fadeoutin
+}
 
-/* === resets === */
+@keyframes typejs-caret-fadeoutin {
+  from {
+    opacity: 1
+  }
+  13% {
+    opacity: 0
+  }
+  50% {
+    opacity: 0
+  }
+  63% {
+    opacity: 1
+  }
+  to {
+    opacity: 1
+  }
+}
 
-/* === defaults === */
-
-/* === generic styles */
-
-/* === layout === */
-
-/* === modules === */
-
-/* === specific styles */
-
-/* === subsections === */
-
-/* === hacks / overrides === */
+@-webkit-keyframes typejs-caret-fadeoutin {
+  from {
+    opacity: 1
+  }
+  13% {
+    opacity: 0
+  }
+  50% {
+    opacity: 0
+  }
+  63% {
+    opacity: 1
+  }
+  to {
+    opacity: 1
+  }
+}
