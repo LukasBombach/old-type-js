@@ -1,5 +1,7 @@
 # Libraries in Berlin
 
+by Lukas Bombach, 538587.
+
 I went to the Central library TU Berlin. I have been there before and was quite fond of it. To try something I did not already know, I planned on visiting the Computer Science library or main library FU Berlin, but it would have taken me 1:40 hours to get there, which seems unreasonable, if I plan on going there on a regular basis.
 
 ## Are there recent books on media and computing available? On general computing? What signature systematic is used for computing literature?
