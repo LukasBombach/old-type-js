@@ -1,19 +1,23 @@
 'use strict';
 
 /**
- *
- * @type {Type|exports|module.exports}
+ * Type js core from which we will read settings
+ * @private
+ * @type {Type}
  */
 var Type = require('../core');
 
 /**
- *
+ * The id attribute of the container element
+ * @private
  * @type {string}
  */
-var containerId = Type.settings.prefix + 'caret-container';
+var containerId = Type.Settings.prefix + 'caret-container';
 
 /**
- *
+ * Returns the container which all caret divs will be appended to
+ * Creates the container if it has not been created yet
+ * @private
  * @returns {HTMLElement}
  */
 function getElementContainer() {
@@ -27,7 +31,8 @@ function getElementContainer() {
 }
 
 /**
- *
+ * Creates a div - the visual representation of the caret
+ * @private
  * @returns {HTMLElement}
  */
 function createElement() {
@@ -39,7 +44,36 @@ function createElement() {
 }
 
 /**
- *
+ * Adds a class to an element
+ * @private
+ * @param el
+ * @param className
+ */
+function addClass(el, className) {
+  if (el.classList) {
+    el.classList.add(className);
+  } else {
+    el.className += ' ' + className;
+  }
+}
+
+/**
+ * Removes a class from an element
+ * @private
+ * @param el
+ * @param className
+ */
+function removeClass(el, className) {
+  if (el.classList) {
+    el.classList.remove(className);
+  } else {
+    var regex = new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi');
+    el.className = el.className.replace(regex, ' ');
+  }
+}
+
+/**
+ * The Caret function-object on which we work on
  * @constructor
  */
 function Caret() {
@@ -47,7 +81,33 @@ function Caret() {
 }
 
 /**
- *
+ * Moves the caret to the given position
+ * @param x
+ * @param y
+ */
+Caret.prototype.moveTo = function (x, y) {
+  this.el.style.left = x + 'px';
+  this.el.style.top = y + 'px';
+};
+
+/**
+ * Makes the caret blink
+ */
+Caret.prototype.blink = function () {
+  removeClass(this.el, 'hide');
+  addClass(this.el, 'blink');
+};
+
+/**
+ * Hides the caret
+ */
+Caret.prototype.hide = function () {
+  removeClass(this.el, 'blink');
+  addClass(this.el, 'hide');
+};
+
+/**
+ * Module exports
  * @type {Caret}
  */
 module.exports = Caret;

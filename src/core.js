@@ -25,7 +25,7 @@ function Type(element, elementOut) {
 
 Type.fn = Type.prototype;
 
-Type.settings = {
+Type.Settings = {
   prefix : 'typejs-'
 };
 
