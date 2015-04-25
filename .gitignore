@@ -6,6 +6,7 @@ test/index.js
 
 # Development Tools
 .idea
+.texpadtmp
 
 # System
 .DS_Store

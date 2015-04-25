@@ -35,7 +35,7 @@ Yes, most of them. They can be found using the [Datenbankenangebot on the TU's l
 
 ## How do you obtain an electronic publication at this library?
 
-Using the ["new catalog" I  mentioned earlier](http://portal.ub.tu-berlin.de/), you need to click "Online-Publikationen" and search the database. Online publications can only be accessed via the TU network
+Using the ["new catalog" I  mentioned earlier](http://portal.ub.tu-berlin.de/), you need to click "Online-Publikationen" and search the database. Online publications can only be accessed via the TU network.
 
 ## How do interlibrary loans work?
 
@@ -47,5 +47,18 @@ Yes, ground floor to the left.
 
 ## Find and document 10 items that are relevant to your thesis.
 
+ 1. A Survey on Tree Edit Distance and Related Problems
 
-## Find a paper (max 10 pages) in a journal that is relevant to your thesis topic for the Journal club. Either scan it from a printed version or download it from a database. Upload the paper to the Journal Club forum (in the next block) by 22:00 on Sunday, April 26, 2015.
+ Facebook calls this the state of the art on generating the minimum number of operations to transform one tree into another. May be useful to me when I alter the representation of my document data or the output as DOM / HTML.
+
+ 2. THE TECHNOLOGY OF WORD PROCESSING
+
+ A paper from 1981, which seems to be exactly the age I need to be interested in. It should cover some basics on implementing a word processor.
+
+ 3. Operational Transformation for Collaborative Word Processing
+
+ A paper on collaborative text editing.
+
+ 4. 
+
+## Find a paper (max 10 pages) in a journal that is relevant to your thesis topic for the Journal club.
