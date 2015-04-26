@@ -77,9 +77,28 @@ function removeClass(el, className) {
  * @constructor
  */
 function Caret() {
-  this.el = createElement();
+  this.caretEl = createElement();
   this.hide();
 }
+
+Caret.prototype.setTextNode = function (textNode, offset) {
+  if (!(textNode instanceof Node) || textNode.nodeType !== Node.TEXT_NODE) {
+    throw new Error('textNode parameter must be a Node of type Node.TEXT_NODE');
+  }
+  if (textNode === this.textNode && offset === null) {
+    return this;
+  }
+  this.textNode = textNode;
+  this.offset = offset || 0;
+  // todo should trigger event that positions the caret visually
+  return this;
+};
+
+Caret.prototype.moveRight = function () {
+  getCharacterWidth(this.textNode, this.offset);
+  this.offset += 1;
+  //this.positionByOffset(); // todo trigger by event
+};
 
 /**
  * Moves the caret to the given position
@@ -87,24 +106,24 @@ function Caret() {
  * @param y
  */
 Caret.prototype.moveTo = function (x, y) {
-  this.el.style.left = x + 'px';
-  this.el.style.top = y + 'px';
+  this.caretEl.style.left = x + 'px';
+  this.caretEl.style.top = y + 'px';
 };
 
 /**
  * Makes the caret blink
  */
 Caret.prototype.blink = function () {
-  removeClass(this.el, 'hide');
-  addClass(this.el, 'blink');
+  removeClass(this.caretEl, 'hide');
+  addClass(this.caretEl, 'blink');
 };
 
 /**
  * Hides the caret
  */
 Caret.prototype.hide = function () {
-  removeClass(this.el, 'blink');
-  addClass(this.el, 'hide');
+  removeClass(this.caretEl, 'blink');
+  addClass(this.caretEl, 'hide');
 };
 
 /**
@@ -112,7 +131,7 @@ Caret.prototype.hide = function () {
  */
 Caret.prototype.destroy = function () {
   var container = getElementContainer();
-  container.removeChild(this.el);
+  container.removeChild(this.caretEl);
   if (!container.hasChildNodes()) {
     container.parentNode.removeChild(container);
   }
