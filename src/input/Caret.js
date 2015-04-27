@@ -106,7 +106,8 @@ Caret.prototype.setTextNode = function (textNode, offset) {
   // todo should trigger event that positions the caret visually
   var rect = getRect(this.textNode, this.offset);
   //this.positionByOffset(); // todo trigger by event
-  this.moveTo(rect.right, rect.top);
+  var x = this.offset === 0 ? rect.left : rect.right;
+  this.moveTo(x, rect.top);
   this.resetBlink();
   return this;
 };
@@ -124,13 +125,14 @@ function getRect(textNode, offset) {
 }
 
 Caret.prototype.moveLeft = function () {
-  if (this.offset - 1 < 0) {
+  if (this.offset <= 0) {
     return this;
   }
   this.offset -= 1;
   var rect = getRect(this.textNode, this.offset);
   //this.positionByOffset(); // todo trigger by event
-  this.moveTo(rect.right, rect.top);
+  var x = this.offset === 0 ? rect.left : rect.right;
+  this.moveTo(x, rect.top);
   this.resetBlink();
   return this;
 };
