@@ -104,6 +104,10 @@ Caret.prototype.setTextNode = function (textNode, offset) {
   this.textNode = textNode;
   this.offset = offset || 0;
   // todo should trigger event that positions the caret visually
+  var rect = getRect(this.textNode, this.offset);
+  //this.positionByOffset(); // todo trigger by event
+  this.moveTo(rect.right, rect.top);
+  this.resetBlink();
   return this;
 };
 
