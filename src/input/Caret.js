@@ -119,7 +119,6 @@ function getRect(textNode, offset) {
   return rects[0];
 }
 
-
 Caret.prototype.moveLeft = function () {
   if (this.offset - 1 < 0) {
     return this;
@@ -176,6 +175,16 @@ Caret.prototype.moveDown = function () {
   this.moveTo(searched.right, searched.top);
   this.resetBlink();
   return this;
+};
+
+Caret.prototype.insertAtOffset = function (value) {
+  var str = this.textNode.nodeValue;
+  if (this.offset > 0) {
+    this.textNode.nodeValue = str.substring(0, this.offset) + value + str.substring(this.offset, str.length);
+  } else {
+    this.textNode.nodeValue = value + str;
+  }
+  this.moveRight();
 };
 
 /**
