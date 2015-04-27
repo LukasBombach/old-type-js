@@ -192,11 +192,12 @@ Caret.prototype.insertAtOffset = function (value) {
 };
 
 Caret.prototype.removeAtOffset = function () {
+  var offset = this.offset,
+    str = this.textNode.nodeValue;
   this.moveLeft();
   this.moveLeft();
-  var str = this.textNode.nodeValue;
-  if (this.offset > 0) {
-    this.textNode.nodeValue = str.substring(0, this.offset + 1) + str.substring(this.offset + 2, str.length);
+  if (offset > 0) {
+    this.textNode.nodeValue = str.substring(0, offset - 1) + str.substring(offset, str.length);
   }
   this.moveRight();
 };
