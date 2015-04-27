@@ -187,6 +187,16 @@ Caret.prototype.insertAtOffset = function (value) {
   this.moveRight();
 };
 
+Caret.prototype.removeAtOffset = function () {
+  this.moveLeft();
+  this.moveLeft();
+  var str = this.textNode.nodeValue;
+  if (this.offset > 0) {
+    this.textNode.nodeValue = str.substring(0, this.offset + 1) + str.substring(this.offset + 2, str.length);
+  }
+  this.moveRight();
+};
+
 /**
  * Moves the caret to the given position
  * @param x
