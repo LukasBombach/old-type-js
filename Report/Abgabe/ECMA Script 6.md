@@ -8,4 +8,6 @@ Roundup: http://www.2ality.com/2015/04/deploying-es6.html
 
 ⁃	Decided not to use ES6 because my library is intended to be used for a wide range of browsers. That means even when ES6 is common for most browsers, I will still need transpilers for a long time to support legacy systems.
 ⁃	Complete rewrites are not necessarily a bad thing and can be a great opportunity to improve your library / program. I am looking forward to a complete rewrite using ES6
-⁃	One of the main reasons for me to use ES6 is the syntax of classes and foremost their private properites. I decided I will use underscore syntax _myfunction to mark methods as private. This is a common conventions and will be understood by professionals.
+⁃	One of the main reasons for me to use ES6 is the syntax of classes and foremost their private properites. I decided I will use underscore syntax \_myfunction to mark methods as private. This is a common conventions and will be understood by professionals.
+
+Promises would have been nice though. I might not need them though
