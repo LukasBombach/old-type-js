@@ -107,6 +107,100 @@ function Caret() {
   };
 
   /**
+   * Moves the caret left by one character
+   *
+   * @returns {Caret}
+   */
+  this.moveLeft = function () {
+    if (this.offset <= 0) {
+      return this;
+    }
+    this.offset -= 1;
+    var rect = this._getRectForCharacter(this.textNode, this.offset);
+    //this.positionByOffset(); // todo trigger by event
+    var x = this.offset === 0 ? rect.left : rect.right;
+    this.moveTo(x, rect.top);
+    this.resetBlink();
+    return this;
+  };
+
+  /**
+   * Moves the caret right by one character
+   *
+   * @returns {Caret}
+   */
+  this.moveRight = function () {
+    if (this.offset + 1 >= this.textNode.length) {
+      return this;
+    }
+    var rect = this._getRectForCharacter(this.textNode, this.offset);
+    this.offset += 1;
+    //this.positionByOffset(); // todo trigger by event
+    this.moveTo(rect.right, rect.top);
+    this.resetBlink();
+    return this;
+  };
+
+  /**
+   * Moves the caret up by one line. Tries to preserve horizontal position.
+   *
+   * @returns {Caret}
+   */
+  this.moveUp = function () {
+    var searched,
+      current = this._getRectForCharacter(this.textNode, this.offset),
+      charOffset = this.offset;
+    do {
+      searched = this._getRectForCharacter(this.textNode, charOffset);
+      charOffset--;
+      if(charOffset < 0) {
+        return this;
+      }
+    } while (searched.top === current.top || searched.right > current.right)
+    this.offset = charOffset;
+    this.moveTo(searched.right, searched.top);
+    this.resetBlink();
+    return this;
+  };
+
+  /**
+   * Moves the caret down by one line. Tries to preserve horizontal position.
+   *
+   * @returns {Caret}
+   */
+  this.moveDown = function () {
+    var searched,
+      current = this._getRectForCharacter(this.textNode, this.offset),
+      charOffset = this.offset;
+    do {
+      searched = this._getRectForCharacter(this.textNode, charOffset);
+      charOffset++;
+      if(charOffset >= this.textNode.length) {
+        return this;
+      }
+    } while (searched.top === current.top || searched.right < current.right)
+    this.offset = charOffset;
+    this.moveTo(searched.right, searched.top);
+    this.resetBlink();
+    return this;
+  };
+
+  /**
+   * Inserts a given {String} at the caret's current offset in the caret's current text node
+   *
+   * @param {String} text - The {String} that will be be inserted
+   */
+  this.insertTextAtOffset = function (text) {
+    var str = this.textNode.nodeValue;
+    if (this.offset > 0) {
+      this.textNode.nodeValue = str.substring(0, this.offset) + text + str.substring(this.offset, str.length);
+    } else {
+      this.textNode.nodeValue = text + str;
+    }
+    this.moveRight();
+  };
+
+  /**
    * Hides the caret visually
    *
    * @returns {Caret}
@@ -175,74 +269,10 @@ function Caret() {
 
 
 
-Caret.prototype.moveLeft = function () {
-  if (this.offset <= 0) {
-    return this;
-  }
-  this.offset -= 1;
-  var rect = this._getRectForCharacter(this.textNode, this.offset);
-  //this.positionByOffset(); // todo trigger by event
-  var x = this.offset === 0 ? rect.left : rect.right;
-  this.moveTo(x, rect.top);
-  this.resetBlink();
-  return this;
-};
 
-Caret.prototype.moveRight = function () {
-  if (this.offset + 1 >= this.textNode.length) {
-    return this;
-  }
-  var rect = this._getRectForCharacter(this.textNode, this.offset);
-  this.offset += 1;
-  //this.positionByOffset(); // todo trigger by event
-  this.moveTo(rect.right, rect.top);
-  this.resetBlink();
-  return this;
-};
 
-Caret.prototype.moveUp = function () {
-  var searched,
-    current = this._getRectForCharacter(this.textNode, this.offset),
-    charOffset = this.offset;
-  do {
-    searched = this._getRectForCharacter(this.textNode, charOffset);
-    charOffset--;
-    if(charOffset < 0) {
-      return this;
-    }
-  } while (searched.top === current.top || searched.right > current.right)
-  this.offset = charOffset;
-  this.moveTo(searched.right, searched.top);
-  this.resetBlink();
-  return this;
-};
 
-Caret.prototype.moveDown = function () {
-  var searched,
-    current = this._getRectForCharacter(this.textNode, this.offset),
-    charOffset = this.offset;
-  do {
-    searched = this._getRectForCharacter(this.textNode, charOffset);
-    charOffset++;
-    if(charOffset >= this.textNode.length) {
-      return this;
-    }
-  } while (searched.top === current.top || searched.right < current.right)
-  this.offset = charOffset;
-  this.moveTo(searched.right, searched.top);
-  this.resetBlink();
-  return this;
-};
 
-Caret.prototype.insertAtOffset = function (value) {
-  var str = this.textNode.nodeValue;
-  if (this.offset > 0) {
-    this.textNode.nodeValue = str.substring(0, this.offset) + value + str.substring(this.offset, str.length);
-  } else {
-    this.textNode.nodeValue = value + str;
-  }
-  this.moveRight();
-};
 
 Caret.prototype.removeAtOffset = function () {
   var offset = this.offset,
