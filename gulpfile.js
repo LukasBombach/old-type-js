@@ -59,7 +59,8 @@ var configs = {
     'preserveLicenseComments': false,
     'optimize': 'none',
     'skipModuleInsertion': true,
-    'cjsTranslate': true
+    'cjsTranslate': true,
+    'generateSourceMaps': true
   }
 };
 
@@ -108,18 +109,38 @@ var configs = {
 gulp.task('concat-src', function (callback) {
 
   var outputFile = distFolder + distFile,
+    mapFile = outputFile + '.map',
     rjsOptions = _.merge(_.clone(configs.rjs), {
       'baseUrl': './src/',
       'include': ['type'],
       'out': outputFile
     });
 
-  rjs.optimize(rjsOptions, function() {
-    var amdcleanOptions = {
-      'transformAMDChecks': false,
-      'filePath': outputFile
-    };
-    fs.writeFileSync(outputFile, amdclean.clean(amdcleanOptions));
+
+  rjs.optimize(rjsOptions, function () {
+    var sourceMapContents = fs.readFileSync(mapFile, {encoding: 'utf8'}),
+      amdcleanOptions = {
+        'transformAMDChecks': false,
+        'filePath': outputFile,
+        'sourceMap': sourceMapContents,
+        'wrap': false,
+        'esprima': {
+          'source': 'type.js' // name of your file to appear in sourcemap
+        },
+        'escodegen': {
+          'sourceMap': true,
+          'sourceMapWithCode': true
+        }
+      };
+      //amdcleanOptions = {
+      //  'transformAMDChecks': false,
+      //  'filePath': outputFile,
+      //  'sourceMap': sourceMapContents
+      //};
+    var amdCleanOutpout = amdclean.clean(amdcleanOptions);
+    console.log(amdCleanOutpout);
+    fs.writeFileSync(outputFile, amdCleanOutpout.code);
+    fs.writeFileSync(mapFile, amdCleanOutpout.map);
     gulp
       .src(allSrcFiles)
       .pipe(livereload());
