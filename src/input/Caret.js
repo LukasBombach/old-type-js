@@ -353,8 +353,9 @@ function Caret() {
   };
 
   /**
-   * Returns the container to which all caret divs will be appended.
-   * Creates the container if it has not been created yet.
+   * All div representations of carets will be appended to a single
+   * container. This method returns this container and creates it
+   * if it has not been created yet.
    *
    * @returns {HTMLElement}
    * @private
