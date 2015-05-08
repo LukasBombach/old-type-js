@@ -199,7 +199,7 @@ function Caret() {
    */
   this._positionAtOffset = function () {
     var rect = this._getRectAtOffset(this.textNode, this.offset);
-    this._postitionAt(rect.left, rect.top);
+    this._positionAt(rect.left, rect.top);
     return this;
   };
 
@@ -211,7 +211,7 @@ function Caret() {
    * @returns {Caret}
    * @private
    */
-  this._postitionAt = function (x, y) {
+  this._positionAt = function (x, y) {
     this.caretEl.style.left = x + 'px';
     this.caretEl.style.top = y + 'px';
     return this;
