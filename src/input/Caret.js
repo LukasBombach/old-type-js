@@ -1,16 +1,22 @@
 'use strict';
 
 /**
- *
- * @type {Type|exports|module.exports}
+ * @type {Object}
  */
-//var Settings = require('../core');
+var Settings = require('../core').settings;
 
 /**
  * An editor's caret. We cannot use the browser's native caret since we do not utilize
  * native inputs (a textarea or an element that is set to contenteditable). We emulate
  * a caret with a blinking div. This class manages that div and provides methods to
  * position it.
+ *
+ * @class Caret
+ **/
+
+/**
+ * Creates a new Caret and adds a hidden div (visual representation of the caret) to
+ * the DOM
  *
  * @constructor
  */
@@ -27,7 +33,7 @@ function Caret() {
    * @type {string}
    * @private
    */
-  this._containerId = 'typejs-' + 'caret-container';
+  this._containerId = Settings.prefix + 'caret-container';
 
   /**
    * Places the caret in a text node at a given position
@@ -316,7 +322,7 @@ function Caret() {
   this._createElement = function () {
     var container = this._getElementContainer(),
         el = window.document.createElement('div');
-    el.className = 'typejs-' + 'caret';
+    el.className = Settings.prefix + 'caret';
     container.appendChild(el);
     return el;
   };
