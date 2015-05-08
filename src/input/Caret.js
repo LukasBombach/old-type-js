@@ -1,25 +1,10 @@
 'use strict';
 
-function textNodeNode(options) {
-  options = options || {};
-  this.prev = options.prev;
-  this.next = options.next;
-}
-
-
 /**
- * Type js core from which we will read settings
- * @private
- * @type {Type}
+ *
+ * @type {Type|exports|module.exports}
  */
-//var Type = require('../core');
-
-/**
- * The id attribute of the container element
- * @private
- * @type {string}
- */
-var containerId = 'typejs-' + 'caret-container';
+//var Settings = require('../core');
 
 /**
  * An editor's caret. We cannot use the browser's native caret since we do not utilize
@@ -35,6 +20,14 @@ function Caret() {
 }
 
 (function () {
+
+  /**
+   * The id attribute of the caret container element
+   *
+   * @type {string}
+   * @private
+   */
+  this._containerId = 'typejs-' + 'caret-container';
 
   /**
    * Places the caret in a text node at a given position
@@ -111,7 +104,7 @@ function Caret() {
       if(charOffset < 0) {
         return this;
       }
-    } while (searched.top === current.top || searched.right > current.right)
+    } while (searched.top === current.top || searched.right > current.right);
     this.offset = charOffset;
     this._moveTo(searched.right, searched.top);
     this._resetBlink();
@@ -141,9 +134,9 @@ function Caret() {
   };
 
   /**
-   * Inserts a given {String} at the caret's current offset in the caret's current text node
+   * Inserts a given {string} at the caret's current offset in the caret's current text node
    *
-   * @param {String} text - The {String} that will be be inserted
+   * @param {string} text - The {string} that will be be inserted
    * @returns {Caret}
    */
   this.insertTextAtOffset = function (text) {
@@ -248,7 +241,7 @@ function Caret() {
    * Todo There should be a separate utility module for stuff like this
    *
    * @param {Element} el - The {Element} that the class should be added to
-   * @param {String} className - The class to be removed
+   * @param {string} className - The class to be removed
    * @returns {Caret}
    * @private
    */
@@ -266,7 +259,7 @@ function Caret() {
    * Todo There should be a separate utility module for stuff like this
    *
    * @param {Element} el - The {Element} that the class should be removed from
-   * @param {String} className - The class to be removed
+   * @param {string} className - The class to be removed
    * @returns {Caret}
    * @private
    */
@@ -336,10 +329,10 @@ function Caret() {
    * @private
    */
   this._getElementContainer = function () {
-    var container = window.document.getElementById(containerId);
+    var container = window.document.getElementById(this._containerId);
     if (container === null) {
       container = window.document.createElement('div');
-      container.setAttribute('id', containerId);
+      container.setAttribute('id', this._containerId);
       window.document.body.appendChild(container);
     }
     return container;
