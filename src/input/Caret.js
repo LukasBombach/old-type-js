@@ -129,7 +129,7 @@ function Caret() {
    */
   this._setOffset = function (offset) {
     this.offset = offset;
-    this._positionAtOffset();
+    this._moveElToOffset();
     this._resetBlink();
     this._scrollIntoView();
     return this;
@@ -197,9 +197,9 @@ function Caret() {
    * @returns {Caret}
    * @private
    */
-  this._positionAtOffset = function () {
+  this._moveElToOffset = function () {
     var rect = this._getRectAtOffset(this.textNode, this.offset);
-    this._positionAt(rect.left, rect.top);
+    this._moveElTo(rect.left, rect.top);
     return this;
   };
 
@@ -211,7 +211,7 @@ function Caret() {
    * @returns {Caret}
    * @private
    */
-  this._positionAt = function (x, y) {
+  this._moveElTo = function (x, y) {
     this.caretEl.style.left = x + 'px';
     this.caretEl.style.top = y + 'px';
     return this;
