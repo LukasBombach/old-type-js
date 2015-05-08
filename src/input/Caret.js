@@ -22,51 +22,6 @@ function textNodeNode(options) {
 var containerId = 'typejs-' + 'caret-container';
 
 /**
- * Returns the container which all caret divs will be appended to
- * Creates the container if it has not been created yet
- * @private
- * @returns {HTMLElement}
- */
-function getElementContainer() {
-  var container = window.document.getElementById(containerId);
-  if (container === null) {
-    container = window.document.createElement('div');
-    container.setAttribute('id', containerId);
-    window.document.body.appendChild(container);
-  }
-  return container;
-}
-
-/**
- * Adds a class to an element
- * @private
- * @param el
- * @param className
- */
-function addClass(el, className) {
-  if (el.classList) {
-    el.classList.add(className);
-  } else {
-    el.className += ' ' + className;
-  }
-}
-
-/**
- * Removes a class from an element
- * @private
- * @param el
- * @param className
- */
-function removeClass(el, className) {
-  if (el.classList) {
-    el.classList.remove(className);
-  } else {
-    var regex = new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi');
-    el.className = el.className.replace(regex, ' ');
-  }
-}
-
-/**
  * An editor's caret. We cannot use the browser's native caret since we do not utilize
  * native inputs (a textarea or an element that is set to contenteditable). We emulate
  * a caret with a blinking div. This class manages that div and provides methods to
@@ -225,8 +180,8 @@ function Caret() {
    * @returns {Caret}
    */
   this.blink = function () {
-    removeClass(this.caretEl, 'hide');
-    addClass(this.caretEl, 'blink');
+    this._removeClass(this.caretEl, 'hide');
+    this._addClass(this.caretEl, 'blink');
     return this;
   };
 
@@ -236,8 +191,8 @@ function Caret() {
    * @returns {Caret}
    */
   this.hide = function () {
-    removeClass(this.caretEl, 'blink');
-    addClass(this.caretEl, 'hide');
+    this._removeClass(this.caretEl, 'blink');
+    this._addClass(this.caretEl, 'hide');
     return this;
   };
 
@@ -251,7 +206,7 @@ function Caret() {
     if (typeof this.caretEl !== "object") {
       return this;
     }
-    var container = getElementContainer();
+    var container = this._getElementContainer();
     container.removeChild(this.caretEl);
     if (!container.hasChildNodes()) {
       container.parentNode.removeChild(container);
@@ -285,6 +240,43 @@ function Caret() {
     var newCaret = this.caretEl.cloneNode(true);
     this.caretEl.parentNode.replaceChild(newCaret, this.caretEl);
     this.caretEl = newCaret;
+    return this;
+  };
+
+  /**
+   * Utility method to add a class to an element
+   * Todo There should be a separate utility module for stuff like this
+   *
+   * @param {Element} el - The {Element} that the class should be added to
+   * @param {String} className - The class to be removed
+   * @returns {Caret}
+   * @private
+   */
+  this._addClass = function (el, className) {
+    if (el.classList) {
+      el.classList.add(className);
+    } else {
+      el.className += ' ' + className;
+    }
+    return this;
+  };
+
+  /**
+   * Utility method to remove a class from an element
+   * Todo There should be a separate utility module for stuff like this
+   *
+   * @param {Element} el - The {Element} that the class should be removed from
+   * @param {String} className - The class to be removed
+   * @returns {Caret}
+   * @private
+   */
+  this._removeClass = function (el, className) {
+    if (el.classList) {
+      el.classList.remove(className);
+    } else {
+      var regex = new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi');
+      el.className = el.className.replace(regex, ' ');
+    }
     return this;
   };
 
@@ -329,18 +321,35 @@ function Caret() {
    * @private
    */
   this._createElement = function () {
-    var container = getElementContainer(),
+    var container = this._getElementContainer(),
         el = window.document.createElement('div');
     el.className = 'typejs-' + 'caret';
     container.appendChild(el);
     return el;
   };
 
+  /**
+   * Returns the container to which all caret divs will be appended.
+   * Creates the container if it has not been created yet.
+   *
+   * @returns {HTMLElement}
+   * @private
+   */
+  this._getElementContainer = function () {
+    var container = window.document.getElementById(containerId);
+    if (container === null) {
+      container = window.document.createElement('div');
+      container.setAttribute('id', containerId);
+      window.document.body.appendChild(container);
+    }
+    return container;
+  }
 
 }).call(Caret.prototype);
 
 /**
  * Module exports
+ *
  * @type {Caret}
  */
 module.exports = Caret;
