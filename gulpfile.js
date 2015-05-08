@@ -184,10 +184,13 @@ gulp.task('concat-test', function (callback) {
     });
 
   rjs.optimize(rjsOptions, function () {
+
     gulp
       .src(allTestFiles)
       .pipe(livereload());
+
     callback();
+
   }, function (err) {
     return callback(err);
   });

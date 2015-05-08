@@ -38,6 +38,19 @@ function getElementContainer() {
 }
 
 /**
+ * Creates a div - the visual representation of the caret
+ * @private
+ * @returns {HTMLElement}
+ */
+function createElement() {
+  var container = getElementContainer(),
+    el = window.document.createElement('div');
+  el.className = 'typejs-' + 'caret';
+  container.appendChild(el);
+  return el;
+}
+
+/**
  * Adds a class to an element
  * @private
  * @param el
@@ -67,98 +80,47 @@ function removeClass(el, className) {
 }
 
 /**
- * An editor's caret. We cannot use the browser's native caret since we do not utilize
- * native inputs (a textarea or an element that is set to contenteditable). We emulate
- * a caret with a blinking div. This class manages that div and provides methods to
- * position it.
- *
+ * The Caret function-object on which we work on
  * @constructor
  */
 function Caret() {
-  this.caretEl = this._createElement();
+  this.caretEl = createElement();
   this.hide();
 }
 
-(function () {
-
-  /**
-   * Places the caret in a text node at a given position
-   *
-   * @param {Node} node - The (text) {Node} in which the caret should be placed
-   * @param {int} offset - The character offset where the caret should be moved to
-   * @returns {Caret}
-   */
-  this.setTextNode = function (node, offset) {
-    if (!(node instanceof Node) || node.nodeType !== Node.TEXT_NODE) {
-      throw new Error('textNode parameter must be a Node of type Node.TEXT_NODE');
-    }
-    if (node === this.textNode && offset === null) {
-      return this;
-    }
-    this.textNode = node;
-    this.offset = offset || 0;
-    // todo should trigger event that positions the caret visually
-    var rect = getRect(this.textNode, this.offset);
-    //this.positionByOffset(); // todo trigger by event
-    var x = this.offset === 0 ? rect.left : rect.right;
-    this.moveTo(x, rect.top);
-    this.resetBlink();
+/**
+ *
+ * @param textNode
+ * @param offset
+ * @returns {Caret}
+ */
+Caret.prototype.setTextNode = function (textNode, offset) {
+  if (!(textNode instanceof Node) || textNode.nodeType !== Node.TEXT_NODE) {
+    throw new Error('textNode parameter must be a Node of type Node.TEXT_NODE');
+  }
+  if (textNode === this.textNode && offset === null) {
     return this;
-  };
+  }
+  this.textNode = textNode;
+  this.offset = offset || 0;
+  // todo should trigger event that positions the caret visually
+  var rect = getRect(this.textNode, this.offset);
+  //this.positionByOffset(); // todo trigger by event
+  var x = this.offset === 0 ? rect.left : rect.right;
+  this.moveTo(x, rect.top);
+  this.resetBlink();
+  return this;
+};
 
-  /**
-   * Hides the caret visually
-   *
-   * @returns {Caret}
-   */
-  this.hide = function () {
-    removeClass(this.caretEl, 'blink');
-    addClass(this.caretEl, 'hide');
-    return this;
-  };
-
-  /**
-   * Creates a {Range} and returns it
-   *
-   * @param {Node} node - The node in which the created range should begin
-   * @param {int} start - The offset at which the range should start
-   * @param {int} end - The offset at which the range should end
-   * @param {Node} [endNode=node] - The node in which the created range should end.
-   *                                Optional. Defaults to the start node.
-   * @returns {Range}
-   * @private
-   */
-  this._createRange = function(node, start, end, endNode) {
-    var range = window.document.createRange();
-    range.setEnd(endNode || node, end);
-    range.setStart(node, start);
-    return range;
-  };
-
-  /**
-   * Creates a div - the visual representation of the caret
-   *
-   * @returns {HTMLElement}
-   * @private
-   */
-  this._createElement = function () {
-    var container = getElementContainer(),
-      el = window.document.createElement('div');
-    el.className = 'typejs-' + 'caret';
-    container.appendChild(el);
-    return el;
-  };
-
-
-}).call(Caret.prototype);
-
-
-
-
-
+function range(node, start, end, endNode) {
+  var r = window.document.createRange();
+  r.setEnd(endNode || node, end);
+  r.setStart(node, start);
+  return r;
+}
 
 function getRect(textNode, offset) {
-  var rects = this._createRange(textNode, offset, offset + 1).getClientRects();
+  var rects = range(textNode, offset, offset + 1).getClientRects();
   return rects[0];
 }
 
@@ -264,6 +226,14 @@ Caret.prototype.resetBlink = function () {
   var newCaret = this.caretEl.cloneNode(true);
   this.caretEl.parentNode.replaceChild(newCaret, this.caretEl);
   this.caretEl = newCaret;
+};
+
+/**
+ * Hides the caret
+ */
+Caret.prototype.hide = function () {
+  removeClass(this.caretEl, 'blink');
+  addClass(this.caretEl, 'hide');
 };
 
 /**
