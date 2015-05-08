@@ -41,7 +41,7 @@ function Caret() {
    */
   this.setTextNode = function (node, offset) {
     if (!(node instanceof Node) || node.nodeType !== Node.TEXT_NODE) {
-      throw new Error('textNode parameter must be a Node of type Node.TEXT_NODE');
+      throw new Error('node parameter must be a Node of type Node.TEXT_NODE');
     }
     if (node === this.textNode && offset === null) {
       return this;
@@ -74,7 +74,7 @@ function Caret() {
    * @returns {Caret}
    */
   this.moveRight = function () {
-    if (this.offset + 1 >= this.textNode.length) {
+    if (this.offset >= this.textNode.length) {
       return this;
     }
     this.offset += 1;
@@ -90,10 +90,10 @@ function Caret() {
    */
   this.moveUp = function () {
     var searched,
-      current = this._getRectForCharacter(this.textNode, this.offset),
+      current = this._getRectAtOffset(this.textNode, this.offset),
       charOffset = this.offset;
     do {
-      searched = this._getRectForCharacter(this.textNode, charOffset);
+      searched = this._getRectAtOffset(this.textNode, charOffset);
       charOffset--;
       if(charOffset < 0) {
         return this;
@@ -112,10 +112,10 @@ function Caret() {
    */
   this.moveDown = function () {
     var searched,
-      current = this._getRectForCharacter(this.textNode, this.offset),
+      current = this._getRectAtOffset(this.textNode, this.offset),
       charOffset = this.offset;
     do {
-      searched = this._getRectForCharacter(this.textNode, charOffset);
+      searched = this._getRectAtOffset(this.textNode, charOffset);
       charOffset++;
       if(charOffset >= this.textNode.length) {
         return this;
@@ -146,18 +146,19 @@ function Caret() {
 
   /**
    * Removes one character left from the current offset
+   * and moves the caret accordingly
    *
    * @returns {Caret}
    */
   this.removeAtOffset = function () {
-    var offset = this.offset,
-        str = this.textNode.nodeValue;
-    this.moveLeft();
-    this.moveLeft();
-    if (offset > 0) {
-      this.textNode.nodeValue = str.substring(0, offset - 1) + str.substring(offset, str.length);
+    if (this.offset <= 0) {
+      return this;
     }
-    this.moveRight();
+    var str = this.textNode.nodeValue;
+    this.textNode.nodeValue = str.substring(0, this.offset - 1) + str.substring(this.offset, str.length);
+    this.offset -= 1;
+    this._moveToOffset();
+    this._resetBlink();
     return this;
   };
 
@@ -209,7 +210,7 @@ function Caret() {
    * @private
    */
   this._moveToOffset = function () {
-    var rect = this._getRectForCharacter(this.textNode, this.offset);
+    var rect = this._getRectAtOffset(this.textNode, this.offset);
     this._moveTo(rect.left, rect.top);
     return this;
   };
@@ -290,26 +291,27 @@ function Caret() {
    * @returns {ClientRect}
    * @private
    */
-  this._getRectForCharacter = function (node, offset) {
-    var rects = this._createRange(node, offset, offset + 1).getClientRects();
+  this._getRectAtOffset = function (node, offset) {
+    var rects = this._createRange(node, offset).getClientRects();
     return rects[0];
   };
 
   /**
    * Creates a {Range} and returns it
    *
-   * @param {Node} node - The node in which the created range should begin
+   * @param {Node} startNode - The node in which the created range should begin
    * @param {number} start - The offset at which the range should start
-   * @param {number} end - The offset at which the range should end
+   * @param {number} [end=start] - The offset at which the range should end
+   *     Optional. Defaults to the start offset.
    * @param {Node} [endNode=node] - The node in which the created range should end.
    *     Optional. Defaults to the start node.
    * @returns {Range}
    * @private
    */
-  this._createRange = function(node, start, end, endNode) {
+  this._createRange = function(startNode, start, end, endNode) {
     var range = window.document.createRange();
-    range.setEnd(endNode || node, end);
-    range.setStart(node, start);
+    range.setEnd(endNode || startNode, end || start);
+    range.setStart(startNode, start);
     return range;
   };
 
