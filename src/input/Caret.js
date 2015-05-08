@@ -85,6 +85,7 @@ function Caret() {
 
   /**
    * Moves the caret up by one line. Tries to preserve horizontal position.
+   * Todo needs refactoring, moving up a) not accurate, b) buggy
    *
    * @returns {Caret}
    */
@@ -100,13 +101,14 @@ function Caret() {
       }
     } while (searched.top === current.top || searched.right > current.right);
     this.offset = charOffset;
-    this._moveTo(searched.right, searched.top);
+    this._moveToOffset();
     this._resetBlink();
     return this;
   };
 
   /**
    * Moves the caret down by one line. Tries to preserve horizontal position.
+   * Todo needs refactoring, moving down a) not accurate, b) buggy
    *
    * @returns {Caret}
    */
@@ -122,7 +124,7 @@ function Caret() {
       }
     } while (searched.top === current.top || searched.right < current.right);
     this.offset = charOffset;
-    this._moveTo(searched.right, searched.top);
+    this._moveToOffset();
     this._resetBlink();
     return this;
   };
