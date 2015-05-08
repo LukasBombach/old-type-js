@@ -130,7 +130,8 @@ function Caret() {
   };
 
   /**
-   * Inserts a given {string} at the caret's current offset in the caret's current text node
+   * Inserts a given {string} at the caret's current offset in the caret's
+   * current text node
    *
    * @param {string} str - The {string} that will be be inserted
    * @returns {Caret}
@@ -138,7 +139,9 @@ function Caret() {
   this.insertTextAtOffset = function (str) {
     var nodeText = this.textNode.nodeValue;
     if (this.offset > 0) {
-      this.textNode.nodeValue = nodeText.substring(0, this.offset) + str + nodeText.substring(this.offset, nodeText.length);
+      this.textNode.nodeValue = nodeText.substring(0, this.offset)
+        + str
+        + nodeText.substring(this.offset, nodeText.length);
     } else {
       this.textNode.nodeValue = str + nodeText;
     }
@@ -157,7 +160,8 @@ function Caret() {
       return this;
     }
     var str = this.textNode.nodeValue;
-    this.textNode.nodeValue = str.substring(0, this.offset - 1) + str.substring(this.offset, str.length);
+    this.textNode.nodeValue = str.substring(0, this.offset - 1)
+      + str.substring(this.offset, str.length);
     this.offset -= 1;
     this._moveToOffset();
     this._resetBlink();
@@ -232,6 +236,17 @@ function Caret() {
   };
 
   /**
+   * Scrolls page to show caret
+   *
+   * @returns {Caret}
+   * @private
+   */
+  this._scrollIntoView = function () {
+    this.caretEl.scrollIntoView();
+    return this;
+  };
+
+  /**
    * Resets the blink animation by recreating the caret div element
    * Todo Maybe find a better way to reset the blink animation, DOM = slow
    *
@@ -276,7 +291,8 @@ function Caret() {
     if (el.classList) {
       el.classList.remove(className);
     } else {
-      var regex = new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi');
+      var regex = new RegExp('(^|\\b)' + className.split(' ')
+          .join('|') + '(\\b|$)', 'gi');
       el.className = el.className.replace(regex, ' ');
     }
     return this;
