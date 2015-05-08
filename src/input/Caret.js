@@ -101,8 +101,8 @@ function Caret() {
     var rect = this._getRectForCharacter(this.textNode, this.offset);
     //this.positionByOffset(); // todo trigger by event
     var x = this.offset === 0 ? rect.left : rect.right;
-    this.moveTo(x, rect.top);
-    this.resetBlink();
+    this._moveTo(x, rect.top);
+    this._resetBlink();
     return this;
   };
 
@@ -119,8 +119,8 @@ function Caret() {
     var rect = this._getRectForCharacter(this.textNode, this.offset);
     //this.positionByOffset(); // todo trigger by event
     var x = this.offset === 0 ? rect.left : rect.right;
-    this.moveTo(x, rect.top);
-    this.resetBlink();
+    this._moveTo(x, rect.top);
+    this._resetBlink();
     return this;
   };
 
@@ -136,8 +136,8 @@ function Caret() {
     var rect = this._getRectForCharacter(this.textNode, this.offset);
     this.offset += 1;
     //this.positionByOffset(); // todo trigger by event
-    this.moveTo(rect.right, rect.top);
-    this.resetBlink();
+    this._moveTo(rect.right, rect.top);
+    this._resetBlink();
     return this;
   };
 
@@ -158,8 +158,8 @@ function Caret() {
       }
     } while (searched.top === current.top || searched.right > current.right)
     this.offset = charOffset;
-    this.moveTo(searched.right, searched.top);
-    this.resetBlink();
+    this._moveTo(searched.right, searched.top);
+    this._resetBlink();
     return this;
   };
 
@@ -178,10 +178,10 @@ function Caret() {
       if(charOffset >= this.textNode.length) {
         return this;
       }
-    } while (searched.top === current.top || searched.right < current.right)
+    } while (searched.top === current.top || searched.right < current.right);
     this.offset = charOffset;
-    this.moveTo(searched.right, searched.top);
-    this.resetBlink();
+    this._moveTo(searched.right, searched.top);
+    this._resetBlink();
     return this;
   };
 
@@ -189,6 +189,7 @@ function Caret() {
    * Inserts a given {String} at the caret's current offset in the caret's current text node
    *
    * @param {String} text - The {String} that will be be inserted
+   * @returns {Caret}
    */
   this.insertTextAtOffset = function (text) {
     var str = this.textNode.nodeValue;
@@ -198,16 +199,92 @@ function Caret() {
       this.textNode.nodeValue = text + str;
     }
     this.moveRight();
+    return this;
   };
 
   /**
-   * Hides the caret visually
+   * Removes one character left from the current offset
+   *
+   * @returns {Caret}
+   */
+  this.removeAtOffset = function () {
+    var offset = this.offset,
+        str = this.textNode.nodeValue;
+    this.moveLeft();
+    this.moveLeft();
+    if (offset > 0) {
+      this.textNode.nodeValue = str.substring(0, offset - 1) + str.substring(offset, str.length);
+    }
+    this.moveRight();
+    return this;
+  };
+
+  /**
+   * Makes the caret blink
+   *
+   * @returns {Caret}
+   */
+  this.blink = function () {
+    removeClass(this.caretEl, 'hide');
+    addClass(this.caretEl, 'blink');
+    return this;
+  };
+
+  /**
+   * Hides the caret
    *
    * @returns {Caret}
    */
   this.hide = function () {
     removeClass(this.caretEl, 'blink');
     addClass(this.caretEl, 'hide');
+    return this;
+  };
+
+  /**
+   * Removes the caret div from the DOM. Also removes the caret
+   * container if there are no more carets in it
+   *
+   * @returns {Caret}
+   */
+  this.destroy = function () {
+    if (typeof this.caretEl !== "object") {
+      return this;
+    }
+    var container = getElementContainer();
+    container.removeChild(this.caretEl);
+    if (!container.hasChildNodes()) {
+      container.parentNode.removeChild(container);
+    }
+    this.caretEl = null;
+    return this;
+  };
+
+  /**
+   * Moves the caret to the given position
+   *
+   * @param {number} x Horizontal position the caret should be moved to
+   * @param {number} y Vertical position the caret should be moved to
+   * @returns {Caret}
+   * @private
+   */
+  this._moveTo = function (x, y) {
+    this.caretEl.style.left = x + 'px';
+    this.caretEl.style.top = y + 'px';
+    return this;
+  };
+
+  /**
+   * Resets the blink animation by recreating the caret div element
+   * Todo Maybe find a better way to reset the blink animation, DOM = slow
+   *
+   * @returns {Caret}
+   * @private
+   */
+  this._resetBlink = function () {
+    var newCaret = this.caretEl.cloneNode(true);
+    this.caretEl.parentNode.replaceChild(newCaret, this.caretEl);
+    this.caretEl = newCaret;
     return this;
   };
 
@@ -261,64 +338,6 @@ function Caret() {
 
 
 }).call(Caret.prototype);
-
-
-
-
-
-
-
-
-
-
-
-
-
-Caret.prototype.removeAtOffset = function () {
-  var offset = this.offset,
-    str = this.textNode.nodeValue;
-  this.moveLeft();
-  this.moveLeft();
-  if (offset > 0) {
-    this.textNode.nodeValue = str.substring(0, offset - 1) + str.substring(offset, str.length);
-  }
-  this.moveRight();
-};
-
-/**
- * Moves the caret to the given position
- * @param x
- * @param y
- */
-Caret.prototype.moveTo = function (x, y) {
-  this.caretEl.style.left = x + 'px';
-  this.caretEl.style.top = y + 'px';
-};
-
-/**
- * Makes the caret blink
- */
-Caret.prototype.blink = function () {
-  removeClass(this.caretEl, 'hide');
-  addClass(this.caretEl, 'blink');
-};
-
-Caret.prototype.resetBlink = function () {
-  var newCaret = this.caretEl.cloneNode(true);
-  this.caretEl.parentNode.replaceChild(newCaret, this.caretEl);
-  this.caretEl = newCaret;
-};
-
-/**
- * Removes the caret from the dom
- */
-Caret.prototype.destroy = function () {
-  var container = getElementContainer();
-  container.removeChild(this.caretEl);
-  if (!container.hasChildNodes()) {
-    container.parentNode.removeChild(container);
-  }
-};
 
 /**
  * Module exports

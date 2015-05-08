@@ -108,7 +108,7 @@ Caret.prototype.setTextNode = function (textNode, offset) {
   //this.positionByOffset(); // todo trigger by event
   var x = this.offset === 0 ? rect.left : rect.right;
   this.moveTo(x, rect.top);
-  this.resetBlink();
+  this._resetBlink();
   return this;
 };
 
@@ -133,7 +133,7 @@ Caret.prototype.moveLeft = function () {
   //this.positionByOffset(); // todo trigger by event
   var x = this.offset === 0 ? rect.left : rect.right;
   this.moveTo(x, rect.top);
-  this.resetBlink();
+  this._resetBlink();
   return this;
 };
 
@@ -145,7 +145,7 @@ Caret.prototype.moveRight = function () {
   this.offset += 1;
   //this.positionByOffset(); // todo trigger by event
   this.moveTo(rect.right, rect.top);
-  this.resetBlink();
+  this._resetBlink();
   return this;
 };
 
@@ -162,7 +162,7 @@ Caret.prototype.moveUp = function () {
   } while (searched.top === current.top || searched.right > current.right)
   this.offset = charOffset;
   this.moveTo(searched.right, searched.top);
-  this.resetBlink();
+  this._resetBlink();
   return this;
 };
 
@@ -179,7 +179,7 @@ Caret.prototype.moveDown = function () {
   } while (searched.top === current.top || searched.right < current.right)
   this.offset = charOffset;
   this.moveTo(searched.right, searched.top);
-  this.resetBlink();
+  this._resetBlink();
   return this;
 };
 
@@ -222,7 +222,7 @@ Caret.prototype.blink = function () {
   addClass(this.caretEl, 'blink');
 };
 
-Caret.prototype.resetBlink = function () {
+Caret.prototype._resetBlink = function () {
   var newCaret = this.caretEl.cloneNode(true);
   this.caretEl.parentNode.replaceChild(newCaret, this.caretEl);
   this.caretEl = newCaret;
