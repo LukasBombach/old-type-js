@@ -33,25 +33,6 @@ function Caret() {
   this._containerId = Settings.prefix + 'caret-container';
 
   /**
-   * Places the caret in a text node at a given position
-   *
-   * @param {Node} node - The (text) {Node} in which the caret should be placed
-   * @param {number} offset - The character offset where the caret should be moved to
-   * @returns {Caret}
-   */
-  this.setTextNode = function (node, offset) {
-    if (!(node instanceof Node) || node.nodeType !== Node.TEXT_NODE) {
-      throw new Error('node parameter must be a Node of type Node.TEXT_NODE');
-    }
-    if (node === this.textNode && offset === null) {
-      return this;
-    }
-    this.textNode = node;
-    this.moveToAndShowAtOffset(offset || 0);
-    return this;
-  };
-
-  /**
    * Moves the caret left by one character
    *
    * @returns {Caret}
@@ -145,7 +126,7 @@ function Caret() {
    *
    * @returns {Caret}
    */
-  this.removeAtOffset = function () {
+  this.removeCharacterAtOffset = function () {
     if (this.offset <= 0) {
       return this;
     }
@@ -156,6 +137,41 @@ function Caret() {
     return this;
   };
 
+  /**
+   * Places the caret in a text node at a given position
+   * Todo Merge method with moveToAndShowAtOffset
+   *
+   * @param {Node} node - The (text) {Node} in which the caret should be placed
+   * @param {number} offset - The character offset where the caret should be moved to
+   * @returns {Caret}
+   */
+  this.setTextNode = function (node, offset) {
+    if (!(node instanceof Node) || node.nodeType !== Node.TEXT_NODE) {
+      throw new Error('node parameter must be a Node of type Node.TEXT_NODE');
+    }
+    if (node === this.textNode && offset === null) {
+      return this;
+    }
+    this.textNode = node;
+    this.moveToAndShowAtOffset(offset || 0);
+    return this;
+  };
+
+  /**
+   * Sets the offset and displays the caret at the according
+   * position
+   *
+   * @param {number} offset - The offset that should be set
+   * @returns {Caret}
+   */
+  this.moveToAndShowAtOffset = function (offset) {
+    this.offset = offset;
+    this._moveToOffset();
+    this._resetBlink();
+    this._scrollIntoView();
+    return this;
+  };
+  
   /**
    * Makes the caret blink
    *
@@ -194,21 +210,6 @@ function Caret() {
       container.parentNode.removeChild(container);
     }
     this.caretEl = null;
-    return this;
-  };
-
-  /**
-   * Sets the offset and displays the caret at the according
-   * position
-   *
-   * @param {number} offset - The offset that should be set
-   * @returns {Caret}
-   */
-  this.moveToAndShowAtOffset = function (offset) {
-    this.offset = offset;
-    this._moveToOffset();
-    this._resetBlink();
-    this._scrollIntoView();
     return this;
   };
 
