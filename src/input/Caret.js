@@ -47,9 +47,7 @@ function Caret() {
       return this;
     }
     this.textNode = node;
-    this.offset = offset || 0;
-    this._moveToOffset();
-    this._resetBlink();
+    this.moveToAndShowAtOffset(offset || 0);
     return this;
   };
 
@@ -62,9 +60,7 @@ function Caret() {
     if (this.offset <= 0) {
       return this;
     }
-    this.offset -= 1;
-    this._moveToOffset();
-    this._resetBlink();
+    this.moveToAndShowAtOffset(this.offset - 1);
     return this;
   };
 
@@ -77,9 +73,7 @@ function Caret() {
     if (this.offset >= this.textNode.length) {
       return this;
     }
-    this.offset += 1;
-    this._moveToOffset();
-    this._resetBlink();
+    this.moveToAndShowAtOffset(this.offset + 1);
     return this;
   };
 
@@ -100,9 +94,7 @@ function Caret() {
         return this;
       }
     } while (searched.top === current.top || searched.right > current.right);
-    this.offset = charOffset;
-    this._moveToOffset();
-    this._resetBlink();
+    this.moveToAndShowAtOffset(charOffset);
     return this;
   };
 
@@ -123,9 +115,7 @@ function Caret() {
         return this;
       }
     } while (searched.top === current.top || searched.right < current.right);
-    this.offset = charOffset;
-    this._moveToOffset();
-    this._resetBlink();
+    this.moveToAndShowAtOffset(charOffset);
     return this;
   };
 
@@ -162,9 +152,7 @@ function Caret() {
     var str = this.textNode.nodeValue;
     this.textNode.nodeValue = str.substring(0, this.offset - 1)
       + str.substring(this.offset, str.length);
-    this.offset -= 1;
-    this._moveToOffset();
-    this._resetBlink();
+    this.moveToAndShowAtOffset(this.offset - 1);
     return this;
   };
 
@@ -206,6 +194,21 @@ function Caret() {
       container.parentNode.removeChild(container);
     }
     this.caretEl = null;
+    return this;
+  };
+
+  /**
+   * Sets the offset and displays the caret at the according
+   * position
+   *
+   * @param {number} offset - The offset that should be set
+   * @returns {Caret}
+   */
+  this.moveToAndShowAtOffset = function (offset) {
+    this.offset = offset;
+    this._moveToOffset();
+    this._resetBlink();
+    this._scrollIntoView();
     return this;
   };
 
