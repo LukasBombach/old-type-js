@@ -85,7 +85,7 @@ function Caret() {
    * Places the caret in a text node at a given position
    *
    * @param {Node} node - The (text) {Node} in which the caret should be placed
-   * @param {int} offset - The character offset where the caret should be moved to
+   * @param {number} offset - The character offset where the caret should be moved to
    * @returns {Caret}
    */
   this.setTextNode = function (node, offset) {
@@ -98,7 +98,7 @@ function Caret() {
     this.textNode = node;
     this.offset = offset || 0;
     // todo should trigger event that positions the caret visually
-    var rect = getRect(this.textNode, this.offset);
+    var rect = this._getRectForCharacter(this.textNode, this.offset);
     //this.positionByOffset(); // todo trigger by event
     var x = this.offset === 0 ? rect.left : rect.right;
     this.moveTo(x, rect.top);
@@ -118,13 +118,29 @@ function Caret() {
   };
 
   /**
+   * Returns a {ClientRect} with the boundaries enclosing a character at a
+   * given offset in a text node
+   *
+   * @param {Node} node - The text node which containing the character we
+   *     which to fetch the boundaries of
+   * @param {number} offset - The offset of the character we which to fetch
+   *     the boundaries of
+   * @returns {ClientRect}
+   * @private
+   */
+  this._getRectForCharacter = function (node, offset) {
+    var rects = this._createRange(node, offset, offset + 1).getClientRects();
+    return rects[0];
+  };
+
+  /**
    * Creates a {Range} and returns it
    *
    * @param {Node} node - The node in which the created range should begin
-   * @param {int} start - The offset at which the range should start
-   * @param {int} end - The offset at which the range should end
+   * @param {number} start - The offset at which the range should start
+   * @param {number} end - The offset at which the range should end
    * @param {Node} [endNode=node] - The node in which the created range should end.
-   *                                Optional. Defaults to the start node.
+   *     Optional. Defaults to the start node.
    * @returns {Range}
    * @private
    */
@@ -136,14 +152,14 @@ function Caret() {
   };
 
   /**
-   * Creates a div - the visual representation of the caret
+   * Creates a div (the visual representation of the caret) and returns it.
    *
    * @returns {HTMLElement}
    * @private
    */
   this._createElement = function () {
     var container = getElementContainer(),
-      el = window.document.createElement('div');
+        el = window.document.createElement('div');
     el.className = 'typejs-' + 'caret';
     container.appendChild(el);
     return el;
@@ -157,17 +173,14 @@ function Caret() {
 
 
 
-function getRect(textNode, offset) {
-  var rects = this._createRange(textNode, offset, offset + 1).getClientRects();
-  return rects[0];
-}
+
 
 Caret.prototype.moveLeft = function () {
   if (this.offset <= 0) {
     return this;
   }
   this.offset -= 1;
-  var rect = getRect(this.textNode, this.offset);
+  var rect = this._getRectForCharacter(this.textNode, this.offset);
   //this.positionByOffset(); // todo trigger by event
   var x = this.offset === 0 ? rect.left : rect.right;
   this.moveTo(x, rect.top);
@@ -179,7 +192,7 @@ Caret.prototype.moveRight = function () {
   if (this.offset + 1 >= this.textNode.length) {
     return this;
   }
-  var rect = getRect(this.textNode, this.offset);
+  var rect = this._getRectForCharacter(this.textNode, this.offset);
   this.offset += 1;
   //this.positionByOffset(); // todo trigger by event
   this.moveTo(rect.right, rect.top);
@@ -189,10 +202,10 @@ Caret.prototype.moveRight = function () {
 
 Caret.prototype.moveUp = function () {
   var searched,
-    current = getRect(this.textNode, this.offset),
+    current = this._getRectForCharacter(this.textNode, this.offset),
     charOffset = this.offset;
   do {
-    searched = getRect(this.textNode, charOffset);
+    searched = this._getRectForCharacter(this.textNode, charOffset);
     charOffset--;
     if(charOffset < 0) {
       return this;
@@ -206,10 +219,10 @@ Caret.prototype.moveUp = function () {
 
 Caret.prototype.moveDown = function () {
   var searched,
-    current = getRect(this.textNode, this.offset),
+    current = this._getRectForCharacter(this.textNode, this.offset),
     charOffset = this.offset;
   do {
-    searched = getRect(this.textNode, charOffset);
+    searched = this._getRectForCharacter(this.textNode, charOffset);
     charOffset++;
     if(charOffset >= this.textNode.length) {
       return this;
