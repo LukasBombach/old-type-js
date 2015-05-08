@@ -42,8 +42,10 @@ var distTestFile   = "index.js";
 var allSrcFiles = ['./src/**/*.js'];
 
 // Dist
-var distFolder = "./dist/";
-var distFile   = "type.js";
+//var distFolder = "./dist/";
+//var distFile   = "type.js";
+var distFolder = "./src/";
+var distFile   = "type_dist.js";
 var distMin    = "type.min.js";
 
 /********************
@@ -138,7 +140,6 @@ gulp.task('concat-src', function (callback) {
       //  'sourceMap': sourceMapContents
       //};
     var amdCleanOutpout = amdclean.clean(amdcleanOptions);
-    console.log(amdCleanOutpout);
     fs.writeFileSync(outputFile, amdCleanOutpout.code);
     fs.writeFileSync(mapFile, amdCleanOutpout.map);
     gulp
@@ -207,7 +208,7 @@ gulp.task('dev', ["concat-src"], function () {
 /********************
  *
  * High level tasks
- * Intended for usage in console
+ * Intended for cli usage
  *
  ********************/
 gulp.task("build", ["concat-src"]);
