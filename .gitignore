@@ -2,8 +2,9 @@
 dev/
 dist/
 node_modules/
-test/index.js
+test/run/index.js
 src/type.js.map
+test/run/index.js.map
 
 # Development Tools
 .idea

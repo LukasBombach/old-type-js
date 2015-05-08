@@ -209,7 +209,8 @@ gulp.task("test", ["concat-test"], function () {
 gulp.task('dev', ["concat-src"], function () {
   var allFiles = allSrcFiles.concat(allTestFiles);
   livereload.listen();
-  gulp.watch(allFiles, ["test", "build"]);
+  //gulp.watch(allFiles, ["test", "build"]);
+  gulp.watch(allFiles, ["build"]);
 });
 
 /********************
