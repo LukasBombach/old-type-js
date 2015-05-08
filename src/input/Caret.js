@@ -25,7 +25,8 @@ function Caret() {
 (function () {
 
   /**
-   * The id attribute of the caret container element
+   * The id attribute of the caret container element as created by
+   * _getElementContainer()
    *
    * @type {string}
    * @private
@@ -102,7 +103,6 @@ function Caret() {
 
   /**
    * Places the caret in a text node at a given position
-   * Todo Merge method with moveToAndShowAtOffset
    *
    * @param {Node} node - The (text) {Node} in which the caret should be placed
    * @param {number} offset - The character offset where the caret should be moved to
@@ -136,7 +136,7 @@ function Caret() {
     } else {
       this.textNode.nodeValue = str + nodeText;
     }
-    this.moveRight();
+    this._setOffset(this.offset + str.length);
     return this;
   };
 
