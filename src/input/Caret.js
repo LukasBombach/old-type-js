@@ -121,21 +121,6 @@ function Caret() {
   };
 
   /**
-   * Sets the offset and displays the caret at the according
-   * position
-   *
-   * @param {number} offset - The offset that should be set
-   * @returns {Caret}
-   */
-  this._setOffset = function (offset) {
-    this.offset = offset;
-    this._moveElToOffset();
-    this._resetBlink();
-    this._scrollIntoView();
-    return this;
-  };
-
-  /**
    * Inserts a given {string} at the caret's current offset in the caret's
    * current text node
    *
@@ -188,6 +173,21 @@ function Caret() {
       container.parentNode.removeChild(container);
     }
     this.caretEl = null;
+    return this;
+  };
+
+  /**
+   * Sets the offset and displays the caret at the according
+   * position
+   *
+   * @param {number} offset - The offset that should be set
+   * @returns {Caret}
+   */
+  this._setOffset = function (offset) {
+    this.offset = offset;
+    this._moveElToOffset();
+    this._resetBlink();
+    this._scrollIntoView();
     return this;
   };
 
