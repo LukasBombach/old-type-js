@@ -1,8 +1,5 @@
 'use strict';
 
-/**
- * @type {Object}
- */
 var Settings = require('../core').settings;
 
 /**
