@@ -48,11 +48,7 @@ function Caret() {
     }
     this.textNode = node;
     this.offset = offset || 0;
-    // todo should trigger event that positions the caret visually
-    var rect = this._getRectForCharacter(this.textNode, this.offset);
-    //this.positionByOffset(); // todo trigger by event
-    var x = this.offset === 0 ? rect.left : rect.right;
-    this._moveTo(x, rect.top);
+    this._moveToOffset();
     this._resetBlink();
     return this;
   };
@@ -67,10 +63,7 @@ function Caret() {
       return this;
     }
     this.offset -= 1;
-    var rect = this._getRectForCharacter(this.textNode, this.offset);
-    //this.positionByOffset(); // todo trigger by event
-    var x = this.offset === 0 ? rect.left : rect.right;
-    this._moveTo(x, rect.top);
+    this._moveToOffset();
     this._resetBlink();
     return this;
   };
@@ -84,10 +77,8 @@ function Caret() {
     if (this.offset + 1 >= this.textNode.length) {
       return this;
     }
-    var rect = this._getRectForCharacter(this.textNode, this.offset);
     this.offset += 1;
-    //this.positionByOffset(); // todo trigger by event
-    this._moveTo(rect.right, rect.top);
+    this._moveToOffset();
     this._resetBlink();
     return this;
   };
@@ -139,15 +130,15 @@ function Caret() {
   /**
    * Inserts a given {string} at the caret's current offset in the caret's current text node
    *
-   * @param {string} text - The {string} that will be be inserted
+   * @param {string} str - The {string} that will be be inserted
    * @returns {Caret}
    */
-  this.insertTextAtOffset = function (text) {
-    var str = this.textNode.nodeValue;
+  this.insertTextAtOffset = function (str) {
+    var nodeText = this.textNode.nodeValue;
     if (this.offset > 0) {
-      this.textNode.nodeValue = str.substring(0, this.offset) + text + str.substring(this.offset, str.length);
+      this.textNode.nodeValue = nodeText.substring(0, this.offset) + str + nodeText.substring(this.offset, nodeText.length);
     } else {
-      this.textNode.nodeValue = text + str;
+      this.textNode.nodeValue = str + nodeText;
     }
     this.moveRight();
     return this;
@@ -208,6 +199,18 @@ function Caret() {
       container.parentNode.removeChild(container);
     }
     this.caretEl = null;
+    return this;
+  };
+
+  /**
+   * Moves the caret div to the position of the current offset
+   *
+   * @returns {Caret}
+   * @private
+   */
+  this._moveToOffset = function () {
+    var rect = this._getRectForCharacter(this.textNode, this.offset);
+    this._moveTo(rect.left, rect.top);
     return this;
   };
 
