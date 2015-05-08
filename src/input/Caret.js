@@ -105,7 +105,7 @@ function Caret() {
    * Places the caret in a text node at a given position
    *
    * @param {Node} node - The (text) {Node} in which the caret should be placed
-   * @param {number} offset - The character offset where the caret should be moved to
+   * @param {number} [offset=0] - The character offset where the caret should be moved to
    * @returns {Caret}
    */
   this.moveTo = function (node, offset) {
@@ -229,17 +229,6 @@ function Caret() {
   };
 
   /**
-   * Hides the caret
-   *
-   * @returns {Caret}
-   */
-  this._hide = function () {
-    this._removeClass(this.caretEl, 'blink');
-    this._addClass(this.caretEl, 'hide');
-    return this;
-  };
-
-  /**
    * Makes the caret blink
    *
    * @returns {Caret}
@@ -247,6 +236,17 @@ function Caret() {
   this._blink = function () {
     this._removeClass(this.caretEl, 'hide');
     this._addClass(this.caretEl, 'blink');
+    return this;
+  };
+
+  /**
+   * Hides the caret
+   *
+   * @returns {Caret}
+   */
+  this._hide = function () {
+    this._removeClass(this.caretEl, 'blink');
+    this._addClass(this.caretEl, 'hide');
     return this;
   };
 
