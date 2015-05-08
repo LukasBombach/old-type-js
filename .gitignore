@@ -3,6 +3,7 @@ dev/
 dist/
 node_modules/
 test/index.js
+src/type.js.map
 
 # Development Tools
 .idea

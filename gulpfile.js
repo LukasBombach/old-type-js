@@ -45,9 +45,10 @@ var allSrcFiles = ['./src/**/*.js'];
 // Dist
 var distFolder = "./dist/";
 var distFile   = "type.js";
-//var distFolder = "./src/";
-//var distFile   = "type_dist.js";
 var distMin    = "type.min.js";
+
+// Development
+var srcDistRelativePath = '../' + srcFolder;
 
 /********************
  *
@@ -112,15 +113,19 @@ var configs = {
 gulp.task('concat-src', function (callback) {
 
   var outputFile = distFolder + distFile,
-    mapFile = outputFile + '.map',
-    rjsOptions = _.merge(_.clone(configs.rjs), {
+    mapFileName = distFile + '.map',
+    mapFile = srcFolder + mapFileName,
+    rjsConfig = _.clone(configs.rjs),
+    rjsOptions = _.merge(rjsConfig, {
       'baseUrl': srcFolder,
       'include': ['type'],
       'out': outputFile
     });
 
-
   rjs.optimize(rjsOptions, function () {
+
+    fs.renameSync(outputFile + '.map', mapFile);
+
     var sourceMapContents = fs.readFileSync(mapFile, {encoding: 'utf8'}),
       amdcleanOptions = {
         'transformAMDChecks': false,
@@ -128,22 +133,26 @@ gulp.task('concat-src', function (callback) {
         'sourceMap': sourceMapContents,
         'wrap': false,
         'esprima': {
-          'source': 'type.js' // name of your file to appear in sourcemap
+          'source': 'type.js'
         },
         'escodegen': {
-          //'sourceMap': mapFile,
           'sourceMap': true,
-          'sourceMapWithCode': true,
-          'sourceMapRoot' : '../src/'
+          'sourceMapWithCode': true
         }
-      };
-    var amdCleanOutpout = amdclean.clean(amdcleanOptions);
+      },
+      amdCleanOutpout = amdclean.clean(amdcleanOptions);
+
+    amdCleanOutpout.code += "\n//# sourceMappingURL=" + srcDistRelativePath + mapFileName;
+
     fs.writeFileSync(outputFile, amdCleanOutpout.code);
     fs.writeFileSync(mapFile, amdCleanOutpout.map);
+
     gulp
       .src(allSrcFiles)
       .pipe(livereload());
+
     callback();
+
   }, function (err) {
     return callback(err);
   });
