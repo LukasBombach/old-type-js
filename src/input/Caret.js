@@ -229,17 +229,6 @@ function Caret() {
   };
 
   /**
-   * Makes the caret blink
-   *
-   * @returns {Caret}
-   */
-  this._blink = function () {
-    this._removeClass(this.caretEl, 'hide');
-    this._addClass(this.caretEl, 'blink');
-    return this;
-  };
-
-  /**
    * Hides the caret
    *
    * @returns {Caret}
@@ -250,6 +239,16 @@ function Caret() {
     return this;
   };
 
+  /**
+   * Makes the caret blink
+   *
+   * @returns {Caret}
+   */
+  this._blink = function () {
+    this._removeClass(this.caretEl, 'hide');
+    this._addClass(this.caretEl, 'blink');
+    return this;
+  };
 
   /**
    * Resets the blink animation by recreating the caret div element
