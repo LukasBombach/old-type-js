@@ -67,10 +67,10 @@ function Caret() {
    */
   this.moveUp = function () {
     var searched,
-      current = this._getRectAtOffset(this.textNode, this.offset),
+      current = this._getRectAtOffset(this.offset),
       charOffset = this.offset;
     do {
-      searched = this._getRectAtOffset(this.textNode, charOffset);
+      searched = this._getRectAtOffset(charOffset);
       charOffset--;
       if(charOffset < 0) {
         return this;
@@ -88,10 +88,10 @@ function Caret() {
    */
   this.moveDown = function () {
     var searched,
-      current = this._getRectAtOffset(this.textNode, this.offset),
+      current = this._getRectAtOffset(this.offset),
       charOffset = this.offset;
     do {
-      searched = this._getRectAtOffset(this.textNode, charOffset);
+      searched = this._getRectAtOffset(charOffset);
       charOffset++;
       if(charOffset >= this.textNode.length) {
         return this;
@@ -198,7 +198,7 @@ function Caret() {
    * @private
    */
   this._moveElToOffset = function () {
-    var rect = this._getRectAtOffset(this.textNode, this.offset);
+    var rect = this._getRectAtOffset(this.offset);
     this._moveElTo(rect.left, rect.top);
     return this;
   };
@@ -306,14 +306,18 @@ function Caret() {
    * Returns a {ClientRect} with the boundaries enclosing a character at a
    * given offset in a text node
    *
-   * @param {Node} node - The text node which containing the character we
-   *     which to fetch the boundaries of
+   * @param {Node} [node=this.textNode] - The text node which containing the
+   *     character we which to fetch the boundaries of.
    * @param {number} offset - The offset of the character we which to fetch
    *     the boundaries of
    * @returns {ClientRect}
    * @private
    */
   this._getRectAtOffset = function (node, offset) {
+    if (typeof node === "number") {
+      offset = node;
+      node = this.textNode;
+    }
     var rects = this._createRange(node, offset).getClientRects();
     return rects[0];
   };
