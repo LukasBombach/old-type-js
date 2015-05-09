@@ -8,13 +8,10 @@ var Settings = require('../core').settings;
  * a caret with a blinking div. This class manages that div and provides methods to
  * position it.
  *
- * @class Caret
- **/
-
-/**
  * Creates a new Caret and adds a hidden div (visual representation of the caret) to
  * the DOM
  *
+ * @class Caret
  * @constructor
  */
 function Caret() {
@@ -60,7 +57,8 @@ function Caret() {
   };
 
   /**
-   * Moves the caret up by one line. Tries to preserve horizontal position.
+   * Moves the caret up by one line.
+   * Tries to preserve horizontal position.
    * Todo needs refactoring, moving up a) not accurate, b) buggy at beginning / end
    *
    * @returns {Caret}
@@ -81,7 +79,8 @@ function Caret() {
   };
 
   /**
-   * Moves the caret down by one line. Tries to preserve horizontal position.
+   * Moves the caret down by one line.
+   * Tries to preserve horizontal position.
    * Todo needs refactoring, moving down a) not accurate, b) buggy at beginning / end
    *
    * @returns {Caret}
@@ -127,7 +126,7 @@ function Caret() {
    * @param {string} str - The {string} that will be be inserted
    * @returns {Caret}
    */
-  this.insertTextAtOffset = function (str) {
+  this.insertText = function (str) {
     var nodeText = this.textNode.nodeValue;
     if (this.offset > 0) {
       this.textNode.nodeValue = nodeText.substring(0, this.offset)
@@ -146,7 +145,7 @@ function Caret() {
    *
    * @returns {Caret}
    */
-  this.removeCharacterAtOffset = function () {
+  this.removeCharacter = function () {
     if (this.offset <= 0) {
       return this;
     }
@@ -310,7 +309,7 @@ function Caret() {
    *     character we which to fetch the boundaries of.
    * @param {number} offset - The offset of the character we which to fetch
    *     the boundaries of
-   * @returns {ClientRect}
+   * @returns {{top: (number), right: (number), bottom: (number), left: (number)}}
    * @private
    */
   this._getRectAtOffset = function (node, offset) {
@@ -318,8 +317,27 @@ function Caret() {
       offset = node;
       node = this.textNode;
     }
+    var scroll = this._getScrollPosition();
     var rects = this._createRange(node, offset).getClientRects();
-    return rects[0];
+    return {
+      top    : rects[0].top + scroll.top,
+      right  : rects[0].right + scroll.left,
+      bottom : rects[0].bottom + scroll.top,
+      left   : rects[0].left + scroll.left
+    };
+  };
+
+  /**
+   * Return's the window's horizontal an vertical scroll positions
+   *
+   * @returns {{top: (number), left: (number)}}
+   * @private
+   */
+  this._getScrollPosition = function () {
+    return {
+      top  : window.pageYOffset || document.documentElement.scrollTop,
+      left : window.pageXOffset || document.documentElement.scrollLeft
+    };
   };
 
   /**
@@ -375,7 +393,5 @@ function Caret() {
 
 }).call(Caret.prototype);
 
-/**
- * @type {Caret}
- */
+
 module.exports = Caret;
