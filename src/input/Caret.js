@@ -61,14 +61,14 @@ function Caret() {
 
   /**
    * Moves the caret up by one line. Tries to preserve horizontal position.
-   * Todo needs refactoring, moving up a) not accurate, b) buggy
+   * Todo needs refactoring, moving up a) not accurate, b) buggy at beginning / end
    *
    * @returns {Caret}
    */
   this.moveUp = function () {
     var searched,
-      current = this._getRectAtOffset(this.offset),
-      charOffset = this.offset;
+        current = this._getRectAtOffset(this.offset),
+        charOffset = this.offset;
     do {
       searched = this._getRectAtOffset(charOffset);
       charOffset--;
@@ -82,14 +82,14 @@ function Caret() {
 
   /**
    * Moves the caret down by one line. Tries to preserve horizontal position.
-   * Todo needs refactoring, moving down a) not accurate, b) buggy
+   * Todo needs refactoring, moving down a) not accurate, b) buggy at beginning / end
    *
    * @returns {Caret}
    */
   this.moveDown = function () {
     var searched,
-      current = this._getRectAtOffset(this.offset),
-      charOffset = this.offset;
+        current = this._getRectAtOffset(this.offset),
+        charOffset = this.offset;
     do {
       searched = this._getRectAtOffset(charOffset);
       charOffset++;
