@@ -86,9 +86,9 @@ function Caret() {
    */
   this.moveDown = function () {
 
-    // Shorthand variables
+    // Shorthand variables and init offset
     var node   = this.textNode,
-        offset = this.offset;
+        offset = this.offset + 1;
 
     // We are gonna create a range and move it through
     // the text until it is positioned 1 line below
@@ -96,25 +96,29 @@ function Caret() {
     // position
     var range    = this._createRange(node, offset),
         rangePos = this._getPositionsFromRange(range),
-        caretPos = this._getRectAtOffset(this.offset);
+        caretPos = this._getRectAtOffset(this.offset),
+        lastRangeRight;
 
     // Move the range right letter by letter. The range will start
     // in the same line and we keep moving it until it reaches the
     // next line and stop moving when it has moved further right
     // than the caret. That means the range will be one line below
     // the caret and in about the same horizontal position.
-    do {
+    while( offset < node.length &&
+      (rangePos.bottom == caretPos.bottom || rangePos.right < caretPos.right)) {
       range.setEnd(node, offset);
       range.collapse(false);
+      lastRangeRight = rangePos.right;
       rangePos = this._getPositionsFromRange(range);
       offset++;
-    } while( offset < node.length &&
-      (rangePos.bottom == caretPos.bottom || rangePos.right < caretPos.right)
-      );
+    }
 
     // The text might have only one line, we check to see if the range
     // has actually moved lower than the caret and then move the caret
     if(rangePos.bottom > caretPos.bottom) {
+      if(this._compareDeltaTo(caretPos.right, lastRangeRight, rangePos.right) == -1) {
+        offset -= 1;
+      }
       this._setOffset(offset);
     }
 
@@ -321,6 +325,14 @@ function Caret() {
       el.className = el.className.replace(regex, ' ');
     }
     return this;
+  };
+
+
+  this._compareDeltaTo = function (pivot, a, b) {
+    var deltaA = Math.abs(pivot - a),
+        deltaB = Math.abs(pivot - b);
+    if (deltaA == deltaB) return 0;
+    return deltaA < deltaB ? -1 : 1;
   };
 
   /**
