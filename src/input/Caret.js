@@ -86,9 +86,9 @@ function Caret() {
    */
   this.moveDown = function () {
 
-    // Shorthand variables and init offset
+    // Shorthand variables
     var node   = this.textNode,
-        offset = this.offset + 1;
+        offset = this.offset;
 
     // We are gonna create a range and move it through
     // the text until it is positioned 1 line below
@@ -115,11 +115,13 @@ function Caret() {
 
     // The text might have only one line, we check to see if the range
     // has actually moved lower than the caret and then move the caret
+    // In any case we moved the offset too far by 1 character so we
+    // we need to subtract it
     if(rangePos.bottom > caretPos.bottom) {
       if(this._compareDeltaTo(caretPos.right, lastRangeRight, rangePos.right) == -1) {
         offset -= 1;
       }
-      this._setOffset(offset);
+      this._setOffset(--offset);
     }
 
     // Chaining
