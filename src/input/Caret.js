@@ -59,12 +59,53 @@ function Caret() {
   /**
    * Moves the caret up by one line.
    * Tries to preserve horizontal position.
-   * Todo needs refactoring, moving up a) not accurate, b) buggy at beginning / end
    *
    * @returns {Caret}
    */
   this.moveUp = function () {
-    var searched,
+
+    // Shorthand variables
+    var node = this.textNode,
+      offset = this.offset;
+
+    // We are gonna create a range and move it through
+    // the text until it is positioned 1 line below
+    // the caret's position at around the same horizontal
+    // position
+    var range  = this._createRange(node, offset),
+      rangePos = this._getPositionsFromRange(range),
+      caretPos = this._getRectAtOffset(this.offset),
+      lastRangeLeft;
+
+    // Move the range right letter by letter. The range will start
+    // in the same line and we keep moving it until it reaches the
+    // next line and stop moving when it has moved further right
+    // than the caret. That means the range will be one line below
+    // the caret and in about the same horizontal position.
+    while( offset > 0 &&
+    (rangePos.top == caretPos.top|| rangePos.left > caretPos.left)) {
+      range.setStart(node, offset);
+      range.collapse(true);
+      lastRangeLeft = rangePos.left;
+      rangePos = this._getPositionsFromRange(range);
+      offset--;
+    }
+
+    // The text might have only one line, we check to see if the range
+    // has actually moved lower than the caret and then move the caret
+    // In any case we moved the offset too far by 1 character so we
+    // we need to subtract it
+    if(rangePos.top < caretPos.top) {
+      if(this._compareDeltaTo(caretPos.left, lastRangeLeft, rangePos.left) == -1) {
+        offset += 1;
+      }
+      this._setOffset(++offset);
+    }
+
+    // Chaining
+    return this;
+
+    /*var searched,
         current = this._getRectAtOffset(this.offset),
         charOffset = this.offset;
     do {
@@ -75,7 +116,7 @@ function Caret() {
       }
     } while (searched.top === current.top || searched.right > current.right);
     this._setOffset(charOffset);
-    return this;
+    return this;*/
   };
 
   /**
@@ -88,17 +129,17 @@ function Caret() {
   this.moveDown = function () {
 
     // Shorthand variables
-    var node   = this.textNode,
-        offset = this.offset;
+    var node = this.textNode,
+      offset = this.offset;
 
     // We are gonna create a range and move it through
     // the text until it is positioned 1 line below
     // the caret's position at around the same horizontal
     // position
-    var range    = this._createRange(node, offset),
-        rangePos = this._getPositionsFromRange(range),
-        caretPos = this._getRectAtOffset(this.offset),
-        lastRangeRight;
+    var range  = this._createRange(node, offset),
+      rangePos = this._getPositionsFromRange(range),
+      caretPos = this._getRectAtOffset(this.offset),
+      lastRangeRight;
 
     // Move the range right letter by letter. The range will start
     // in the same line and we keep moving it until it reaches the
