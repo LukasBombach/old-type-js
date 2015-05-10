@@ -84,11 +84,11 @@ function Caret() {
     // the caret and in about the same horizontal position.
     while( offset > 0 &&
     (rangePos.top == caretPos.top|| rangePos.left > caretPos.left)) {
+      offset--;
       range.setStart(node, offset);
       range.collapse(true);
       lastRangeLeft = rangePos.left;
       rangePos = this._getPositionsFromRange(range);
-      offset--;
     }
 
     // The text might have only one line, we check to see if the range
@@ -99,24 +99,11 @@ function Caret() {
       if(this._compareDeltaTo(caretPos.left, lastRangeLeft, rangePos.left) == -1) {
         offset += 1;
       }
-      this._setOffset(++offset);
+      this._setOffset(offset);
     }
 
     // Chaining
     return this;
-
-    /*var searched,
-        current = this._getRectAtOffset(this.offset),
-        charOffset = this.offset;
-    do {
-      searched = this._getRectAtOffset(charOffset);
-      charOffset--;
-      if(charOffset < 0) {
-        return this;
-      }
-    } while (searched.top === current.top || searched.right > current.right);
-    this._setOffset(charOffset);
-    return this;*/
   };
 
   /**
@@ -148,11 +135,11 @@ function Caret() {
     // the caret and in about the same horizontal position.
     while( offset < node.length &&
       (rangePos.bottom == caretPos.bottom || rangePos.right < caretPos.right)) {
+      offset++;
       range.setEnd(node, offset);
       range.collapse(false);
       lastRangeRight = rangePos.right;
       rangePos = this._getPositionsFromRange(range);
-      offset++;
     }
 
     // The text might have only one line, we check to see if the range
@@ -163,7 +150,7 @@ function Caret() {
       if(this._compareDeltaTo(caretPos.right, lastRangeRight, rangePos.right) == -1) {
         offset -= 1;
       }
-      this._setOffset(--offset);
+      this._setOffset(offset);
     }
 
     // Chaining
