@@ -64,7 +64,6 @@ function Caret() {
    * it left, character by character, and stop in the line above the caret when it's
    * horizontally aligned with it. The caret will then be moved to that position.
    *
-   *
    * @returns {Caret}
    */
   this.moveUp = function () {
