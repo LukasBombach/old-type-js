@@ -81,22 +81,44 @@ function Caret() {
   /**
    * Moves the caret down by one line.
    * Tries to preserve horizontal position.
-   * Todo needs refactoring, moving down a) not accurate, b) buggy at beginning / end
    *
    * @returns {Caret}
    */
   this.moveDown = function () {
-    var searched,
-        current = this._getRectAtOffset(this.offset),
-        charOffset = this.offset;
+
+    // Shorthand variables
+    var node   = this.textNode,
+        offset = this.offset;
+
+    // We are gonna create a range and move it through
+    // the text until it is positioned 1 line below
+    // the caret's position at around the same horizontal
+    // position
+    var range    = this._createRange(node, offset),
+        rangePos = this._getPositionsFromRange(range),
+        caretPos = this._getRectAtOffset(this.offset);
+
+    // Move the range right letter by letter. The range will start
+    // in the same line and we keep moving it until it reaches the
+    // next line and stop moving when it has moved further right
+    // than the caret. That means the range will be one line below
+    // the caret and in about the same horizontal position.
     do {
-      searched = this._getRectAtOffset(charOffset);
-      charOffset++;
-      if(charOffset >= this.textNode.length) {
-        return this;
-      }
-    } while (searched.top === current.top || searched.right < current.right);
-    this._setOffset(charOffset);
+      range.setEnd(node, offset);
+      range.collapse(false);
+      rangePos = this._getPositionsFromRange(range);
+      offset++;
+    } while( offset < node.length &&
+      (rangePos.bottom == caretPos.bottom || rangePos.right < caretPos.right)
+      );
+
+    // The text might have only one line, we check to see if the range
+    // has actually moved lower than the caret and then move the caret
+    if(rangePos.bottom > caretPos.bottom) {
+      this._setOffset(offset);
+    }
+
+    // Chaining
     return this;
   };
 
@@ -309,7 +331,7 @@ function Caret() {
    *     character we which to fetch the boundaries of.
    * @param {number} offset - The offset of the character we which to fetch
    *     the boundaries of
-   * @returns {{top: (number), right: (number), bottom: (number), left: (number)}}
+   * @returns {{top: number, right: number, bottom: number, left: number}}
    * @private
    */
   this._getRectAtOffset = function (node, offset) {
@@ -317,13 +339,25 @@ function Caret() {
       offset = node;
       node = this.textNode;
     }
+    return this._getPositionsFromRange(this._createRange(node, offset));
+  };
+
+  /**
+   * Returns the positions from a {ClientRect} relative to the scroll
+   * position
+   *
+   * @param {Range} range The {Range} that should be measured
+   * @returns {{top: number, right: number, bottom: number, left: number}}
+   * @private
+   */
+  this._getPositionsFromRange = function (range) {
     var scroll = this._getScrollPosition();
-    var rects = this._createRange(node, offset).getClientRects();
+    var rect = range.getClientRects()[0];
     return {
-      top    : rects[0].top + scroll.top,
-      right  : rects[0].right + scroll.left,
-      bottom : rects[0].bottom + scroll.top,
-      left   : rects[0].left + scroll.left
+      top    : rect.top + scroll.top,
+      right  : rect.right + scroll.left,
+      bottom : rect.bottom + scroll.top,
+      left   : rect.left + scroll.left
     };
   };
 
