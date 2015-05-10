@@ -81,6 +81,7 @@ function Caret() {
   /**
    * Moves the caret down by one line.
    * Tries to preserve horizontal position.
+   * Todo Make inline comments function comments. Maybe.
    *
    * @returns {Caret}
    */
@@ -329,7 +330,18 @@ function Caret() {
     return this;
   };
 
-
+  /**
+   * Calculates The delta between a given the pivot (a {number}) and a as
+   * well as b (both {number}s) and returns -1 if a is closer to pivot,
+   * 1 of b is closer to pivot and 0 if both numbers are equally close.
+   *
+   *
+   * @param {number} pivot - A number to which a and be will be compared to
+   * @param {number} a - An arbitrary number
+   * @param {number} b - An arbitrary number
+   * @returns {number}
+   * @private
+   */
   this._compareDeltaTo = function (pivot, a, b) {
     var deltaA = Math.abs(pivot - a),
         deltaB = Math.abs(pivot - b);
