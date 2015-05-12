@@ -26,7 +26,7 @@ function EtherpadLite(options) {
     host     : 'localhost',
     port     : 9001,
     rootPath : '/api/1.2.1/',
-    apiKey   : null
+    apikey   : '6535d0f30f0ce73a5a183dd1ee1909b5a233ed5d024bc0bc09bf35ee78ca0671'//null
   };
 
   /**
@@ -61,13 +61,23 @@ function EtherpadLite(options) {
    * @param {string} method - The method to be called on the server
    * @param {Object} params - The parameters sent to the method
    * @param {function} callback - The callback to be called on
-   *     completion of the request
+   *     completion of the request. This function will receive 2
+   *     parameters. The first one will be the code as returned by
+   *     etherpad lite. If the request itself was erroneous this
+   *     code will be -2. The second argument will be an object
+   *     created from the JSON as returned by the server. If the
+   *     request was erroneous, the raw server output will be passed
+   *     instead of an object.
    * @returns {EtherpadLite}
    */
   this.call = function(method, params, callback) {
-    params = params || {};
-    var url = this._getApiUrl() + method + '?' + this._getApiParams + '&' + this._queryString(params);
-    this._getJSON(url, callback);
+    if(typeof params === "function") {
+      callback = params;
+      params = null;
+    }
+    var paramsQuery = params ? '&' + this._queryString(params || {}) : '';
+    var url = this._getApiUrl() + method + '?' + this._getApiParams() + paramsQuery;
+    this._getEtherpadJSON(url, callback);
     return this;
   };
 
@@ -88,7 +98,7 @@ function EtherpadLite(options) {
    * @returns {EtherpadLite}
    * @private
    */
-  this._getJSON = function(url, callback) {
+  this._getEtherpadJSON = function(url, callback) {
 
     // Create the request
     var request = new XMLHttpRequest();
@@ -100,11 +110,12 @@ function EtherpadLite(options) {
 
         // ... check if it was successful and transform the response text
         var success = this.status >= 200 && this.status < 400,
-          response = success ? JSON.parse(this.responseText) : this.responseText;
+          response = success ? JSON.parse(this.responseText) : this.responseText,
+          successCode = success ? response.code : -2;
 
         // Call the callback - if provided
         if(callback) {
-          callback(success, response)
+          callback(successCode, response)
         }
       }
     };
@@ -136,9 +147,7 @@ function EtherpadLite(options) {
    */
   this._getApiParams = function() {
     var apiOptions = {
-      host   : this.options.host,
-      port   : this.options.port,
-      apiKey : this.options.apiKey
+      apikey : this.options.apikey
     };
     return this._queryString(apiOptions);
   };

@@ -6,4 +6,6 @@ var Type = require('./core');
 
 window.Caret = require('./input/caret');
 
+window.Etherpad = require('./input/EtherpadLite');
+
 window.Type = Type;
