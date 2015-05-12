@@ -73,7 +73,7 @@ function EtherpadLite(options) {
    * Todo There should be a utility module for XMLHttpRequest requests
    *
    * @param {string} url - The URL that will be called
-   * @param {callback} [callback] - The function that shall be
+   * @param {function} [callback] - The function that shall be
    *     called on completion. First parameter passed to the
    *     function will be a {boolean} which will be true if
    *     the request was successful. The second parameter will
@@ -105,11 +105,9 @@ function EtherpadLite(options) {
       }
     };
 
-    // Send the request and clear the variable
+    // Send the request and return this for chaining
     request.send();
     request = null;
-
-    // Chaining
     return this;
   };
 
