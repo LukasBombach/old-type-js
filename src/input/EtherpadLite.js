@@ -56,7 +56,12 @@ function EtherpadLite(options) {
   };
 
   /**
+   * Calls a method on the Etherpad server
    *
+   * @param {string} method - The method to be called on the server
+   * @param {Object} params - The parameters sent to the method
+   * @param {function} callback - The callback to be called on
+   *     completion of the request
    * @returns {EtherpadLite}
    */
   this.call = function(method, params, callback) {
@@ -109,6 +114,13 @@ function EtherpadLite(options) {
     return this;
   };
 
+  /**
+   * Returns a full URL to an Etherpad server including protocol,
+   * host, port and root path
+   *
+   * @returns {string}
+   * @private
+   */
   this._getApiUrl = function() {
     var protocol = this.options.port == 443 ? 'https' : 'http',
       rootPath = this.options.rootPath || '/';
