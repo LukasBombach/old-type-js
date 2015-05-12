@@ -474,5 +474,4 @@ function Caret() {
 
 }).call(Caret.prototype);
 
-
 module.exports = Caret;
