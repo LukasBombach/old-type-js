@@ -74,6 +74,7 @@ function Etherpad(options, connect) {
    */
   this.connect = function() {
     var rootPath = this.options.rootPath;
+    var protocol = this.options.port == 443 ? 'https' : 'http';
     return this;
   };
 
@@ -85,14 +86,26 @@ function Etherpad(options, connect) {
    * @private
    */
   this._getApiOptions = function() {
-    var param,
-      urlParams = [],
-      apiOptions = [
-        'host', 'port', 'apiKey'
-      ];
-    for (var i = 0; i < apiOptions.length; i++) {
-      param = apiOptions[i];
-      urlParams.push( param + '=' + encodeURIComponent(this.options[param]) );
+    var apiOptions = {
+      host   : this.options.host,
+      port   : this.options.port,
+      apiKey : this.options.apiKey
+    };
+    return this._queryString(apiOptions);
+  };
+
+  /**
+   * Encodes an object as query string
+   *
+   * @param {Object} params - The keys and values that will be encoded
+   * @returns {string} - A query string based on the keys and values
+   *     of the given params
+   * @private
+   */
+  this._queryString = function(params) {
+    var urlParams = [], k;
+    for(k in params) {
+      urlParams.push( k + '=' + encodeURIComponent(params[k]) )
     }
     return urlParams.join('&');
   }
