@@ -50,7 +50,7 @@ function renderNode(node) {
 
 /**
  *
- * @param document {Document}
+ * @param document {TypeDocument}
  * @constructor
  */
 function HtmlRenderer(document) {

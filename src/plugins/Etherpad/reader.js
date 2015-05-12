@@ -1,7 +1,7 @@
 'use strict';
 
 var Etherpad = require('./EtherpadLite');
-var Document = require('../../document');
+var TypeDocument = require('../../type_document');
 var DocumentNode = require('../../document_node');
 
 /**
@@ -23,7 +23,7 @@ function EtherpadReader() {
       if(err === 0) {
         var node = new DocumentNode('P');
         node.childNodes.push(new DocumentNode('TEXT', res.data.text));
-        var document = new Document(node);
+        var document = new TypeDocument(node);
         callback(document);
       }
     });

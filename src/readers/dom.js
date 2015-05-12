@@ -1,6 +1,6 @@
 'use strict';
 
-var Document = require('../document');
+var Document = require('../type_document');
 var DocumentNode = require('../document_node');
 
 var nodeTypeMap = {
@@ -74,7 +74,7 @@ function DomReader(rootNode) {
 
 /**
  *
- * @returns {Document}
+ * @returns {TypeDocument}
  */
 DomReader.prototype.getDocument = function () {
   if (this.documentDirty === false) {

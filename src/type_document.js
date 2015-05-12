@@ -5,10 +5,10 @@ var Node = require('./document_node');
 /**
  * Holds the contents of the editor
  *
- * @class Document
+ * @class TypeDocument
  * @constructor
  */
-var Document = function (rootNode) {
+var TypeDocument = function (rootNode) {
   this.setRootNode(rootNode);
 };
 
@@ -16,9 +16,9 @@ var Document = function (rootNode) {
  * Setter for rootNode
  * @param rootNode
  */
-Document.prototype.setRootNode = function (rootNode) {
+TypeDocument.prototype.setRootNode = function (rootNode) {
   this.rootNode = rootNode;
   return this;
 };
 
-module.exports = Document;
+module.exports = TypeDocument;
