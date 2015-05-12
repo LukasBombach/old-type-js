@@ -16,15 +16,8 @@ var Caret = require('./Caret');
  *     connect to a server on instantiation
  * @constructor
  */
-function Etherpad(options, connect) {
-  if( typeof options === "boolean") {
-    connect = options;
-    options = {};
-  }
+function Etherpad(options) {
   this.setOptions(options);
-  if(connect) {
-    this.connect();
-  }
 }
 
 (function () {
@@ -72,10 +65,62 @@ function Etherpad(options, connect) {
    *
    * @returns {Etherpad}
    */
-  this.connect = function() {
-    var rootPath = this.options.rootPath;
-    var protocol = this.options.port == 443 ? 'https' : 'http';
+  this.call = function(method, params, callback) {
+    var url = this._getApiUrl();
+    this._ajax(url)
+
     return this;
+  };
+
+  /**
+   * Performs a XMLHttpRequest request and calls the callback
+   * on completion.
+   *
+   * @param {string} url - The URL that will be called
+   * @param {callback} [callback] - The function that shall be
+   *     called on completion. First parameter passed to the
+   *     function will be a {boolean} which will be true if
+   *     the request was successful. The second parameter will
+   *     be the data returned by the request. If the call was
+   *     successful, the data will have been parsed as JSON,
+   *     otherwise the raw response text will be returned.
+   * @returns {Etherpad}
+   * @private
+   */
+  this._getJSON = function(url, callback) {
+
+    // Create the request
+    var request = new XMLHttpRequest();
+    request.open('GET', url, true);
+
+    // When the request completes...
+    request.onreadystatechange = function() {
+      if (this.readyState === 4) {
+
+        // ... check if it was successful and transform the response text
+        var success = this.status >= 200 && this.status < 400,
+          response = success ? JSON.parse(this.responseText) : this.responseText;
+
+        // Call the callback - if provided
+        if(callback) {
+          callback(success, response)
+        }
+
+      }
+    };
+
+    // Send the request and clear the variable
+    request.send();
+    request = null;
+
+    // Chaining
+    return this;
+  };
+
+  this._getApiUrl = function() {
+    var protocol = this.options.port == 443 ? 'https' : 'http',
+      rootPath = this.options.rootPath || '/';
+    return protocol + '://' + this.options.host + ':' + this.options.port + rootPath
   };
 
   /**
