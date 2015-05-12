@@ -3,20 +3,14 @@
 var Caret = require('./Caret');
 
 /**
+ * Class to call methods on an EtherpadLite server
  *
- * Based on etherpad-lite-client-js by Tomas Sedovic
- * {@link https://github.com/tomassedovic/etherpad-lite-client-js}
- * License: MIT (Expat)
- * {@link https://github.com/tomassedovic/etherpad-lite-client-js/blob/master/LICENSE.txt}
- *
- * @class Etherpad
+ * @class EtherpadLite
  * @param {Object} [options] - Settings to connect to an Etherpad
  *     server with
- * @param {boolean} connect - Whether or not this class should
- *     connect to a server on instantiation
  * @constructor
  */
-function Etherpad(options) {
+function EtherpadLite(options) {
   this.setOptions(options);
 }
 
@@ -47,7 +41,7 @@ function Etherpad(options) {
    * @param {*} [value] - If the first parameter is a string,
    *     this value will be set to the key of the give first
    *     parameter. Any arbitrary value can be set.
-   * @returns {Etherpad}
+   * @returns {EtherpadLite}
    */
   this.setOptions = function(options, value) {
     var prop;
@@ -63,18 +57,20 @@ function Etherpad(options) {
 
   /**
    *
-   * @returns {Etherpad}
+   * @returns {EtherpadLite}
    */
   this.call = function(method, params, callback) {
-    var url = this._getApiUrl();
-    this._ajax(url)
-
+    params = params || {};
+    var url = this._getApiUrl() + method + '?' + this._getApiParams + '&' + this._queryString(params);
+    this._getJSON(url, callback);
     return this;
   };
 
   /**
    * Performs a XMLHttpRequest request and calls the callback
    * on completion.
+   *
+   * Todo There should be a utility module for XMLHttpRequest requests
    *
    * @param {string} url - The URL that will be called
    * @param {callback} [callback] - The function that shall be
@@ -84,7 +80,7 @@ function Etherpad(options) {
    *     be the data returned by the request. If the call was
    *     successful, the data will have been parsed as JSON,
    *     otherwise the raw response text will be returned.
-   * @returns {Etherpad}
+   * @returns {EtherpadLite}
    * @private
    */
   this._getJSON = function(url, callback) {
@@ -130,7 +126,7 @@ function Etherpad(options) {
    * @returns {string}
    * @private
    */
-  this._getApiOptions = function() {
+  this._getApiParams = function() {
     var apiOptions = {
       host   : this.options.host,
       port   : this.options.port,
@@ -155,7 +151,7 @@ function Etherpad(options) {
     return urlParams.join('&');
   }
 
-}).call(Etherpad.prototype);
+}).call(EtherpadLite.prototype);
 
-module.exports = Etherpad;
+module.exports = EtherpadLite;
 
