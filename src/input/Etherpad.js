@@ -25,8 +25,10 @@ function Etherpad(options) {
    * @type {{host: string, port: number}}
    */
   this.options = {
-      host : 'localhost',
-      port : 9001
+    host     : 'localhost',
+    port     : 9001,
+    rootPath : '/api/1.2.1/',
+    apiKey   : null
   };
 
   /**
@@ -41,6 +43,7 @@ function Etherpad(options) {
    * @param {*} [value] - If the first parameter is a string,
    *     this value will be set to the key of the give first
    *     parameter. Any arbitrary value can be set.
+   * @returns {Etherpad}
    */
   this.setOptions = function(options, value) {
     var prop;
@@ -51,7 +54,37 @@ function Etherpad(options) {
         this.options[prop] = options[prop];
       }
     }
+    return this;
   };
+
+  /**
+   *
+   * @returns {Etherpad}
+   */
+  this.connect = function() {
+    var rootPath = this.options.rootPath;
+    return this;
+  };
+
+  /**
+   * Takes a subset (the options required for every API call) of
+   * this.options and returns them as URL-encoded parameters
+   *
+   * @returns {string}
+   * @private
+   */
+  this._getApiOptions = function() {
+    var param,
+      urlParams = [],
+      apiOptions = [
+        'host', 'port', 'apiKey'
+      ];
+    for (var i = 0; i < apiOptions.length; i++) {
+      param = apiOptions[i];
+      urlParams.push( param + '=' + encodeURIComponent(this.options[param]) );
+    }
+    return urlParams.join('&');
+  }
 
 }).call(Etherpad.prototype);
 
