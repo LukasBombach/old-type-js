@@ -48,7 +48,7 @@ function Etherpad(options) {
       this.options[options] = value;
     } else {
       for (prop in options) {
-        this.options[prop] = this.options[prop];
+        this.options[prop] = options[prop];
       }
     }
   };
