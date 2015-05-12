@@ -101,13 +101,11 @@ function EtherpadLite(options) {
         if(callback) {
           callback(success, response)
         }
-
       }
     };
 
     // Send the request and return this for chaining
     request.send();
-    request = null;
     return this;
   };
 
