@@ -1,11 +1,9 @@
 'use strict';
 
 var Type = require('./core');
-//require('./range');
-//require('./cmd');
 
 window.Caret = require('./input/caret');
 
-window.Etherpad = require('./input/EtherpadLite');
+window.Etherpad = require('./plugins/Etherpad/EtherpadLite');
 
 window.Type = Type;

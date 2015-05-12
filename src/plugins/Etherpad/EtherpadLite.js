@@ -1,7 +1,5 @@
 'use strict';
 
-var Caret = require('./Caret');
-
 /**
  * Class to call methods on an EtherpadLite server
  *
@@ -11,6 +9,7 @@ var Caret = require('./Caret');
  * @constructor
  */
 function EtherpadLite(options) {
+  options = options || {};
   this.setOptions(options);
 }
 
@@ -20,13 +19,15 @@ function EtherpadLite(options) {
    * Object that holds the settings for communicating with an
    * Etherpad server. Initial values are the default options.
    *
-   * @type {{host: string, port: number}}
+   * Todo All Instances will share the same options
+   *
+   * @type {{host: string, port: number, rootPath: string, apikey: null}}
    */
   this.options = {
     host     : 'localhost',
     port     : 9001,
     rootPath : '/api/1.2.1/',
-    apikey   : '6535d0f30f0ce73a5a183dd1ee1909b5a233ed5d024bc0bc09bf35ee78ca0671'//null
+    apikey   : null
   };
 
   /**
@@ -57,6 +58,8 @@ function EtherpadLite(options) {
 
   /**
    * Calls a method on the Etherpad server
+   *
+   * Todo This -2 error thing is not really cool
    *
    * @param {string} method - The method to be called on the server
    * @param {Object} params - The parameters sent to the method
