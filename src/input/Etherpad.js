@@ -9,11 +9,22 @@ var Caret = require('./Caret');
  * License: MIT (Expat)
  * {@link https://github.com/tomassedovic/etherpad-lite-client-js/blob/master/LICENSE.txt}
  *
- * @param options
+ * @class Etherpad
+ * @param {Object} [options] - Settings to connect to an Etherpad
+ *     server with
+ * @param {boolean} connect - Whether or not this class should
+ *     connect to a server on instantiation
  * @constructor
  */
-function Etherpad(options) {
+function Etherpad(options, connect) {
+  if( typeof options === "boolean") {
+    connect = options;
+    options = {};
+  }
   this.setOptions(options);
+  if(connect) {
+    this.connect();
+  }
 }
 
 (function () {
