@@ -78,9 +78,10 @@ function Type(options) {
 
   /**
    * Etherpad Dev code
-   * @returns {Type}
+   * @returns {EtherpadInput}
    */
   this.etherpad = function(renderTo) {
+
     //var reader = new EtherpadReader();
     //reader.getDocument(function(document) {
     //  console.log(document);
@@ -88,7 +89,7 @@ function Type(options) {
     //  renderTo.appendChild(renderer.output());
     //});
 
-    var input = new EtherpadInput({
+    return new EtherpadInput({
       onContentLoaded : function(text, input) {
         var node = new DocumentNode('P');
         node.childNodes.push(new DocumentNode('TEXT', text));
@@ -99,7 +100,6 @@ function Type(options) {
       }
     });
 
-    return this;
   }
 
 }).call(Type.prototype);

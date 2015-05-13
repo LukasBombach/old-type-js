@@ -193,7 +193,7 @@ function Caret() {
    * Removes one character left from the current offset
    * and moves the caret accordingly
    *
-   * @param {number} numChars - Home many characters should be removed
+   * @param {number} [numChars] - Home many characters should be removed
    *     from the caret's position. A negative number will remove
    *     characters left from the caret, a positive number from the right.
    * @returns {Caret}

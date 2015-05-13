@@ -17,6 +17,8 @@ function EtherpadInput(options) {
 
   this.caret = new Caret();
 
+  this.revision = -1;
+
   var url = 'http://localhost:9001/';
   var baseURL = '/';
   var resource = 'socket.io';
@@ -61,6 +63,7 @@ function EtherpadInput(options) {
   };
 
   this.initEditor = function(response) {
+    this.revision = response.collab_client_vars.rev;
     var contents = response.collab_client_vars.initialAttributedText.text;
     if(this.options.onContentLoaded) {
       this.options.onContentLoaded(contents, this);
@@ -69,6 +72,33 @@ function EtherpadInput(options) {
 
   this.setCaret = function(x, y) {
     this.caret._setOffset(x);
+  };
+
+  this.propagateUpdate = function(length, operator, offset, value, charBank) {
+    this.socket.json.send(
+    {
+      type: 'COLLABROOM',
+      component: 'pad',
+      data: {
+        type: "USER_CHANGES",
+        baseRev: this.revision,
+        changeset: this.getChangeset(length, operator, offset, value, charBank),
+        apool: userChangesData.apool
+      }
+    });
+  };
+
+  // Example 'Z:g0>1=cp*0+1$a'
+  this.getChangeset = function(length, operator, offset, value, charBank) {
+    var lengthDiff, operation;
+
+    length     = 'Z:'+length.toString(36);
+    lengthDiff = (operator == '+' ? '>' : '<') + value;
+    offset     = '=' + offset.toString(36);
+    operation  = operator + value;
+    charBank   = charBank != null ? '$' + charBank : '';
+
+    return length + lengthDiff + offset + operation + charBank;
   };
 
   this.updateContent = function(data) {
