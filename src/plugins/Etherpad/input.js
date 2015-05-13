@@ -66,7 +66,8 @@ function EtherpadInput(options) {
   this.updateContent = function(data) {
 
     var changeSet = data.changeset,
-      attribtues, operator, value, match;
+      attribtues, operator, value, match,
+      caretAtPosZero = true;
 
     // Matches an array of results for each operation
     var regex = /((?:\*[0-9a-z]+)*)(?:\|([0-9a-z]+))?([-+=])([0-9a-z]+)|\?|/g,
@@ -84,14 +85,16 @@ function EtherpadInput(options) {
         switch(operator) {
           case '=':
             this.caret._setOffset(parseInt(value, 36));
+            caretAtPosZero = false;
             console.log('setting offset', parseInt(value, 36));
             break;
           case '+':
+            if(caretAtPosZero) this.caret._setOffset(0);
             this.caret.insertText(charBank);
+            console.log('writing', charBank);
             break;
           case '-':
-            // this.caret._setOffset(this.caret.offset + 1);
-            // console.log('setting offset +1', this.caret.offset);
+            if(caretAtPosZero) this.caret._setOffset(0);
             this.caret.removeCharacter(parseInt(value, 36));
             console.log('removing', parseInt(value, 36));
             break;

@@ -200,7 +200,7 @@ function Caret() {
    */
   this.removeCharacter = function (numChars) {
     numChars = numChars || -1;
-    if (this.offset <= 0) {
+    if ( (this.offset <= 0 && numChars < 0) || (this.offset >= this.textNode.length && numChars > 0) ) {
       return this;
     }
     var str = this.textNode.nodeValue;
