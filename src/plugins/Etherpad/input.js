@@ -50,6 +50,10 @@ function EtherpadInput(options) {
         case 'NEW_CHANGES':
           this.updateContent(response.data);
           break;
+        case 'CUSTOM':
+          if(response.data.payload.action === 'cursorPosition')
+            this.setCaret(response.data.payload.locationX, response.data.payload.locationY)
+          break;
         default:
           break;
       }
@@ -61,6 +65,10 @@ function EtherpadInput(options) {
     if(this.options.onContentLoaded) {
       this.options.onContentLoaded(contents, this);
     }
+  };
+
+  this.setCaret = function(x, y) {
+    this.caret._setOffset(x);
   };
 
   this.updateContent = function(data) {
