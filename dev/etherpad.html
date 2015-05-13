@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>type demo</title>
+  <link rel="stylesheet" href="./assets/normalize.css" />
+  <link rel="stylesheet" href="./assets/main.css" />
+  <style>
+    body {
+      background: #eeeeee;
+      padding: 50px;
+    }
+    #etherpad {
+
+      margin: 0 auto;
+      padding: 100px;
+      box-sizing: border-box;
+
+      max-width: 840px;
+      min-height: 1000px;
+
+      background: #fff;
+      box-shadow: 0 0 0 0.75pt #d1d1d1,0 0 3pt 0.75pt #ccc;
+
+      line-height: 1.4em;
+
+    }
+  </style>
+</head>
+<body>
+
+<!--<h1>type demo</h1>-->
+<!--<p>Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>-->
+
+<div id="etherpad"></div>
+
+<script src="../src/plugins/Etherpad/vendor/socket.io.js"></script>
+<script src="./../dist/type.js"></script>
+
+<script>
+
+
+  /*
+   *
+   * Etherpad
+   *
+   */
+  //var e = new Etherpad({apikey: '6535d0f30f0ce73a5a183dd1ee1909b5a233ed5d024bc0bc09bf35ee78ca0671'});
+  var type = new Type();
+  var epinput = type.etherpad(document.getElementById('etherpad'));
+
+  /*
+   *
+   * Caret
+   *
+   */
+  var ps = document.getElementsByTagName('p');
+  var t = ps[0].childNodes[0];
+  var c = new Caret();
+  c._blink();
+  c.moveTo(t, 0);
+
+  document.addEventListener('keydown', function(e) {
+    if(e.keyCode == 37) {
+      c.moveLeft();
+      e.preventDefault();
+    }
+    else if(e.keyCode == 39) {
+      c.moveRight();
+      e.preventDefault();
+    }
+    else if(e.keyCode == 38) {
+      c.moveUp();
+      e.preventDefault();
+    }
+    else if(e.keyCode == 40) { // TODO keyCode is deprecated
+      c.moveDown();
+      e.preventDefault();
+    }
+    else if(e.keyCode == 8) { // TODO keyCode is deprecated
+      e.preventDefault();
+      c.removeCharacter();
+      //epinput.
+
+    }
+  });
+
+  document.addEventListener('keypress', function(event) {
+    var key = event.keyCode || event.which;
+
+    if(key === 8) {
+      // backspace handling done at keydown
+    } else {
+      c.insertText(String.fromCharCode(key));
+    }
+
+  });
+
+  ps[0].addEventListener("click", function(e) {
+    var range;
+    var textNode;
+    var offset;
+    range = document.caretRangeFromPoint(e.clientX, e.clientY);
+    textNode = range.startContainer;
+    offset = range.startOffset;
+    if (textNode.nodeType == 3) {
+      c.moveTo(textNode, offset);
+    }
+  }, false);
+
+</script>
+</body>
+</html>

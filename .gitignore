@@ -1,5 +1,5 @@
 # Project
-dev/
+#dev/
 dist/
 node_modules/
 test/run/index.js

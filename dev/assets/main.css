@@ -1,0 +1,74 @@
+#typejs-caret-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.typejs-caret {
+  position: absolute;
+  cursor: text;
+  background: #fc4d57;
+  width: 2px;
+  height: 14px;
+  margin-left: -1px;
+}
+
+.hide {
+  display: none;
+}
+
+/**
+ * Animation mimicked from Google Docs
+ */
+.typejs-caret.blink {
+  -webkit-animation-delay: 0.5s;
+  animation-delay: 0.5s;
+  -webkit-animation-duration: 1s;
+  -moz-animation-duration: 1s;
+  -o-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-iteration-count: infinite;
+  -moz-animation-iteration-count: infinite;
+  -o-animation-iteration-count: infinite;
+  animation-iteration-count: infinite;
+  -webkit-animation-name: typejs-caret-fadeoutin;
+  -moz-animation-name: typejs-caret-fadeoutin;
+  -o-animation-name: typejs-caret-fadeoutin;
+  animation-name: typejs-caret-fadeoutin
+}
+
+@keyframes typejs-caret-fadeoutin {
+  from {
+    opacity: 1
+  }
+  13% {
+    opacity: 0
+  }
+  50% {
+    opacity: 0
+  }
+  63% {
+    opacity: 1
+  }
+  to {
+    opacity: 1
+  }
+}
+
+@-webkit-keyframes typejs-caret-fadeoutin {
+  from {
+    opacity: 1
+  }
+  13% {
+    opacity: 0
+  }
+  50% {
+    opacity: 0
+  }
+  63% {
+    opacity: 1
+  }
+  to {
+    opacity: 1
+  }
+}
