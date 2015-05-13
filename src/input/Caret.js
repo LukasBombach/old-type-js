@@ -193,16 +193,25 @@ function Caret() {
    * Removes one character left from the current offset
    * and moves the caret accordingly
    *
+   * @param {number} numChars - Home many characters should be removed
+   *     from the caret's position. A negative number will remove
+   *     characters left from the caret, a positive number from the right.
    * @returns {Caret}
    */
-  this.removeCharacter = function () {
+  this.removeCharacter = function (numChars) {
+    numChars = numChars || -1;
     if (this.offset <= 0) {
       return this;
     }
     var str = this.textNode.nodeValue;
-    this.textNode.nodeValue = str.substring(0, this.offset - 1)
-      + str.substring(this.offset, str.length);
-    this._setOffset(this.offset - 1);
+    if(numChars < 0) {
+      this.textNode.nodeValue = str.substring(0, this.offset + numChars)
+        + str.substring(this.offset, str.length);
+      this._setOffset(this.offset + numChars);
+    } else {
+      this.textNode.nodeValue = str.substring(0, this.offset)
+        + str.substring(this.offset + numChars, str.length);
+    }
     return this;
   };
 

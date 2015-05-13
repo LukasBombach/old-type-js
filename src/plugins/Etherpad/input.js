@@ -83,10 +83,18 @@ function EtherpadInput(options) {
         value = match[4];
         switch(operator) {
           case '=':
-            this.caret._setOffset(this.caret.offset + parseInt(value, 36));
+            this.caret._setOffset(parseInt(value, 36));
+            console.log('setting offset', parseInt(value, 36));
             break;
           case '+':
-            this.caret.insertText(charBank)
+            this.caret.insertText(charBank);
+            break;
+          case '-':
+            // this.caret._setOffset(this.caret.offset + 1);
+            // console.log('setting offset +1', this.caret.offset);
+            this.caret.removeCharacter(parseInt(value, 36));
+            console.log('removing', parseInt(value, 36));
+            break;
         }
       }
     }
