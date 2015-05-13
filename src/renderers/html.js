@@ -49,7 +49,7 @@ function renderNode(node) {
 }
 
 /**
- *
+ * Renders a {TypeDocument} to HTML
  * @param document {TypeDocument}
  * @constructor
  */
