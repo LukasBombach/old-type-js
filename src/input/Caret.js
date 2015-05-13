@@ -1,6 +1,6 @@
 'use strict';
 
-var Settings = require('../core').settings;
+var Settings = require('../Settings');
 
 /**
  * An editor's caret. We cannot use the browser's native caret since we do not utilize

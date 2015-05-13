@@ -7,6 +7,10 @@
 var EtherpadReader = require('./plugins/Etherpad/reader');
 var EtherpadInput = require('./plugins/Etherpad/input');
 
+var TypeDocument = require('./type_document');
+var DocumentNode = require('./document_node');
+
+
 /**
  * Renders a {TypeDocument} to HTML
  * @type {HtmlRenderer}
@@ -84,7 +88,16 @@ function Type(options) {
     //  renderTo.appendChild(renderer.output());
     //});
 
-    var input = new EtherpadInput();
+    var input = new EtherpadInput({
+      onContentLoaded : function(text, input) {
+        var node = new DocumentNode('P');
+        node.childNodes.push(new DocumentNode('TEXT', text));
+        var document = new TypeDocument(node);
+        var renderer = new Renderer(document);
+        renderTo.appendChild(renderer.output());
+        input.caret.moveTo(renderTo.childNodes[0].childNodes[0], 0)._blink();
+      }
+    });
 
     return this;
   }
@@ -97,16 +110,6 @@ function Type(options) {
  * @type {Object}
  */
 Type.fn = Type.prototype;
-
-/**
- * Global Type settings.
- * Todo There should be an own settings module
- *
- * @type {{prefix: string}}
- */
-Type.settings = {
-  prefix : 'typejs-'
-};
 
 /**
  * Module Exports for CommonJs
