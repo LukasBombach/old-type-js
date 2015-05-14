@@ -80,6 +80,7 @@ function EtherpadInput(options) {
 
   this.propagateUpdate = function(length, operator, offset, value, charBank) {
     var changeset = this.getChangeset(length, operator, offset, value, charBank);
+    console.log('seding', changeset);
     this.socket.json.send(
     {
       type: 'COLLABROOM',
