@@ -1,0 +1,20 @@
+body {
+  background: #eeeeee;
+  padding: 50px;
+}
+
+.page {
+
+  margin: 0 auto;
+  padding: 100px;
+  box-sizing: border-box;
+
+  max-width: 840px;
+  min-height: 1000px;
+
+  background: #fff;
+  box-shadow: 0 0 0 0.75pt #d1d1d1,0 0 3pt 0.75pt #ccc;
+
+  line-height: 1.4em;
+
+}

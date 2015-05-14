@@ -4,34 +4,14 @@
   <title>type demo</title>
   <link rel="stylesheet" href="./assets/normalize.css" />
   <link rel="stylesheet" href="./assets/main.css" />
-  <style>
-    body {
-      background: #eeeeee;
-      padding: 50px;
-    }
-    #etherpad {
-
-      margin: 0 auto;
-      padding: 100px;
-      box-sizing: border-box;
-
-      max-width: 840px;
-      min-height: 1000px;
-
-      background: #fff;
-      box-shadow: 0 0 0 0.75pt #d1d1d1,0 0 3pt 0.75pt #ccc;
-
-      line-height: 1.4em;
-
-    }
-  </style>
 </head>
 <body>
 
 <!--<h1>type demo</h1>-->
-<!--<p>Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit.</p>-->
+<p id="test">Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum.<br/>Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</p>
 
-<div id="etherpad"></div>
+<div id="etherpad" class="page"></div>
+
 
 <script src="../src/plugins/Etherpad/vendor/socket.io.js"></script>
 <script src="./../dist/type.js"></script>
