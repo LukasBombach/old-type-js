@@ -74,6 +74,7 @@
         }
         else if(e.keyCode == 8) { // TODO keyCode is deprecated
           e.preventDefault();
+          input.propagateUpdate(t.length, '-', c.offset - 1, 1);
           c.removeCharacter();
         }
       });
@@ -85,14 +86,9 @@
           // backspace handling done at keydown
         } else {
           var val = String.fromCharCode(key);
-          input.propagateUpdate(
-            t.length,
-            '+',
-            c.offset,
-            val.length,
-            val);
+          input.propagateUpdate(t.length, '+', c.offset, val.length, val);
+          c.insertText(val);
         }
-        c.insertText(val);
       });
 
       ps.childNodes[0].addEventListener("click", function(e) {

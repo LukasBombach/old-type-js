@@ -102,17 +102,16 @@ function EtherpadInput(options) {
   };
 
   // Example 'Z:g0>1=cp*0+1$a'
-  // We send "Z:fw>1=9*0+1$a"
-  // they sd "Z:fv>1=8*0+1$a"
-  // new snd "Z:fv>1=8*0+1$a"
+  // We send "Z:fu<1=q*0-1"
+  // they sd "Z:fu<1=q-1$"
   this.getChangeset = function(length, operator, offset, value, charBank) {
     var lengthDiff, operation;
 
     length     = 'Z:'+length.toString(36);
     lengthDiff = (operator == '+' ? '>' : '<') + value;
     offset     = offset > 0 ? '=' + offset.toString(36) : '';
-    operation  = '*0'+operator + value;
-    charBank   = charBank != null ? '$' + charBank : '';
+    operation  = (operator == '+' ? '*0' : '') + operator + value;
+    charBank   = charBank != null ? '$' + charBank : '$';
 
     return length + lengthDiff + offset + operation + charBank;
   };
