@@ -101,6 +101,26 @@ function EtherpadInput(options) {
     });
   };
 
+  this.progagateCaret = function (x, y) {
+    var message = {
+      type : 'cursor',
+      action : 'cursorPosition',
+      locationY: y,
+      locationX: x,
+      padId : this.padId,
+      myAuthorId : this.userId
+    };
+    this.sendMessage(message);
+  };
+
+  this.sendMessage = function(msg) {
+    this.socket.json.send({
+      type: 'COLLABROOM',
+      component: 'pad',
+      data: msg
+    });
+  };
+
   // Example 'Z:g0>1=cp*0+1$a'
   // We send "Z:fu<1=q*0-1"
   // they sd "Z:fu<1=q-1$"
