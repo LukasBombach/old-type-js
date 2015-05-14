@@ -56,8 +56,8 @@ function EtherpadInput(options) {
           this.acceptCommit(response.data);
           break;
         case 'CUSTOM':
-          if(response.data.payload.action === 'cursorPosition')
-            this.setCaret(response.data.payload.locationX, response.data.payload.locationY)
+          if(response.data.payload.action === 'cursorPosition' && response.data.payload.authorId != this.userId)
+            this.setCaret(response.data.payload.locationX, response.data.payload.locationY);
           break;
         default:
           break;
