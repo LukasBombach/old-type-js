@@ -80,7 +80,7 @@ function Type(options) {
    * Etherpad Dev code
    * @returns {EtherpadInput}
    */
-  this.etherpad = function(renderTo) {
+  this.etherpad = function(options) {
 
     //var reader = new EtherpadReader();
     //reader.getDocument(function(document) {
@@ -95,8 +95,9 @@ function Type(options) {
         node.childNodes.push(new DocumentNode('TEXT', text));
         var document = new TypeDocument(node);
         var renderer = new Renderer(document);
-        renderTo.appendChild(renderer.output());
-        input.caret.moveTo(renderTo.childNodes[0].childNodes[0], 0)._blink();
+        options.renderTo.appendChild(renderer.output());
+        input.caret.moveTo(options.renderTo.childNodes[0].childNodes[0], 0)._blink();
+        options.onload(input);
       }
     });
 

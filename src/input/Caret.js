@@ -282,7 +282,7 @@ function Caret() {
    * @private
    */
   this._scrollIntoView = function () {
-    this.caretEl.scrollIntoView();
+    //this.caretEl.scrollIntoView();
     return this;
   };
 

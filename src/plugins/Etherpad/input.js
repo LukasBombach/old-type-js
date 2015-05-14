@@ -52,6 +52,9 @@ function EtherpadInput(options) {
         case 'NEW_CHANGES':
           this.updateContent(response.data);
           break;
+        case 'ACCEPT_COMMIT':
+          this.acceptCommit(response.data);
+          break;
         case 'CUSTOM':
           if(response.data.payload.action === 'cursorPosition')
             this.setCaret(response.data.payload.locationX, response.data.payload.locationY)
@@ -64,6 +67,7 @@ function EtherpadInput(options) {
 
   this.initEditor = function(response) {
     this.revision = response.collab_client_vars.rev;
+    this.userId = response.userId;
     var contents = response.collab_client_vars.initialAttributedText.text;
     if(this.options.onContentLoaded) {
       this.options.onContentLoaded(contents, this);
@@ -75,6 +79,7 @@ function EtherpadInput(options) {
   };
 
   this.propagateUpdate = function(length, operator, offset, value, charBank) {
+    var changeset = this.getChangeset(length, operator, offset, value, charBank);
     this.socket.json.send(
     {
       type: 'COLLABROOM',
@@ -82,26 +87,39 @@ function EtherpadInput(options) {
       data: {
         type: "USER_CHANGES",
         baseRev: this.revision,
-        changeset: this.getChangeset(length, operator, offset, value, charBank),
-        apool: userChangesData.apool
+        changeset: changeset,
+        apool: {
+          nextNum: 1,
+          numToAttrib: {
+            0: [
+              "author",
+              this.userId
+            ]
+          }
+        }
       }
     });
   };
 
   // Example 'Z:g0>1=cp*0+1$a'
+  // We send "Z:fw>1=9*0+1$a"
+  // they sd "Z:fv>1=8*0+1$a"
+  // new snd "Z:fv>1=8*0+1$a"
   this.getChangeset = function(length, operator, offset, value, charBank) {
     var lengthDiff, operation;
 
     length     = 'Z:'+length.toString(36);
     lengthDiff = (operator == '+' ? '>' : '<') + value;
-    offset     = '=' + offset.toString(36);
-    operation  = operator + value;
+    offset     = offset > 0 ? '=' + offset.toString(36) : '';
+    operation  = '*0'+operator + value;
     charBank   = charBank != null ? '$' + charBank : '';
 
     return length + lengthDiff + offset + operation + charBank;
   };
 
   this.updateContent = function(data) {
+
+    this.revision = data.newRev;
 
     var changeSet = data.changeset,
       attribtues, operator, value, match,
@@ -139,6 +157,10 @@ function EtherpadInput(options) {
         }
       }
     }
+  };
+
+  this.acceptCommit = function(data) {
+    this.revision = data.newRev;
   };
 
   this.sendClientReady = function(isReconnect, messageType)
