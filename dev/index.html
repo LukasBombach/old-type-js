@@ -25,15 +25,8 @@
   var ps = document.getElementsByTagName('p');
   var t = ps[0].childNodes[0];
 
-  //console.log(t);
-
   var c = new Caret();
-
-  var e = new Etherpad({apikey: '6535d0f30f0ce73a5a183dd1ee1909b5a233ed5d024bc0bc09bf35ee78ca0671'});
-
-  //c.moveTo(100,100);
   c._blink();
-
   c.moveTo(t, 0);
 
   document.addEventListener('keydown', function(e) {
@@ -81,13 +74,6 @@
       c.moveTo(textNode, offset);
     }
   }, false);
-
-
-
-
-  //var n = new Type();
-  //n.cmd();
-  //console.log(typeof n);
 
 </script>
 </body>
