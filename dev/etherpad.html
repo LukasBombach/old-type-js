@@ -81,6 +81,12 @@
           input.propagateUpdate(t.length, '-', c.offset - 1, 1);
           c.removeCharacter();
         }
+        else if(e.keyCode == 32) { // space
+          e.preventDefault();
+          var val = ' ';
+          input.propagateUpdate(t.length, '+', c.offset, val.length, val);
+          c.insertText(val);
+        }
       });
 
       document.addEventListener('keypress', function(event) {
