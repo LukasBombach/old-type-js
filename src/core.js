@@ -10,6 +10,8 @@ var EtherpadInput = require('./plugins/Etherpad/input');
 var TypeDocument = require('./type_document');
 var DocumentNode = require('./document_node');
 
+var BrowserInput = require('./input/browser');
+
 
 /**
  * Renders a {TypeDocument} to HTML
@@ -35,19 +37,23 @@ function Type(options) {
   options = options || {};
   this.setOptions(options);
 
+  this._input = new this.options.input(this.options.root);
+
+  this._input.getDocument(this._setDocument.bind(this));
+
 }
 
 (function () {
 
   /**
    * This object holds the settings for this Type instance
-   * Todo All Instances will share the same options
+   * Todo All Instances will share the same options, make this "defaultOptions"
    *
    * @type {{reader: null, renderer: null}}
    */
   this.options = {
-    reader   : null,
-    renderer : null
+    input : BrowserInput,
+    root  : null
   };
 
   /**
@@ -77,7 +83,21 @@ function Type(options) {
   };
 
   /**
+   * Setter for the internal document representation
+   *
+   * @param doc
+   * @returns {Type}
+   * @private
+   */
+  this._setDocument = function(doc) {
+    this._document = doc;
+    console.log(this._document);
+    return this;
+  };
+
+  /**
    * Etherpad Dev code
+   *
    * @returns {EtherpadInput}
    */
   this.etherpad = function(options) {

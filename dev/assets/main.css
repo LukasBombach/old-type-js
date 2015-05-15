@@ -1,6 +1,15 @@
 
 @import "layout.css";
 
+.tk-freight-text-pro {
+  letter-spacing: .01rem;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 22px;
+  line-height: 1.5;
+  color: rgba(0,0,0,0.8);
+}
+
 #typejs-caret-container {
   position: absolute;
   top: 0;
@@ -12,7 +21,7 @@
   cursor: text;
   background: #fc4d57;
   width: 2px;
-  height: 14px;
+  height: 16px;
   margin-left: -1px;
 }
 

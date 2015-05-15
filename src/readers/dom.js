@@ -40,30 +40,6 @@ var elementTypeMap = {
   sup    : 'SUP'
 };
 
-function getDocumentNodesForDomNode(domNode, parentDocumentNode) {
-
-  var type;
-
-  if (domNode.nodeType === NODE_TYPE_TEXT) {
-    type = elementTypeMap.text;
-  } else if (elementTypeMap[domNode.tagName.toLowerCase()] !== undefined) {
-    type = elementTypeMap[domNode.tagName.toLowerCase()];
-  } else {
-    type = 'UNKNOWN';
-    console.debug('Did not find map for tag', domNode.tagName.toLowerCase());
-  }
-
-  var value = domNode.nodeType === Node.TEXT_NODE ? domNode.nodeValue : null;
-  var documentNode = new DocumentNode(type, value, parentDocumentNode);
-
-  for (var i = 0; i < domNode.childNodes.length; i++) {
-    documentNode.childNodes.push(getDocumentNodesForDomNode(domNode.childNodes[i], documentNode));
-  }
-
-  return documentNode;
-
-}
-
 /**
  *
  * @constructor
@@ -77,12 +53,56 @@ function DomReader(rootNode) {
  * @returns {TypeDocument}
  */
 DomReader.prototype.getDocument = function () {
-  if (this.documentDirty === false) {
-    return this.document;
-  }
-  this.document = new Document(getDocumentNodesForDomNode(this.dom, null));
-  this.documentDirty = false;
+  this._load();
   return this.document;
+};
+
+DomReader.prototype.getMap = function () {
+  this._load();
+  console.log(this.map);
+  return this.map;
+};
+
+DomReader.prototype._load = function () {
+  if (this.dirty !== false) {
+    this.map = {};
+    this.document = new Document(this.getDocumentNodesForDomNode(this.dom, null));
+    this.dirty = false;
+  }
+};
+
+DomReader.prototype.getDocumentNodesForDomNode = function(domNode, parentDocumentNode) {
+
+  var type, childNode;
+
+  if (domNode.nodeType === NODE_TYPE_TEXT) {
+    type = elementTypeMap.text;
+  } else if(domNode.tagName === undefined) {
+    type = 'UNKNOWN'; // Todo set constant not string
+    console.debug('Skipping undefined tagName', domNode);
+  } else if (elementTypeMap[domNode.tagName.toLowerCase()] !== undefined) {
+    type = elementTypeMap[domNode.tagName.toLowerCase()];
+  } else {
+    type = 'UNKNOWN'; // Todo set constant not string
+    console.debug('Did not find map for tag', domNode.tagName.toLowerCase());
+  }
+
+  var value = domNode.nodeType === Node.TEXT_NODE ? domNode.nodeValue : null;
+  var documentNode = new DocumentNode(type, value, parentDocumentNode);
+
+  for (var i = 0; i < domNode.childNodes.length; i++) {
+    childNode = this.getDocumentNodesForDomNode(domNode.childNodes[i], documentNode);
+    if(childNode.type !== 'UNKNOWN') { // Todo check against constant not string
+      documentNode.childNodes.push(childNode);
+    }
+  }
+
+  if(type != 'UNKNOWN') {
+    this.map[domNode] = documentNode;
+  }
+
+  return documentNode;
+
 };
 
 /**
@@ -93,7 +113,7 @@ DomReader.prototype.getDocument = function () {
 DomReader.prototype.setDom = function (rootNode) {
   this.dom = rootNode;
   this.document = null;
-  this.documentDirty = true;
+  this.dirty = true;
   return this;
 };
 
