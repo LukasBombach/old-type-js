@@ -65,6 +65,7 @@ function Caret() {
    * Tries to preserve horizontal position.
    *
    * Todo prevNode handling not nice
+   * Todo should only walk 1 line
    *
    * Internally, this will create a collapsed range at the caret's offset and move
    * it left, character by character, and stop in the line above the caret when it's
@@ -119,6 +120,7 @@ function Caret() {
    * Tries to preserve horizontal position.
    *
    * Todo nextNode handling not nice
+   * Todo should only walk 1 line
    *
    * @returns {Caret}
    */
@@ -282,6 +284,7 @@ function Caret() {
   this._moveElToOffset = function () {
     var rect = this._getRectAtOffset(this.offset);
     this._moveElTo(rect.left, rect.top);
+    this._setElHeight(rect.bottom - rect.top)
     return this;
   };
 
@@ -296,6 +299,11 @@ function Caret() {
   this._moveElTo = function (x, y) {
     this.caretEl.style.left = x + 'px';
     this.caretEl.style.top = y + 'px';
+    return this;
+  };
+
+  this._setElHeight = function(h) {
+    this.caretEl.style.height = h + 'px';
     return this;
   };
 
