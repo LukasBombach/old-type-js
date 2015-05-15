@@ -37,9 +37,11 @@ function Caret() {
    */
   this.moveLeft = function () {
     if (this.offset <= 0) {
-      return this;
+      var prevTextNode = this._prevTextNode(this.textNode);
+      if(prevTextNode !== null) this.moveTo(prevTextNode, prevTextNode.length);
+    } else {
+      this._setOffset(this.offset - 1);
     }
-    this._setOffset(this.offset - 1);
     return this;
   };
 
@@ -50,15 +52,19 @@ function Caret() {
    */
   this.moveRight = function () {
     if (this.offset >= this.textNode.length) {
-      return this;
+      var nextTextNode = this._nextTextNode(this.textNode);
+      if(nextTextNode !== null) this.moveTo(nextTextNode, 0);
+    } else {
+      this._setOffset(this.offset + 1);
     }
-    this._setOffset(this.offset + 1);
     return this;
   };
 
   /**
    * Moves the caret up by one line.
    * Tries to preserve horizontal position.
+   *
+   * Todo prevNode handling not nice
    *
    * Internally, this will create a collapsed range at the caret's offset and move
    * it left, character by character, and stop in the line above the caret when it's
@@ -70,7 +76,8 @@ function Caret() {
 
     // Shorthand variables
     var node = this.textNode,
-      offset = this.offset;
+      offset = this.offset,
+      prevNode = node;
 
     // Initial range and positions
     var range  = this._createRange(node, offset),
@@ -79,13 +86,20 @@ function Caret() {
       lastRangeLeft;
 
     // Move the range as described in the method's description
-    while( offset > 0 &&
+    while( prevNode !== null && //offset > 0 &&
     (rangePos.top == caretPos.top|| rangePos.left > caretPos.left)) {
       offset--;
       range.setStart(node, offset);
       range.collapse(true);
       lastRangeLeft = rangePos.left;
       rangePos = this._getPositionsFromRange(range);
+      if(offset <= 0) {
+        prevNode = this._prevTextNode(node);
+        if(prevNode !== null) {
+          node = prevNode;
+          offset = prevNode.length;
+        }
+      }
     }
 
     // If the range moved up, check 2 characters above the caret to find a precise pos.
@@ -93,7 +107,7 @@ function Caret() {
       if(this._compareDeltaTo(caretPos.left, lastRangeLeft, rangePos.left) == -1) {
         offset += 1;
       }
-      this._setOffset(offset);
+      this.moveTo(node, offset);
     }
 
     // Chaining
@@ -104,13 +118,16 @@ function Caret() {
    * Moves the caret down by one line.
    * Tries to preserve horizontal position.
    *
+   * Todo nextNode handling not nice
+   *
    * @returns {Caret}
    */
   this.moveDown = function () {
 
     // Shorthand variables
     var node = this.textNode,
-      offset = this.offset;
+      offset = this.offset,
+      nextNode = node;
 
     // We are gonna create a range and move it through
     // the text until it is positioned 1 line below
@@ -126,13 +143,20 @@ function Caret() {
     // next line and stop moving when it has moved further right
     // than the caret. That means the range will be one line below
     // the caret and in about the same horizontal position.
-    while( offset < node.length &&
+    while( nextNode !== null && //offset < node.length &&
       (rangePos.bottom == caretPos.bottom || rangePos.right < caretPos.right)) {
       offset++;
       range.setEnd(node, offset);
       range.collapse(false);
       lastRangeRight = rangePos.right;
       rangePos = this._getPositionsFromRange(range);
+      if(offset >= node.length) {
+        nextNode = this._nextTextNode(node);
+        if(nextNode !== null) {
+          node = nextNode;
+          offset = 0-1;
+        }
+      }
     }
 
     // The text might have only one line, we check to see if the range
@@ -143,7 +167,7 @@ function Caret() {
       if(this._compareDeltaTo(caretPos.right, lastRangeRight, rangePos.right) == -1) {
         offset -= 1;
       }
-      this._setOffset(offset);
+      this.moveTo(node, offset);
     }
 
     // Chaining
@@ -320,6 +344,44 @@ function Caret() {
     this.caretEl.parentNode.replaceChild(newCaret, this.caretEl);
     this.caretEl = newCaret;
     return this;
+  };
+
+  /**
+   * TODO Code duplication with {BrowserInput}
+   * TODO Is this the right place to implement this anyway?
+   * TODO What about elements that are not siblings?
+   * TODO What if the next element is not in the root element
+   *
+   * @param sibling
+   * @returns {*}
+   * @private
+   */
+  this._nextTextNode = function(sibling) {
+    while ((sibling = sibling.nextSibling)) {
+      if(sibling.nodeType == 3 && /[^\t\n\r ]/.test(sibling.textContent)) {
+        return sibling;
+      }
+    }
+    return null;
+  };
+
+  /**
+   * TODO Code duplication with {BrowserInput}
+   * TODO Is this the right place to implement this anyway?
+   * TODO What about elements that are not siblings?
+   * TODO What if the next element is not in the root element
+   *
+   * @param sibling
+   * @returns {*}
+   * @private
+   */
+  this._prevTextNode = function(sibling) {
+    while ((sibling = sibling.previousSibling)) {
+      if(sibling.nodeType == 3 && /[^\t\n\r ]/.test(sibling.textContent)) {
+        return sibling;
+      }
+    }
+    return null;
   };
 
   /**
