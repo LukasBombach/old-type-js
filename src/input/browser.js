@@ -48,9 +48,6 @@ function BrowserInput(rootNode) {
     if(this._isTextNodeWithContents(el)) {
       return el;
     }
-    if(el.childNodes.length == 0) {
-      return null;
-    }
     for(i = 0; i < el.childNodes.length; i++) {
       if(c = this._findFirstTextNode(el.childNodes[i])) {
         return c;
