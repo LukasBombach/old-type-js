@@ -4,7 +4,6 @@ var Caret = require('./Caret');
 var DomReader = require('../readers/dom');
 
 var TEXT_NODE = 3; // todo Node.TEXT oder so, DOM API
-var COMMENT_NODE = 8;
 
 /**
  *
@@ -16,19 +15,30 @@ function BrowserInput(rootNode) {
   this._rootNode = rootNode;
   this._reader = new DomReader(this._rootNode);
   this._map = this._reader.getMap();
-  console.log(this._map);
-  this._caret._blink();
-  var firstTextNode = this._findFirstTextNode();
-  this._caret.moveTo(firstTextNode);
+  this._caret.moveTo(this._findFirstTextNode())._blink();
 }
 
 (function () {
 
+  /**
+   * Will pass a {TypeDocument} to the callback as read
+   * from a DOM tree
+   *
+   * @param callback
+   */
   this.getDocument = function(callback) {
     var doc = this._reader.getDocument();
     callback(doc);
   };
 
+  /**
+   * Finds the first visible text node in an element. Will
+   * return the elemmt itself, if it is already a text node
+   *
+   * @param el
+   * @returns {*}
+   * @private
+   */
   this._findFirstTextNode = function(el) {
     el = el || this._rootNode;
     var i, c;
@@ -57,12 +67,6 @@ function BrowserInput(rootNode) {
   this._isTextNodeWithContents = function(node) {
     return node.nodeType == TEXT_NODE && /[^\t\n\r ]/.test(node.textContent);
   };
-
-  //this._isIgnorable = function(node) {
-  //  var isAllWhiteSpace = !(/[^\t\n\r ]/.test(node.textContent));
-  //  return node.nodeType == COMMENT_NODE || (node.nodeType == TEXT_NODE && isAllWhiteSpace);
-  //};
-
 
 }).call(BrowserInput.prototype);
 
