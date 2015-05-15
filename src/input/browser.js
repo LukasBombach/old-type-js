@@ -76,7 +76,7 @@ function BrowserInput(rootNode) {
    * @private
    */
   this._bindKeyboardAndMouse = function(caret) {
-    new DeviceInput(this._rootNode, caret)
+    new DeviceInput(this._rootNode, caret);
     return this;
   }
 
