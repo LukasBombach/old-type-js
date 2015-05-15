@@ -2,6 +2,7 @@
 
 var Caret = require('./Caret');
 var DomReader = require('../readers/dom');
+var DeviceInput = require('./browser_device_input');
 
 var TEXT_NODE = 3; // todo Node.TEXT oder so, DOM API
 
@@ -44,13 +45,13 @@ function BrowserInput(rootNode) {
    */
   this._findFirstTextNode = function(el) {
     el = el || this._rootNode;
-    var i, c;
+    var i, child;
     if(this._isTextNodeWithContents(el)) {
       return el;
     }
     for(i = 0; i < el.childNodes.length; i++) {
-      if(c = this._findFirstTextNode(el.childNodes[i])) {
-        return c;
+      if(child = this._findFirstTextNode(el.childNodes[i])) {
+        return child;
       }
     }
     return null;
@@ -75,6 +76,7 @@ function BrowserInput(rootNode) {
    * @private
    */
   this._bindKeyboardAndMouse = function(caret) {
+    new DeviceInput(this._rootNode, caret)
     return this;
   }
 
