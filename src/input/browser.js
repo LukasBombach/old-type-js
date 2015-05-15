@@ -16,6 +16,7 @@ function BrowserInput(rootNode) {
   this._reader = new DomReader(this._rootNode);
   this._map = this._reader.getMap();
   this._caret.moveTo(this._findFirstTextNode())._blink();
+  this._bindKeyboardAndMouse(this._caret);
 }
 
 (function () {
@@ -25,10 +26,12 @@ function BrowserInput(rootNode) {
    * from a DOM tree
    *
    * @param callback
+   * @returns {BrowserInput}
    */
   this.getDocument = function(callback) {
     var doc = this._reader.getDocument();
     callback(doc);
+    return this;
   };
 
   /**
@@ -36,7 +39,7 @@ function BrowserInput(rootNode) {
    * return the elemmt itself, if it is already a text node
    *
    * @param el
-   * @returns {*}
+   * @returns {BrowserInput}
    * @private
    */
   this._findFirstTextNode = function(el) {
@@ -67,6 +70,16 @@ function BrowserInput(rootNode) {
   this._isTextNodeWithContents = function(node) {
     return node.nodeType == TEXT_NODE && /[^\t\n\r ]/.test(node.textContent);
   };
+
+  /**
+   *
+   * @param caret
+   * @returns {BrowserInput}
+   * @private
+   */
+  this._bindKeyboardAndMouse = function(caret) {
+    return this;
+  }
 
 }).call(BrowserInput.prototype);
 
