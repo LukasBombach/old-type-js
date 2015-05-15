@@ -6,12 +6,9 @@
  */
 var EtherpadReader = require('./plugins/Etherpad/reader');
 var EtherpadInput = require('./plugins/Etherpad/input');
-
 var TypeDocument = require('./type_document');
 var DocumentNode = require('./document_node');
-
 var BrowserInput = require('./input/browser');
-
 
 /**
  * Renders a {TypeDocument} to HTML
@@ -36,9 +33,7 @@ function Type(options) {
 
   options = options || {};
   this.setOptions(options);
-
   this._input = new this.options.input(this.options.root);
-
   this._input.getDocument(this._setDocument.bind(this));
 
 }
@@ -91,7 +86,6 @@ function Type(options) {
    */
   this._setDocument = function(doc) {
     this._document = doc;
-    console.log(this._document);
     return this;
   };
 

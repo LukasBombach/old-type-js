@@ -59,7 +59,6 @@ DomReader.prototype.getDocument = function () {
 
 DomReader.prototype.getMap = function () {
   this._load();
-  console.log(this.map);
   return this.map;
 };
 
@@ -77,6 +76,9 @@ DomReader.prototype.getDocumentNodesForDomNode = function(domNode, parentDocumen
 
   if (domNode.nodeType === NODE_TYPE_TEXT) {
     type = elementTypeMap.text;
+  } else if(domNode.nodeType === 8) {
+    type = 'UNKNOWN'; // Todo set constant not string
+    console.debug('Skipping comment node: "' + domNode.nodeValue.toString() + '"');
   } else if(domNode.tagName === undefined) {
     type = 'UNKNOWN'; // Todo set constant not string
     console.debug('Skipping undefined tagName', domNode);
