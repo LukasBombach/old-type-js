@@ -142,9 +142,15 @@ Type.fromEtherpad = function(options) {
       options.root.appendChild(p);
       input.caret.moveTo(options.root.childNodes[0].childNodes[0], 0)._blink();
 
-      return new Type({
+      var type = new Type({
         root : options.root
       });
+
+      type._input._caret.registerCallback('_setOffset', function() {
+        input.progagateCaret(this.offset, 0);
+      });
+
+      return type;
 
     }
   });

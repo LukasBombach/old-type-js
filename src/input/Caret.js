@@ -17,6 +17,7 @@ var Settings = require('../Settings');
 function Caret() {
   this.caretEl = this._createElement();
   this._hide();
+  this.callbacks = {};
 }
 
 (function () {
@@ -203,6 +204,7 @@ function Caret() {
    * @returns {Caret}
    */
   this.insertText = function (str) {
+    this._callbacksFor('insertText', str);
     var nodeText = this.textNode.nodeValue;
     if (this.offset > 0) {
       this.textNode.nodeValue = nodeText.substring(0, this.offset)
@@ -229,6 +231,7 @@ function Caret() {
     if ( (this.offset <= 0 && numChars < 0) || (this.offset >= this.textNode.length && numChars > 0) ) {
       return this;
     }
+    this._callbacksFor('removeCharacter', numChars);
     var str = this.textNode.nodeValue;
     if(numChars < 0) {
       this.textNode.nodeValue = str.substring(0, this.offset + numChars)
@@ -238,6 +241,19 @@ function Caret() {
       this.textNode.nodeValue = str.substring(0, this.offset)
         + str.substring(this.offset + numChars, str.length);
     }
+    return this;
+  };
+
+  /**
+   * Todo JSDOC
+   *
+   * @param functionName
+   * @param callback
+   * @returns {Caret}
+   */
+  this.registerCallback = function(functionName, callback) {
+    this.callbacks[functionName] = this.callbacks[functionName] || [];
+    this.callbacks[functionName].push(callback);
     return this;
   };
 
@@ -272,6 +288,7 @@ function Caret() {
     this._moveElToOffset();
     this._resetBlink();
     this._scrollIntoView();
+    this._callbacksFor('_setOffset');
     return this;
   };
 
@@ -302,6 +319,13 @@ function Caret() {
     return this;
   };
 
+  /**
+   * Todo jsdoc
+   *
+   * @param h
+   * @returns {*}
+   * @private
+   */
   this._setElHeight = function(h) {
     this.caretEl.style.height = h + 'px';
     return this;
@@ -352,6 +376,23 @@ function Caret() {
     this.caretEl.parentNode.replaceChild(newCaret, this.caretEl);
     this.caretEl = newCaret;
     return this;
+  };
+
+  /**
+   * Todo Maybe make a magic function that calls callbacks for functions automatically
+   *
+   * @param functionName
+   * @param params
+   * @private
+   */
+  this._callbacksFor = function(functionName, params) {
+    var i;
+    params = Array.prototype.slice.call(arguments, 1);
+    if(this.callbacks[functionName]) {
+      for(i=0; i<this.callbacks[functionName].length; i++) {
+        this.callbacks[functionName][i].apply(this, params);
+      }
+    }
   };
 
   /**
