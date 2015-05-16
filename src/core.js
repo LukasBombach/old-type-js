@@ -20,6 +20,7 @@ var Renderer = require('./renderers/html');
  * The main class and entry point to set up a Type instance in the browser.
  *
  * @class Type
+ * @param options
  * @constructor
  */
 function Type(options) {
@@ -118,6 +119,36 @@ function Type(options) {
   }
 
 }).call(Type.prototype);
+
+/**
+ *
+ * @param options
+ * @constructor
+ */
+Type.fromEtherpad = function(options) {
+  var etherpadInput = new EtherpadInput({
+    onContentLoaded : function(text, input) {
+
+      //var node = new DocumentNode('P');
+      //node.childNodes.push(new DocumentNode('TEXT', text));
+      //var document = new TypeDocument(node);
+      //var renderer = new Renderer(document);
+      //options.renderTo.appendChild(renderer.output());
+      //input.caret.moveTo(options.renderTo.childNodes[0].childNodes[0], 0)._blink();
+      //options.onload(input);
+
+      var p = window.document.createElement('p');
+      p.appendChild(window.document.createTextNode(text));
+      options.root.appendChild(p);
+      input.caret.moveTo(options.root.childNodes[0].childNodes[0], 0)._blink();
+
+      return new Type({
+        root : options.root
+      });
+
+    }
+  });
+};
 
 /**
  * Exposes Type's prototype as jQuery-style shorthand
