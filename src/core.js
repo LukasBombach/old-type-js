@@ -153,9 +153,13 @@ Type.fromEtherpad = function(options) {
         input.progagateCaret(this.offset, 0);
       });
 
+      // todo numChars
       typeCaret.registerCallback('removeCharacter', function(numChars) {
-        // todo numChars
         input.propagateUpdate(t.length, '-', typeCaret.offset - 1, 1);
+      });
+
+      typeCaret.registerCallback('insertText', function(val) {
+        input.propagateUpdate(t.length, '+', typeCaret.offset, val.length, val);
       });
 
       return type;
