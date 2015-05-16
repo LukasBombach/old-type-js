@@ -14,8 +14,8 @@ var Settings = require('../Settings');
  * @class Caret
  * @constructor
  */
-function Caret() {
-  this.caretEl = this._createElement();
+function Caret(color) {
+  this.caretEl = this._createElement(color);
   this._hide();
   this.callbacks = {};
 }
@@ -204,17 +204,59 @@ function Caret() {
    * @returns {Caret}
    */
   this.insertText = function (str) {
+
     this._callbacksFor('insertText', str);
-    var nodeText = this.textNode.nodeValue;
-    if (this.offset > 0) {
-      this.textNode.nodeValue = nodeText.substring(0, this.offset)
+
+    if(/^[\n\r]+$/.test(str)) {
+
+      var newNode = this.textNode.splitText(this.offset);
+      newNode.parentNode.insertBefore(document.createElement('br'), newNode);
+      this.moveTo(newNode, 0);
+      return this;
+
+    } else {
+
+      var nodeText = this.textNode.nodeValue;
+      if (this.offset > 0) {
+        this.textNode.nodeValue = nodeText.substring(0, this.offset)
+          + str
+          + nodeText.substring(this.offset, nodeText.length);
+      } else {
+        this.textNode.nodeValue = str + nodeText;
+      }
+      this._setOffset(this.offset + str.length);
+      return this;
+
+    }
+
+
+    /*
+     var nodeText = this.textNode.nodeValue,
+     splitText, i, newTextNodes = [],
+     parentNode = this.textNode.parentNode,
+     tmpNode;
+
+     if (this.offset > 0) {
+      nodeText = nodeText.substring(0, this.offset)
         + str
         + nodeText.substring(this.offset, nodeText.length);
     } else {
-      this.textNode.nodeValue = str + nodeText;
+      nodeText = str + nodeText;
     }
-    this._setOffset(this.offset + str.length);
-    return this;
+
+    splitText = nodeText.split(/(?:\r\n|\r|\n)/g);
+
+    this.textNode.nodeValue = splitText[0];
+
+    for(i=1; i<splitText.length; i++) {
+      tmpNode = document.createTextNode(splitText[i]);
+      parentNode.insertBefore(tmpNode, this.textNode.nextSibling);
+      if(i < splitText.length - 1)
+        parentNode.insertBefore(document.createElement('br'), this.textNode.nextSibling);
+    }
+
+    this.moveTo(tmpNode, tmpNode.length);
+    */
   };
 
   /**
@@ -566,10 +608,10 @@ function Caret() {
    * @returns {HTMLElement}
    * @private
    */
-  this._createElement = function () {
+  this._createElement = function (color) {
     var container = this._getElementContainer(),
         el = window.document.createElement('div');
-    el.className = Settings.prefix + 'caret';
+    el.className = Settings.prefix + 'caret ' + color;
     container.appendChild(el);
     return el;
   };

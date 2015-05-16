@@ -24,6 +24,9 @@
   height: 16px;
   margin-left: -1px;
 }
+.typejs-caret.blue {
+  background: #4285f4;
+}
 
 .hide {
   display: none;

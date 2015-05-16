@@ -18,7 +18,7 @@ function EtherpadInput(options) {
 
   var self = this;
 
-  this.caret = new Caret();
+  this.caret = new Caret('blue');
 
   this.revision = -1;
 
