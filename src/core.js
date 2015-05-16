@@ -138,7 +138,8 @@ Type.fromEtherpad = function(options) {
       //options.onload(input);
 
       var p = window.document.createElement('p');
-      p.appendChild(window.document.createTextNode(text));
+      var t = window.document.createTextNode(text);
+      p.appendChild(t);
       options.root.appendChild(p);
       input.caret.moveTo(options.root.childNodes[0].childNodes[0], 0)._blink();
 
@@ -146,8 +147,15 @@ Type.fromEtherpad = function(options) {
         root : options.root
       });
 
-      type._input._caret.registerCallback('_setOffset', function() {
+      var typeCaret = type._input._caret;
+
+      typeCaret.registerCallback('_setOffset', function() {
         input.progagateCaret(this.offset, 0);
+      });
+
+      typeCaret.registerCallback('removeCharacter', function(numChars) {
+        // todo numChars
+        input.propagateUpdate(t.length, '-', typeCaret.offset - 1, 1);
       });
 
       return type;
