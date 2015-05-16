@@ -128,16 +128,24 @@ function EtherpadInput(options) {
   // Example 'Z:g0>1=cp*0+1$a'
   // We send "Z:fu<1=q*0-1"
   // they sd "Z:fu<1=q-1$"
+  // Enter: "Z:99>1=d*0|1+1$entr"
   this.getChangeset = function(textContainer, operator, offset, value, charBank) {
-    var length, lengthDiff, operation;
+    var length, lengthDiff, operation, operatorSnd;
 
     length = this._getLengthFor(textContainer);
 
-    length     = 'Z:'+length.toString(36);
-    lengthDiff = (operator == '+' ? '>' : '<') + value;
-    offset     = offset > 0 ? '=' + offset.toString(36) : '';
-    operation  = (operator == '+' ? '*0' : '') + operator + value;
-    charBank   = charBank != null ? '$' + charBank : '$';
+    length      = 'Z:'+length.toString(36);
+    lengthDiff  = (operator == '+' ? '>' : '<') + value;
+    offset      = offset > 0 ? '=' + offset.toString(36) : '';
+    if(/^[\n\r]+$/.test(charBank)) {
+      operatorSnd = '|1+1';
+      charBank = "$\n";
+    } else {
+      operatorSnd = operator + value;
+      charBank    = charBank != null ? '$' + charBank : '$';
+    }
+
+    operation   = (operator == '+' ? '*0' : '') + operatorSnd;
 
     return length + lengthDiff + offset + operation + charBank;
   };
