@@ -3,6 +3,9 @@
 var Etherpad = require('./EtherpadLite');
 var Caret = require('../../input/Caret');
 
+var TEXT_NODE = 3; // todo Node.TEXT oder so, DOM API
+
+
 /**
  * Loads a document from an Etherpad Pad
  * @constructor
@@ -78,8 +81,8 @@ function EtherpadInput(options) {
     this.caret._setOffset(x);
   };
 
-  this.propagateUpdate = function(length, operator, offset, value, charBank) {
-    var changeset = this.getChangeset(length, operator, offset, value, charBank);
+  this.propagateUpdate = function(textContainer, operator, offset, value, charBank) {
+    var changeset = this.getChangeset(textContainer, operator, offset, value, charBank);
     console.log('seding', changeset);
     this.socket.json.send(
     {
@@ -125,8 +128,10 @@ function EtherpadInput(options) {
   // Example 'Z:g0>1=cp*0+1$a'
   // We send "Z:fu<1=q*0-1"
   // they sd "Z:fu<1=q-1$"
-  this.getChangeset = function(length, operator, offset, value, charBank) {
-    var lengthDiff, operation;
+  this.getChangeset = function(textContainer, operator, offset, value, charBank) {
+    var length, lengthDiff, operation;
+
+    length = this._getLengthFor(textContainer);
 
     length     = 'Z:'+length.toString(36);
     lengthDiff = (operator == '+' ? '>' : '<') + value;
@@ -137,6 +142,30 @@ function EtherpadInput(options) {
     return length + lengthDiff + offset + operation + charBank;
   };
 
+  /**
+   *
+   * @param el
+   * @returns {*}
+   * @private
+   */
+  this._getLengthFor = function(el) {
+    var i, length = 0;
+    if(el.nodeType == TEXT_NODE) {
+      return el.length;
+    }
+    if(el.tagName.toLowerCase() == 'br') {
+      return 1;
+    }
+    for(i = 0; i < el.childNodes.length; i++) {
+      length += this._getLengthFor(el.childNodes[i])
+    }
+    return length;
+  };
+
+  /**
+   *
+   * @param data
+   */
   this.updateContent = function(data) {
 
     this.revision = data.newRev;

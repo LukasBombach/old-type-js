@@ -138,8 +138,13 @@ Type.fromEtherpad = function(options) {
       //options.onload(input);
 
       var p = window.document.createElement('p');
-      var t = window.document.createTextNode(text);
-      p.appendChild(t);
+
+      text = text.replace(/(?:\r\n|\r|\n)/g, '<br />');
+
+      p.innerHTML = text;
+
+      //var textNode = window.document.createTextNode(text);
+      //p.appendChild(textNode);
       options.root.appendChild(p);
       input.caret.moveTo(options.root.childNodes[0].childNodes[0], 0)._blink();
 
@@ -155,11 +160,11 @@ Type.fromEtherpad = function(options) {
 
       // todo numChars
       typeCaret.registerCallback('removeCharacter', function(numChars) {
-        input.propagateUpdate(t.length, '-', typeCaret.offset - 1, 1);
+        input.propagateUpdate(p, '-', typeCaret.offset - 1, 1);
       });
 
       typeCaret.registerCallback('insertText', function(val) {
-        input.propagateUpdate(t.length, '+', typeCaret.offset, val.length, val);
+        input.propagateUpdate(p, '+', typeCaret.offset, val.length, val);
       });
 
       return type;
