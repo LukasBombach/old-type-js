@@ -40,7 +40,7 @@ function BrowserInput(rootNode) {
    * return the elemmt itself, if it is already a text node
    *
    * @param el
-   * @returns {BrowserInput}
+   * @returns {HTMLElement|null}
    * @private
    */
   this._findFirstTextNode = function(el) {

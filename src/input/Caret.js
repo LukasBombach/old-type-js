@@ -14,7 +14,8 @@ var Settings = require('../Settings');
  * @class Caret
  * @constructor
  */
-function Caret(color) {
+function Caret(color, constrainingNode) {
+  this._constrainingNode = constrainingNode || document.body;
   this.caretEl = this._createElement(color);
   this._hide();
   this.callbacks = {};
@@ -455,6 +456,73 @@ function Caret(color) {
     }
     return null;
   };
+
+  /**
+   *
+   * @param {HTMLElement} sibling
+   * @returns {*}
+   * @private
+   */
+  this._findTextNode = function(sibling, direction) {
+
+    var nextSibling = this._findSiblingTextNode(sibling, direction);
+
+    if(nextSibling !== null) {
+      return nextSibling;
+    }
+
+    if(sibling.parentNode != this._constrainingNode && sibling.parentNode.nextSibling) {
+      if(this._isTextNodeWithContents(sibling.parentNode.nextSibling)) {
+        return sibling.parentNode.nextSibling;
+      } else {
+        this._findTextNodeInChildren(sibling.parentNode.nextSibling, direction)
+      }
+    }
+
+    return null;
+  };
+
+  /**
+   *
+   * @param {HTMLElement} sibling - The text node that should be used as a
+   *     starting point
+   * @param {string} direction - Determines the direction in which the siblings
+   *     should be traversed. Allowed values are 'next' or 'previous' for traversing
+   *     the following (next) siblings or previous siblings
+   * @returns {HTMLElement|null} - Returns the first text node found or null if the
+   *     end of the containing node was hit
+   * @private
+   */
+  this._findSiblingTextNode = function(sibling, direction) {
+    while(sibling = sibling[direction + 'Sibling']) {
+      if(this._isTextNodeWithContents(sibling)) {
+        return sibling;
+      }
+    }
+    return null;
+  };
+
+  /**
+   *
+   * @param {HTMLElement} sibling
+   * @param direction
+   * @returns {HTMLElement|null}
+   * @private
+   */
+  this._findTextNodeInChildren = function(sibling, direction){
+
+  };
+
+  /**
+   * Todo: code duplication in browser.js, there should be a dom util module
+   * @param node
+   * @returns {boolean}
+   * @private
+   */
+  this._isTextNodeWithContents = function(node) {
+    return node.nodeType == 3 && /[^\t\n\r ]/.test(node.textContent);
+  };
+
 
   /**
    * TODO Code duplication with {BrowserInput}
