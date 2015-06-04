@@ -448,7 +448,7 @@ function Caret(color, constrainingNode) {
    * @returns {*}
    * @private
    */
-  this._nextTextNode = function(sibling) {
+  this._nextTextNodeOld = function(sibling) {
     while ((sibling = sibling.nextSibling)) {
       if(sibling.nodeType == 3 && /[^\t\n\r ]/.test(sibling.textContent)) {
         return sibling;
@@ -467,7 +467,7 @@ function Caret(color, constrainingNode) {
    * @returns {*}
    * @private
    */
-  this._prevTextNode = function(sibling) {
+  this._prevTextNodeOld = function(sibling) {
     while ((sibling = sibling.previousSibling)) {
       if(sibling.nodeType == 3 && /[^\t\n\r ]/.test(sibling.textContent)) {
         return sibling;
@@ -483,7 +483,7 @@ function Caret(color, constrainingNode) {
    * @returns {*}
    * @private
    */
-  this._nextTextNodeNew = function(el, returnMe) {
+  this._nextTextNode = function(el, returnMe) {
 
     var parent = el.parentNode;
 
@@ -492,16 +492,16 @@ function Caret(color, constrainingNode) {
     }
 
     if(el.childNodes.length) {
-      return this._nextTextNodeNew(el.childNodes[0], true);
+      return this._nextTextNode(el.childNodes[0], true);
     }
 
     if(el.nextSibling !== null) {
-      return this._nextTextNodeNew(el.nextSibling, true);
+      return this._nextTextNode(el.nextSibling, true);
     }
 
     while(parent !== this._constrainingNode) {
       if(parent.nextSibling !== null) {
-        return this._nextTextNodeNew(parent.nextSibling , true);
+        return this._nextTextNode(parent.nextSibling , true);
       }
       parent = parent.parentNode;
     }
@@ -516,7 +516,7 @@ function Caret(color, constrainingNode) {
    * @returns {*}
    * @private
    */
-  this._prevTextNodeNew = function(el, returnMe) {
+  this._prevTextNode = function(el, returnMe) {
 
     var parent = el.parentNode;
 
@@ -525,16 +525,16 @@ function Caret(color, constrainingNode) {
     }
 
     if(el.childNodes.length) {
-      return this._prevTextNodeNew(el.childNodes[el.childNodes.length - 1], true);
+      return this._prevTextNode(el.childNodes[el.childNodes.length - 1], true);
     }
 
     if(el.previousSibling !== null) {
-      return this._prevTextNodeNew(el.previousSibling, true);
+      return this._prevTextNode(el.previousSibling, true);
     }
 
     while(parent !== this._constrainingNode) {
       if(parent.previousSibling !== null) {
-        return this._prevTextNodeNew(parent.previousSibling , true);
+        return this._prevTextNode(parent.previousSibling , true);
       }
       parent = parent.parentNode;
     }
