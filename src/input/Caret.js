@@ -437,46 +437,11 @@ function Caret(color, constrainingNode) {
       }
     }
   };
-
+  
   /**
-   * TODO Code duplication with {BrowserInput}
-   * TODO Is this the right place to implement this anyway?
-   * TODO What about elements that are not siblings?
-   * TODO What if the next element is not in the root element
-   *
-   * @param sibling
-   * @returns {*}
-   * @private
-   */
-  this._nextTextNodeOld = function(sibling) {
-    while ((sibling = sibling.nextSibling)) {
-      if(sibling.nodeType == 3 && /[^\t\n\r ]/.test(sibling.textContent)) {
-        return sibling;
-      }
-    }
-    return null;
-  };
-
-  /**
-   * TODO Code duplication with {BrowserInput}
-   * TODO Is this the right place to implement this anyway?
-   * TODO What about elements that are not siblings?
-   * TODO What if the next element is not in the root element
-   *
-   * @param sibling
-   * @returns {*}
-   * @private
-   */
-  this._prevTextNodeOld = function(sibling) {
-    while ((sibling = sibling.previousSibling)) {
-      if(sibling.nodeType == 3 && /[^\t\n\r ]/.test(sibling.textContent)) {
-        return sibling;
-      }
-    }
-    return null;
-  };
-
-  /**
+   * TODO Possible code duplication with other code operating on the DOM like {BrowserInput}
+   * TODO Caching instead of traversing every time
+   * TODO We check for the _constrainingNode but this concept isn't really/properly used by other parts of the code
    *
    * @param el
    * @param returnMe
@@ -510,6 +475,9 @@ function Caret(color, constrainingNode) {
   };
 
   /**
+   * TODO Possible code duplication with other code operating on the DOM like {BrowserInput}
+   * TODO Caching instead of traversing every time
+   * TODO We check for the _constrainingNode but this concept isn't really/properly used by other parts of the code
    *
    * @param el
    * @param returnMe
