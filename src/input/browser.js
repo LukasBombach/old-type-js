@@ -12,7 +12,7 @@ var TEXT_NODE = 3; // todo Node.TEXT oder so, DOM API
  * @constructor
  */
 function BrowserInput(rootNode) {
-  this._caret = new Caret();
+  this._caret = new Caret(null, rootNode);
   this._rootNode = rootNode;
   this._reader = new DomReader(this._rootNode);
   this._map = this._reader.getMap();
