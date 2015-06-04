@@ -457,7 +457,14 @@ function Caret(color, constrainingNode) {
     return null;
   };
 
-  this._findTextNodeNew = function(el, returnMe) {
+  /**
+   *
+   * @param el
+   * @param returnMe
+   * @returns {*}
+   * @private
+   */
+  this._findNextTextNodeNew = function(el, returnMe) {
 
     var parent = el.parentNode;
 
@@ -466,16 +473,42 @@ function Caret(color, constrainingNode) {
     }
 
     if(el.childNodes.length) {
-      return this._findTextNodeNew(el.childNodes[0], true);
+      return this._findNextTextNodeNew(el.childNodes[0], true);
     }
 
     if(el.nextSibling !== null) {
-      return this._findTextNodeNew(el.nextSibling, true);
+      return this._findNextTextNodeNew(el.nextSibling, true);
     }
 
     while(parent !== this._constrainingNode) {
       if(parent.nextSibling !== null) {
-        return this._findTextNodeNew(parent.nextSibling , true);
+        return this._findNextTextNodeNew(parent.nextSibling , true);
+      }
+      parent = parent.parentNode;
+    }
+
+    return null;
+  };
+
+  this._findPrevTextNodeNew = function(el, returnMe) {
+
+    var parent = el.parentNode;
+
+    if(returnMe === true && this._isTextNodeWithContents(el)) {
+      return el;
+    }
+
+    if(el.childNodes.length) {
+      return this._findPrevTextNodeNew(el.childNodes[el.childNodes.length - 1], true);
+    }
+
+    if(el.previousSibling !== null) {
+      return this._findPrevTextNodeNew(el.previousSibling, true);
+    }
+
+    while(parent !== this._constrainingNode) {
+      if(parent.previousSibling !== null) {
+        return this._findPrevTextNodeNew(parent.previousSibling , true);
       }
       parent = parent.parentNode;
     }
