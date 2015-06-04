@@ -458,165 +458,6 @@ function Caret(color, constrainingNode) {
   };
 
   /**
-   *
-   * @param el
-   * @param returnMe
-   * @returns {*}
-   * @private
-   */
-  this._findNextTextNodeNew = function(el, returnMe) {
-
-    var parent = el.parentNode;
-
-    if(returnMe === true && this._isTextNodeWithContents(el)) {
-      return el;
-    }
-
-    if(el.childNodes.length) {
-      return this._findNextTextNodeNew(el.childNodes[0], true);
-    }
-
-    if(el.nextSibling !== null) {
-      return this._findNextTextNodeNew(el.nextSibling, true);
-    }
-
-    while(parent !== this._constrainingNode) {
-      if(parent.nextSibling !== null) {
-        return this._findNextTextNodeNew(parent.nextSibling , true);
-      }
-      parent = parent.parentNode;
-    }
-
-    return null;
-  };
-
-  this._findPrevTextNodeNew = function(el, returnMe) {
-
-    var parent = el.parentNode;
-
-    if(returnMe === true && this._isTextNodeWithContents(el)) {
-      return el;
-    }
-
-    if(el.childNodes.length) {
-      return this._findPrevTextNodeNew(el.childNodes[el.childNodes.length - 1], true);
-    }
-
-    if(el.previousSibling !== null) {
-      return this._findPrevTextNodeNew(el.previousSibling, true);
-    }
-
-    while(parent !== this._constrainingNode) {
-      if(parent.previousSibling !== null) {
-        return this._findPrevTextNodeNew(parent.previousSibling , true);
-      }
-      parent = parent.parentNode;
-    }
-
-    return null;
-  };
-
-  /**
-   * Todo: DOM traversal muss mit state machine gemacht werden
-   *
-   * @param {HTMLElement} el
-   * @returns {*}
-   * @private
-   * @param direction
-   */
-  this._findTextNode = function(el, direction) {
-
-    var nextTextNode, searchNode;
-
-    searchNode = el.childNodes.length ? el : el.nextSibling;
-
-    if(searchNode !== null) {
-      do {
-        nextTextNode = this._findFirstTextNodeInChildren(el);
-        if (nextTextNode !== null) {
-          return nextTextNode;
-        }
-      } while((searchNode = searchNode.nextSibling));
-    }
-
-    if(el.parentNode === this._constrainingNode) {
-      return null;
-    }
-
-    searchNode = el.parentNode;
-
-
-    //var nextSibling = this._findSiblingTextNode(sibling, direction);
-//
-    //if(nextSibling !== null) {
-    //  return nextSibling;
-    //}
-//
-    //if(sibling.parentNode.nextSibling === null || sibling.parentNode === this._constrainingNode) {
-    //  return null;
-    //}
-//
-    //if(this._isTextNodeWithContents(sibling.parentNode.nextSibling)) {
-    //  return sibling.parentNode.nextSibling;
-    //}
-//
-    //this._findFirstTextNodeInChildren(sibling.parentNode.nextSibling);
-    //this._findLastTextNodeInChildren(sibling.parentNode.nextSibling);
-
-  };
-
-  /**
-   *
-   * @param {HTMLElement} sibling - The text node that should be used as a
-   *     starting point
-   * @param {string} direction - Determines the direction in which the siblings
-   *     should be traversed. Allowed values are 'next' or 'previous' for traversing
-   *     the following (next) siblings or previous siblings
-   * @returns {HTMLElement|null} - Returns the first text node found or null if the
-   *     end of the containing node was hit
-   * @private
-   */
-  this._findSiblingTextNode = function(sibling, direction) {
-    while(sibling = sibling[direction + 'Sibling']) {
-      if(this._isTextNodeWithContents(sibling)) {
-        return sibling;
-      }
-    }
-    return null;
-  };
-
-  /**
-   *
-   * @param {HTMLElement} el
-   * @param direction
-   * @returns {HTMLElement|null}
-   * @private
-   */
-  this._findFirstTextNodeInChildren = function(el){
-    var i, child;
-    if(this._isTextNodeWithContents(el)) {
-      return el;
-    }
-    for(i = 0; i < el.childNodes.length; i++) {
-      if(child = this._findFirstTextNodeInChildren(el.childNodes[i])) {
-        return child;
-      }
-    }
-    return null;
-  };
-
-  /**
-   * Todo: code duplication in browser.js, there should be a dom util module
-   * @param node
-   * @returns {boolean}
-   * @private
-   */
-  this._isTextNodeWithContents = function(node) {
-    return node.nodeType == 3 && /[^\t\n\r ]/.test(node.textContent);
-  };
-
-
-  /**
    * TODO Code duplication with {BrowserInput}
    * TODO Is this the right place to implement this anyway?
    * TODO What about elements that are not siblings?
@@ -633,6 +474,82 @@ function Caret(color, constrainingNode) {
       }
     }
     return null;
+  };
+
+  /**
+   *
+   * @param el
+   * @param returnMe
+   * @returns {*}
+   * @private
+   */
+  this._nextTextNodeNew = function(el, returnMe) {
+
+    var parent = el.parentNode;
+
+    if(returnMe === true && this._isTextNodeWithContents(el)) {
+      return el;
+    }
+
+    if(el.childNodes.length) {
+      return this._nextTextNodeNew(el.childNodes[0], true);
+    }
+
+    if(el.nextSibling !== null) {
+      return this._nextTextNodeNew(el.nextSibling, true);
+    }
+
+    while(parent !== this._constrainingNode) {
+      if(parent.nextSibling !== null) {
+        return this._nextTextNodeNew(parent.nextSibling , true);
+      }
+      parent = parent.parentNode;
+    }
+
+    return null;
+  };
+
+  /**
+   *
+   * @param el
+   * @param returnMe
+   * @returns {*}
+   * @private
+   */
+  this._prevTextNodeNew = function(el, returnMe) {
+
+    var parent = el.parentNode;
+
+    if(returnMe === true && this._isTextNodeWithContents(el)) {
+      return el;
+    }
+
+    if(el.childNodes.length) {
+      return this._prevTextNodeNew(el.childNodes[el.childNodes.length - 1], true);
+    }
+
+    if(el.previousSibling !== null) {
+      return this._prevTextNodeNew(el.previousSibling, true);
+    }
+
+    while(parent !== this._constrainingNode) {
+      if(parent.previousSibling !== null) {
+        return this._prevTextNodeNew(parent.previousSibling , true);
+      }
+      parent = parent.parentNode;
+    }
+
+    return null;
+  };
+
+  /**
+   * Todo: code duplication in browser.js, there should be a dom util module
+   * @param node
+   * @returns {boolean}
+   * @private
+   */
+  this._isTextNodeWithContents = function(node) {
+    return node.nodeType == 3 && /[^\t\n\r ]/.test(node.textContent);
   };
 
   /**
