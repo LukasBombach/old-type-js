@@ -150,9 +150,9 @@ function Caret(color, constrainingNode) {
     // next line and stop moving when it has moved further right
     // than the caret. That means the range will be one line below
     // the caret and in about the same horizontal position.
-    while( (nextNode !== null // && offset < node.length &&
-      && (rangePos.bottom == caretPos.bottom || rangePos.right < caretPos.right))
-      || !rangePos) { // TODO Wenn keine RangePos am Ende des Textes ist wird es eine Endlosschleife geben.
+    while( nextNode !== null // && offset < node.length &&
+      && (!rangePos || (rangePos.bottom == caretPos.bottom || rangePos.right < caretPos.right))
+    ) { // TODO gucken ob sich das noch irgendwie aufhängen kann wenn caret am ende des textes ist und rangePos nicht gesetzt ist
       if(offset >= visibleText.end /*node.length*/) {
         nextNode = this._nextTextNode(node);
         if(nextNode !== null) {
