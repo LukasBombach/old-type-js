@@ -457,6 +457,32 @@ function Caret(color, constrainingNode) {
     return null;
   };
 
+  this._findTextNodeNew = function(el, returnMe) {
+
+    var parent = el.parentNode;
+
+    if(returnMe === true && this._isTextNodeWithContents(el)) {
+      return el;
+    }
+
+    if(el.childNodes.length) {
+      return this._findTextNodeNew(el.childNodes[0], true);
+    }
+
+    if(el.nextSibling !== null) {
+      return this._findTextNodeNew(el.nextSibling, true);
+    }
+
+    while(parent !== this._constrainingNode) {
+      if(parent.nextSibling !== null) {
+        return this._findTextNodeNew(parent.nextSibling , true);
+      }
+      parent = parent.parentNode;
+    }
+
+    return null;
+  };
+
   /**
    * Todo: DOM traversal muss mit state machine gemacht werden
    *
@@ -469,16 +495,22 @@ function Caret(color, constrainingNode) {
 
     var nextTextNode, searchNode;
 
-    if(el.childNodes.length) {
-      searchNode = el;
+    searchNode = el.childNodes.length ? el : el.nextSibling;
+
+    if(searchNode !== null) {
+      do {
+        nextTextNode = this._findFirstTextNodeInChildren(el);
+        if (nextTextNode !== null) {
+          return nextTextNode;
+        }
+      } while((searchNode = searchNode.nextSibling));
     }
 
-    do {
-      nextTextNode = this._findFirstTextNodeInChildren(el);
-      if (nextTextNode !== null) {
-        return nextTextNode;
-      }
-    } while((searchNode = searchNode.nextSibling));
+    if(el.parentNode === this._constrainingNode) {
+      return null;
+    }
+
+    searchNode = el.parentNode;
 
 
     //var nextSibling = this._findSiblingTextNode(sibling, direction);
