@@ -38,9 +38,9 @@ function Caret(color, constrainingNode) {
    * @returns {Caret}
    */
   this.moveLeft = function () {
-    if (this.offset <= 0) {
+    if (this.offset <= this._visibleTextOffsets(this.textNode).start) {
       var prevTextNode = this._prevTextNode(this.textNode);
-      if(prevTextNode !== null) this.moveTo(prevTextNode, prevTextNode.length);
+      if(prevTextNode !== null) this.moveTo(prevTextNode, this._visibleTextOffsets(prevTextNode).end);
     } else {
       this._setOffset(this.offset - 1);
     }
@@ -53,9 +53,9 @@ function Caret(color, constrainingNode) {
    * @returns {Caret}
    */
   this.moveRight = function () {
-    if (this.offset >= this.textNode.length) {
+    if (this.offset >= this._visibleTextOffsets(this.textNode).end) {
       var nextTextNode = this._nextTextNode(this.textNode);
-      if(nextTextNode !== null) this.moveTo(nextTextNode, 0);
+      if(nextTextNode !== null) this.moveTo(nextTextNode, this._visibleTextOffsets(nextTextNode).start);
     } else {
       this._setOffset(this.offset + 1);
     }
@@ -139,9 +139,10 @@ function Caret(color, constrainingNode) {
     // the text until it is positioned 1 line below
     // the caret's position at around the same horizontal
     // position
-    var range  = this._createRange(node, offset),
-      rangePos = this._getPositionsFromRange(range),
-      caretPos = this._getRectAtOffset(this.offset),
+    var range     = this._createRange(node, offset),
+      rangePos    = this._getPositionsFromRange(range),
+      caretPos    = this._getRectAtOffset(this.offset),
+      visibleText = this._visibleTextOffsets(node),
       lastRangeRight;
 
     // Move the range right letter by letter. The range will start
@@ -152,10 +153,11 @@ function Caret(color, constrainingNode) {
     while( (nextNode !== null // && offset < node.length &&
       && (rangePos.bottom == caretPos.bottom || rangePos.right < caretPos.right))
       || !rangePos) { // TODO Wenn keine RangePos am Ende des Textes ist wird es eine Endlosschleife geben.
-      if(offset >= node.length) {
+      if(offset >= visibleText.end /*node.length*/) {
         nextNode = this._nextTextNode(node);
         if(nextNode !== null) {
           node = nextNode;
+          visibleText = this._visibleTextOffsets(node);
           offset = 0;
         }
       } else {
@@ -533,10 +535,11 @@ function Caret(color, constrainingNode) {
    * @private
    */
   this._visibleTextOffsets = function(textNode) {
-    var matches = textNode.nodeValue.match(/(^[\t\n\r ]+)|([\t\n\r ]+$)/g);
+    var startWhitespace = textNode.nodeValue.match(/^[\t\n\r ]+/g) || [''];
+    var endWhitespace   = textNode.nodeValue.match(/[\t\n\r ]+$/g) || [''];
     return {
-      start: matches[0].length,
-      end: textNode.nodeValue.length - matches[1].length
+      start : startWhitespace[0].length,
+      end   : textNode.nodeValue.length - endWhitespace[0].length
     }
   };
 
