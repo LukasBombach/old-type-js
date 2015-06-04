@@ -95,7 +95,7 @@ function Caret(color, constrainingNode) {
         prevNode = this._prevTextNode(node);
         if(prevNode !== null) {
           node = prevNode;
-          offset = prevNode.length;
+          offset = prevNode.length; // TODO Check auf !rangePos ist nicht nötig wenn _visibleTextOffsets verwendet werden, da unsichtbarer text nie selektiert wird
         }
       } else {
         offset--;
