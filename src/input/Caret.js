@@ -89,9 +89,8 @@ function Caret(color, constrainingNode) {
       lastRangeLeft;
 
     // Move the range as described in the method's description
-    while( (prevNode !== null // && offset > 0 &&
-            && (rangePos.top == caretPos.top|| rangePos.left > caretPos.left))
-            || !rangePos) {
+    while( prevNode !== null // && offset > 0 &&
+          && (!rangePos || (rangePos.top == caretPos.top|| rangePos.left > caretPos.left)) ) {
       if(offset <= 0) {
         prevNode = this._prevTextNode(node);
         if(prevNode !== null) {
