@@ -89,8 +89,9 @@ function Caret(color, constrainingNode) {
       lastRangeLeft;
 
     // Move the range as described in the method's description
-    while( prevNode !== null && //offset > 0 &&
-    (rangePos.top == caretPos.top|| rangePos.left > caretPos.left)) {
+    while( (prevNode !== null // && offset > 0 &&
+            && (rangePos.top == caretPos.top|| rangePos.left > caretPos.left))
+            || !rangePos) {
       offset--;
       range.setStart(node, offset);
       range.collapse(true);
@@ -147,8 +148,9 @@ function Caret(color, constrainingNode) {
     // next line and stop moving when it has moved further right
     // than the caret. That means the range will be one line below
     // the caret and in about the same horizontal position.
-    while( nextNode !== null && //offset < node.length &&
-      (rangePos.bottom == caretPos.bottom || rangePos.right < caretPos.right)) {
+    while( (nextNode !== null // && offset < node.length &&
+      && (rangePos.bottom == caretPos.bottom || rangePos.right < caretPos.right))
+      || !rangePos) { // TODO Wenn keine RangePos am Ende des Textes ist wird es eine Endlosschleife geben.
       offset++;
       range.setEnd(node, offset);
       range.collapse(false);
@@ -437,7 +439,7 @@ function Caret(color, constrainingNode) {
       }
     }
   };
-  
+
   /**
    * TODO Possible code duplication with other code operating on the DOM like {BrowserInput}
    * TODO Caching instead of traversing every time
@@ -607,6 +609,9 @@ function Caret(color, constrainingNode) {
   this._getPositionsFromRange = function (range) {
     var scroll = this._getScrollPosition();
     var rect = range.getClientRects()[0];
+    if(!rect) {
+      return false;
+    }
     return {
       top    : rect.top + scroll.top,
       right  : rect.right + scroll.left,
