@@ -92,18 +92,19 @@ function Caret(color, constrainingNode) {
     while( (prevNode !== null // && offset > 0 &&
             && (rangePos.top == caretPos.top|| rangePos.left > caretPos.left))
             || !rangePos) {
-      offset--;
-      range.setStart(node, offset);
-      range.collapse(true);
-      lastRangeLeft = rangePos.left;
-      rangePos = this._getPositionsFromRange(range);
       if(offset <= 0) {
         prevNode = this._prevTextNode(node);
         if(prevNode !== null) {
           node = prevNode;
           offset = prevNode.length;
         }
+      } else {
+        offset--;
       }
+      range.setStart(node, offset);
+      range.collapse(true);
+      lastRangeLeft = rangePos.left;
+      rangePos = this._getPositionsFromRange(range);
     }
 
     // If the range moved up, check 2 characters above the caret to find a precise pos.
@@ -151,18 +152,19 @@ function Caret(color, constrainingNode) {
     while( (nextNode !== null // && offset < node.length &&
       && (rangePos.bottom == caretPos.bottom || rangePos.right < caretPos.right))
       || !rangePos) { // TODO Wenn keine RangePos am Ende des Textes ist wird es eine Endlosschleife geben.
-      offset++;
-      range.setEnd(node, offset);
-      range.collapse(false);
-      lastRangeRight = rangePos.right;
-      rangePos = this._getPositionsFromRange(range);
       if(offset >= node.length) {
         nextNode = this._nextTextNode(node);
         if(nextNode !== null) {
           node = nextNode;
-          offset = 0-1;
+          offset = 0;
         }
+      } else {
+        offset++;
       }
+      range.setEnd(node, offset);
+      range.collapse(false);
+      lastRangeRight = rangePos.right;
+      rangePos = this._getPositionsFromRange(range);
     }
 
     // The text might have only one line, we check to see if the range
