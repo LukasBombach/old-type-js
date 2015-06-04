@@ -460,42 +460,28 @@ function Caret(color, constrainingNode) {
   /**
    * Todo: DOM traversal muss mit state machine gemacht werden
    *
-   * @param {HTMLElement} el
+   * @param {HTMLElement} sibling
    * @returns {*}
    * @private
    * @param direction
    */
-  this._findTextNode = function(el, direction) {
+  this._findTextNode = function(sibling, direction) {
 
-    var nextTextNode, searchNode;
+    var nextSibling = this._findSiblingTextNode(sibling, direction);
 
-    if(el.childNodes.length) {
-      searchNode = el;
+    if(nextSibling !== null) {
+      return nextSibling;
     }
 
-    do {
-      nextTextNode = this._findFirstTextNodeInChildren(el);
-      if (nextTextNode !== null) {
-        return nextTextNode;
-      }
-    } while((searchNode = searchNode.nextSibling));
+    if(sibling.parentNode.nextSibling === null || sibling.parentNode === this._constrainingNode) {
+      return null;
+    }
 
+    if(this._isTextNodeWithContents(sibling.parentNode.nextSibling)) {
+      return sibling.parentNode.nextSibling;
+    }
 
-    //var nextSibling = this._findSiblingTextNode(sibling, direction);
-//
-    //if(nextSibling !== null) {
-    //  return nextSibling;
-    //}
-//
-    //if(sibling.parentNode.nextSibling === null || sibling.parentNode === this._constrainingNode) {
-    //  return null;
-    //}
-//
-    //if(this._isTextNodeWithContents(sibling.parentNode.nextSibling)) {
-    //  return sibling.parentNode.nextSibling;
-    //}
-//
-    //this._findFirstTextNodeInChildren(sibling.parentNode.nextSibling);
+    this._findFirstTextNodeInChildren(sibling.parentNode.nextSibling);
     //this._findLastTextNodeInChildren(sibling.parentNode.nextSibling);
 
   };
