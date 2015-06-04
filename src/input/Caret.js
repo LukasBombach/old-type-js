@@ -458,10 +458,12 @@ function Caret(color, constrainingNode) {
   };
 
   /**
+   * Todo: DOM traversal muss mit state machine gemacht werden
    *
    * @param {HTMLElement} sibling
    * @returns {*}
    * @private
+   * @param direction
    */
   this._findTextNode = function(sibling, direction) {
 
@@ -471,15 +473,17 @@ function Caret(color, constrainingNode) {
       return nextSibling;
     }
 
-    if(sibling.parentNode != this._constrainingNode && sibling.parentNode.nextSibling) {
-      if(this._isTextNodeWithContents(sibling.parentNode.nextSibling)) {
-        return sibling.parentNode.nextSibling;
-      } else {
-        this._findTextNodeInChildren(sibling.parentNode.nextSibling, direction)
-      }
+    if(sibling.parentNode.nextSibling === null || sibling.parentNode === this._constrainingNode) {
+      return null;
     }
 
-    return null;
+    if(this._isTextNodeWithContents(sibling.parentNode.nextSibling)) {
+      return sibling.parentNode.nextSibling;
+    }
+
+    this._findFirstTextNodeInChildren(sibling.parentNode.nextSibling);
+    //this._findLastTextNodeInChildren(sibling.parentNode.nextSibling);
+
   };
 
   /**
@@ -504,13 +508,22 @@ function Caret(color, constrainingNode) {
 
   /**
    *
-   * @param {HTMLElement} sibling
+   * @param {HTMLElement} el
    * @param direction
    * @returns {HTMLElement|null}
    * @private
    */
-  this._findTextNodeInChildren = function(sibling, direction){
-
+  this._findFirstTextNodeInChildren = function(el){
+    var i, child;
+    if(this._isTextNodeWithContents(el)) {
+      return el;
+    }
+    for(i = 0; i < el.childNodes.length; i++) {
+      if(child = this._findFirstTextNodeInChildren(el.childNodes[i])) {
+        return child;
+      }
+    }
+    return null;
   };
 
   /**
