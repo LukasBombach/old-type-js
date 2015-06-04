@@ -1,6 +1,10 @@
 
 @import "layout.css";
 
+/*#document {
+  white-space:pre;
+}*/
+
 .tk-freight-text-pro {
   letter-spacing: .01rem;
   font-weight: 400;

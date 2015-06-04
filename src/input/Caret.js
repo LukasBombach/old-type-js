@@ -525,6 +525,22 @@ function Caret(color, constrainingNode) {
   };
 
   /**
+   * Finds the whitespace at the beginning and the end of a text node and
+   * returns their lengths
+   *
+   * @param textNode
+   * @returns {{start: number, end: number}}
+   * @private
+   */
+  this._visibleTextOffsets = function(textNode) {
+    var matches = textNode.nodeValue.match(/(^[\t\n\r ]+)|([\t\n\r ]+$)/g);
+    return {
+      start: matches[0].length,
+      end: textNode.nodeValue.length - matches[1].length
+    }
+  };
+
+  /**
    * Utility method to add a class to an element
    * Todo There should be a separate utility module for stuff like this
    *
