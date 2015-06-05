@@ -27,6 +27,7 @@
   width: 2px;
   height: 16px;
   margin-left: -1px;
+  pointer-events: none;
 }
 .typejs-caret.blue {
   background: #4285f4;

@@ -35,6 +35,32 @@ function TempDomHelper() {
   /**
    *
    * @param textNode
+   * @param start
+   * @param end
+   * @returns {TempDomHelper}
+   * @private
+   */
+  this._em = function(textNode, start, end) {
+    this._wrapWith(textNode, 'em', start, end);
+    return this;
+  };
+
+  /**
+   *
+   * @param textNode
+   * @param start
+   * @param end
+   * @returns {TempDomHelper}
+   * @private
+   */
+  this._u = function(textNode, start, end) {
+    this._wrapWith(textNode, 'u', start, end);
+    return this;
+  };
+
+  /**
+   *
+   * @param textNode
    * @param tagName
    * @param start
    * @param end

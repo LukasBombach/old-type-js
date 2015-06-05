@@ -78,16 +78,32 @@ function BrowserDeviceInput(element, caret) {
     });
 
     // Most text input can be caught on keypress
-    window.document.addEventListener('keypress', function(event) {
-      var key = event.keyCode || event.which;
+    window.document.addEventListener('keypress', function(e) {
+      var key = e.keyCode || e.which;
+      //console.log(key);
       if(key === 8) {
         // done at keydown
-      } else if(event.metaKey &&  key == 98) { // cmd + b
+      } else if( (e.metaKey || e.ctrlKey) &&  key == 98) { // cmd + b
+        e.preventDefault();
         var range = window.getSelection().getRangeAt(0);
         self.dom.cmd(self.caret.textNode, 'strong', range.startOffset, range.endOffset);
         self.caret._moveElToOffset();
+
+      } else if( (e.metaKey || e.ctrlKey) &&  key == 105) { // cmd + i
+        e.preventDefault();
+        var range = window.getSelection().getRangeAt(0);
+        self.dom.cmd(self.caret.textNode, 'em', range.startOffset, range.endOffset);
+        self.caret._moveElToOffset();
+
+      } else if( (e.metaKey || e.ctrlKey) &&  key == 117) { // cmd + u
+        e.preventDefault();
+        var range = window.getSelection().getRangeAt(0);
+        self.dom.cmd(self.caret.textNode, 'u', range.startOffset, range.endOffset);
+        self.caret._moveElToOffset();
+
       } else {
         caret.insertText(String.fromCharCode(key));
+
       }
 
     });
