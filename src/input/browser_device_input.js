@@ -87,19 +87,19 @@ function BrowserDeviceInput(element, caret) {
         e.preventDefault();
         var range = window.getSelection().getRangeAt(0);
         self.dom.cmd(self.caret.textNode, 'strong', range.startOffset, range.endOffset);
-        self.caret._moveElToOffset();
+        //self.caret._moveElToOffset();
 
       } else if( (e.metaKey || e.ctrlKey) &&  key == 105) { // cmd + i
         e.preventDefault();
         var range = window.getSelection().getRangeAt(0);
         self.dom.cmd(self.caret.textNode, 'em', range.startOffset, range.endOffset);
-        self.caret._moveElToOffset();
+        //self.caret._moveElToOffset();
 
-      } else if( (e.metaKey || e.ctrlKey) &&  key == 117) { // cmd + u
+      } else if( (e.metaKey || e.ctrlKey) &&  key == 107) { // cmd + k (u does not work, maybe cos machine is broken)
         e.preventDefault();
         var range = window.getSelection().getRangeAt(0);
         self.dom.cmd(self.caret.textNode, 'u', range.startOffset, range.endOffset);
-        self.caret._moveElToOffset();
+        //self.caret._moveElToOffset();
 
       } else {
         caret.insertText(String.fromCharCode(key));
