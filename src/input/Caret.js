@@ -349,7 +349,7 @@ function Caret(color, constrainingNode) {
   this._moveElToOffset = function () {
     var rect = this._getRectAtOffset(this.offset);
     this._moveElTo(rect.left, rect.top);
-    this._setElHeight(rect.bottom - rect.top)
+    this._setElHeight(rect.bottom - rect.top);
     return this;
   };
 

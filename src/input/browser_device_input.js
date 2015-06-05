@@ -85,6 +85,7 @@ function BrowserDeviceInput(element, caret) {
       } else if(event.metaKey &&  key == 98) { // cmd + b
         var range = window.getSelection().getRangeAt(0);
         self.dom.cmd(self.caret.textNode, 'strong', range.startOffset, range.endOffset);
+        self.caret._moveElToOffset();
       } else {
         caret.insertText(String.fromCharCode(key));
       }
