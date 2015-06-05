@@ -1,5 +1,7 @@
 
 
+var TempDomHelper = require('./TempDomHelper');
+
 function BrowserDeviceInput(element, caret) {
 
   if(arguments.length == 1) {
@@ -8,6 +10,9 @@ function BrowserDeviceInput(element, caret) {
   }
 
   // Todo listening to window.document instead of element
+
+  this.caret = caret;
+  this.dom = new TempDomHelper();
 
   this.bindKeyboard(element, caret);
   this.bindMouse(element, caret);
@@ -24,6 +29,8 @@ function BrowserDeviceInput(element, caret) {
    * @returns {BrowserDeviceInput}
    */
   this.bindKeyboard = function(element, caret) {
+
+    var self = this;
 
     // Some events must be catched on keydown to prevent
     // native browser behaviour
@@ -73,7 +80,11 @@ function BrowserDeviceInput(element, caret) {
     // Most text input can be caught on keypress
     window.document.addEventListener('keypress', function(event) {
       var key = event.keyCode || event.which;
-      if(key === 8) { // done at keydown
+      if(key === 8) {
+        // done at keydown
+      } else if(event.metaKey &&  key == 98) { // cmd + b
+        var range = window.getSelection().getRangeAt(0);
+        self.dom.cmd(self.caret.textNode, 'strong', range.startOffset, range.endOffset);
       } else {
         caret.insertText(String.fromCharCode(key));
       }

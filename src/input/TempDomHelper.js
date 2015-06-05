@@ -13,7 +13,8 @@ function TempDomHelper() {
    * @returns {TempDomHelper}
    */
   this.cmd = function(textNode, cmd) {
-    var args = Array.prototype.splice.call(arguments, 0, 2, textNode);
+    var args = Array.prototype.slice.call(arguments, 2);
+    args.unshift(textNode);
     this['_'+cmd].apply(this, args);
     return this;
   };
@@ -41,7 +42,9 @@ function TempDomHelper() {
    * @private
    */
   this._wrapWith = function(textNode, tag, start, end) {
-
+    var wrapContents = textNode.splitText(start);
+    wrapContents.splitText(end - start);
+    console.log(wrapContents);
     return this;
   };
 
