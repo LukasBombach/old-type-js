@@ -35,16 +35,18 @@ function TempDomHelper() {
   /**
    *
    * @param textNode
-   * @param tag
+   * @param tagName
    * @param start
    * @param end
    * @returns {TempDomHelper}
    * @private
    */
-  this._wrapWith = function(textNode, tag, start, end) {
+  this._wrapWith = function(textNode, tagName, start, end) {
     var wrapContents = textNode.splitText(start);
     wrapContents.splitText(end - start);
-    console.log(wrapContents);
+    var tag = document.createElement(tagName);
+    tag.innerHTML = wrapContents.nodeValue;
+    wrapContents.parentNode.replaceChild(tag, wrapContents);
     return this;
   };
 
