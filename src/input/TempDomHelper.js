@@ -82,17 +82,17 @@ function TempDomHelper() {
       console.log('Nested elements not implemented yet, doing nothing.');
       return;
     }
-    var startTag = '<'+el.tagName+'>',
-      endTag = '</'+el.tagName+'>',
+    var startTag = '<'+el.tagName.toLowerCase()+'>',
+      endTag = '</'+el.tagName.toLowerCase()+'>',
       text = el.innerHTML,
-      textParts = [],
-      newNodes;
+      parts = [];
 
-    textParts.push(text.substr(0, start));
-    textParts.push(text.substr(start, end-start));
-    textParts.push(text.substr(end));
+    parts.push(text.substr(0, start));
+    parts.push(text.substr(start, end-start));
+    parts.push(text.substr(end));
 
-    newNodes = this._createFromHTML(startTag + textParts.join(endTag+startTag) + endTag);
+    el.insertAdjacentHTML('afterend', startTag+parts[0]+endTag + parts[1] + startTag+parts[2]+endTag);
+    el.parentNode.removeChild(el);
 
     return this;
   };
