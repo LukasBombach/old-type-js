@@ -39,68 +39,97 @@ function BrowserDeviceInput(element, caret) {
       // TODO Code repetition
       // TODO keyCode is deprecated
 
+      var key = e.keyCode || e.which;
+
+      console.log(key);
+
       // Left arrow
-      if(e.keyCode == 37) {
+      if(key == 37) {
         e.preventDefault();
         caret.moveLeft();
       }
 
       // Right arrow
-      else if(e.keyCode == 39) {
+      else if(key == 39) {
         e.preventDefault();
         caret.moveRight();
       }
 
       // Up arrow
-      else if(e.keyCode == 38) {
+      else if(key == 38) {
         e.preventDefault();
         caret.moveUp();
       }
 
       // Down arrow
-      else if(e.keyCode == 40) {
+      else if(key == 40) {
         e.preventDefault();
         caret.moveDown();
       }
 
       // Backspace
-      else if(e.keyCode == 8) {
+      else if(key == 8) {
         caret.removeCharacter();
         e.preventDefault();
       }
 
       // Space
-      else if(e.keyCode == 32) {
+      else if(key == 32) {
         e.preventDefault();
         caret.insertText(' ');
       }
 
     });
 
+    Mousetrap.bind('command+b', function(e) {
+      var range = window.getSelection().getRangeAt(0);
+      self.dom.cmd(self.caret.textNode, 'strong', range.startOffset, range.endOffset);
+      //self.caret._moveElToOffset();
+      return false;
+    });
+
+    Mousetrap.bind('command+i', function(e) {
+      var range = window.getSelection().getRangeAt(0);
+      self.dom.cmd(self.caret.textNode, 'em', range.startOffset, range.endOffset);
+      //self.caret._moveElToOffset();
+      return false;
+    });
+
+    Mousetrap.bind('command+u', function(e) {
+      var range = window.getSelection().getRangeAt(0);
+      self.dom.cmd(self.caret.textNode, 'u', range.startOffset, range.endOffset);
+      //self.caret._moveElToOffset();
+      return false;
+    });
+
+    /*
+     else if( (e.metaKey || e.ctrlKey) &&  key == 98) { // cmd + b
+     e.preventDefault();
+     var range = window.getSelection().getRangeAt(0);
+     self.dom.cmd(self.caret.textNode, 'strong', range.startOffset, range.endOffset);
+     //self.caret._moveElToOffset();
+     }
+
+     else if( (e.metaKey || e.ctrlKey) &&  key == 105) { // cmd + i
+     e.preventDefault();
+     var range = window.getSelection().getRangeAt(0);
+     self.dom.cmd(self.caret.textNode, 'em', range.startOffset, range.endOffset);
+     //self.caret._moveElToOffset();
+     }
+
+     else if( (e.metaKey || e.ctrlKey) &&  key == 21) { // strg + u
+     e.preventDefault();
+     var range = window.getSelection().getRangeAt(0);
+     self.dom.cmd(self.caret.textNode, 'u', range.startOffset, range.endOffset);
+     //self.caret._moveElToOffset();
+     }
+    */
+
     // Most text input can be caught on keypress
     window.document.addEventListener('keypress', function(e) {
       var key = e.keyCode || e.which;
-      //console.log(key);
       if(key === 8) {
         // done at keydown
-      } else if( (e.metaKey || e.ctrlKey) &&  key == 98) { // cmd + b
-        e.preventDefault();
-        var range = window.getSelection().getRangeAt(0);
-        self.dom.cmd(self.caret.textNode, 'strong', range.startOffset, range.endOffset);
-        //self.caret._moveElToOffset();
-
-      } else if( (e.metaKey || e.ctrlKey) &&  key == 105) { // cmd + i
-        e.preventDefault();
-        var range = window.getSelection().getRangeAt(0);
-        self.dom.cmd(self.caret.textNode, 'em', range.startOffset, range.endOffset);
-        //self.caret._moveElToOffset();
-
-      } else if( (e.metaKey || e.ctrlKey) &&  key == 107) { // cmd + k (u does not work, maybe cos machine is broken)
-        e.preventDefault();
-        var range = window.getSelection().getRangeAt(0);
-        self.dom.cmd(self.caret.textNode, 'u', range.startOffset, range.endOffset);
-        //self.caret._moveElToOffset();
-
       } else {
         caret.insertText(String.fromCharCode(key));
 
