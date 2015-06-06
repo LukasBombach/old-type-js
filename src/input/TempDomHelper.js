@@ -6,55 +6,45 @@ function TempDomHelper() {
 
 (function () {
 
+  this._inlineCommands = {
+    strong : 'strong',
+    em     : 'em',
+    u      : 'u'
+  };
+
   /**
    *
-   * @param textNode
    * @param cmd
+   * @param rangeInfo
    * @returns {TempDomHelper}
    */
-  this.cmd = function(textNode, cmd) {
+  this.cmd = function(cmd, rangeInfo) {
     var args = Array.prototype.slice.call(arguments, 2);
-    args.unshift(textNode);
-    this['_'+cmd].apply(this, args);
+
+    if(this._inlineCommands[cmd] !== null) {
+      args.unshift(cmd, rangeInfo);
+      this._inline.apply(this, args);
+    }
+
     return this;
   };
 
   /**
    *
-   * @param textNode
-   * @param start
-   * @param end
-   * @returns {TempDomHelper}
+   * @param cmd
+   * @param rangeInfo
+   * @returns {*}
    * @private
    */
-  this._strong = function(textNode, start, end) {
-    this._wrapWith(textNode, 'strong', start, end);
-    return this;
-  };
-
-  /**
-   *
-   * @param textNode
-   * @param start
-   * @param end
-   * @returns {TempDomHelper}
-   * @private
-   */
-  this._em = function(textNode, start, end) {
-    this._wrapWith(textNode, 'em', start, end);
-    return this;
-  };
-
-  /**
-   *
-   * @param textNode
-   * @param start
-   * @param end
-   * @returns {TempDomHelper}
-   * @private
-   */
-  this._u = function(textNode, start, end) {
-    this._wrapWith(textNode, 'u', start, end);
+  this._inline = function(cmd, rangeInfo) {
+    var tag = this._inlineCommands[cmd];
+    if(rangeInfo.startContainer === rangeInfo.endContainer && this._isInside(tag, rangeInfo.startContainer)) {
+      console.log('textNode is inside node of same formatting, doing nothing');
+    } else if(rangeInfo.startContainer === rangeInfo.endContainer) {
+      this._wrapWith(rangeInfo.startContainer, this._inlineCommands[cmd], rangeInfo.startOffset, rangeInfo.endOffset);
+    } else {
+      console.log('startContainer does not equal endContainer, not implemented yet')
+    }
     return this;
   };
 
@@ -74,6 +64,46 @@ function TempDomHelper() {
     tag.innerHTML = wrapContents.nodeValue;
     wrapContents.parentNode.replaceChild(tag, wrapContents);
     return this;
+  };
+
+  /**
+   * Todo: Restraining Container
+   *
+   * @param selector
+   * @param el
+   * @returns {boolean}
+   * @private
+   */
+  this._isInside = function(selector, el) {
+    while (el.parentNode) {
+      if (this._matches(el, selector)) {
+        return true;
+      }
+      el = el.parentNode;
+    }
+    return false;
+  };
+
+  /**
+   *
+   * @param el
+   * @param selector
+   * @returns {boolean}
+   * @private
+   */
+  this._matches = function(el, selector) {
+    var _matches = (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector);
+
+    if (_matches) {
+      return _matches.call(el, selector);
+    } else {
+      var nodes = el.parentNode.querySelectorAll(selector);
+      for (var i = nodes.length; i--;) {
+        if (nodes[i] === el)
+          return true;
+      }
+      return false;
+    }
   };
 
 }).call(TempDomHelper.prototype);

@@ -81,24 +81,28 @@ function BrowserDeviceInput(element, caret) {
 
     });
 
-    Mousetrap.bind('command+b', function(e) {
+    function getInfoFromRange() {
       var range = window.getSelection().getRangeAt(0);
-      self.dom.cmd(self.caret.textNode, 'strong', range.startOffset, range.endOffset);
-      //self.caret._moveElToOffset();
+      return {
+        startContainer : range.startContainer,
+        startOffset    : range.startOffset,
+        endContainer   : range.endContainer,
+        endOffset      : range.endOffset
+      }
+    }
+
+    Mousetrap.bind('command+b', function(e) {
+      self.dom.cmd('strong', getInfoFromRange());
       return false;
     });
 
     Mousetrap.bind('command+i', function(e) {
-      var range = window.getSelection().getRangeAt(0);
-      self.dom.cmd(self.caret.textNode, 'em', range.startOffset, range.endOffset);
-      //self.caret._moveElToOffset();
+      self.dom.cmd('em', getInfoFromRange());
       return false;
     });
 
     Mousetrap.bind('command+u', function(e) {
-      var range = window.getSelection().getRangeAt(0);
-      self.dom.cmd(self.caret.textNode, 'u', range.startOffset, range.endOffset);
-      //self.caret._moveElToOffset();
+      self.dom.cmd('u', getInfoFromRange());
       return false;
     });
 
