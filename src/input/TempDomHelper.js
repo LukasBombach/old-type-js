@@ -37,9 +37,11 @@ function TempDomHelper() {
    * @private
    */
   this._inline = function(cmd, rangeInfo) {
-    var tag = this._inlineCommands[cmd];
-    if(rangeInfo.startContainer === rangeInfo.endContainer && this._isInside(tag, rangeInfo.startContainer)) {
-      console.log('textNode is inside node of same formatting, doing nothing');
+    var tagName = this._inlineCommands[cmd],
+      startTag;
+    if(rangeInfo.startContainer === rangeInfo.endContainer && (startTag = this._isInside(tagName, rangeInfo.startContainer))) {
+      //console.log('textNode is inside node of same formatting, doing nothing');
+      this._split(startTag, rangeInfo.startOffset, rangeInfo.endOffset);
     } else if(rangeInfo.startContainer === rangeInfo.endContainer) {
       this._wrapWith(rangeInfo.startContainer, this._inlineCommands[cmd], rangeInfo.startOffset, rangeInfo.endOffset);
     } else {
@@ -67,17 +69,46 @@ function TempDomHelper() {
   };
 
   /**
+   *
+   * @param el
+   * @param start
+   * @param end
+   * @returns {*}
+   * @private
+   */
+  this._split = function(el, start, end) {
+    console.log(el, start, end);
+    if(el.childNodes.length > 1) {
+      console.log('Nested elements not implemented yet, doing nothing.');
+      return;
+    }
+    var startTag = '<'+el.tagName+'>',
+      endTag = '</'+el.tagName+'>',
+      text = el.innerHTML,
+      textParts = [],
+      newNodes;
+
+    textParts.push(text.substr(0, start));
+    textParts.push(text.substr(start, end-start));
+    textParts.push(text.substr(end));
+
+    newNodes = this._createFromHTML(startTag + textParts.join(endTag+startTag) + endTag);
+
+    return this;
+  };
+
+  /**
    * Todo: Restraining Container
    *
    * @param selector
    * @param el
-   * @returns {boolean}
+   * @returns {boolean|Node}
    * @private
    */
   this._isInside = function(selector, el) {
     while (el.parentNode) {
       if (this._matches(el, selector)) {
-        return true;
+        return el;
       }
       el = el.parentNode;
     }
@@ -105,6 +136,18 @@ function TempDomHelper() {
       return false;
     }
   };
+
+  /**
+   *
+   * @param string
+   * @returns {NodeList}
+   * @private
+   */
+  this._createFromHTML = function(string) {
+    var frag = document.createDocumentFragment();
+    frag.innerHTML = string;
+    return frag.childNodes;
+  }
 
 }).call(TempDomHelper.prototype);
 
