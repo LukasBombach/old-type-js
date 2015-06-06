@@ -37,16 +37,54 @@ function TempDomHelper() {
    * @private
    */
   this._inline = function(cmd, rangeInfo) {
+
     var tagName = this._inlineCommands[cmd],
       startTag;
+
     if(rangeInfo.startContainer === rangeInfo.endContainer && (startTag = this._isInside(tagName, rangeInfo.startContainer))) {
-      //console.log('textNode is inside node of same formatting, doing nothing');
       this._split(startTag, rangeInfo.startOffset, rangeInfo.endOffset);
-    } else if(rangeInfo.startContainer === rangeInfo.endContainer) {
-      this._wrapWith(rangeInfo.startContainer, this._inlineCommands[cmd], rangeInfo.startOffset, rangeInfo.endOffset);
-    } else {
-      console.log('startContainer does not equal endContainer, not implemented yet')
     }
+
+    else if(rangeInfo.startContainer === rangeInfo.endContainer) {
+      this._wrapWith(rangeInfo.startContainer, this._inlineCommands[cmd], rangeInfo.startOffset, rangeInfo.endOffset);
+    }
+
+    else {
+      this._wrapWithMultiple(rangeInfo, this._inlineCommands[cmd]);
+    }
+
+    return this;
+  };
+
+  /**
+   *
+   * @param rangeInfo
+   * @param tagName
+   * @returns {*}
+   * @private
+   */
+  this._wrapWithMultiple = function(rangeInfo, tagName) {
+
+    var startEl = rangeInfo.startContainer.parentNode,
+      endEl = rangeInfo.endContainer.parentNode,
+      newMiddleEl = window.document.createElement(tagName),
+      sibling = startEl.nextSibling;
+
+    // startcontainer < insert inside till end
+    var formattedStartText = rangeInfo.startContainer.splitText(rangeInfo.startOffset);
+    startEl.replaceChild(this._nel(formattedStartText.nodeValue, tagName), formattedStartText);
+
+    // elements in between < wrap all (simplest markup)
+    endEl.parentElement.insertBefore(newMiddleEl, endEl);
+    while(sibling !== endEl && sibling !== null) {
+      newMiddleEl.appendChild(sibling);
+      sibling = sibling.nextSibling;
+    }
+
+    // endcontainer < insert inside from start
+    var formattedEndText = rangeInfo.endContainer.splitText(rangeInfo.endOffset).previousSibling;
+    endEl.replaceChild(this._nel(formattedEndText.nodeValue, tagName), formattedEndText);
+
     return this;
   };
 
@@ -77,11 +115,12 @@ function TempDomHelper() {
    * @private
    */
   this._split = function(el, start, end) {
-    console.log(el, start, end);
+
     if(el.childNodes.length > 1) {
       console.log('Nested elements not implemented yet, doing nothing.');
       return;
     }
+
     var startTag = '<'+el.tagName.toLowerCase()+'>',
       endTag = '</'+el.tagName.toLowerCase()+'>',
       text = el.innerHTML,
@@ -139,15 +178,37 @@ function TempDomHelper() {
 
   /**
    *
-   * @param string
-   * @returns {NodeList}
+   * @param str
+   * @returns {NodeList|Node}
+   * @private
+   * @param wrapwith
+   */
+  this._createFromHTML = function(str, wrapwith) {
+
+    if(wrapwith !== null) {
+      str = '<'+wrapwith+'>' + str + '</'+wrapwith+'>';
+    }
+
+    //var frag = document.createDocumentFragment();
+    //var frag = window.document.createElement('div');
+    //frag.innerHTML = str;
+
+    var parser = new DOMParser();
+    var frag = parser.parseFromString(str, "text/xml");
+
+    return frag.childNodes.length == 1 ? frag.childNodes[0] : frag.childNodes;
+  };
+
+  /**
+   * Shorthand for _createFromHTML
+   *
+   * @param str
+   * @returns {NodeList|Node}
    * @private
    */
-  this._createFromHTML = function(string) {
-    var frag = document.createDocumentFragment();
-    frag.innerHTML = string;
-    return frag.childNodes;
-  }
+  this._nel = function(str, wrapwith) {
+    return this._createFromHTML(str, wrapwith);
+  };
 
 }).call(TempDomHelper.prototype);
 
