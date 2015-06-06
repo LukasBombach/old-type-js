@@ -39,14 +39,23 @@ function TempDomHelper() {
   this._inline = function(cmd, rangeInfo) {
 
     var tagName = this._inlineCommands[cmd],
-      startTag;
+      startTag = this._isInside(tagName, rangeInfo.startContainer),
+      endTag = this._isInside(tagName, rangeInfo.endContainer);;
 
-    if(rangeInfo.startContainer === rangeInfo.endContainer && (startTag = this._isInside(tagName, rangeInfo.startContainer))) {
+    if(rangeInfo.startContainer === rangeInfo.endContainer && startTag !== false) {
       this._split(startTag, rangeInfo.startOffset, rangeInfo.endOffset);
     }
 
     else if(rangeInfo.startContainer === rangeInfo.endContainer) {
       this._wrapWith(rangeInfo.startContainer, this._inlineCommands[cmd], rangeInfo.startOffset, rangeInfo.endOffset);
+    }
+
+    else if(startTag !== false && endTag === false) {
+      this._extendEndTo(rangeInfo, this._inlineCommands[cmd]);
+    }
+
+    else if(startTag === false && endTag !== false) {
+      this._extendStartTo(rangeInfo, this._inlineCommands[cmd]);
     }
 
     else {
