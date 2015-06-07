@@ -16,6 +16,7 @@ function BrowserDeviceInput(element, caret) {
 
   this.bindKeyboard(element, caret);
   this.bindMouse(element, caret);
+  this.bindUi(element, caret);
 
 }
 
@@ -81,53 +82,20 @@ function BrowserDeviceInput(element, caret) {
 
     });
 
-    function getInfoFromRange() {
-      var range = window.getSelection().getRangeAt(0);
-      return {
-        startContainer : range.startContainer,
-        startOffset    : range.startOffset,
-        endContainer   : range.endContainer,
-        endOffset      : range.endOffset
-      }
-    }
-
     Mousetrap.bind('command+b', function(e) {
-      self.dom.cmd('strong', getInfoFromRange());
+      self.dom.cmd('strong', self._getInfoFromRange());
       return false;
     });
 
     Mousetrap.bind('command+i', function(e) {
-      self.dom.cmd('em', getInfoFromRange());
+      self.dom.cmd('em', self._getInfoFromRange());
       return false;
     });
 
     Mousetrap.bind('command+u', function(e) {
-      self.dom.cmd('u', getInfoFromRange());
+      self.dom.cmd('u', self._getInfoFromRange());
       return false;
     });
-
-    /*
-     else if( (e.metaKey || e.ctrlKey) &&  key == 98) { // cmd + b
-     e.preventDefault();
-     var range = window.getSelection().getRangeAt(0);
-     self.dom.cmd(self.caret.textNode, 'strong', range.startOffset, range.endOffset);
-     //self.caret._moveElToOffset();
-     }
-
-     else if( (e.metaKey || e.ctrlKey) &&  key == 105) { // cmd + i
-     e.preventDefault();
-     var range = window.getSelection().getRangeAt(0);
-     self.dom.cmd(self.caret.textNode, 'em', range.startOffset, range.endOffset);
-     //self.caret._moveElToOffset();
-     }
-
-     else if( (e.metaKey || e.ctrlKey) &&  key == 21) { // strg + u
-     e.preventDefault();
-     var range = window.getSelection().getRangeAt(0);
-     self.dom.cmd(self.caret.textNode, 'u', range.startOffset, range.endOffset);
-     //self.caret._moveElToOffset();
-     }
-    */
 
     // Most text input can be caught on keypress
     window.document.addEventListener('keypress', function(e) {
@@ -164,6 +132,45 @@ function BrowserDeviceInput(element, caret) {
     }, false);
     return this;
   };
+
+  /**
+   *
+   * @param element
+   * @param caret
+   * @returns {*}
+   */
+  this.bindUi = function(element, caret) {
+
+    var controls = document.getElementById('controls');
+
+    if(!controls) {
+      return this;
+    }
+
+    var elements = controls.querySelectorAll('button'),
+      self = this,
+      cmd;
+
+    for (var i = 0; i < elements.length; i++) {
+      elements[i].onclick = function() {
+        cmd = this.getAttribute('data-cmd');
+        self.dom.cmd(cmd, self._getInfoFromRange());
+      }
+    }
+
+    return this;
+  };
+
+  this._getInfoFromRange = function () {
+    var range = window.getSelection().getRangeAt(0);
+    return {
+      startContainer : range.startContainer,
+      startOffset    : range.startOffset,
+      endContainer   : range.endContainer,
+      endOffset      : range.endOffset
+    }
+  }
+
 
 }).call(BrowserDeviceInput.prototype);
 

@@ -7,9 +7,15 @@ function TempDomHelper() {
 (function () {
 
   this._inlineCommands = {
-    strong : 'strong',
-    em     : 'em',
-    u      : 'u'
+    strong     : 'strong',
+    em         : 'em',
+    u          : 'u',
+    s          : 's',
+    h1         : 'h1',
+    h2         : 'h2',
+    h3         : 'h3',
+    h4         : 'h4',
+    blockquote : 'blockquote'
   };
 
   /**
