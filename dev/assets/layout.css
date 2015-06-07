@@ -14,9 +14,44 @@ body {
 
   background: #fff;
   box-shadow: 0 0 0 0.75pt #d1d1d1,0 0 3pt 0.75pt #ccc;
+  border-radius: 2px;
 
   line-height: 1.4em;
 
   color: rgba(0,0,0,0.8);
 
+}
+
+#controls {
+
+  margin: 0 auto;
+  padding: 8px;
+  box-sizing: border-box;
+
+  position: relative;
+  top: -25px;
+
+  max-width: 840px;
+  background: rgba(30, 30, 30, .8);
+  box-shadow: 0 0 0 0.75pt #d1d1d1,0 0 3pt 0.75pt #ccc;
+  border-radius: 2px;
+
+}
+
+#controls button {
+
+  border: none;
+  background: rgba(230, 230, 230, .2);
+  border-radius: 2px;
+
+  padding: 6px 12px;
+
+  color: #fff;
+  font-size: 14px;
+  line-height: 14px;
+
+}
+
+#controls button:hover {
+  background: rgba(230, 230, 230, .4);
 }
