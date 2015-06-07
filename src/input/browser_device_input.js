@@ -97,6 +97,11 @@ function BrowserDeviceInput(element, caret) {
       return false;
     });
 
+    Mousetrap.bind('command+s', function(e) {
+      self.dom.cmd('s', self._getInfoFromRange());
+      return false;
+    });
+
     // Most text input can be caught on keypress
     window.document.addEventListener('keypress', function(e) {
       var key = e.keyCode || e.which;
