@@ -1,3 +1,9 @@
+/********************
+ *
+ * Page Design
+ *
+ *******************/
+
 body {
   background: #eeeeee;
   padding: 50px;
@@ -21,6 +27,12 @@ body {
   color: rgba(0,0,0,0.8);
 
 }
+
+/********************
+ *
+ * Editor controls
+ *
+ *******************/
 
 #controls {
 
@@ -73,6 +85,28 @@ body {
 #controls button:active {
   background: rgba(0, 0, 0, .2);
 }
+
+#controls [data-cmd="strong"] {
+  font-weight: bold;
+}
+
+#controls [data-cmd="em"] {
+  font-style: italic;
+}
+
+#controls [data-cmd="u"] {
+  text-decoration: underline;
+}
+
+#controls [data-cmd="s"] {
+  text-decoration: line-through;
+}
+
+/********************
+ *
+ * Content styles
+ *
+ *******************/
 
 blockquote {
   border-left: 4px solid #ddd;
