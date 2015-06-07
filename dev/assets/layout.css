@@ -38,6 +38,10 @@ body {
 
 }
 
+#controls .group {
+  margin-right: 32px;
+}
+
 #controls button {
 
   border: none;
@@ -45,6 +49,7 @@ body {
   border-radius: 2px;
 
   padding: 6px 12px;
+  /*margin-right: 1px;*/
 
   color: #fff;
   font-size: 14px;
