@@ -60,6 +60,10 @@ function TempDomHelper() {
    */
   this._inline = function (cmd, typeRange, params) {
 
+    if (typeRange.spansToThisTag(cmd)) {
+      this._undoElement(typeRange.getStartElement());
+    }
+
     if (typeRange.isEnclosedByTag(cmd)) {
       this._splitElement(typeRange);
     }
