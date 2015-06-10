@@ -60,11 +60,13 @@ function TempDomHelper() {
    */
   this._inline = function (cmd, typeRange, params) {
 
-    if (typeRange.spansToThisTag(cmd)) {
+    var cmdTag = this._commands[cmd].tag;
+
+    if (typeRange.spansToThisTag(cmdTag)) {
       this._undoElement(typeRange.getStartElement());
     }
 
-    if (typeRange.isEnclosedByTag(cmd)) {
+    if (typeRange.isEnclosedByTag(cmdTag)) {
       this._splitElement(typeRange);
     }
 
@@ -79,7 +81,7 @@ function TempDomHelper() {
    * @returns {*}
    * @private
    */
-  this._block = function(cmd, typeRange, params) {
+  this._block = function (cmd, typeRange, params) {
     return this;
   };
 
@@ -89,7 +91,17 @@ function TempDomHelper() {
    * @returns {*}
    * @private
    */
-  this._splitElement = function(typeRange) {
+  this._splitElement = function (typeRange) {
+
+    return this;
+  };
+
+  /**
+   *
+   * @param element
+   * @private
+   */
+  this._undoElement = function (element) {
 
     return this;
   };

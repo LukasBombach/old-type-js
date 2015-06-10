@@ -23,6 +23,17 @@ var extensions = {
    * @param tagName
    * @returns {boolean}
    */
+  spansToThisTag : function (tagName) {
+    return this.isEnclosedByTag(tagName) &&
+      this.startContainer === this.startContainer.parentNode.firstChild &&
+      this.endContainer === this.startContainer.parentNode.lastChild;
+  },
+
+  /**
+   *
+   * @param tagName
+   * @returns {boolean}
+   */
   isEnclosedByTag : function (tagName) {
     var startElement = this.getStartElement();
     return startElement.tagName.toLowerCase() === tagName.toLowerCase() &&
