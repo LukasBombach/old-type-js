@@ -82,6 +82,7 @@ function TempDomHelper() {
    * @private
    */
   this._block = function (cmd, typeRange, params) {
+
     return this;
   };
 

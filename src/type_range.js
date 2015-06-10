@@ -25,6 +25,8 @@ var extensions = {
    */
   spansToThisTag : function (tagName) {
     return this.isEnclosedByTag(tagName) &&
+      this.startOffset === 0 &&
+      this.endOffset === this.endContainer.length &&
       this.startContainer === this.startContainer.parentNode.firstChild &&
       this.endContainer === this.startContainer.parentNode.lastChild;
   },
