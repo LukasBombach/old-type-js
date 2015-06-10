@@ -1,44 +1,103 @@
 {\rtf1\ansi\ansicpg1252\cocoartf1347\cocoasubrtf570
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;}
-{\colortbl;\red255\green255\blue255;\red254\green187\blue100;\red29\green48\blue13;\red217\green234\blue202;
-\red0\green20\blue69;\red202\green219\blue254;\red205\green205\blue205;\red201\green113\blue0;\red83\green80\blue0;
-\red254\green253\blue213;}
-\paperw11900\paperh16840\margl1440\margr1440\vieww16900\viewh12160\viewkind0
+{\colortbl;\red255\green255\blue255;\red254\green187\blue100;\red0\green20\blue69;\red202\green219\blue254;
+\red29\green48\blue13;\red217\green234\blue202;\red205\green205\blue205;\red71\green20\blue0;\red255\green219\blue205;
+\red14\green0\blue45;\red207\green187\blue254;\red201\green113\blue0;\red83\green80\blue0;\red254\green253\blue213;
+}
+\paperw11900\paperh16840\margl1440\margr1440\vieww20360\viewh12160\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
 
-\f0\b\fs28 \cf0 In einem Element ggf. andere Element umschlie\'dfend
+\f0\b\fs28 \cf0 block in block
 \b0 \
 <p>text\cb2 text\cb1 text</p>\
 <p>te\cb2 xt<br>te\cb1 xt</p>\
 <p>te\cb2 xt<em>text</em>te\cb1 xt</p> 
-\b \cf3 \cb4  N\'e4chst h\'f6heres Block Element aufteilen 
+\b \cf3 \cb4  Inhalt umschlie\'dfen 
+\b0 \cf0 \cb1  \
+\
+\
+
+\b h1 in p oder li
+\b0 \
+<p>text\cb2 text\cb1 text</p>\
+<li>text\cb2 text\cb1 text</li>\
+<p>te\cb2 xt<br>te\cb1 xt</p>\
+<p>te\cb2 xt<em>text</em>te\cb1 xt</p> 
+\b \cf5 \cb6  N\'e4chst h\'f6heres Block Element aufteilen 
 \b0 \cf0 \cb1  
-\b \cf5 \cb6  Inhalt umschlie\'dfen 
-\b0 \cf0 \cb1 \
+\b \cf3 \cb4  Inhalt umschlie\'dfen 
+\b0 \cf0 \cb1  \
+\
+
+\b Block in inline
+\b0 \
+<em>text\cb2 text\cb1 text</em> 
+\b \cf3 \cb4  Inhalt umschlie\'dfen 
+\b0 \cf0 \cb1  \
+<p>text<em>text\cb2 text\cb1 text</em>text</p>  
+\b \cf5 \cb6  N\'e4chst h\'f6heres Block Element aufteilen 
+\b0 \cf0 \cb1  
+\b \cf3 \cb4  Inhalt umschlie\'dfen 
+\b0 \cf0 \cb1  \
+\
+
+\b Block in verschiedenen Blocks
+\b0 \
+<div> te\cb2 xt <div> te\cb1 xt </div> text </div>\
+\
+\
+ - - - - - - - - - - - - - - - - - - - - - - - - - - -\
+\
+\
+\
+
+\b In einem Element ggf. andere Element umschlie\'dfend
+\b0 \
+<p>text\cb2 text\cb1 text</p>\
+<p>te\cb2 xt<br>te\cb1 xt</p>\
+<p>te\cb2 xt<em>text</em>te\cb1 xt</p> 
+\b \cf5 \cb6  N\'e4chst h\'f6heres Block Element aufteilen 
+\b0 \cf0 \cb1  
+\b \cf3 \cb4  Inhalt umschlie\'dfen 
+\b0 \cf0 \cb1  \
+\
+<p>text <strong> te\cb2 xt<em>text</em>te\cb1 xt </strong> text </p> 
+\b \cf5 \cb6  N\'e4chst h\'f6heres Block Element aufteilen 
+\b0 \cf0 \cb1  
+\b \cf3 \cb4  Inhalt umschlie\'dfen 
+\b0 \cf0 \cb1  \
 \
 
 \b Startet in einem Element, endet in anderem Element\
 Dazwischen \cb7 Inline-Elemente\cb1  die umschlossen werden m\'fcssen
 \b0 \
 <em>te\cb2 xt</em><u>text</u><em>te\cb1 xt</em> 
-\b \cf5 \cb6 \'96 umschlie\'dfen 
-\b0 \cf0 \cb1 \
+\b \cf3 \cb4  Inhalt umschlie\'dfen 
+\b0 \cf0 \cb1  
+\b \cf5 \cb6  N\'e4chst h\'f6heres Block Element aufteilen 
+\b0 \cf0 \cb1  \cf8 \cb9  
+\b Es sei denn es gibt kein Block element
+\b0  \cf0 \cb1  \
 \
 \
 
 \b Startet in einem Element, endet in anderem Element
 \b0 \
-<p>te\cb2 xt<em>te\cb1 xt</em>text</p>\
-<p>te\cb2 xt</p><p>te\cb1 xt</p> 
-\b \cf3 \cb4 \'96 Elemente einf\'fcgen 
-\b0 \cf0 \cb1 \
+<p>te\cb2 xt<em>te\cb1 xt</em>text</p> 
+\b \cf3 \cb4  Inhalt umschlie\'dfen 
+\b0 \cf0 \cb1  \cf10 \cb11  
+\b Inline Elemente aufteilen
+\b0  \cf0 \cb1  \
+<p>te\cb2 xt</p><p>te\cb1 xt</p>  
+\b \cf3 \cb4  Inhalt umschlie\'dfen 
+\b0 \cf0 \cb1  \
 \
 
 \b Startet in einem Element, endet in anderem Element\
 Dazwischen \cb7 Block-Elemente\cb1  in denen etwas eingef\'fcgt werden muss
 \b0 \
 <p>te\cb2 xt</p><p>text</p><p>te\cb1 xt</p> 
-\b \cf3 \cb4 \'96 Elemente einf\'fcgen 
+\b \cf5 \cb6 \'96 Elemente einf\'fcgen 
 \b0 \cf0 \cb1 \
 \
 \
@@ -48,13 +107,13 @@ Dazwischen Block-Elemente in denen etwas eingef\'fcgt werden muss\
 Und Elemente die umschlossen werden m\'fcssen
 \b0 \
 <p>te\cb2 xt</p>   <p>   <u>text</u>   </p>   <p>te\cb1 xt</p> \'96 
-\b \cf3 \cb4  In Block Elemente einf\'fcgen 
+\b \cf5 \cb6  In Block Elemente einf\'fcgen 
 \b0 \cf0 \cb1  
-\b \cf5 \cb6  Inline Elemente umschlie\'dfen 
+\b \cf3 \cb4  Inline Elemente umschlie\'dfen 
 \b0 \cf0 \cb1 \
 \
 <p>te\cb2 xt</p>  
-\i \cf8 textNode
+\i \cf12 textNode
 \i0 \cf0    <p>te\cb1 xt</p> \'96 \cb7  
 \b Leere Elemente ignorieren
 \b0  \cb1   \
@@ -63,4 +122,4 @@ Und Elemente die umschlossen werden m\'fcssen
 \
 \
 
-\b\fs24 \cf9 \cb10 TODO: DAS GANZE MUSS IM DOCUMENT PASSIEREN. ALSO DAS TYPEDOCUMENT MUSS MIT ENTSPRECHENDEN REGELN ABGE\'c4NDERT\cf0 \cb1  \cf9 \cb10 WERDEN, ERST DANN MUSS DARAUS HTML GERENDERT WERDEN (VIELLEICHT MIT VIRTUAL DOM)}
+\b\fs24 \cf13 \cb14 TODO: DAS GANZE MUSS IM DOCUMENT PASSIEREN. ALSO DAS TYPEDOCUMENT MUSS MIT ENTSPRECHENDEN REGELN ABGE\'c4NDERT\cf0 \cb1  \cf13 \cb14 WERDEN, ERST DANN MUSS DARAUS HTML GERENDERT WERDEN (VIELLEICHT MIT VIRTUAL DOM)}
