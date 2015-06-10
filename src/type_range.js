@@ -27,7 +27,7 @@ var extensions = {
   },
 
   /**
-   * 
+   *
    * @returns {string}
    */
   getEndTagName : function() {
@@ -40,6 +40,17 @@ var extensions = {
    */
   containsMultipleElements : function () {
     return this.startContainer !== this.endContainer;
+  },
+
+  /**
+   *
+   * @param tagName
+   * @returns {boolean}
+   */
+  startsOrEndsInTag : function (tagName) {
+    tagName = tagName.toLowerCase();
+    return this.getStartTagName() === tagName ||
+      this.getEndTagName() === tagName;
   }
 
 };

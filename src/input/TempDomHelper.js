@@ -6,47 +6,42 @@ function TempDomHelper() {
 
 (function () {
 
-  this._COMMAND_TYPE_INLINE = 0;
-  this._COMMAND_TYPE_BLOCK  = 1;
+  this._TYPE_INLINE = 0;
+  this._TYPE_BLOCK = 1;
 
-  this._commands = {
-    strong     : {type: this._COMMAND_TYPE_INLINE, tag: 'strong'},
-    em         : {type: this._COMMAND_TYPE_INLINE, tag: 'em'},
-    u          : {type: this._COMMAND_TYPE_INLINE, tag: 'u'},
-    s          : {type: this._COMMAND_TYPE_INLINE, tag: 's'},
-    h1         : {type: this._COMMAND_TYPE_BLOCK,  tag: 'h1'},
-    h2         : {type: this._COMMAND_TYPE_BLOCK,  tag: 'h2'},
-    h3         : {type: this._COMMAND_TYPE_BLOCK,  tag: 'h3'},
-    h4         : {type: this._COMMAND_TYPE_BLOCK,  tag: 'h4'},
-    h5         : {type: this._COMMAND_TYPE_BLOCK,  tag: 'h5'},
-    h6         : {type: this._COMMAND_TYPE_BLOCK,  tag: 'h6'},
-    blockquote : {type: this._COMMAND_TYPE_BLOCK,  tag: 'blockquote'}
+  this._tags = {
+    strong     : this._TYPE_INLINE,
+    em         : this._TYPE_INLINE,
+    u          : this._TYPE_INLINE,
+    s          : this._TYPE_INLINE,
+    h1         : this._TYPE_BLOCK,
+    h2         : this._TYPE_BLOCK,
+    h3         : this._TYPE_BLOCK,
+    h4         : this._TYPE_BLOCK,
+    h5         : this._TYPE_BLOCK,
+    h6         : this._TYPE_BLOCK,
+    blockquote : this._TYPE_BLOCK
   };
 
   /**
    *
-   * @param cmd
+   * @param tag
    * @param typeRange
    * @param params
    * @returns {TempDomHelper}
    */
-  this.cmd = function (cmd, typeRange, params) {
+  this.cmd = function (tag, typeRange, params) {
 
-    // Break on unknown commands
-    if (this._commands[cmd] === undefined) {
-      console.debug('Command "' + cmd + '" not implemented');
+    // Break on unknown tags
+    if (this._tags[tag] === undefined) {
+      console.debug('Tag "' + tag + '" not implemented');
       return this;
     }
 
     // Call command handler for either inline or block commands
-    if (this._commands[cmd].type === this._COMMAND_TYPE_INLINE) {
-      this._inline.apply(this, arguments);
-    } else if (this._commands[cmd].type === this._COMMAND_TYPE_BLOCK) {
-      this._block.apply(this, arguments);
-    } else {
-      console.debug('Did not find type for "' + cmd + '"');
-    }
-
+    var handler = this._tags[tag] === this._COMMAND_TYPE_INLINE ? '_inline' : '_block';
+    this[handler].apply(this, arguments);
+    
     return this;
   };
 
@@ -58,17 +53,21 @@ function TempDomHelper() {
    * @returns {TempDomHelper}
    * @private
    */
-  this._inline = function (cmd, typeRange, params) {
+  this._inline = function (tag, typeRange, params) {
 
-    var cmdTag = this._commands[cmd].tag;
-
-    if (!typeRange.containsMultipleElements()) {
-      if (typeRange.getStartTagName() !== cmdTag) {
-        this._insert(typeRange);
-      } else {
-        this._remove(typeRange);
-      }
-    }
+    //if (!typeRange.containsMultipleElements()) {
+    //  if (typeRange.getStartTagName() !== cmdTag) {
+    //    this._insert(typeRange.startContainer, typeRange.startOffset, typeRange.endOffset);
+    //  } else {
+    //    this._remove(typeRange.startContainer, typeRange.startOffset, typeRange.endOffset);
+    //  }
+    //} else {
+    //  if (typeRange.getStartTagName() !== cmdTag) {
+    //    this._insert(typeRange.startContainer, typeRange.startOffset, typeRange.endOffset);
+    //  } else {
+    //    this._remove(typeRange.startContainer, typeRange.startOffset, typeRange.endOffset);
+    //  }
+    //}
 
     return this;
   };
@@ -88,25 +87,24 @@ function TempDomHelper() {
 
   /**
    *
-   * @param typeRange
-   * @returns {*}
+   * @param textNode
+   * @param start
+   * @param end
    * @private
    */
-  this._split = function (typeRange) {
+  this._insert = function (textNode, start, end) {
 
-    return this;
   };
 
   /**
-   * TODO: Do not use insertAdjacentHTML because this destroys elements and will destroy listeners
    *
-   * @param el
+   * @param textNode
+   * @param start
+   * @param end
    * @private
    */
-  this._unwrap = function (el) {
-    el.insertAdjacentHTML('afterend', el.innerHTML);
-    el.parentNode.removeChild(el);
-    return this;
+  this._remove = function (textNode, start, end) {
+
   };
 
 }).call(TempDomHelper.prototype);
