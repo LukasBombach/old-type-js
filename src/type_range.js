@@ -8,6 +8,12 @@ var extensions = {
 
   getEndElement : function () {
     return this.endContainer.parentNode;
+  },
+
+  isEnclosedByTag : function (tagName) {
+    var startElement = this.getStartElement();
+    return startElement.tagName.toLowerCase() === tagName.toLowerCase() &&
+        startElement === this.getEndElement();
   }
 
 };

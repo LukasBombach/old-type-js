@@ -39,14 +39,11 @@ function TempDomHelper() {
     }
 
     // Call command handler for either inline or block commands
-    switch (this._commands[cmd].type) {
-    case this._COMMAND_TYPE_INLINE:
+    if (this._commands[cmd].type === this._COMMAND_TYPE_INLINE) {
       this._inline.apply(this, arguments);
-      break;
-    case this._COMMAND_TYPE_BLOCK:
+    } else if (this._commands[cmd].type === this._COMMAND_TYPE_BLOCK) {
       this._block.apply(this, arguments);
-      break;
-    default:
+    } else {
       console.debug('Did not find type for "' + cmd + '"');
     }
 
@@ -61,9 +58,9 @@ function TempDomHelper() {
    * @returns {TempDomHelper}
    * @private
    */
-  this._inline = function(cmd, typeRange, params) {
+  this._inline = function (cmd, typeRange, params) {
 
-    if (typeRange.getStartElement() === typeRange.getEndElement()) {
+    if (typeRange.isEnclosedByTag(cmd)) {
       this._splitElement(typeRange);
     }
 
@@ -83,7 +80,7 @@ function TempDomHelper() {
   };
 
   /**
-   * 
+   *
    * @param typeRange
    * @returns {*}
    * @private
