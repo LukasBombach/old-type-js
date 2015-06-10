@@ -20,26 +20,26 @@ var extensions = {
 
   /**
    *
-   * @returns {string}
+   * @param tagName
+   * @returns {boolean}
    */
-  getStartTagName : function() {
-    return this.getStartElement().tagName.toLowerCase();
-  },
-
-  /**
-   * 
-   * @returns {string}
-   */
-  getEndTagName : function() {
-    return this.getEndElement().tagName.toLowerCase();
+  spansToElement : function (tagName) {
+    return this.isEnclosedByElement(tagName) &&
+      this.startOffset === 0 &&
+      this.endOffset === this.endContainer.length &&
+      this.startContainer === this.startContainer.parentNode.firstChild &&
+      this.endContainer === this.startContainer.parentNode.lastChild;
   },
 
   /**
    *
+   * @param tagName
    * @returns {boolean}
    */
-  containsMultipleElements : function () {
-    return this.startContainer !== this.endContainer;
+  isEnclosedByElement : function (tagName) {
+    var startElement = this.getStartElement();
+    return startElement.tagName.toLowerCase() === tagName.toLowerCase() &&
+        startElement === this.getEndElement();
   }
 
 };
