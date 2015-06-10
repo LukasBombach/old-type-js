@@ -63,10 +63,10 @@ function TempDomHelper() {
     var cmdTag = this._commands[cmd].tag;
 
     if (!typeRange.containsMultipleElements()) {
-      if (typeRange.getStartTagName() === cmdTag) {
-        this._remove(typeRange);
-      } else {
+      if (typeRange.getStartTagName() !== cmdTag) {
         this._insert(typeRange);
+      } else {
+        this._remove(typeRange);
       }
     }
 
