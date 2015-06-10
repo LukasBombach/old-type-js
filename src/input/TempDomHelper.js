@@ -62,11 +62,11 @@ function TempDomHelper() {
 
     var cmdTag = this._commands[cmd].tag;
 
-    if (typeRange.spansToThisTag(cmdTag)) {
-      this._undoElement(typeRange.getStartElement());
+    if (typeRange.spansToElement(cmdTag)) {
+      this._unwrap(typeRange.getStartElement());
     }
 
-    if (typeRange.isEnclosedByTag(cmdTag)) {
+    if (typeRange.isEnclosedByElement(cmdTag)) {
       this._splitElement(typeRange);
     }
 
@@ -98,12 +98,14 @@ function TempDomHelper() {
   };
 
   /**
+   * TODO: Do not use insertAdjacentHTML because this destroys elements and will destroy listeners
    *
-   * @param element
+   * @param el
    * @private
    */
-  this._undoElement = function (element) {
-
+  this._unwrap = function (el) {
+    el.insertAdjacentHTML('afterend', el.innerHTML);
+    el.parentNode.removeChild(el);
     return this;
   };
 

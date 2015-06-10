@@ -23,8 +23,8 @@ var extensions = {
    * @param tagName
    * @returns {boolean}
    */
-  spansToThisTag : function (tagName) {
-    return this.isEnclosedByTag(tagName) &&
+  spansToElement : function (tagName) {
+    return this.isEnclosedByElement(tagName) &&
       this.startOffset === 0 &&
       this.endOffset === this.endContainer.length &&
       this.startContainer === this.startContainer.parentNode.firstChild &&
@@ -36,7 +36,7 @@ var extensions = {
    * @param tagName
    * @returns {boolean}
    */
-  isEnclosedByTag : function (tagName) {
+  isEnclosedByElement : function (tagName) {
     var startElement = this.getStartElement();
     return startElement.tagName.toLowerCase() === tagName.toLowerCase() &&
         startElement === this.getEndElement();
