@@ -41,13 +41,13 @@ function TempDomHelper() {
     // Call command handler for either inline or block commands
     var handler = this._tags[tag] === this._COMMAND_TYPE_INLINE ? '_inline' : '_block';
     this[handler].apply(this, arguments);
-    
+
     return this;
   };
 
   /**
    *
-   * @param cmd
+   * @param tag
    * @param typeRange
    * @param params
    * @returns {TempDomHelper}
@@ -68,6 +68,10 @@ function TempDomHelper() {
     //    this._remove(typeRange.startContainer, typeRange.startOffset, typeRange.endOffset);
     //  }
     //}
+
+    if (typeRange.startsOrEndsInTag(tag)) {
+      
+    }
 
     return this;
   };
