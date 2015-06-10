@@ -67,7 +67,7 @@ function TempDomHelper() {
     }
 
     if (typeRange.isEnclosedByElement(cmdTag)) {
-      this._splitElement(typeRange);
+      this._split(typeRange);
     }
 
     return this;
@@ -92,7 +92,7 @@ function TempDomHelper() {
    * @returns {*}
    * @private
    */
-  this._splitElement = function (typeRange) {
+  this._split = function (typeRange) {
 
     return this;
   };
