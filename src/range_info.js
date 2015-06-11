@@ -7,6 +7,7 @@
  * @constructor
  */
 function RangeInfo(range) {
+  // Todo duck typing of range as {Range}
   this.startContainer = range.startContainer;
   this.endContainer = range.endContainer;
   this.startOffset = range.startOffset;

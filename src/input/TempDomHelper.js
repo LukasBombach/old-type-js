@@ -129,6 +129,12 @@ function TempDomHelper() {
     } while (startTag.nextSibling && startTag.nextSibling !== endContainer);
 
 
+    // create start node
+    // while next node
+    // if contains endNode
+      // go in recursively
+
+
     return this;
   };
 
