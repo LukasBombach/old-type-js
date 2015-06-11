@@ -109,16 +109,26 @@ function TempDomHelper() {
       endOffset = typeRange.endOffset,
       startTag;
 
-
     if (startContainer === endContainer) {
       this._insertInTextNode(tag, startContainer, startOffset, endOffset);
-    } else {
-      if (typeRange.startTagIs(tag)) {
-        startTag = typeRange.getStartElement();
-      } else {
-        startTag = this._insertInTextNode(tag, startContainer, startOffset, startContainer.length);
-      }
+      return this;
     }
+
+    if (typeRange.startTagIs(tag)) {
+      startTag = typeRange.getStartElement();
+    } else {
+      startTag = this._insertInTextNode(tag, startContainer, startOffset, startContainer.length);
+    }
+
+    do {
+
+      if (startTag.nextSibling.contains(endContainer)) {
+
+      }
+
+    } while (startTag.nextSibling && startTag.nextSibling !== endContainer);
+
+
     return this;
   };
 
