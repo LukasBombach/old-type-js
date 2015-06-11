@@ -32,7 +32,7 @@ function TempDomHelper() {
    */
   this.cmd = function (tag, typeRange, params) {
 
-    // Break on unknown tags
+    // Stop on unknown tags
     if (this._tags[tag] === undefined) {
       console.debug('Tag "' + tag + '" not implemented');
       return this;
@@ -69,8 +69,13 @@ function TempDomHelper() {
     //  }
     //}
 
-    if (typeRange.startsOrEndsInTag(tag)) {
-      
+    //if (typeRange.startsOrEndsInTag(tag)) {
+    //}
+
+    if (typeRange.isEnclosedByTag(tag)) {
+      this._remove(tag, typeRange);
+    } else {
+      this._insert(tag, typeRange);
     }
 
     return this;
@@ -91,13 +96,56 @@ function TempDomHelper() {
 
   /**
    *
+   * @param tag
+   * @param typeRange
+   * @returns {*}
+   * @private
+   */
+  this._insert = function (tag, typeRange) {
+
+    var startContainer = typeRange.startContainer,
+      endContainer = typeRange.endContainer,
+      startOffset = typeRange.startOffset,
+      endOffset = typeRange.endOffset,
+      startTag;
+
+
+    if (startContainer === endContainer) {
+      this._insertInTextNode(tag, startContainer, startOffset, endOffset);
+    } else {
+      if (typeRange.startTagIs(tag)) {
+        startTag = typeRange.getStartElement();
+      } else {
+        startTag = this._insertInTextNode(tag, startContainer, startOffset, startContainer.length);
+      }
+    }
+    return this;
+  };
+
+  /**
+   *
+   * @param tag
+   * @param typeRange
+   * @returns {*}
+   * @private
+   */
+  this._remove = function (tag, typeRange) {
+
+    return this;
+  };
+
+  /**
+   *
+   * @param tag
    * @param textNode
    * @param start
    * @param end
+   * @returns {Element}
    * @private
    */
-  this._insert = function (textNode, start, end) {
-
+  this._insertInTextNode = function (tag, textNode, start, end) {
+    // todo create element in textnode and return it
+    return document.createElement(tag);
   };
 
   /**
@@ -105,10 +153,12 @@ function TempDomHelper() {
    * @param textNode
    * @param start
    * @param end
+   * @returns {*}
    * @private
    */
-  this._remove = function (textNode, start, end) {
+  this._removeFromTextNode = function (tag, textNode, start, end) {
 
+    return this;
   };
 
 }).call(TempDomHelper.prototype);

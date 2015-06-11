@@ -22,7 +22,7 @@ var extensions = {
    *
    * @returns {string}
    */
-  getStartTagName : function() {
+  getStartTagName : function () {
     return this.getStartElement().tagName.toLowerCase();
   },
 
@@ -30,8 +30,26 @@ var extensions = {
    *
    * @returns {string}
    */
-  getEndTagName : function() {
+  getEndTagName : function () {
     return this.getEndElement().tagName.toLowerCase();
+  },
+
+  /**
+   *
+   * @param tagName
+   * @returns {boolean}
+   */
+  startTagIs : function (tagName) {
+    return this.getStartTagName() === tagName.toLowerCase();
+  },
+
+  /**
+   *
+   * @param tagName
+   * @returns {boolean}
+   */
+  endTagIs : function (tagName) {
+    return this.getEndTagName() === tagName.toLowerCase();
   },
 
   /**
@@ -42,16 +60,20 @@ var extensions = {
     return this.startContainer !== this.endContainer;
   },
 
+  isEnclosedByTag : function () {
+
+  }
+
   /**
    *
    * @param tagName
    * @returns {boolean}
    */
-  startsOrEndsInTag : function (tagName) {
-    tagName = tagName.toLowerCase();
-    return this.getStartTagName() === tagName ||
-      this.getEndTagName() === tagName;
-  }
+  //startsOrEndsInTag : function (tagName) {
+  //  tagName = tagName.toLowerCase();
+  //  return this.getStartTagName() === tagName ||
+  //    this.getEndTagName() === tagName;
+  //}
 
 };
 
