@@ -2,11 +2,12 @@
 
 /**
  *
+ * Todo Make this a singleton
+ *
  * @param el
  * @constructor
  */
-function DomUtilities(el) {
-  this.el = el;
+function DomUtilities() {
 }
 
 (function () {
@@ -23,6 +24,8 @@ DomUtilities._TEXT_NODE = 3;
 /**
  * Finds the first visible text node in an element. Will
  * return the element itself, if it is already a text node
+ *
+ * Todo Can be removed by using nextTextNode - I think (maybe this method is faster though (still unnecessary code))
  *
  * @param {Node} el The element to be searched in.
  * @returns {Node|null}
@@ -44,7 +47,8 @@ DomUtilities.firstTextNode = function (el) {
  *
  * @param el
  * @param returnMe
- * @returns {*}
+ * @param constrainingNode
+ * @returns {null|Node}
  */
 DomUtilities.nextTextNode = function (el, returnMe, constrainingNode) {
 
