@@ -41,6 +41,43 @@ DomUtilities.firstTextNode = function (el) {
 };
 
 /**
+ *
+ * @param el
+ * @param returnMe
+ * @returns {*}
+ */
+DomUtilities.nextTextNode = function (el, returnMe, constrainingNode) {
+
+  if (typeof returnMe !== "boolean") {
+    constrainingNode = returnMe;
+    returnMe = false;
+  }
+
+  var parent = el.parentNode;
+
+  if (returnMe === true && DomUtilities.isTextNodeWithContents(el)) {
+    return el;
+  }
+
+  if (el.childNodes.length) {
+    return DomUtilities.nextTextNode(el.childNodes[0], true, constrainingNode);
+  }
+
+  if (el.nextSibling !== null) {
+    return DomUtilities.nextTextNode(el.nextSibling, true, constrainingNode);
+  }
+
+  while (parent !== constrainingNode) {
+    if (parent.nextSibling !== null) {
+      return DomUtilities.nextTextNode(parent.nextSibling, true, constrainingNode);
+    }
+    parent = parent.parentNode;
+  }
+
+  return null;
+};
+
+/**
  * Returns true if a give node is a text node and its contents is not
  * entirely whitespace.
  *
