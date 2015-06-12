@@ -132,11 +132,14 @@ function TempDomHelper() {
       addNode = addNode.nextSibling;
     } while (addNode.nextSibling !== null && !addNode.nextSibling.contains(endContainer));
 
+    if (addNode.nextSibling.contains(endContainer)) {
+      mergeNodes.push(this._insertRecursive());
+    }
 
-    //if (addNode.nextSibling === endContainer) {
-    //  endTextNode = (endOffset === endContainer.length) ? endContainer : endContainer.splitText(endOffset).previousSibling;
-    //  mergeNodes.push(endTextNode);
-    //}
+    if (addNode.nextSibling === null) {
+
+    }
+
   };
 
   /**
