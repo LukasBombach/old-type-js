@@ -119,12 +119,15 @@ function TempDomHelper() {
     // then find next sibling of parent (parent's parent etc)
     // and repeat this method
 
-
     // ----
 
     // other idea
     // iterate over siblings
-    // if endcontainer is found, wrap
+    // if endNode (endContainer) is found, wrap including part of endcontainer ✓
+
+    // if node parent to endNode is found, wrao until before that node and apply this method to first textNode in there
+    // What do with
+
     // if node parent to end is found, wrap till before that and apply this method to that node
     // if end of parent is found wrap find next sibling to parent
 
