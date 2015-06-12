@@ -105,7 +105,7 @@ function TempDomHelper() {
    * @returns {string}
    * @private
    */
-  this._insertRecursive = function (tag, rangeInfo) {
+  this._insertOperations = function (tag, rangeInfo) {
 
     var startContainer = rangeInfo.startContainer,
       startOffset      = rangeInfo.startOffset,
@@ -133,7 +133,7 @@ function TempDomHelper() {
     } while (addNode.nextSibling !== null && !addNode.nextSibling.contains(endContainer));
 
     if (addNode.nextSibling.contains(endContainer)) {
-      mergeNodes.push(this._insertRecursive());
+      mergeNodes.push(this._insertOperations());
     }
 
     if (addNode.nextSibling === null) {
