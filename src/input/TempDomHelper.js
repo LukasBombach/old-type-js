@@ -128,6 +128,8 @@ function TempDomHelper() {
     // if node parent to end is found, wrap till before that and apply this method to that node
     // if end of parent is found wrap find next sibling to parent
 
+
+
   };
 
   /**
