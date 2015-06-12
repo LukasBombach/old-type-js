@@ -107,7 +107,9 @@ function TempDomHelper() {
       endContainer = typeRange.endContainer,
       startOffset = typeRange.startOffset,
       endOffset = typeRange.endOffset,
-      startTag;
+      startTag,
+      sibling,
+      wrapTags = [];
 
     if (startContainer === endContainer) {
       this._insertInTextNode(tag, startContainer, startOffset, endOffset);
@@ -120,13 +122,25 @@ function TempDomHelper() {
       startTag = this._insertInTextNode(tag, startContainer, startOffset, startContainer.length);
     }
 
-    do {
+    while ((sibling = startTag.nextSibling) && !sibling.contains(endContainer)) {
+      wrapTags.push(sibling);
+    }
 
-      if (startTag.nextSibling.contains(endContainer)) {
+    // If the tag has following siblings (is not last child)
+    if (startTag.nextSibling !== null) {
+    }
 
-      }
+    this._nextTextNode(startTag); // finds next
 
-    } while (startTag.nextSibling && startTag.nextSibling !== endContainer);
+
+    //
+    //do {
+    //
+    //  if (startTag.nextSibling.contains(endContainer)) {
+    //
+    //  }
+    //
+    //} while (startTag.nextSibling && startTag.nextSibling !== endContainer);
 
 
     // create start node
