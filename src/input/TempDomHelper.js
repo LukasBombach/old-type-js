@@ -105,6 +105,43 @@ function TempDomHelper() {
    * @returns {string}
    * @private
    */
+  this._insertRecursive = function (tag, rangeInfo) {
+
+    var startContainer = rangeInfo.startContainer,
+      startOffset      = rangeInfo.startOffset,
+      endContainer     = rangeInfo.endContainer,
+      endOffset        = rangeInfo.endOffset,
+      endTextNode      = (endOffset === endContainer.length) ? endContainer : endContainer.splitText(endOffset).previousSibling,
+      mergeNodes = [],
+      addNode;
+
+    if (startContainer === endContainer) {
+      return 'New tag at startContainer, startOffset, endOffset';
+    }
+
+    if (rangeInfo.startTagIs(tag)) {
+      addNode = "node rangeInfo.getStartElement()";
+    } else {
+      addNode = 'New tag at startContainer, startOffset, startContainer.length';
+    }
+
+    do {
+      mergeNodes.push(addNode);
+      addNode = addNode.nextSibling;
+    } while (addNode.nextSibling !== null && !addNode.nextSibling.contains(endContainer));
+
+    return merge()
+
+  };
+
+  /**
+   * Todo Aufschreiben: Technik an Virtual Dom angelehnt, möglichst wenige operations
+   *
+   * @param tag
+   * @param rangeInfo
+   * @returns {string}
+   * @private
+   */
   this._insertNew = function (tag, rangeInfo) {
 
     var startContainer = rangeInfo.startContainer,
