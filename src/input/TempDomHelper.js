@@ -111,16 +111,19 @@ function TempDomHelper() {
       startOffset      = rangeInfo.startOffset,
       endContainer     = rangeInfo.endContainer,
       endOffset        = rangeInfo.endOffset,
-      endTextNode      = (endOffset === endContainer.length) ? endContainer : endContainer.splitText(endOffset).previousSibling,
-      mergeNodes = [],
-      addNode;
+      mergeNodes       = [],
+      addNode,
+      endTextNode;
 
     if (startContainer === endContainer) {
-      return 'New tag at startContainer, startOffset, endOffset';
+      if (rangeInfo.endTagIs(tag)) {
+        return 'Tag rangeInfo.endTag()';
+      }
+      return '(endOffset === endContainer.length) ? endContainer : endContainer.splitText(endOffset).previousSibling';
     }
 
     if (rangeInfo.startTagIs(tag)) {
-      addNode = "node rangeInfo.getStartElement()";
+      addNode = "Tag rangeInfo.getStartElement()";
     } else {
       addNode = 'New tag at startContainer, startOffset, startContainer.length';
     }
@@ -130,8 +133,11 @@ function TempDomHelper() {
       addNode = addNode.nextSibling;
     } while (addNode.nextSibling !== null && !addNode.nextSibling.contains(endContainer));
 
-    return merge()
 
+    //if (addNode.nextSibling === endContainer) {
+    //  endTextNode = (endOffset === endContainer.length) ? endContainer : endContainer.splitText(endOffset).previousSibling;
+    //  mergeNodes.push(endTextNode);
+    //}
   };
 
   /**
