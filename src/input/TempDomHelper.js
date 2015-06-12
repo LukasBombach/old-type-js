@@ -1,6 +1,7 @@
 'use strict';
 
 var RangeInfo = require('../range_info');
+var DomUtil = require('../dom_utilities');
 
 function TempDomHelper() {
 }
