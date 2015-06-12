@@ -98,6 +98,52 @@ function TempDomHelper() {
   };
 
   /**
+   * Todo Aufschreiben: Technik an Virtual Dom angelehnt, möglichst wenige operations
+   *
+   * @param tag
+   * @param rangeInfo
+   * @returns {string}
+   * @private
+   */
+  this._insertNew = function (tag, rangeInfo) {
+
+    var startContainer = rangeInfo.startContainer,
+      startOffset      = rangeInfo.startOffset,
+      endContainer     = rangeInfo.endContainer,
+      endOffset        = rangeInfo.endOffset,
+      endTextNode      = (endOffset === endContainer.length) ? endContainer : endContainer.splitText(endOffset).previousSibling,
+      startTag,
+      sibling,
+      wrapTags = [];
+
+    if (startContainer === endContainer) {
+      return 'New tag at startContainer, startOffset, endOffset';
+    }
+
+    if (rangeInfo.startTagIs(tag)) {
+      startTag = sibling = rangeInfo.getStartElement();
+    } else {
+      startTag = sibling = this._insertInTextNode(tag, startContainer, startOffset, startContainer.length);
+    }
+
+    while (sibling = sibling.nextSibling) {
+
+      if (sibling === endTextNode) {
+        wrapTags.push(sibling);
+        break;
+      } else if (sibling.contains(endContainer)) {
+        break;
+      } else {
+        wrapTags.push(sibling);
+      }
+    }
+
+    return DomUtil.moveElementsTo(startTag, wrapTags);
+
+
+  };
+
+  /**
    *
    * @param tag
    * @param rangeInfo
@@ -107,13 +153,12 @@ function TempDomHelper() {
   this._insert = function (tag, rangeInfo) {
 
     var startContainer = rangeInfo.startContainer,
-      endContainer = rangeInfo.endContainer,
       startOffset = rangeInfo.startOffset,
+      endContainer = rangeInfo.endContainer,
       endOffset = rangeInfo.endOffset,
       startTag,
       sibling,
       wrapTags = [],
-      firstTextNode,
       nextTextNode;
 
     if (startContainer === endContainer) {
@@ -122,16 +167,22 @@ function TempDomHelper() {
     }
 
     if (rangeInfo.startTagIs(tag)) {
-      startTag = rangeInfo.getStartElement();
+      startTag = sibling = rangeInfo.getStartElement();
     } else {
-      startTag = this._insertInTextNode(tag, startContainer, startOffset, startContainer.length);
+      startTag = sibling = this._insertInTextNode(tag, startContainer, startOffset, startContainer.length);
     }
 
-    sibling = startTag.nextSibling;
+    while (true) {
+      if (sibling.nextSibling !== null || sibling.nextSibling === endContainer) {
+        wrapTags.push(sibling);
+      } else {
+        break;
+      }
+    }
 
-    while (sibling !== null && !sibling.contains(endContainer)) {
+    while (sibling.nextSibling !== null && !sibling.nextSibling.contains(endContainer)) {
+      sibling = sibling.nextSibling;
       wrapTags.push(sibling);
-      sibling = startTag.nextSibling;
     }
 
     this._extendTagTo(startTag, wrapTags);
