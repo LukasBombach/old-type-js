@@ -119,6 +119,15 @@ function TempDomHelper() {
     // then find next sibling of parent (parent's parent etc)
     // and repeat this method
 
+
+    // ----
+
+    // other idea
+    // iterate over siblings
+    // if endcontainer is found, wrap
+    // if node parent to end is found, wrap till before that and apply this method to that node
+    // if end of parent is found wrap find next sibling to parent
+
   };
 
   /**
