@@ -1,5 +1,7 @@
 'use strict';
 
+var RangeInfo = require('../range_info');
+
 function TempDomHelper() {
 }
 
@@ -132,18 +134,8 @@ function TempDomHelper() {
     this._extendTagTo(startTag, wrapTags);
 
     if (sibling !== null && sibling.contains(endContainer)) {
-      this._insert
+      this._insert(tag, new RangeInfo());
     }
-
-
-    //
-    //do {
-    //
-    //  if (startTag.nextSibling.contains(endContainer)) {
-    //
-    //  }
-    //
-    //} while (startTag.nextSibling && startTag.nextSibling !== endContainer);
 
 
     // create start node
