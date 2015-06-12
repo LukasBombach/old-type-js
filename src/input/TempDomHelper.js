@@ -132,6 +132,14 @@ function TempDomHelper() {
     // if end of parent is found wrap find next sibling to parent
 
 
+    // ---
+
+    // Immer siblings iterieren und wrappen. bis man den sibling findet der das ding als child hat
+    // -> note: selbst wenn letzteres ein einfaches <u>endNode<u> element ist, wird es als node.contains(endNode) gefunden
+    // Wenn der node.contains(endNode) gefunden wurde, bei seinem ersten ChildNode anfangen und den selben algorithmus ausführen
+
+    // Deswegen sollte _insert irgendwie mit elementen arbeiten und nicht mit textnodes
+
 
   };
 
