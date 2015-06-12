@@ -112,7 +112,8 @@ function TempDomHelper() {
       endOffset = rangeInfo.endOffset,
       startTag,
       sibling,
-      wrapTags = [];
+      wrapTags = [],
+      firstTextNode;
 
     if (startContainer === endContainer) {
       this._insertInTextNode(tag, startContainer, startOffset, endOffset);
@@ -135,7 +136,8 @@ function TempDomHelper() {
     this._extendTagTo(startTag, wrapTags);
 
     if (sibling !== null && sibling.contains(endContainer)) {
-      this._insert(tag, new RangeInfo());
+      firstTextNode = DomUtil.firstTextNode(sibling);
+      this._insert(tag, new RangeInfo(firstTextNode, 0, endContainer, endOffset));
     }
 
 

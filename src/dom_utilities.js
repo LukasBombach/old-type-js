@@ -1,31 +1,15 @@
 'use strict';
 
+/**
+ *
+ * @param el
+ * @constructor
+ */
 function DomUtilities(el) {
   this.el = el;
 }
 
 (function () {
-
-  /**
-   * Finds the first visible text node in an element. Will
-   * return the element itself, if it is already a text node
-   *
-   * @returns {Node|null}
-   */
-  this.firstTextNode = function () {
-    return DomUtilities.firstTextNode(this.el);
-  };
-
-  /**
-   * Returns true if a give node is a text node and its contents is not
-   * entirely whitespace.
-   *
-   * @returns {boolean}
-   * @private
-   */
-  this.isTextNodeWithContents = function () {
-    return DomUtilities.isTextNodeWithContents(this.el);
-  };
 
 }).call(DomUtilities.prototype);
 
@@ -68,8 +52,5 @@ DomUtilities.isTextNodeWithContents = function (node) {
   node = node || this.el;
   return node.nodeType === DomUtilities._TEXT_NODE && /[^\t\n\r ]/.test(node.textContent);
 };
-
-
-
 
 module.exports = DomUtilities;
