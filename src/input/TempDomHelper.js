@@ -114,7 +114,7 @@ function TempDomHelper() {
 
     // move through elements until endcontainer is reached
     // or end of parent element is reached
-    // inclide everyting in between
+    // include everything in between
 
     // then find next sibling of parent (parent's parent etc)
     // and repeat this method
