@@ -139,6 +139,17 @@ function TempDomHelper() {
     // Wenn der node.contains(endNode) gefunden wurde, bei seinem ersten ChildNode anfangen und den selben algorithmus ausführen
 
     // Deswegen sollte _insert irgendwie mit elementen arbeiten und nicht mit textnodes
+    // TextNodes sind auch einfach nur nodes, von daher muss man es nur als sonderfall betrachten wenn currentNode = startContainer
+
+    if (startContainer === endContainer) {
+      this._insertInTextNode(tag, startContainer, startOffset, endOffset);
+      return this;
+    }
+
+    var sibling = startContainer;
+
+    //  while()
+
 
 
   };
