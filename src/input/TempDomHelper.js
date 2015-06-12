@@ -97,6 +97,30 @@ function TempDomHelper() {
     return this;
   };
 
+  this._insertNewNew = function(tag, rangeInfo) {
+
+    var startContainer = rangeInfo.startContainer,
+      startOffset      = rangeInfo.startOffset,
+      endContainer     = rangeInfo.endContainer,
+      endOffset        = rangeInfo.endOffset;
+
+    if (startContainer === endContainer) {
+      this._insertInTextNode(tag, startContainer, startOffset, endOffset);
+      return this;
+    }
+
+    var startNewTagAtConainer = startContainer,
+      startNewTagAtOffset = startOffset;
+
+    // move through elements until endcontainer is reached
+    // or end of parent element is reached
+    // inclide everyting in between
+
+    // then find next sibling of parent (parent's parent etc)
+    // and repeat this method
+
+  };
+
   /**
    * Todo Aufschreiben: Technik an Virtual Dom angelehnt, möglichst wenige operations
    *
