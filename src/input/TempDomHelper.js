@@ -112,8 +112,7 @@ function TempDomHelper() {
       endContainer     = rangeInfo.endContainer,
       endOffset        = rangeInfo.endOffset,
       mergeNodes       = [],
-      addNode,
-      endTextNode;
+      addNode;
 
     if (startContainer === endContainer) {
       if (rangeInfo.endTagIs(tag)) {
