@@ -122,8 +122,11 @@ function TempDomHelper() {
       startTag = this._insertInTextNode(tag, startContainer, startOffset, startContainer.length);
     }
 
-    while ((sibling = startTag.nextSibling) && !sibling.contains(endContainer)) {
+    sibling = startTag.nextSibling;
+
+    while (sibling !== null && !sibling.contains(endContainer)) {
       wrapTags.push(sibling);
+      sibling = startTag.nextSibling;
     }
 
     this._extendTagTo(startTag, wrapTags);
