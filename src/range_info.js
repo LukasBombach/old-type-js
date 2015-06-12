@@ -3,7 +3,9 @@
 /**
  *
  * @param {Range|Node} rangeOrStartContainer
- * @returns {*}
+ * @param startOffset
+ * @param endContainer
+ * @param endOffset
  * @constructor
  */
 function RangeInfo(rangeOrStartContainer, startOffset, endContainer, endOffset) {
