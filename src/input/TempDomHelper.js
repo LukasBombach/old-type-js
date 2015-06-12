@@ -97,16 +97,16 @@ function TempDomHelper() {
   /**
    *
    * @param tag
-   * @param typeRange
+   * @param rangeInfo
    * @returns {*}
    * @private
    */
-  this._insert = function (tag, typeRange) {
+  this._insert = function (tag, rangeInfo) {
 
-    var startContainer = typeRange.startContainer,
-      endContainer = typeRange.endContainer,
-      startOffset = typeRange.startOffset,
-      endOffset = typeRange.endOffset,
+    var startContainer = rangeInfo.startContainer,
+      endContainer = rangeInfo.endContainer,
+      startOffset = rangeInfo.startOffset,
+      endOffset = rangeInfo.endOffset,
       startTag,
       sibling,
       wrapTags = [];
@@ -116,8 +116,8 @@ function TempDomHelper() {
       return this;
     }
 
-    if (typeRange.startTagIs(tag)) {
-      startTag = typeRange.getStartElement();
+    if (rangeInfo.startTagIs(tag)) {
+      startTag = rangeInfo.getStartElement();
     } else {
       startTag = this._insertInTextNode(tag, startContainer, startOffset, startContainer.length);
     }
@@ -126,11 +126,11 @@ function TempDomHelper() {
       wrapTags.push(sibling);
     }
 
-    // If the tag has following siblings (is not last child)
-    if (startTag.nextSibling !== null) {
-    }
+    this._extendTagTo(startTag, wrapTags);
 
-    this._nextTextNode(startTag); // finds next
+    if (sibling !== null && sibling.contains(endContainer)) {
+      this._insert
+    }
 
 
     //
