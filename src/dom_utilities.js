@@ -20,6 +20,10 @@ function DomUtilities() {
   this._TEXT_NODE = 3;
 
   /**
+   * Traverses the DOM tree and finds the next node after the node passed
+   * as first argument. Will traverse the children, siblings and parents'
+   * siblings (in that order) to find the next node in the DOM tree as
+   * displayed by the document flow.
    *
    * @param {Node} node - The node from which the search should start
    * @param {Object} [options] - Settings determining what node to return
