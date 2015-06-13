@@ -131,7 +131,7 @@ DomUtilities.removeTag = function (el, tag, deep) {
     }
   }
 
-  if (el.tagName && el.tagName.toLowerCase() === el.toLowerCase()) {
+  if (el.nodeType === 1 && el.tagName.toLowerCase() === el.toLowerCase()) {
     DomUtilities.unwrap(el);
   }
 
