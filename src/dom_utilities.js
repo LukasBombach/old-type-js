@@ -1,5 +1,7 @@
 'use strict';
 
+var singleton;
+
 /**
  *
  * @constructor
@@ -148,6 +150,5 @@ function DomUtilities() {
 
 }).call(DomUtilities.prototype);
 
-
-
-module.exports = new DomUtilities();
+singleton = new DomUtilities();
+module.exports = singleton;
