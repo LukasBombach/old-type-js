@@ -93,6 +93,7 @@ function DomUtilities() {
   };
 
   /**
+   * Todo Maybe remove inline comments as they are here for my personal understanding rather than anything else
    *
    * (Modified) from
    * http://stackoverflow.com/questions/3337587/wrapping-a-set-of-dom-elements-using-javascript/13169465#13169465
