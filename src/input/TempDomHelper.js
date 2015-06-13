@@ -128,32 +128,22 @@ function TempDomHelper() {
     // Deswegen sollte _insert irgendwie mit elementen arbeiten und nicht mit textnodes
     // TextNodes sind auch einfach nur nodes, von daher muss man es nur als sonderfall betrachten wenn currentNode = startContainer
 
-    var startContainer = rangeInfo.startContainer,
-      startOffset      = rangeInfo.startOffset,
-      endContainer     = rangeInfo.endContainer,
-      endOffset        = rangeInfo.endOffset,
-      currentNode      = startContainer,
-      wrap             = [];
 
-    if (startContainer === endContainer) {
-      this._insertInTextNode(tag, startContainer, startOffset, endOffset);
+    // Todo what if start end end node are 2 adjacent text nodes
+    if (rangeInfo.startsAndEndsInSameNode()) {
+      this._insertInTextNode(tag, rangeInfo.startContainer, rangeInfo.startOffset, rangeInfo.endOffset);
       return this;
     }
 
+    var startNode = rangeInfo.startContainer.splitText(rangeInfo.startOffset),
+      endNode     = rangeInfo.endContainer.splitText(rangeInfo.endOffset).previousSibling,
+      currentNode = startNode,
+      wrap        = [];
+
     do {
-
-      if (currentNode === startContainer) {
-        currentNode = currentNode.splitText(startOffset);
-      }
-
-      if (currentNode === endContainer) {
-        currentNode = endContainer.splitText(endOffset).previousSibling;
-      }
-
       wrap.push(currentNode);
       currentNode = currentNode.nextSibling;
-
-    } while (currentNode && DomUtil.containsButIsNot(currentNode, endContainer));
+    } while (currentNode && !currentNode.contains(endNode));
 
   };
 

@@ -87,6 +87,14 @@ function RangeInfo(rangeOrStartContainer, startOffset, endContainer, endOffset) 
    *
    * @returns {boolean}
    */
+  this.startsAndEndsInSameNode = function () {
+    return this.startContainer === this.endContainer;
+  };
+
+  /**
+   *
+   * @returns {boolean}
+   */
   this.containsMultipleElements = function () {
     return this.startContainer !== this.endContainer;
   };
