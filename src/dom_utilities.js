@@ -20,6 +20,45 @@ function DomUtilities() {
   this._TEXT_NODE = 3;
 
   /**
+   *
+   * @param {Node} node The node from which the search should start
+   * @param {Object} options Settings determining what node to return
+   * @param options.filterFunction
+   * @param options.constrainingNode
+   * @param options.returnMe
+   * @returns {null|Node}
+   */
+  this.nextNode = function (node, options) {
+
+    options = options || {};
+
+    var parent = node.parentNode;
+
+    if (options.returnMe === true && this.isTextNodeWithContents(node)) {
+      return node;
+    }
+
+    if (node.childNodes.length) {
+      return this.nextTextNode(node.childNodes[0], true, constrainingNode);
+    }
+
+    if (node.nextSibling !== null) {
+      return this.nextTextNode(node.nextSibling, true, constrainingNode);
+    }
+
+    while (parent !== constrainingNode) {
+      if (parent.nextSibling !== null) {
+        return this.nextTextNode(parent.nextSibling, true, constrainingNode);
+      }
+      parent = parent.parentNode;
+    }
+
+    return null;
+
+
+  };
+
+  /**
    * Finds the first visible text node in an element. Will
    * return the element itself, if it is already a text node
    *
