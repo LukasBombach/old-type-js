@@ -161,20 +161,23 @@ function DomUtilities() {
    */
   this.removeTag = function (el, tag, deep) {
 
+    // Required vars, Crockford style
     var i;
 
+    // Recursively remove the given tag from the elements children
     if (deep && el.children.length) {
       for (i = 0; i < el.children.length; i += 1) {
         this.removeTag(el.children[i], tag, deep);
       }
     }
 
+    // Unwrap this tag if it is the tag we want to remove
     if (el.nodeType === 1 && el.tagName.toLowerCase() === el.toLowerCase()) {
       this.unwrap(el);
     }
 
+    // Chaining
     return this;
-
   };
 
 }).call(DomUtilities.prototype);
