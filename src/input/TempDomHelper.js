@@ -97,7 +97,7 @@ function TempDomHelper() {
     return this;
   };
 
-  this._insertNewNew = function(tag, rangeInfo) {
+  this._insertNewNew = function (tag, rangeInfo) {
 
     // move through elements until endcontainer is reached
     // or end of parent element is reached
@@ -145,12 +145,18 @@ function TempDomHelper() {
       currentNode = currentNode.nextSibling;
     } while (currentNode && !currentNode.contains(endNode));
 
+    // We found the endNode and can stop this algorithm
     if (currentNode === endNode) {
       nodesToWrap.push(currentNode);
+      DomUtil.wrap(tag, nodesToWrap);
+      return this;
     }
 
     DomUtil.wrap(tag, nodesToWrap);
 
+    if (currentNode.contains(endNode)) {
+      this._insertNewNew(tag, rangeInfo);
+    }
   };
 
   /**
