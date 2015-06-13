@@ -13,6 +13,7 @@ function DomUtilities() {
 
   /**
    * Node.nodeType value for text nodes
+   *
    * @type {number}
    * @private
    */
@@ -32,8 +33,9 @@ function DomUtilities() {
     if (this.isTextNodeWithContents(el)) {
       return el;
     }
-    for (i = 0; i < el.childNodes.length; i++) {
-      if (child = this.firstTextNode(el.childNodes[i])) {
+    for (i = 0; i < el.childNodes.length; i += 1) {
+      child = this.firstTextNode(el.childNodes[i]);
+      if (child) {
         return child;
       }
     }
