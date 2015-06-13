@@ -22,13 +22,14 @@ function DomUtilities() {
   /**
    *
    * @param {Node} node - The node from which the search should start
-   * @param {Object} options  - Settings determining what node to return
-   * @param {Function} options.filterFunction - nextNode traverses the
+   * @param {Object} [options] - Settings determining what node to return
+   * @param {Function} [options.filterFunction] - nextNode traverses the
    *     DOM tree and passes each node to this function. This function
    *     should return true if the node passed is a node that we look for
    *     or false otherwise. E.g. if we want to find the next text node
    *     in the tree, the function should check if the node passed is of
-   *     nodeType === 3. If
+   *     nodeType === 3. If this parameter is not set, any node found
+   *     will be returned.
    * @param options.constrainingNode
    * @param options.returnMe
    * @returns {null|Node}
