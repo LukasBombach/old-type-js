@@ -50,42 +50,6 @@ function TempDomHelper() {
 
   /**
    *
-   * @param tag
-   * @param typeRange
-   * @param params
-   * @returns {TempDomHelper}
-   * @private
-   */
-  this._inline = function (tag, typeRange, params) {
-
-    //if (!typeRange.containsMultipleElements()) {
-    //  if (typeRange.getStartTagName() !== cmdTag) {
-    //    this._insert(typeRange.startContainer, typeRange.startOffset, typeRange.endOffset);
-    //  } else {
-    //    this._remove(typeRange.startContainer, typeRange.startOffset, typeRange.endOffset);
-    //  }
-    //} else {
-    //  if (typeRange.getStartTagName() !== cmdTag) {
-    //    this._insert(typeRange.startContainer, typeRange.startOffset, typeRange.endOffset);
-    //  } else {
-    //    this._remove(typeRange.startContainer, typeRange.startOffset, typeRange.endOffset);
-    //  }
-    //}
-
-    //if (typeRange.startsOrEndsInTag(tag)) {
-    //}
-
-    if (typeRange.isEnclosedByTag(tag)) {
-      this._remove(tag, typeRange);
-    } else {
-      this._insert(tag, typeRange);
-    }
-
-    return this;
-  };
-
-  /**
-   *
    * @param cmd
    * @param typeRange
    * @param params
@@ -97,37 +61,9 @@ function TempDomHelper() {
     return this;
   };
 
-  this._insertNewNew = function (tag, rangeInfo) {
+  this._inline = function (tag, rangeInfo) {
 
-    // move through elements until endcontainer is reached
-    // or end of parent element is reached
-    // include everything in between
-
-    // then find next sibling of parent (parent's parent etc)
-    // and repeat this method
-
-    // ----
-
-    // other idea
-    // iterate over siblings
-    // if endNode (endContainer) is found, wrap including part of endcontainer ✓
-
-    // if node parent to endNode is found, wrao until before that node and apply this method to first textNode in there
-    // What do with
-
-    // if node parent to end is found, wrap till before that and apply this method to that node
-    // if end of parent is found wrap find next sibling to parent
-
-
-    // ---
-
-    // Immer siblings iterieren und wrappen. bis man den sibling findet der das ding als child hat
-    // -> note: selbst wenn letzteres ein einfaches <u>endNode<u> element ist, wird es als node.contains(endNode) gefunden
-    // Wenn der node.contains(endNode) gefunden wurde, bei seinem ersten ChildNode anfangen und den selben algorithmus ausführen
-
-    // Deswegen sollte _insert irgendwie mit elementen arbeiten und nicht mit textnodes
-    // TextNodes sind auch einfach nur nodes, von daher muss man es nur als sonderfall betrachten wenn currentNode = startContainer
-
+    var startNode, endNode;
 
     // Todo what if start end end node are 2 adjacent text nodes
     if (rangeInfo.startsAndEndsInSameNode()) {
@@ -135,9 +71,25 @@ function TempDomHelper() {
       return this;
     }
 
-    var startNode = rangeInfo.startOffset === 0 ? rangeInfo.startContainer : rangeInfo.startContainer.splitText(rangeInfo.startOffset),
-      endNode     = rangeInfo.endOffset === rangeInfo.endContainer.length ? rangeInfo.endContainer : rangeInfo.endContainer.splitText(rangeInfo.endOffset).previousSibling,
-      currentNode = startNode,
+    if (rangeInfo.startOffset === 0) {
+      startNode = rangeInfo.startContainer;
+    } else {
+      startNode = rangeInfo.startContainer.splitText(rangeInfo.startOffset);
+    }
+
+    if (rangeInfo.endOffset === rangeInfo.endContainer.length) {
+      endNode = rangeInfo.endContainer;
+    } else {
+      endNode = rangeInfo.endContainer.splitText(rangeInfo.endOffset).previousSibling;
+    }
+
+    this._wrapInline(tag, startNode, endNode);
+
+  };
+
+  this._wrapInline = function (tag, startNode, endNode) {
+
+    var currentNode = startNode,
       nodesToWrap = [];
 
     do {
@@ -157,159 +109,6 @@ function TempDomHelper() {
     if (currentNode.contains(endNode)) {
       this._insertNewNew(tag, rangeInfo);
     }
-  };
-
-  /**
-   * Todo Aufschreiben: Technik an Virtual Dom angelehnt, möglichst wenige operations
-   *
-   * @param tag
-   * @param rangeInfo
-   * @returns {string}
-   * @private
-   */
-  this._insertOperations = function (tag, rangeInfo) {
-
-    var startContainer = rangeInfo.startContainer,
-      startOffset      = rangeInfo.startOffset,
-      endContainer     = rangeInfo.endContainer,
-      endOffset        = rangeInfo.endOffset,
-      mergeNodes       = [],
-      addNode;
-
-    if (startContainer === endContainer) {
-      if (rangeInfo.endTagIs(tag)) {
-        return 'Tag rangeInfo.endTag()';
-      }
-      return '(endOffset === endContainer.length) ? endContainer : endContainer.splitText(endOffset).previousSibling';
-    }
-
-    if (rangeInfo.startTagIs(tag)) {
-      addNode = "Tag rangeInfo.getStartElement()";
-    } else {
-      addNode = 'New tag at startContainer, startOffset, startContainer.length';
-    }
-
-    do {
-      mergeNodes.push(addNode);
-      addNode = addNode.nextSibling;
-    } while (addNode.nextSibling !== null && !addNode.nextSibling.contains(endContainer));
-
-    if (addNode.nextSibling.contains(endContainer)) {
-      mergeNodes.push(this._insertOperations());
-    }
-
-    if (addNode.nextSibling === null) {
-
-    }
-
-  };
-
-  /**
-   * Todo Aufschreiben: Technik an Virtual Dom angelehnt, möglichst wenige operations
-   *
-   * @param tag
-   * @param rangeInfo
-   * @returns {string}
-   * @private
-   */
-  this._insertNew = function (tag, rangeInfo) {
-
-    var startContainer = rangeInfo.startContainer,
-      startOffset      = rangeInfo.startOffset,
-      endContainer     = rangeInfo.endContainer,
-      endOffset        = rangeInfo.endOffset,
-      endTextNode      = (endOffset === endContainer.length) ? endContainer : endContainer.splitText(endOffset).previousSibling,
-      startTag,
-      sibling,
-      wrapTags = [];
-
-    if (startContainer === endContainer) {
-      return 'New tag at startContainer, startOffset, endOffset';
-    }
-
-    if (rangeInfo.startTagIs(tag)) {
-      startTag = sibling = rangeInfo.getStartElement();
-    } else {
-      startTag = sibling = this._insertInTextNode(tag, startContainer, startOffset, startContainer.length);
-    }
-
-    while (sibling = sibling.nextSibling) {
-
-      if (sibling === endTextNode) {
-        wrapTags.push(sibling);
-        break;
-      } else if (sibling.contains(endContainer)) {
-        break;
-      } else {
-        wrapTags.push(sibling);
-      }
-    }
-
-    return DomUtil.moveElementsTo(startTag, wrapTags);
-
-
-  };
-
-  /**
-   *
-   * @param tag
-   * @param rangeInfo
-   * @returns {*}
-   * @private
-   */
-  this._insert = function (tag, rangeInfo) {
-
-    var startContainer = rangeInfo.startContainer,
-      startOffset = rangeInfo.startOffset,
-      endContainer = rangeInfo.endContainer,
-      endOffset = rangeInfo.endOffset,
-      startTag,
-      sibling,
-      wrapTags = [],
-      nextTextNode;
-
-    if (startContainer === endContainer) {
-      this._insertInTextNode(tag, startContainer, startOffset, endOffset);
-      return this;
-    }
-
-    if (rangeInfo.startTagIs(tag)) {
-      startTag = sibling = rangeInfo.getStartElement();
-    } else {
-      startTag = sibling = this._insertInTextNode(tag, startContainer, startOffset, startContainer.length);
-    }
-
-    while (true) {
-      if (sibling.nextSibling !== null || sibling.nextSibling === endContainer) {
-        wrapTags.push(sibling);
-      } else {
-        break;
-      }
-    }
-
-    while (sibling.nextSibling !== null && !sibling.nextSibling.contains(endContainer)) {
-      sibling = sibling.nextSibling;
-      wrapTags.push(sibling);
-    }
-
-    this._extendTagTo(startTag, wrapTags);
-
-    //if (sibling && sibling.contains(endContainer)) {
-    //  firstTextNode = DomUtil.firstTextNode(sibling);
-    //  this._insert(tag, new RangeInfo(firstTextNode, 0, endContainer, endOffset));
-    //}
-
-    nextTextNode = DomUtil.nextTextNode(sibling);
-    this._insert(tag, new RangeInfo(nextTextNode, 0, endContainer, endOffset));
-
-
-    // create start node
-    // while next node
-    // if contains endNode
-      // go in recursively
-
-
-    return this;
   };
 
   /**
