@@ -34,30 +34,8 @@ function TempDomHelper() {
    * @returns {TempDomHelper}
    */
   this.cmd = function (tag, typeRange, params) {
-
-    // Stop on unknown tags
-    if (this._tags[tag] === undefined) {
-      console.debug('Tag "' + tag + '" not implemented');
-      return this;
-    }
-
-    // Call command handler for either inline or block commands
-    var handler = this._tags[tag] === this._COMMAND_TYPE_INLINE ? '_inline' : '_block';
+    var handler = this._handlerFor(tag);
     this[handler].apply(this, arguments);
-
-    return this;
-  };
-
-  /**
-   *
-   * @param cmd
-   * @param typeRange
-   * @param params
-   * @returns {*}
-   * @private
-   */
-  this._block = function (cmd, typeRange, params) {
-
     return this;
   };
 
@@ -68,7 +46,7 @@ function TempDomHelper() {
    * @returns {*}
    * @private
    */
-  this._inline = function (tag, rangeInfo) {
+  this.inline = function (tag, rangeInfo) {
 
     var startNode, endNode;
 
@@ -96,7 +74,41 @@ function TempDomHelper() {
   };
 
   /**
-   * 
+   *
+   * @param cmd
+   * @param typeRange
+   * @param params
+   * @returns {*}
+   * @private
+   */
+  this.block = function (cmd, typeRange, params) {
+
+    return this;
+  };
+
+  /**
+   *
+   * @param tag
+   * @returns {*}
+   * @private
+   */
+  this._handlerFor = function (tag) {
+
+    if (this._tags[tag] === this._TYPE_INLINE) {
+      return 'inline';
+    }
+
+    if (this._tags[tag] === this._TYPE_BLOCK) {
+      return 'block';
+    }
+
+    console.debug('Tag "' + tag + '" not implemented');
+    return '_noop';
+
+  };
+
+  /**
+   *
    * @param tag
    * @param startNode
    * @param endNode
@@ -165,6 +177,16 @@ function TempDomHelper() {
    */
   this._removeFromTextNode = function (tag, textNode, start, end) {
 
+    return this;
+  };
+
+  /**
+   * No op multi-puprose handler
+   *
+   * @returns {*}
+   * @private
+   */
+  this._noop = function () {
     return this;
   };
 
