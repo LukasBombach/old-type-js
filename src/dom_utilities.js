@@ -94,4 +94,8 @@ DomUtilities.isTextNodeWithContents = function (node) {
   return node.nodeType === DomUtilities._TEXT_NODE && /[^\t\n\r ]/.test(node.textContent);
 };
 
+DomUtilities.containsButIsNot = function (a, b) {
+  return a !== b && a.contains(b);
+};
+
 module.exports = DomUtilities;

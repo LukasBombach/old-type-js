@@ -99,19 +99,6 @@ function TempDomHelper() {
 
   this._insertNewNew = function(tag, rangeInfo) {
 
-    var startContainer = rangeInfo.startContainer,
-      startOffset      = rangeInfo.startOffset,
-      endContainer     = rangeInfo.endContainer,
-      endOffset        = rangeInfo.endOffset;
-
-    if (startContainer === endContainer) {
-      this._insertInTextNode(tag, startContainer, startOffset, endOffset);
-      return this;
-    }
-
-    var startNewTagAtConainer = startContainer,
-      startNewTagAtOffset = startOffset;
-
     // move through elements until endcontainer is reached
     // or end of parent element is reached
     // include everything in between
@@ -141,16 +128,32 @@ function TempDomHelper() {
     // Deswegen sollte _insert irgendwie mit elementen arbeiten und nicht mit textnodes
     // TextNodes sind auch einfach nur nodes, von daher muss man es nur als sonderfall betrachten wenn currentNode = startContainer
 
+    var startContainer = rangeInfo.startContainer,
+      startOffset      = rangeInfo.startOffset,
+      endContainer     = rangeInfo.endContainer,
+      endOffset        = rangeInfo.endOffset,
+      currentNode      = startContainer,
+      wrap             = [];
+
     if (startContainer === endContainer) {
       this._insertInTextNode(tag, startContainer, startOffset, endOffset);
       return this;
     }
 
-    var sibling = startContainer;
+    do {
 
-    //  while()
+      if (currentNode === startContainer) {
+        currentNode = currentNode.splitText(startOffset);
+      }
 
+      if (currentNode === endContainer) {
+        currentNode = endContainer.splitText(endOffset).previousSibling;
+      }
 
+      wrap.push(currentNode);
+      currentNode = currentNode.nextSibling;
+
+    } while (currentNode && DomUtil.containsButIsNot(currentNode, endContainer));
 
   };
 
