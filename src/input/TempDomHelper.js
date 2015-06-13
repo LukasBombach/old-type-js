@@ -123,7 +123,7 @@ function TempDomHelper() {
     // The node where we stopped contains the endNode. We wrap up what
     // we have and apply this algorithm recursively to the contents of
     // that node
-    } else if (currentNode.contains(endNode)) {
+    } else if (currentNode && currentNode.contains(endNode)) {
       DomUtil.wrap(tag, nodesToWrap);
       this._insertNewNew(tag, currentNode.firstChild, endNode);
 
