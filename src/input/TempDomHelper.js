@@ -48,28 +48,34 @@ function TempDomHelper() {
    */
   this.inline = function (tag, rangeInfo) {
 
+    // Required variables
     var startNode, endNode;
 
+    // Create tag and finish if a singe text node is selected
     // Todo what if start end end node are 2 adjacent text nodes
     if (rangeInfo.startsAndEndsInSameNode()) {
       this._insertInTextNode(tag, rangeInfo.startContainer, rangeInfo.startOffset, rangeInfo.endOffset);
       return this;
     }
 
+    // Create new text node including the selected text for processing in wrap method (begin of selection)
     if (rangeInfo.startOffset === 0) {
       startNode = rangeInfo.startContainer;
     } else {
       startNode = rangeInfo.startContainer.splitText(rangeInfo.startOffset);
     }
 
+    // Create new text node including the selected text for processing in wrap method (end of selection)
     if (rangeInfo.endOffset === rangeInfo.endContainer.length) {
       endNode = rangeInfo.endContainer;
     } else {
       endNode = rangeInfo.endContainer.splitText(rangeInfo.endOffset).previousSibling;
     }
 
+    // Wrap nodes from startNode to endNode in new tag
     this._wrapInline(tag, startNode, endNode);
 
+    // Chaining
     return this;
   };
 
