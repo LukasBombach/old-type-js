@@ -94,22 +94,49 @@ function DomUtilities() {
 
   /**
    *
+   * (Modified) from
+   * http://stackoverflow.com/questions/3337587/wrapping-a-set-of-dom-elements-using-javascript/13169465#13169465
+   *
    * @param tag
-   * @param nodesToWrap
+   * @param elms
    * @returns {DomUtilities}
    */
-  this.wrap = function (tag, nodesToWrap) {
+  this.wrap = function (tag, elms) {
 
-    var i;
+    // Even out parameters
+    elms  = elms.length ? elms : [elms];
 
-    if (!Array.isArray(nodesToWrap)) {
-      nodesToWrap = [nodesToWrap];
+    // Prepare vars and cache the current parent
+    // and sibling of the first element.
+    var el    = elms[0],
+      parent  = el.parentNode,
+      sibling = el.nextSibling,
+      wrapper = document.createElement(tag),
+      i;
+
+    // Remove the tag we want to wrap from contents
+    // so we don't have the same tag nested
+    for (i = 0; i < elms.length; i += 1) {
+      this.removeTag(elms[i], tag, true);
     }
 
-    for (i = 0; i < nodesToWrap.length; i += 1) {
-      this.removeTag(nodesToWrap[i], tag, true);
+    // Move all elements to the wrapper. Each element is
+    // automatically removed from its current parent and
+    // from the elms array.
+    while (elms.length) {
+      wrapper.appendChild(elms[0]);
     }
 
+    // If the first element had a sibling, insert the wrapper before the
+    // sibling to maintain the HTML structure; otherwise, just append it
+    // to the parent.
+    if (sibling) {
+      parent.insertBefore(wrapper, sibling);
+    } else {
+      parent.appendChild(wrapper);
+    }
+
+    // Chaining
     return this;
   };
 
