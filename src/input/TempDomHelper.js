@@ -102,27 +102,40 @@ function TempDomHelper() {
    */
   this._wrapInline = function (tag, startNode, endNode) {
 
+    // Required variables
     var currentNode = startNode,
       nodesToWrap = [];
 
+    // We iterate through all siblings until we found the end of this
+    // containing node or we found a node that is the endNode or contains
+    // the endNode
     do {
       nodesToWrap.push(currentNode);
       currentNode = currentNode.nextSibling;
     } while (currentNode && !currentNode.contains(endNode));
 
-    // We found the endNode and can stop this algorithm
+    // The node where we stopped is the endNode. We can include it in
+    // the wrapped nodes and stop this algorithm
     if (currentNode === endNode) {
       nodesToWrap.push(currentNode);
       DomUtil.wrap(tag, nodesToWrap);
-      return this;
-    }
 
-    DomUtil.wrap(tag, nodesToWrap);
+    // The node where we stopped contains the endNode. We wrap up what
+    // we have and apply this algorithm recursively to the contents of
+    // that node
+    } else if (currentNode.contains(endNode)) {
+      DomUtil.wrap(tag, nodesToWrap);
+      this._insertNewNew(tag, currentNode.firstChild, endNode);
 
-    if (currentNode.contains(endNode)) {
+    // We have reached the last element of the containing node. We find
+    // the next element in the document flow and apply this algorithm
+    // recursively to that node
+    } else if (currentNode === null) {
+      DomUtil.wrap(tag, nodesToWrap);
       this._insertNewNew(tag, currentNode.firstChild, endNode);
     }
 
+    // Chaining
     return this;
   };
 
