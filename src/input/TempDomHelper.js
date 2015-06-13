@@ -135,8 +135,8 @@ function TempDomHelper() {
       return this;
     }
 
-    var startNode = rangeInfo.startContainer.splitText(rangeInfo.startOffset),
-      endNode     = rangeInfo.endContainer.splitText(rangeInfo.endOffset).previousSibling,
+    var startNode = rangeInfo.startOffset === 0 ? rangeInfo.startContainer : rangeInfo.startContainer.splitText(rangeInfo.startOffset),
+      endNode     = rangeInfo.endOffset === rangeInfo.endContainer.length ? rangeInfo.endContainer : rangeInfo.endContainer.splitText(rangeInfo.endOffset).previousSibling,
       currentNode = startNode,
       nodesToWrap = [];
 
