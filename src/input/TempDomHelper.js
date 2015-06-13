@@ -138,12 +138,18 @@ function TempDomHelper() {
     var startNode = rangeInfo.startContainer.splitText(rangeInfo.startOffset),
       endNode     = rangeInfo.endContainer.splitText(rangeInfo.endOffset).previousSibling,
       currentNode = startNode,
-      wrap        = [];
+      nodesToWrap = [];
 
     do {
-      wrap.push(currentNode);
+      nodesToWrap.push(currentNode);
       currentNode = currentNode.nextSibling;
     } while (currentNode && !currentNode.contains(endNode));
+
+    if (currentNode === endNode) {
+      nodesToWrap.push(currentNode);
+    }
+
+    DomUtil.wrap(tag, nodesToWrap);
 
   };
 

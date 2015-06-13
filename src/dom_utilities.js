@@ -94,8 +94,37 @@ DomUtilities.isTextNodeWithContents = function (node) {
   return node.nodeType === DomUtilities._TEXT_NODE && /[^\t\n\r ]/.test(node.textContent);
 };
 
-DomUtilities.containsButIsNot = function (a, b) {
-  return a !== b && a.contains(b);
+/**
+ *
+ * @param tag
+ * @param nodesToWrap
+ * @returns {DomUtilities}
+ */
+DomUtilities.wrap = function (tag, nodesToWrap) {
+
+  var i;
+
+  if (!Array.isArray(nodesToWrap)) {
+    nodesToWrap = [nodesToWrap];
+  }
+
+  for (i = 0; i < nodesToWrap.length; i += 1) {
+    DomUtilities.removeTag(nodesToWrap[i], tag, true);
+  }
+
+  return this;
+};
+
+DomUtilities.unwrap = function (el) {
+
+  // todo should merge newly adjacent text nodes
+
+};
+
+DomUtilities.removeTag = function (el, tag, deep) {
+
+
+
 };
 
 module.exports = DomUtilities;
