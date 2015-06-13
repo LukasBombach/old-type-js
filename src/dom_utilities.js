@@ -171,15 +171,18 @@ function DomUtilities() {
       next   = el.nextSibling,
       parent = el.parentNode;
 
-    if (this.isTextNode(prev, el.firstChild)) {
-      prev.nodeValue += el.firstChild.nodeValue;
-      el.parentNode.removeChild(el.firstChild);
-    }
+    // Commented out in favour of normalize()
+    // Todo decide to use normalize or my own methods
 
-    if (this.isTextNode(next, el.lastChild)) {
-      next.nodeValue = el.lastChild.nodeValue + next.nodeValue;
-      el.parentNode.removeChild(el.lastChild);
-    }
+    //if (this.isTextNode(prev, el.firstChild)) {
+    //  prev.nodeValue += el.firstChild.nodeValue;
+    //  el.parentNode.removeChild(el.firstChild);
+    //}
+
+    //if (this.isTextNode(next, el.lastChild)) {
+    //  next.nodeValue = el.lastChild.nodeValue + next.nodeValue;
+    //  el.parentNode.removeChild(el.lastChild);
+    //}
 
     if (next) {
       while (el.childNodes.length) {
@@ -190,6 +193,9 @@ function DomUtilities() {
         parent.appendChild(el.firstChild);
       }
     }
+
+    parent.removeChild(el);
+    parent.normalize();
 
     return this;
   };
