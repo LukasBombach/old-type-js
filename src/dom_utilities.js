@@ -76,8 +76,7 @@ function DomUtilities() {
     }
 
     return null;
-
-
+    
   };
 
   /**
