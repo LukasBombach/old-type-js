@@ -123,7 +123,19 @@ DomUtilities.unwrap = function (el) {
 
 DomUtilities.removeTag = function (el, tag, deep) {
 
+  var i;
 
+  if (deep && el.children.length) {
+    for (i = 0; i < el.children.length; i += 1) {
+      DomUtilities.removeTag(el.children[i], tag, deep);
+    }
+  }
+
+  if (el.tagName && el.tagName.toLowerCase() === el.toLowerCase()) {
+    DomUtilities.unwrap(el);
+  }
+
+  return this;
 
 };
 
