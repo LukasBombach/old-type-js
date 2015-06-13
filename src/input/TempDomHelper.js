@@ -89,27 +89,6 @@ function TempDomHelper() {
   /**
    *
    * @param tag
-   * @returns {*}
-   * @private
-   */
-  this._handlerFor = function (tag) {
-
-    if (this._tags[tag] === this._TYPE_INLINE) {
-      return 'inline';
-    }
-
-    if (this._tags[tag] === this._TYPE_BLOCK) {
-      return 'block';
-    }
-
-    console.debug('Tag "' + tag + '" not implemented');
-    return '_noop';
-
-  };
-
-  /**
-   *
-   * @param tag
    * @param startNode
    * @param endNode
    * @returns {*}
@@ -178,6 +157,27 @@ function TempDomHelper() {
   this._removeFromTextNode = function (tag, textNode, start, end) {
 
     return this;
+  };
+
+  /**
+   *
+   * @param tag
+   * @returns {*}
+   * @private
+   */
+  this._handlerFor = function (tag) {
+
+    if (this._tags[tag] === this._TYPE_INLINE) {
+      return 'inline';
+    }
+
+    if (this._tags[tag] === this._TYPE_BLOCK) {
+      return 'block';
+    }
+
+    console.debug('Tag "' + tag + '" not implemented');
+    return '_noop';
+
   };
 
   /**
