@@ -81,8 +81,26 @@ function DomUtilities() {
   };
 
   /**
+   *
+   * @param {...Node} nodes
+   * @returns {boolean}
+   */
+  this.isTextNode = function (nodes) {
+    var i;
+    nodes = arguments.length ? arguments : [arguments];
+    for (i = 0; i < nodes.length; i += 1) {
+      if (nodes[i] && nodes[i].nodeType !== this._TEXT_NODE) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  /**
    * Returns true if a give node is a text node and its contents is not
    * entirely whitespace.
+   *
+   * Todo allow infinite arguments just like isTextNode
    *
    * @param {Node} node The node to be checked.
    * @returns {boolean}
@@ -97,6 +115,7 @@ function DomUtilities() {
    *
    * (Modified) from
    * http://stackoverflow.com/questions/3337587/wrapping-a-set-of-dom-elements-using-javascript/13169465#13169465
+   * https://gist.github.com/datchley/11383482
    *
    * @param tag
    * @param elms
@@ -121,13 +140,6 @@ function DomUtilities() {
       this.removeTag(elms[i], tag, true);
     }
 
-    // Move all elements to the wrapper. Each element is
-    // automatically removed from its current parent and
-    // from the elms array.
-    while (elms.length) {
-      wrapper.appendChild(elms[0]);
-    }
-
     // If the first element had a sibling, insert the wrapper before the
     // sibling to maintain the HTML structure; otherwise, just append it
     // to the parent.
@@ -137,18 +149,47 @@ function DomUtilities() {
       parent.appendChild(wrapper);
     }
 
+    // Move all elements to the wrapper. Each element is
+    // automatically removed from its current parent and
+    // from the elms array.
+    while (elms.length) {
+      wrapper.appendChild(elms[0]);
+    }
+
     // Chaining
     return this;
   };
 
   /**
    *
-   * @param el
+   * @param {Node} el
    * @returns {DomUtilities}
    */
   this.unwrap = function (el) {
 
-    // todo should merge newly adjacent text nodes
+    var prev = el.previousSibling,
+      next   = el.nextSibling,
+      parent = el.parentNode;
+
+    if (this.isTextNode(prev, el.firstChild)) {
+      prev.nodeValue += el.firstChild.nodeValue;
+      el.parentNode.removeChild(el.firstChild);
+    }
+
+    if (this.isTextNode(next, el.lastChild)) {
+      next.nodeValue = el.lastChild.nodeValue + next.nodeValue;
+      el.parentNode.removeChild(el.lastChild);
+    }
+
+    if (next) {
+      while (el.childNodes.length) {
+        parent.insertBefore(el.lastChild, next);
+      }
+    } else {
+      while (el.childNodes.length) {
+        parent.appendChild(el.firstChild);
+      }
+    }
 
     return this;
   };
@@ -166,9 +207,9 @@ function DomUtilities() {
     var i;
 
     // Recursively remove the given tag from the elements children
-    if (deep && el.children.length) {
-      for (i = 0; i < el.children.length; i += 1) {
-        this.removeTag(el.children[i], tag, deep);
+    if (deep && el.childNodes.length) {
+      for (i = 0; i < el.childNodes.length; i += 1) {
+        this.removeTag(el.childNodes[i], tag, deep);
       }
     }
 
