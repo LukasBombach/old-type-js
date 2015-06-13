@@ -120,7 +120,7 @@ function TempDomHelper() {
     DomUtil.wrap(tag, nodesToWrap);
 
     if (currentNode.contains(endNode)) {
-      this._insertNewNew(tag, rangeInfo);
+      this._insertNewNew(tag, currentNode.firstChild, endNode);
     }
 
     return this;
