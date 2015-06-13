@@ -61,6 +61,13 @@ function TempDomHelper() {
     return this;
   };
 
+  /**
+   *
+   * @param tag
+   * @param rangeInfo
+   * @returns {*}
+   * @private
+   */
   this._inline = function (tag, rangeInfo) {
 
     var startNode, endNode;
@@ -85,8 +92,17 @@ function TempDomHelper() {
 
     this._wrapInline(tag, startNode, endNode);
 
+    return this;
   };
 
+  /**
+   * 
+   * @param tag
+   * @param startNode
+   * @param endNode
+   * @returns {*}
+   * @private
+   */
   this._wrapInline = function (tag, startNode, endNode) {
 
     var currentNode = startNode,
@@ -109,6 +125,8 @@ function TempDomHelper() {
     if (currentNode.contains(endNode)) {
       this._insertNewNew(tag, rangeInfo);
     }
+
+    return this;
   };
 
   /**
