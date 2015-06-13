@@ -30,9 +30,19 @@ function DomUtilities() {
    *     in the tree, the function should check if the node passed is of
    *     nodeType === 3. If this parameter is not set, any node found
    *     will be returned.
-   * @param options.constrainingNode
-   * @param options.returnMe
-   * @returns {null|Node}
+   * @param {Node} [options.constrainingNode] While traversing the DOM,
+   *     this method will check nodes' parents and parents' parents. By
+   *     passing a DOM node as this parameter, traversing up will stop at
+   *     this node and return null. This is useful when you want to permit
+   *     traversing outside the editor's root node.
+   * @param {boolean} [options.returnMe] This will determine that if the
+   *     search criteria passed as options.filterFunction applies to the
+   *     node passed as first argument, that node will be returned
+   *     (instead of starting to search after this node). This is mainly
+   *     used internally (by recursive calls of this function).
+   * @returns {null|Node} The next node in the DOM tree found or null
+   *     if none is found for the options.filterFunction criteria or
+   *     options.constrainingNode has been hit.
    */
   this.nextNode = function (node, options) {
 
@@ -40,21 +50,23 @@ function DomUtilities() {
 
     var parent = node.parentNode;
 
-    if (options.returnMe === true && this.isTextNodeWithContents(node)) {
+    if (options.returnMe === true && (!options.filterFunction || options.filterFunction(node))) {
       return node;
     }
 
+    options.returnMe = true;
+
     if (node.childNodes.length) {
-      return this.nextTextNode(node.childNodes[0], true, constrainingNode);
+      return this.nextNode(node.childNodes[0], options);
     }
 
     if (node.nextSibling !== null) {
-      return this.nextTextNode(node.nextSibling, true, constrainingNode);
+      return this.nextNode(node.nextSibling, options);
     }
 
-    while (parent !== constrainingNode) {
+    while (parent !== options.constrainingNode) {
       if (parent.nextSibling !== null) {
-        return this.nextTextNode(parent.nextSibling, true, constrainingNode);
+        return this.nextNode(parent.nextSibling, options);
       }
       parent = parent.parentNode;
     }
