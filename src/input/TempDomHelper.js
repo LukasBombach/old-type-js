@@ -106,9 +106,9 @@ function TempDomHelper(constrainingNode) {
 
   /**
    *
-   * @param tag
-   * @param startNode
-   * @param endNode
+   * @param {String} tag
+   * @param {Node} startNode
+   * @param {Node} endNode
    * @returns {TempDomHelper}
    * @private
    */
@@ -116,11 +116,13 @@ function TempDomHelper(constrainingNode) {
 
     // Required variables
     var currentNode = startNode,
+      parent = currentNode.parentNode,
       nodesToWrap = [];
 
     // We iterate through all siblings until we found the end of this
     // containing node or we found a node that is the endNode or contains
     // the endNode
+    // Todo What if startNode.contains(endNode) - is that even possible? yes in recursion (first else if)
     do {
       nodesToWrap.push(currentNode);
       currentNode = currentNode.nextSibling;
@@ -137,14 +139,16 @@ function TempDomHelper(constrainingNode) {
     // that node
     } else if (currentNode && currentNode.contains(endNode)) {
       DomUtil.wrap(tag, nodesToWrap);
-      this._insertNewNew(tag, currentNode.firstChild, endNode);
+      this._wrapInline(tag, currentNode.firstChild, endNode);
 
     // We have reached the last element of the containing node. We find
     // the next element in the document flow and apply this algorithm
     // recursively to that node
     } else if (currentNode === null) {
       DomUtil.wrap(tag, nodesToWrap);
-      this._insertNewNew(tag, currentNode.firstChild, endNode);
+      if (parent !== null) {
+        this._wrapInline(tag, DomUtil.nextNode(parent), endNode);
+      }
     }
 
     // Chaining

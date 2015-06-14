@@ -99,6 +99,30 @@ function RangeInfo(rangeOrStartContainer, startOffset, endContainer, endOffset) 
     return this.startContainer !== this.endContainer;
   };
 
+  /**
+   *
+   * @returns {Node}
+   */
+  this.isolateStartNode = function () {
+    if (this.startOffset !== 0) {
+      this.startContainer = this.startContainer.splitText(this.startOffset);
+      this.startOffset = 0;
+    }
+    return this.startContainer;
+  };
+
+  /**
+   * 
+   * @returns {*|Node}
+   */
+  this.isolateEndNode = function () {
+    if (this.endOffset !== this.endContainer.length) {
+      this.endContainer = this.endContainer.splitText(this.endOffset).previousSibling;
+      this.endOffset = this.endContainer.length;
+    }
+    return this.endContainer;
+  };
+
   //this.isEnclosedByTag = function () {
   //
   //};
