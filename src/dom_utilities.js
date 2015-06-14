@@ -171,6 +171,16 @@ function DomUtilities() {
   };
 
   /**
+   *
+   * @param {Node} container
+   * @param {Node} node
+   * @returns {boolean}
+   */
+  this.containsButIsnt = function(container, node) {
+    return container !== node && container.contains(node);
+  };
+
+  /**
    * Todo Maybe remove inline comments as they are here for my personal understanding rather than anything else
    *
    * (Modified) from
