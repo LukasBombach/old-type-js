@@ -31,8 +31,7 @@ function TempDomHelper() {
    * @returns {TempDomHelper}
    */
   this.cmd = function (tag, typeRange, params) {
-    var handler = this._handlerFor(tag);
-    this[handler].apply(this, arguments);
+    this._handlerFor(tag).apply(this, arguments);
     return this;
   };
 
@@ -179,7 +178,7 @@ function TempDomHelper() {
    * Todo Maybe use fallback http://stackoverflow.com/a/2881008/1183252 if tag is not found
    *
    * @param tag
-   * @returns {*}
+   * @returns {Function} - this.inline, this.block or this._noop
    * @private
    */
   this._handlerFor = function (tag) {
@@ -187,22 +186,22 @@ function TempDomHelper() {
     tag = tag.toLowerCase();
 
     if (this._inlineTags.indexOf(tag) > -1) {
-      return 'inline';
+      return this.inline;
     }
 
     if (this._blockTags.indexOf(tag) > -1) {
-      return 'block';
+      return this.block;
     }
 
     console.debug('Tag "' + tag + '" not implemented');
-    return '_noop';
+    return this._noop;
 
   };
 
   /**
-   * No op multi-puprose handler
+   * No op multi-purpose handler
    *
-   * @returns {*}
+   * @returns {TempDomHelper}
    * @private
    */
   this._noop = function () {
