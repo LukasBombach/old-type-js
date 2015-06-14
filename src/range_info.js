@@ -10,19 +10,19 @@
  */
 function RangeInfo(rangeOrStartContainer, startOffset, endContainer, endOffset) {
 
-  // If first param is a Range object, read data from it
-  if (rangeOrStartContainer.startContainer && rangeOrStartContainer.endContainer) {
+  // If 1 param has been passed, param should be a Range object
+  if (arguments.length === 1) {
     this.startContainer = rangeOrStartContainer.startContainer;
-    this.startOffset = rangeOrStartContainer.startOffset;
-    this.endContainer = rangeOrStartContainer.endContainer;
-    this.endOffset = rangeOrStartContainer.endOffset;
+    this.startOffset    = rangeOrStartContainer.startOffset;
+    this.endContainer   = rangeOrStartContainer.endContainer;
+    this.endOffset      = rangeOrStartContainer.endOffset;
 
-  // If 4 params have been passed
-  } else if (rangeOrStartContainer.nodeType === 3 && arguments.length === 4) {
+  // If 4 params have been passed, all data is given individually
+  } else if (arguments.length === 4) {
     this.startContainer = rangeOrStartContainer;
-    this.startOffset = startOffset;
-    this.endContainer = endContainer;
-    this.endOffset = endOffset;
+    this.startOffset    = startOffset;
+    this.endContainer   = endContainer;
+    this.endOffset      = endOffset;
 
   // In case of wrong usage
   } else {
