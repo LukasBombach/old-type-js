@@ -70,10 +70,15 @@ function TempDomHelper(constrainingNode) {
       parent = currentNode.parentNode,
       nodesToWrap = [];
 
+    // No fancy algorithm needed for this case
+    if (startNode === endNode) {
+      DomUtil.wrap(tag, startNode);
+      return this;
+    }
+
     // We iterate through all siblings until we found the end of this
     // containing node or we found a node that is the endNode or contains
     // the endNode
-    // Todo What if startNode.contains(endNode) - is that even possible? yes in recursion (first else if)
     do {
       nodesToWrap.push(currentNode);
       currentNode = currentNode.nextSibling;
