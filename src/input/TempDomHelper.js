@@ -32,14 +32,16 @@ function TempDomHelper() {
   /**
    * Will call either this.inline, this.block or this._noop depending on
    * whether the given tag is an inline or block element or we do not know
-   * this tag yet (the latter would be _noop then and would do nothing).
+   * this tag yet (the latter would call _noop which would utter no action).
    *
-   * @param tag
-   * @param typeRange
-   * @param params
+   * @param {String} tag - The tag that we want to format the text with
+   * @param {RangeInfo} rangeInfo - An object containing data on which part
+   *     of the text to format
+   * @param {...*} params - Any number of arguments that specify attributes
+   *     for the tag
    * @returns {TempDomHelper}
    */
-  this.cmd = function (tag, typeRange, params) {
+  this.cmd = function (tag, rangeInfo, params) {
     this._handlerFor(tag).apply(this, arguments);
     return this;
   };
