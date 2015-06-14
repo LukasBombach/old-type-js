@@ -69,23 +69,18 @@ function TempDomHelper(constrainingNode) {
     var currentNode = startNode,
       parent = currentNode.parentNode,
       nodesToWrap = [];
-
-    // No fancy algorithm needed for this case
-    if (startNode === endNode) {
-      DomUtil.wrap(tag, startNode);
-      return this;
-    }
-
+    
     // We iterate through all siblings until we found the end of this
     // containing node or we found a node that is the endNode or contains
     // the endNode
-    do {
+    while (currentNode && !currentNode.contains(endNode)) {
       nodesToWrap.push(currentNode);
       currentNode = currentNode.nextSibling;
-    } while (currentNode && !currentNode.contains(endNode));
+    }
 
     // The node where we stopped is the endNode. We can include it in
-    // the wrapped nodes and stop this algorithm
+    // the wrapped nodes and stop this algorithm. Note: This will also
+    // happen if the startNode equaled the endNode to begin with
     if (currentNode === endNode) {
       nodesToWrap.push(currentNode);
       DomUtil.wrap(tag, nodesToWrap);
