@@ -5,11 +5,12 @@ var DomUtil = require('../dom_utilities');
 
 /**
  *
+ * @param constrainingNode
  * @constructor
  */
-function TempDomHelper() {
+function TempDomHelper(constrainingNode) {
+  this.constrainingNode = constrainingNode;
 }
-
 
 (function () {
 
