@@ -103,7 +103,7 @@ function RangeInfo(rangeOrStartContainer, startOffset, endContainer, endOffset) 
    *
    * @returns {Node}
    */
-  this.isolateStartNode = function () {
+  this.splitStartNode = function () {
     if (this.startOffset !== 0) {
       this.startContainer = this.startContainer.splitText(this.startOffset);
       this.startOffset = 0;
@@ -112,27 +112,17 @@ function RangeInfo(rangeOrStartContainer, startOffset, endContainer, endOffset) 
   };
 
   /**
-   * 
+   *
    * @returns {*|Node}
    */
-  this.isolateEndNode = function () {
+  this.splitEndNode = function () {
     if (this.endOffset !== this.endContainer.length) {
       this.endContainer = this.endContainer.splitText(this.endOffset).previousSibling;
       this.endOffset = this.endContainer.length;
     }
     return this.endContainer;
   };
-
-  //this.isEnclosedByTag = function () {
-  //
-  //};
-
-  //startsOrEndsInTag : function (tagName) {
-  //  tagName = tagName.toLowerCase();
-  //  return this.getStartTagName() === tagName ||
-  //    this.getEndTagName() === tagName;
-  //}
-
+  
 }).call(RangeInfo.prototype);
 
 
