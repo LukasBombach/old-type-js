@@ -103,7 +103,7 @@ function RangeInfo(rangeOrStartContainer, startOffset, endContainer, endOffset) 
    *
    * @returns {Node}
    */
-  this.splitStartNode = function () {
+  this.splitStartContainer = function () {
     if (this.startOffset !== 0) {
       this.startContainer = this.startContainer.splitText(this.startOffset);
       this.startOffset = 0;
@@ -115,14 +115,14 @@ function RangeInfo(rangeOrStartContainer, startOffset, endContainer, endOffset) 
    *
    * @returns {*|Node}
    */
-  this.splitEndNode = function () {
+  this.splitEndContainer = function () {
     if (this.endOffset !== this.endContainer.length) {
       this.endContainer = this.endContainer.splitText(this.endOffset).previousSibling;
       this.endOffset = this.endContainer.length;
     }
     return this.endContainer;
   };
-  
+
 }).call(RangeInfo.prototype);
 
 

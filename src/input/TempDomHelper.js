@@ -47,7 +47,11 @@ function TempDomHelper(constrainingNode) {
    * @returns {TempDomHelper}
    */
   this.cmd = function (tag, rangeInfo, params) {
-    this._handlerFor(tag).apply(this, arguments);
+    var args;
+    params = Array.prototype.slice.call(arguments, 2);
+    args = [tag, rangeInfo.splitStartContainer(), rangeInfo.splitEndContainer()];
+    args = args.concat(params);
+    this._handlerFor(tag).apply(this, args);
     return this;
   };
 
