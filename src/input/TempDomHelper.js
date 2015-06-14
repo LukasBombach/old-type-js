@@ -69,7 +69,7 @@ function TempDomHelper(constrainingNode) {
     var currentNode = startNode,
       parent = currentNode.parentNode,
       nodesToWrap = [];
-    
+
     // We iterate through all siblings until we found the end of this
     // containing node or we found a node that is the endNode or contains
     // the endNode
