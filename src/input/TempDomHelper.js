@@ -9,22 +9,19 @@ function TempDomHelper() {
 
 (function () {
 
-  this._TYPE_INLINE = 0;
-  this._TYPE_BLOCK = 1;
+  /**
+   *
+   * @type {string[]}
+   * @private
+   */
+  this._inlineTags = ["strong", "em", "u", "s"];
 
-  this._tags = {
-    strong     : this._TYPE_INLINE,
-    em         : this._TYPE_INLINE,
-    u          : this._TYPE_INLINE,
-    s          : this._TYPE_INLINE,
-    h1         : this._TYPE_BLOCK,
-    h2         : this._TYPE_BLOCK,
-    h3         : this._TYPE_BLOCK,
-    h4         : this._TYPE_BLOCK,
-    h5         : this._TYPE_BLOCK,
-    h6         : this._TYPE_BLOCK,
-    blockquote : this._TYPE_BLOCK
-  };
+  /**
+   *
+   * @type {string[]}
+   * @private
+   */
+  this._blockTags  = ["h1", "h2", "h3", "h4", "h5", "h6", "blockquote"];
 
   /**
    *
@@ -186,11 +183,13 @@ function TempDomHelper() {
    */
   this._handlerFor = function (tag) {
 
-    if (this._tags[tag] === this._TYPE_INLINE) {
+    tag = tag.toLowerCase();
+
+    if (this._inlineTags.indexOf(tag) > -1) {
       return 'inline';
     }
 
-    if (this._tags[tag] === this._TYPE_BLOCK) {
+    if (this._blockTags.indexOf(tag) > -1) {
       return 'block';
     }
 
