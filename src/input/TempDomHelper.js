@@ -3,6 +3,10 @@
 var RangeInfo = require('../range_info');
 var DomUtil = require('../dom_utilities');
 
+/**
+ *
+ * @constructor
+ */
 function TempDomHelper() {
 }
 
@@ -50,7 +54,7 @@ function TempDomHelper() {
    *
    * @param tag
    * @param rangeInfo
-   * @returns {*}
+   * @returns {TempDomHelper}
    * @private
    */
   this.inline = function (tag, rangeInfo) {
@@ -91,7 +95,7 @@ function TempDomHelper() {
    * @param cmd
    * @param typeRange
    * @param params
-   * @returns {*}
+   * @returns {TempDomHelper}
    * @private
    */
   this.block = function (cmd, typeRange, params) {
@@ -104,7 +108,7 @@ function TempDomHelper() {
    * @param tag
    * @param startNode
    * @param endNode
-   * @returns {*}
+   * @returns {TempDomHelper}
    * @private
    */
   this._wrapInline = function (tag, startNode, endNode) {
@@ -150,7 +154,7 @@ function TempDomHelper() {
    *
    * @param tag
    * @param typeRange
-   * @returns {*}
+   * @returns {TempDomHelper}
    * @private
    */
   this._remove = function (tag, typeRange) {
@@ -177,7 +181,7 @@ function TempDomHelper() {
    * @param textNode
    * @param start
    * @param end
-   * @returns {*}
+   * @returns {TempDomHelper}
    * @private
    */
   this._removeFromTextNode = function (tag, textNode, start, end) {
@@ -188,8 +192,8 @@ function TempDomHelper() {
   /**
    * Todo Maybe use fallback http://stackoverflow.com/a/2881008/1183252 if tag is not found
    *
-   * @param tag
-   * @returns {Function} - this.inline, this.block or this._noop
+   * @param {String} tag
+   * @returns {inline|block|_noop}
    * @private
    */
   this._handlerFor = function (tag) {
