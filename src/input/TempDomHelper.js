@@ -24,6 +24,9 @@ function TempDomHelper() {
   this._blockTags  = ["h1", "h2", "h3", "h4", "h5", "h6", "blockquote"];
 
   /**
+   * Will call either this.inline, this.block or this._noop depending on
+   * whether the given tag is an inline or block element or we do not know
+   * this tag yet (the latter would be _noop then and would do nothing).
    *
    * @param tag
    * @param typeRange
