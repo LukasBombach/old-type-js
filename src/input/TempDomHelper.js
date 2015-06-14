@@ -10,6 +10,9 @@ function TempDomHelper() {
 (function () {
 
   /**
+   * A list of tags that are displayed inline. We generate different markup
+   * for inline and block tags. We use this array as reference to determine
+   * what kind of markup to generate.
    *
    * @type {string[]}
    * @private
@@ -17,6 +20,9 @@ function TempDomHelper() {
   this._inlineTags = ["strong", "em", "u", "s"];
 
   /**
+   * A list of tags that are displayed as block elements. We generate different
+   * markup for inline and block tags. We use this array as reference to determine
+   * what kind of markup to generate.
    *
    * @type {string[]}
    * @private
