@@ -57,12 +57,64 @@ function TempDomHelper(constrainingNode) {
 
   /**
    *
+   * @param {String} tag
+   * @param {Node} startNode
+   * @param {Node} endNode
+   * @param {...*} params
+   * @returns {TempDomHelper}
+   */
+  this.inline = function (tag, startNode, endNode, params) {
+
+    // Required variables
+    var currentNode = startNode,
+      parent = currentNode.parentNode,
+      nodesToWrap = [];
+
+    // We iterate through all siblings until we found the end of this
+    // containing node or we found a node that is the endNode or contains
+    // the endNode
+    // Todo What if startNode.contains(endNode) - is that even possible? yes in recursion (first else if)
+    do {
+      nodesToWrap.push(currentNode);
+      currentNode = currentNode.nextSibling;
+    } while (currentNode && !currentNode.contains(endNode));
+
+    // The node where we stopped is the endNode. We can include it in
+    // the wrapped nodes and stop this algorithm
+    if (currentNode === endNode) {
+      nodesToWrap.push(currentNode);
+      DomUtil.wrap(tag, nodesToWrap);
+
+      // The node where we stopped contains the endNode. We wrap up what
+      // we have and apply this algorithm recursively to the contents of
+      // that node
+    } else if (currentNode && currentNode.contains(endNode)) {
+      DomUtil.wrap(tag, nodesToWrap);
+      this._wrapInline(tag, currentNode.firstChild, endNode);
+
+      // We have reached the last element of the containing node. We find
+      // the next element in the document flow and apply this algorithm
+      // recursively to that node
+    } else if (currentNode === null) {
+      DomUtil.wrap(tag, nodesToWrap);
+      if (parent !== null) {
+        this._wrapInline(tag, DomUtil.nextNode(parent), endNode);
+      }
+    }
+
+    // Chaining
+    return this;
+
+  };
+
+  /**
+   *
    * @param tag
    * @param rangeInfo
    * @returns {TempDomHelper}
    * @private
    */
-  this.inline = function (tag, rangeInfo) {
+  this.inlineOld = function (tag, rangeInfo) {
 
     // Required variables
     var startNode, endNode;
