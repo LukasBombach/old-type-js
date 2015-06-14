@@ -176,6 +176,7 @@ function TempDomHelper() {
   };
 
   /**
+   * Todo Maybe use fallback http://stackoverflow.com/a/2881008/1183252 if tag is not found
    *
    * @param tag
    * @returns {*}
