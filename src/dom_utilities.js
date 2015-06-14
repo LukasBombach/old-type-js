@@ -76,7 +76,7 @@ function DomUtilities() {
     }
 
     return null;
-    
+
   };
 
   /**
@@ -227,9 +227,10 @@ function DomUtilities() {
    */
   this.unwrap = function (el) {
 
-    var prev = el.previousSibling,
-      next   = el.nextSibling,
-      parent = el.parentNode;
+    var prev     = el.previousSibling,
+      next       = el.nextSibling,
+      parent     = el.parentNode,
+      childNodes = el.childNodes;
 
     // Commented out in favour of normalize()
     // Todo decide to use normalize or my own methods
@@ -245,11 +246,11 @@ function DomUtilities() {
     //}
 
     if (next) {
-      while (el.childNodes.length) {
+      while (childNodes.length) {
         parent.insertBefore(el.lastChild, next);
       }
     } else {
-      while (el.childNodes.length) {
+      while (childNodes.length) {
         parent.appendChild(el.firstChild);
       }
     }
