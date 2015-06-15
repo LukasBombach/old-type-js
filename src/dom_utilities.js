@@ -176,7 +176,7 @@ function DomUtilities() {
    * @param {Node} node
    * @returns {boolean}
    */
-  this.containsButIsnt = function(container, node) {
+  this.containsButIsnt = function (container, node) {
     return container !== node && container.contains(node);
   };
 
