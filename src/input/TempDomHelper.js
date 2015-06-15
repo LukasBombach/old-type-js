@@ -70,20 +70,26 @@ function TempDomHelper(constrainingNode) {
       nodesToWrap   = [startNode],
       endNodeFound  = currentNode === endNode;
 
-    // We iterate through the siblings of the startNode until we added the endNode
-    // or the next node contains the endNode or there are no more next nodes
+    // We iterate through the siblings of the startNode until we found and
+    // added the endNode. We also stop if the next node contains the endNode
+    // or there are no more next nodes
     while (!endNodeFound && currentNode.nextSibling && !DomUtil.containsButIsnt(currentNode.nextSibling, endNode)) {
       currentNode  = currentNode.nextSibling;
       endNodeFound = currentNode === endNode;
       nodesToWrap.push(currentNode);
     }
 
-    // We wrap all the siblings we found
+    // We wrap all the siblings we found, including the startNode
     DomUtil.wrap(tag, nodesToWrap);
 
-    //
+    // If we haven not found the endNode (there are either no more siblings
+    // or the next sibling is parent to the endNode), we recursively apply
+    // this method to the next node in the document flow (which may be the
+    // next node we found contains the endNode or the current node's parent's
+    // sibling (for instance))
+    // Todo improve comment
     if (!endNodeFound) {
-      this._wrapInline(tag, DomUtil.nextNode(currentNode), endNode);
+      this.inline(tag, DomUtil.nextNode(currentNode), endNode);
     }
 
     // The node where we stopped contains the endNode. We wrap up what
