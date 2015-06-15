@@ -91,20 +91,7 @@ function TempDomHelper(constrainingNode) {
     if (!endNodeFound) {
       this.inline(tag, DomUtil.nextNode(currentNode), endNode);
     }
-
-    // The node where we stopped contains the endNode. We wrap up what
-    // we have and apply this algorithm recursively to the contents of
-    // the node where we stopped
-    //if (currentNode && currentNode.contains(endNode)) {
-    //  this._wrapInline(tag, currentNode.firstChild, endNode);
-
-    // We have reached the last element of the containing node. We find
-    // the next element in the document flow and apply this algorithm
-    // recursively to that node
-    //} else if (currentNode && startNode.parentNode && this.constrainingNode !== startNode.parentNode) {
-    //  this._wrapInline(tag, DomUtil.nextNode(parent), endNode);
-    //}
-
+    
     // Chaining
     return this;
 
