@@ -79,27 +79,22 @@ function TempDomHelper(constrainingNode) {
     // We wrap all the siblings we found
     DomUtil.wrap(tag, nodesToWrap);
 
-    // The node where we stopped is the endNode. We can include it in
-    // the wrapped nodes and stop this algorithm. Note: This will also
-    // happen if the startNode equaled the endNode to begin with
-    if (currentNode === endNode) {
-
-      // The node where we stopped contains the endNode. We wrap up what
-      // we have and apply this algorithm recursively to the contents of
-      // the node where we stopped
-    } else if (currentNode && currentNode.contains(endNode)) {
-      DomUtil.wrap(tag, nodesToWrap);
-      this._wrapInline(tag, currentNode.firstChild, endNode);
-
-      // We have reached the last element of the containing node. We find
-      // the next element in the document flow and apply this algorithm
-      // recursively to that node
-    } else if (currentNode === null) {
-      DomUtil.wrap(tag, nodesToWrap);
-      if (parent !== null) {
-        this._wrapInline(tag, DomUtil.nextNode(parent), endNode);
-      }
+    if (currentNode !== endNode) {
+      this._wrapInline(tag, DomUtil.nextNode(currentNode), endNode);
     }
+
+    // The node where we stopped contains the endNode. We wrap up what
+    // we have and apply this algorithm recursively to the contents of
+    // the node where we stopped
+    //if (currentNode && currentNode.contains(endNode)) {
+    //  this._wrapInline(tag, currentNode.firstChild, endNode);
+
+    // We have reached the last element of the containing node. We find
+    // the next element in the document flow and apply this algorithm
+    // recursively to that node
+    //} else if (currentNode && startNode.parentNode && this.constrainingNode !== startNode.parentNode) {
+    //  this._wrapInline(tag, DomUtil.nextNode(parent), endNode);
+    //}
 
     // Chaining
     return this;
