@@ -91,7 +91,7 @@ function TempDomHelper(constrainingNode) {
     if (!endNodeFound) {
       this.inline(tag, DomUtil.nextNode(currentNode), endNode);
     }
-    
+
     // Chaining
     return this;
 
