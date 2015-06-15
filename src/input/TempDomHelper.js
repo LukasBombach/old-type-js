@@ -67,19 +67,22 @@ function TempDomHelper(constrainingNode) {
 
     // Required variables
     var currentNode = startNode,
-      nodesToWrap = [startNode];
+      nodesToWrap   = [startNode],
+      endNodeFound  = currentNode === endNode;
 
-    // We iterate through the siblings of the startNode until we found the
-    // endNode, a node containing the endNode or there are no more siblings
-    while (currentNode !== endNode && currentNode.nextSibling && !DomUtil.containsButIsnt(currentNode.nextSibling, endNode)) {
-      currentNode = currentNode.nextSibling;
+    // We iterate through the siblings of the startNode until we added the endNode
+    // or the next node contains the endNode or there are no more next nodes
+    while (!endNodeFound && currentNode.nextSibling && !DomUtil.containsButIsnt(currentNode.nextSibling, endNode)) {
+      currentNode  = currentNode.nextSibling;
+      endNodeFound = currentNode === endNode;
       nodesToWrap.push(currentNode);
     }
 
     // We wrap all the siblings we found
     DomUtil.wrap(tag, nodesToWrap);
 
-    if (currentNode !== endNode) {
+    //
+    if (!endNodeFound) {
       this._wrapInline(tag, DomUtil.nextNode(currentNode), endNode);
     }
 
