@@ -54,12 +54,15 @@ function DomUtilities() {
    */
   this.nextNode = function (node, options) {
 
+    // If no options parameter has been passed
+    options = options || {};
+
+    // If a node has been passed as options parameter
     if (options.nodeType) {
       options = {constrainingNode: options};
     }
 
-    options = options || {};
-
+    // For future reference
     var parent = node.parentNode;
 
     if (options.returnMe === true && (!options.filterFunction || options.filterFunction(node))) {
