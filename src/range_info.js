@@ -128,8 +128,8 @@ function RangeInfo(rangeOrStartContainer, startOffset, endContainer, endOffset) 
    */
   this.ensureStartNodePrecedesEndNode = function () {
     var isSameNode     = this.startContainer === this.endContainer,
-      startPreceedsEnd = this.startContainer.compareDocumentPosition(this.endContainer) & Node.DOCUMENT_POSITION_FOLLOWING;
-    if (isSameNode || startPreceedsEnd) {
+      startPrecedesEnd = this.startContainer.compareDocumentPosition(this.endContainer) & Node.DOCUMENT_POSITION_FOLLOWING;
+    if (isSameNode || startPrecedesEnd) {
       return true;
     }
     throw new Error('Given startContainer does not precede endContainer.');
