@@ -43,11 +43,16 @@ function DomUtilities() {
    *     passing a DOM node as this parameter, traversing up will stop at
    *     this node and return null. This is useful when you want to permit
    *     traversing outside the editor's root node.
-   * @param {boolean} [options.returnMe] This will determine that if the
-   *     search criteria passed as options.filterFunction applies to the
-   *     node passed as first argument, that node will be returned
-   *     (instead of starting to search after this node). This is mainly
-   *     used internally (by recursive calls of this function).
+   * @param {boolean} [options.returnMe] This should not be passed by the
+   *     programmer, it is used internally for recursive function calls to
+   *     determine if the current node should be returned or not. If the
+   *     programmer passes a node and does *not* pass this argument, the
+   *     node passed will not be considered for returning. After that,
+   *     internally, this will be set to true and be passed on with the
+   *     next node in the DOM to a recursive call. The node then passed to
+   *     this method might be the node we are looking for, so having this
+   *     set to true will return that node (given that the filterFunction
+   *     also returns true for that node)
    * @returns {null|Node} The next node in the DOM tree found or null
    *     if none is found for the options.filterFunction criteria or
    *     options.constrainingNode has been hit.
@@ -65,10 +70,12 @@ function DomUtilities() {
     // For later use
     var parent = node.parentNode;
 
+    // If a node is found in this call, return it, stop the recusion
     if (options.returnMe === true && (!options.filterFunction || options.filterFunction(node))) {
       return node;
     }
 
+    // Programmers should call
     options.returnMe = true;
 
     if (node.childNodes.length) {
