@@ -62,7 +62,7 @@ function DomUtilities() {
       options = {constrainingNode: options};
     }
 
-    // For future reference
+    // For later use
     var parent = node.parentNode;
 
     if (options.returnMe === true && (!options.filterFunction || options.filterFunction(node))) {
