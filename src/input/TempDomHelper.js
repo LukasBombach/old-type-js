@@ -79,7 +79,7 @@ function TempDomHelper(constrainingNode) {
       nodesToWrap.push(currentNode);
     }
 
-    if (DomUtil.containsButIsnt(currentNode, endNode)) {
+    if (currentNode && DomUtil.containsButIsnt(currentNode, endNode)) {
       //this.inline_R(tag, DomUtil.nextNode(currentNode), endNode);
       this.inline_R(tag, currentNode, endNode);
     }
