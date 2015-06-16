@@ -25,8 +25,6 @@ function DomUtilities() {
    * siblings (in that order) to find the next node in the DOM tree as
    * displayed by the document flow.
    *
-   * Todo inline comments to explain code
-   *
    * @param {Node} node - The node from which the search should start
    * @param {Object|Node} [options] - If an object is passed, it should
    *     contain settings determining what node to return, see specifics
@@ -78,14 +76,17 @@ function DomUtilities() {
     // Will make future recursive calls consider to return the nodes passed
     options.returnMe = true;
 
+    // 1. If this node has children, go down the tree
     if (node.childNodes.length) {
       return this.nextNode(node.childNodes[0], options);
     }
 
+    // 2. If this node has siblings, move right in the tree
     if (node.nextSibling !== null) {
       return this.nextNode(node.nextSibling, options);
     }
 
+    // 3. Move up in the node's parents until a parent has a sibling or the constrainingNode is hit
     while (parent !== options.constrainingNode) {
       if (parent.nextSibling !== null) {
         return this.nextNode(parent.nextSibling, options);
@@ -93,6 +94,7 @@ function DomUtilities() {
       parent = parent.parentNode;
     }
 
+    // We have not found a node we were looking for
     return null;
 
   };
