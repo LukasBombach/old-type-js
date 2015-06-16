@@ -63,6 +63,37 @@ function TempDomHelper(constrainingNode) {
    * @param {...*} params
    * @returns {TempDomHelper}
    */
+  this.inline_R = function (tag, startNode, endNode, params) {
+
+    var currentNode = startNode,
+      nodesToWrap   = [];
+
+    while (currentNode && !currentNode.contains(endNode)) {
+      nodesToWrap.push(currentNode);
+      currentNode  = currentNode.nextSibling;
+    }
+
+    if (currentNode === endNode) {
+      nodesToWrap.push(currentNode);
+    }
+
+    if (currentNode === null) {
+      this.inline_R(tag, DomUtil.nextNode(startNode.parentNode.lastChild), endNode);
+    }
+
+    return this;
+
+  };
+
+
+    /**
+   *
+   * @param {String} tag
+   * @param {Node} startNode
+   * @param {Node} endNode
+   * @param {...*} params
+   * @returns {TempDomHelper}
+   */
   this.inline = function (tag, startNode, endNode, params) {
 
     // Required variables
