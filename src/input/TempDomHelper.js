@@ -64,7 +64,7 @@ function TempDomHelper(constrainingNode) {
    * @param {...*} params
    * @returns {TempDomHelper}
    */
-  this.inline_R = function (tag, startNode, endNode, params) {
+  this.inline = function (tag, startNode, endNode, params) {
 
     var currentNode = startNode,
       nodesToWrap   = [],
@@ -80,12 +80,12 @@ function TempDomHelper(constrainingNode) {
     }
 
     if (currentNode && DomUtil.containsButIsnt(currentNode, endNode)) {
-      this.inline_R(tag, currentNode.firstChild, endNode);
+      this.inline(tag, currentNode.firstChild, endNode);
     }
 
     if (currentNode === null) {
       nextNode = DomUtil.nextNode(startNode.parentNode.lastChild, this.constrainingNode);
-      this.inline_R(tag, nextNode, endNode);
+      this.inline(tag, nextNode, endNode);
     }
 
     DomUtil.wrap(tag, nodesToWrap);
@@ -94,8 +94,7 @@ function TempDomHelper(constrainingNode) {
 
   };
 
-
-    /**
+  /**
    *
    * @param {String} tag
    * @param {Node} startNode
@@ -103,7 +102,7 @@ function TempDomHelper(constrainingNode) {
    * @param {...*} params
    * @returns {TempDomHelper}
    */
-  this.inline = function (tag, startNode, endNode, params) {
+  this.inline_Fail = function (tag, startNode, endNode, params) {
 
     // Required variables
     var currentNode = startNode,
@@ -129,7 +128,7 @@ function TempDomHelper(constrainingNode) {
     // sibling (for instance))
     // Todo improve comment
     if (!endNodeFound) {
-      this.inline(tag, DomUtil.nextNode(currentNode), endNode);
+      this.inline_Fail(tag, DomUtil.nextNode(currentNode), endNode);
     }
 
     // Chaining
