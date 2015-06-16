@@ -96,145 +96,6 @@ function TempDomHelper(constrainingNode) {
 
   /**
    *
-   * @param {String} tag
-   * @param {Node} startNode
-   * @param {Node} endNode
-   * @param {...*} params
-   * @returns {TempDomHelper}
-   */
-  this.inline_Fail = function (tag, startNode, endNode, params) {
-
-    // Required variables
-    var currentNode = startNode,
-      nodesToWrap   = [startNode],
-      endNodeFound  = currentNode === endNode;
-
-    // We iterate through the siblings of the startNode until we found and
-    // added the endNode. We also stop if the next node contains the endNode
-    // or there are no more next nodes
-    while (!endNodeFound && currentNode.nextSibling && !DomUtil.containsButIsnt(currentNode.nextSibling, endNode)) {
-      currentNode  = currentNode.nextSibling;
-      endNodeFound = currentNode === endNode;
-      nodesToWrap.push(currentNode);
-    }
-
-    // We wrap all the siblings we found, including the startNode
-    DomUtil.wrap(tag, nodesToWrap);
-
-    // If we haven not found the endNode (there are either no more siblings
-    // or the next sibling is parent to the endNode), we recursively apply
-    // this method to the next node in the document flow (which may be the
-    // next node we found contains the endNode or the current node's parent's
-    // sibling (for instance))
-    // Todo improve comment
-    if (!endNodeFound) {
-      this.inline_Fail(tag, DomUtil.nextNode(currentNode), endNode);
-    }
-
-    // Chaining
-    return this;
-
-  };
-
-  /**
-   *
-   * @param {String} tag
-   * @param {Node} startNode
-   * @param {Node} endNode
-   * @param {...*} params
-   * @returns {TempDomHelper}
-   */
-  this.inlineOld2 = function (tag, startNode, endNode, params) {
-
-    // Required variables
-    var currentNode = startNode,
-      parent = currentNode.parentNode,
-      nodesToWrap = [];
-
-    // We iterate through all siblings until we found the end of this
-    // containing node or we found a node that is the endNode or contains
-    // the endNode
-    while (currentNode && !currentNode.contains(endNode)) {
-      nodesToWrap.push(currentNode);
-      currentNode = currentNode.nextSibling;
-    }
-
-    while (currentNode !== endNode && currentNode.nextSibling && !currentNode.nextSibling.contains(endNode)) {
-      currentNode = currentNode.nextSibling;
-      nodesToWrap.push(currentNode);
-    }
-
-    // The node where we stopped is the endNode. We can include it in
-    // the wrapped nodes and stop this algorithm. Note: This will also
-    // happen if the startNode equaled the endNode to begin with
-    if (currentNode === endNode) {
-      nodesToWrap.push(currentNode);
-      DomUtil.wrap(tag, nodesToWrap);
-
-      // The node where we stopped contains the endNode. We wrap up what
-      // we have and apply this algorithm recursively to the contents of
-      // the node where we stopped
-    } else if (currentNode && currentNode.contains(endNode)) {
-      DomUtil.wrap(tag, nodesToWrap);
-      this._wrapInline(tag, currentNode.firstChild, endNode);
-
-      // We have reached the last element of the containing node. We find
-      // the next element in the document flow and apply this algorithm
-      // recursively to that node
-    } else if (currentNode === null) {
-      DomUtil.wrap(tag, nodesToWrap);
-      if (parent !== null) {
-        this._wrapInline(tag, DomUtil.nextNode(parent), endNode);
-      }
-    }
-
-    // Chaining
-    return this;
-
-  };
-
-  /**
-   *
-   * @param tag
-   * @param rangeInfo
-   * @returns {TempDomHelper}
-   * @private
-   */
-  this.inlineOld = function (tag, rangeInfo) {
-
-    // Required variables
-    var startNode, endNode;
-
-    // Create tag and finish if a singe text node is selected
-    // Todo what if start end end node are 2 adjacent text nodes
-    if (rangeInfo.startsAndEndsInSameNode()) {
-      this._insertInTextNode(tag, rangeInfo.startContainer, rangeInfo.startOffset, rangeInfo.endOffset);
-      return this;
-    }
-
-    // Create new text node including the selected text for processing in wrap method (begin of selection)
-    if (rangeInfo.startOffset === 0) {
-      startNode = rangeInfo.startContainer;
-    } else {
-      startNode = rangeInfo.startContainer.splitText(rangeInfo.startOffset);
-    }
-
-    // Create new text node including the selected text for processing in wrap method (end of selection)
-    if (rangeInfo.endOffset === rangeInfo.endContainer.length) {
-      endNode = rangeInfo.endContainer;
-    } else {
-      endNode = rangeInfo.endContainer.splitText(rangeInfo.endOffset).previousSibling;
-    }
-
-    // Wrap nodes from startNode to endNode in new tag
-    this._wrapInline(tag, startNode, endNode);
-
-    // Chaining
-    return this;
-  };
-
-  /**
-   *
    * @param cmd
    * @param typeRange
    * @param params
@@ -242,58 +103,6 @@ function TempDomHelper(constrainingNode) {
    * @private
    */
   this.block = function (cmd, typeRange, params) {
-
-    return this;
-  };
-
-  /**
-   *
-   * @param {String} tag
-   * @param {Node} startNode
-   * @param {Node} endNode
-   * @returns {TempDomHelper}
-   * @private
-   */
-  this._wrapInline = function (tag, startNode, endNode) {
-
-    // Required variables
-    var currentNode = startNode,
-      parent = currentNode.parentNode,
-      nodesToWrap = [];
-
-    // We iterate through all siblings until we found the end of this
-    // containing node or we found a node that is the endNode or contains
-    // the endNode
-    // Todo What if startNode.contains(endNode) - is that even possible? yes in recursion (first else if)
-    do {
-      nodesToWrap.push(currentNode);
-      currentNode = currentNode.nextSibling;
-    } while (currentNode && !currentNode.contains(endNode));
-
-    // The node where we stopped is the endNode. We can include it in
-    // the wrapped nodes and stop this algorithm
-    if (currentNode === endNode) {
-      nodesToWrap.push(currentNode);
-      DomUtil.wrap(tag, nodesToWrap);
-
-    // The node where we stopped contains the endNode. We wrap up what
-    // we have and apply this algorithm recursively to the contents of
-    // that node
-    } else if (currentNode && currentNode.contains(endNode)) {
-      DomUtil.wrap(tag, nodesToWrap);
-      this._wrapInline(tag, currentNode.firstChild, endNode);
-
-    // We have reached the last element of the containing node. We find
-    // the next element in the document flow and apply this algorithm
-    // recursively to that node
-    } else if (currentNode === null) {
-      DomUtil.wrap(tag, nodesToWrap);
-      if (parent !== null) {
-        this._wrapInline(tag, DomUtil.nextNode(parent), endNode);
-      }
-    }
-
-    // Chaining
     return this;
   };
 
@@ -304,35 +113,7 @@ function TempDomHelper(constrainingNode) {
    * @returns {TempDomHelper}
    * @private
    */
-  this._remove = function (tag, typeRange) {
-
-    return this;
-  };
-
-  /**
-   *
-   * @param tag
-   * @param textNode
-   * @param start
-   * @param end
-   * @returns {Element}
-   * @private
-   */
-  this._insertInTextNode = function (tag, textNode, start, end) {
-    // todo create element in textnode and return it
-    return document.createElement(tag);
-  };
-
-  /**
-   *
-   * @param textNode
-   * @param start
-   * @param end
-   * @returns {TempDomHelper}
-   * @private
-   */
-  this._removeFromTextNode = function (tag, textNode, start, end) {
-
+  this.remove = function (tag, typeRange) {
     return this;
   };
 
@@ -344,20 +125,15 @@ function TempDomHelper(constrainingNode) {
    * @private
    */
   this._handlerFor = function (tag) {
-
     tag = tag.toLowerCase();
-
     if (this._inlineTags.indexOf(tag) > -1) {
       return this.inline;
     }
-
     if (this._blockTags.indexOf(tag) > -1) {
       return this.block;
     }
-
     console.debug('Tag "' + tag + '" not implemented');
     return this._noop;
-
   };
 
   /**
