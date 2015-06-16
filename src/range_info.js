@@ -29,6 +29,8 @@ function RangeInfo(rangeOrStartContainer, startOffset, endContainer, endOffset) 
     throw new Error('Illegal parameters. Pass either a Range or descriptive parameters. You passed', arguments);
   }
 
+  this.ensureStartNodePrecedesEndNode();
+
 }
 
 (function () {
@@ -118,6 +120,19 @@ function RangeInfo(rangeOrStartContainer, startOffset, endContainer, endOffset) 
       return true;
     }
     throw new Error('Range is not inside given node.');
+  };
+
+  /**
+   *
+   * @returns {boolean}
+   */
+  this.ensureStartNodePrecedesEndNode = function () {
+    var isSameNode     = this.startContainer === this.endContainer,
+      startPreceedsEnd = this.startContainer.compareDocumentPosition(this.endContainer) & Node.DOCUMENT_POSITION_FOLLOWING;
+    if (isSameNode || startPreceedsEnd) {
+      return true;
+    }
+    throw new Error('Given startContainer does not precede endContainer.');
   };
 
   /**
