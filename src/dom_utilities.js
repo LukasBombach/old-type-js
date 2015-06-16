@@ -25,8 +25,12 @@ function DomUtilities() {
    * siblings (in that order) to find the next node in the DOM tree as
    * displayed by the document flow.
    *
+   * Todo inline comments to explain code
+   *
    * @param {Node} node - The node from which the search should start
-   * @param {Object} [options] - Settings determining what node to return
+   * @param {Object|Node} [options] - If an object is passed, it should
+   *     contain settings determining what node to return, see specifics
+   *     below. If a {Node} is passed, this acts as options.constrainingNode
    * @param {Function} [options.filterFunction] - nextNode traverses the
    *     DOM tree and passes each node to this function. This function
    *     should return true if the node passed is a node that we look for
@@ -49,6 +53,10 @@ function DomUtilities() {
    *     options.constrainingNode has been hit.
    */
   this.nextNode = function (node, options) {
+
+    if (options.nodeType) {
+      options = {constrainingNode: options};
+    }
 
     options = options || {};
 
