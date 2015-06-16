@@ -80,7 +80,7 @@ function TempDomHelper(constrainingNode) {
     }
 
     if (currentNode && DomUtil.containsButIsnt(currentNode, endNode)) {
-      this.inline_R(tag, currentNode, endNode);
+      this.inline_R(tag, currentNode.firstChild, endNode);
     }
 
     if (currentNode === null) {
