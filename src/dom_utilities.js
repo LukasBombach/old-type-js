@@ -75,7 +75,7 @@ function DomUtilities() {
       return node;
     }
 
-    // Programmers should call
+    // Will make future recursive calls consider to return the nodes passed
     options.returnMe = true;
 
     if (node.childNodes.length) {
