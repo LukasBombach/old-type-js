@@ -48,6 +48,9 @@ function TempDomHelper(constrainingNode) {
    */
   this.cmd = function (tag, rangeInfo, params) {
     var args;
+    if (!rangeInfo.isInside(this.constrainingNode)) {
+      throw new Error();
+    }
     params = Array.prototype.slice.call(arguments, 2);
     args = [tag, rangeInfo.splitStartContainer(), rangeInfo.splitEndContainer()];
     args = args.concat(params);
@@ -66,7 +69,8 @@ function TempDomHelper(constrainingNode) {
   this.inline_R = function (tag, startNode, endNode, params) {
 
     var currentNode = startNode,
-      nodesToWrap   = [];
+      nodesToWrap   = [],
+      nextNode;
 
     while (currentNode && !currentNode.contains(endNode)) {
       nodesToWrap.push(currentNode);
@@ -77,9 +81,17 @@ function TempDomHelper(constrainingNode) {
       nodesToWrap.push(currentNode);
     }
 
-    if (currentNode === null) {
-      this.inline_R(tag, DomUtil.nextNode(startNode.parentNode.lastChild), endNode);
+    if (DomUtil.containsButIsnt(currentNode, endNode)) {
+      //this.inline_R(tag, DomUtil.nextNode(currentNode), endNode);
+      this.inline_R(tag, currentNode, endNode);
     }
+
+    if (currentNode === null) {
+      nextNode = DomUtil.nextNode(startNode.parentNode.lastChild, this.constrainingNode);
+      this.inline_R(tag, nextNode, endNode);
+    }
+
+    DomUtil.wrap(tag, nodesToWrap);
 
     return this;
 

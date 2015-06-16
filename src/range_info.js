@@ -101,6 +101,15 @@ function RangeInfo(rangeOrStartContainer, startOffset, endContainer, endOffset) 
 
   /**
    *
+   * @param {Node} node
+   * @returns {boolean}
+   */
+  this.isInside = function (node) {
+    return node.contains(this.startContainer) && node.contains(this.endContainer);
+  };
+
+  /**
+   *
    * @returns {Node}
    */
   this.splitStartContainer = function () {
