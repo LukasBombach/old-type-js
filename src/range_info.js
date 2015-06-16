@@ -110,6 +110,18 @@ function RangeInfo(rangeOrStartContainer, startOffset, endContainer, endOffset) 
 
   /**
    *
+   * @param node
+   * @returns {boolean}
+   */
+  this.ensureIsInside = function (node) {
+    if (this.isInside(node)) {
+      return true;
+    }
+    throw new Error('Range is not inside given node.');
+  };
+
+  /**
+   *
    * @returns {Node}
    */
   this.splitStartContainer = function () {

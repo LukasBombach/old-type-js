@@ -48,9 +48,7 @@ function TempDomHelper(constrainingNode) {
    */
   this.cmd = function (tag, rangeInfo, params) {
     var args;
-    if (!rangeInfo.isInside(this.constrainingNode)) {
-      throw new Error();
-    }
+    rangeInfo.ensureIsInside(this.constrainingNode);
     params = Array.prototype.slice.call(arguments, 2);
     args = [tag, rangeInfo.splitStartContainer(), rangeInfo.splitEndContainer()];
     args = args.concat(params);
