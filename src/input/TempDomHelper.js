@@ -57,6 +57,9 @@ function TempDomHelper(constrainingNode) {
   };
 
   /**
+   * This method will wrap the given tag around (and including) all elements
+   * between the startNode and endNode and try to maintain simple and valid
+   * HTML.
    *
    * @param {String} tag
    * @param {Node} startNode
