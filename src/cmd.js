@@ -170,7 +170,26 @@ function Cmd(constrainingNode) {
 
 }).call(Cmd.prototype);
 
-Type.on('ready', function(type) {
+/**
+ * Public interface for the command plugin
+ * Formats the current selection with a given tag
+ *
+ * @param {String} tag -
+ * @param {...*} params - Any number of arbitrary parameters
+ */
+Type.fn.cmd = function (tag, params) {
+  if (!this._plugins['cmd']) {
+    this._plugins['cmd'] = new Cmd(type.options.root);
+  }
+  var range = RangeInfo.fromCurrentSelection();
+  this._plugins['cmd'](tag, range, params);
+};
+
+
+/**
+ * Todo Alternative Variante, TYPE-22
+ */
+/*Type.on('ready', function(type) {
 
   var cmd = new Cmd(type.options.root);
 
@@ -179,6 +198,7 @@ Type.on('ready', function(type) {
     cmd.cmd(tag, range, params);
   }
 
-});
+});*/
+
 
 module.exports = Cmd;

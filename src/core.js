@@ -34,7 +34,9 @@ function Type(options) {
   this._input.getDocument(this._setDocument.bind(this));
 
   // Todo Jira TYPE-22
-  this.cmd = new Cmd(this.options.root);
+  //this.cmd = new Cmd(this.options.root);
+
+  this._plugins = {};
 
   Type.trigger('ready', this);
 
