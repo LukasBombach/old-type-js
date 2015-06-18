@@ -158,7 +158,7 @@ function TempDomHelper(constrainingNode) {
   };
 
   /**
-   * No op multi-purpose handler
+   * Multi-purpose no-op handler
    *
    * @returns {TempDomHelper}
    * @private
