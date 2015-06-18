@@ -1,6 +1,6 @@
 
 
-var TempDomHelper = require('./TempDomHelper');
+//var TempDomHelper = require('./TempDomHelper');
 
 function BrowserDeviceInput(element, caret) {
 
@@ -12,7 +12,7 @@ function BrowserDeviceInput(element, caret) {
   // Todo listening to window.document instead of element
 
   this.caret = caret;
-  this.dom = new TempDomHelper();
+  //this.dom = new TempDomHelper();
 
   this.bindKeyboard(element, caret);
   this.bindMouse(element, caret);

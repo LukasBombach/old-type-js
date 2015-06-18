@@ -9,6 +9,7 @@ var EtherpadInput = require('./plugins/Etherpad/input');
 var TypeDocument = require('./type_document');
 var DocumentNode = require('./document_node');
 var BrowserInput = require('./input/browser');
+var Cmd = require('./cmd');
 
 /**
  * Renders a {TypeDocument} to HTML
@@ -37,9 +38,35 @@ function Type(options) {
   this._input = new this.options.input(this.options.root);
   this._input.getDocument(this._setDocument.bind(this));
 
+  // Todo Jira TYPE-22
+  this.cmd = new Cmd(this.options.root);
+
+  this.eventCallbacks = {};
+
 }
 
 (function () {
+
+  this.on = function (eventName, cb) {
+    this.eventCallbacks[eventName] = this.eventCallbacks[eventName] || [];
+    this.eventCallbacks[eventName].push(cb);
+  };
+
+  this.off = function (eventName, cb) {
+    var index = this.eventCallbacks[eventName] ? this.eventCallbacks[eventName].indexOf(cb) : -1;
+    if (index > -1) {
+      this.eventCallbacks[eventName].splice(index, 1);
+    }
+  };
+
+  this.trigger = function (eventName, params) {
+    var i;
+    if (this.eventCallbacks[eventName]) {
+      for (i = 0; i < this.eventCallbacks[eventName].length; i += 1) {
+        this.eventCallbacks[eventName][i].apply(this, params);
+      }
+    }
+  };
 
   /**
    * This object holds the settings for this Type instance

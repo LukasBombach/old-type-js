@@ -1,6 +1,7 @@
 'use strict';
 
 /**
+ * Todo Rename to TypeRange
  *
  * @param {Range|Node} rangeOrStartContainer
  * @param {Number} startOffset
