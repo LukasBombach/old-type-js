@@ -66,30 +66,42 @@ function TempDomHelper(constrainingNode) {
    */
   this.inline = function (tag, startNode, endNode, params) {
 
+    // Required variables
     var currentNode = startNode,
       nodesToWrap   = [],
       nextNode;
 
+    // Collect the startNode and all its siblings until we
+    // found the endNode or a node containing it
     while (currentNode && !currentNode.contains(endNode)) {
       nodesToWrap.push(currentNode);
       currentNode  = currentNode.nextSibling;
     }
 
+    // If the node where we stopped is the endNode, add it
+    // to our collection of nodes
     if (currentNode === endNode) {
       nodesToWrap.push(currentNode);
     }
 
+    // If the node where we stopped contains the endNode,
+    // apply this algorithm on it recursively
     if (currentNode && DomUtil.containsButIsnt(currentNode, endNode)) {
       this.inline(tag, currentNode.firstChild, endNode);
     }
 
+    // If we did not find the endNode but there are no more
+    // siblings, find the next node in the document flow and
+    // apply this algorithm on it recursively
     if (currentNode === null) {
       nextNode = DomUtil.nextNode(startNode.parentNode.lastChild, this.constrainingNode);
       this.inline(tag, nextNode, endNode);
     }
 
+    // Wrap the nodes we got so far in the provided tag
     DomUtil.wrap(tag, nodesToWrap);
 
+    // Chaining
     return this;
 
   };
