@@ -134,10 +134,15 @@ function TempDomHelper(constrainingNode) {
   };
 
   /**
+   * Takes a tag name and returns the handler function for formatting
+   * the DOM with this tag by checking if it is an inline or block tag.
+   *
    * Todo Maybe use fallback http://stackoverflow.com/a/2881008/1183252 if tag is not found
    *
-   * @param {String} tag
-   * @returns {inline|block|_noop}
+   * @param {String} tag - The name of the tag that the DOM should be
+   *     formatted with.
+   * @returns {inline|block|_noop} - The handler function for inline
+   *     or block tags, or _noop if the tag is unknown.
    * @private
    */
   this._handlerFor = function (tag) {
