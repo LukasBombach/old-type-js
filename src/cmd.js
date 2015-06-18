@@ -170,16 +170,15 @@ function Cmd(constrainingNode) {
 
 }).call(Cmd.prototype);
 
+Type.on('ready', function(type) {
 
-(function () {
+  var cmd = new Cmd(type.options.root);
 
-  this.cmd = function (tag, typeRange, params) {
-
+  type.cmd = function (tag, params) {
+    var range = RangeInfo.fromCurrentSelection();
+    cmd.cmd(tag, range, params);
   }
 
-}).call(Type.fn);
-
-
-
+});
 
 module.exports = Cmd;

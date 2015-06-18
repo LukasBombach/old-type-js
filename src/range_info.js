@@ -4,9 +4,9 @@
  * Todo Rename to TypeRange
  *
  * @param {Range|Node} rangeOrStartContainer
- * @param {Number} startOffset
- * @param {Node} endContainer
- * @param {Number} endOffset
+ * @param {Number} [startOffset]
+ * @param {Node} [endContainer]
+ * @param {Number} [endOffset]
  * @constructor
  */
 function RangeInfo(rangeOrStartContainer, startOffset, endContainer, endOffset) {
@@ -162,5 +162,9 @@ function RangeInfo(rangeOrStartContainer, startOffset, endContainer, endOffset) 
 
 }).call(RangeInfo.prototype);
 
+
+RangeInfo.fromCurrentSelection = function () {
+  return new RangeInfo(document.getSelection().getRangeAt(0));
+};
 
 module.exports = RangeInfo;
