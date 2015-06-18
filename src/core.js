@@ -47,18 +47,45 @@ function Type(options) {
 
 (function () {
 
+  /**
+   * Register a callback for a Type specific event
+   *
+   * @param {String} eventName - The name of the event on which you wish the
+   *     function to be called
+   * @param {Function} cb - The function you wish to be called on the event
+   * @returns {Type}
+   */
   this.on = function (eventName, cb) {
     this.eventCallbacks[eventName] = this.eventCallbacks[eventName] || [];
     this.eventCallbacks[eventName].push(cb);
+    return this;
   };
 
+  /**
+   * Unregister a callback for a Type specific event
+   *
+   * @param {String} eventName - The name of the event on which you wish the
+   *     for which you no longer wish to call the function
+   * @param {Function} cb - The function you no longer wish to be called
+   * @returns {Type}
+   */
   this.off = function (eventName, cb) {
     var index = this.eventCallbacks[eventName] ? this.eventCallbacks[eventName].indexOf(cb) : -1;
     if (index > -1) {
       this.eventCallbacks[eventName].splice(index, 1);
     }
+    return this;
   };
 
+  /**
+   * Trigger a Type specific event to call all callbacks for
+   *
+   * @param {String} eventName - The name of the event on which you wish to
+   *     call its callbacks for
+   * @param {...*} params - Arbitrary parameters you wish to pass to the
+   *     callbacks
+   * @returns {Type}
+   */
   this.trigger = function (eventName, params) {
     var i;
     if (this.eventCallbacks[eventName]) {
@@ -66,6 +93,7 @@ function Type(options) {
         this.eventCallbacks[eventName][i].apply(this, params);
       }
     }
+    return this;
   };
 
   /**
