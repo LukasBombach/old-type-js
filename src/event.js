@@ -62,17 +62,12 @@ var Type = require('./core');
 
 }).call(Type.fn);
 
+
 /**
- * Global Type.js Events
+ * Global Type.js events
+ * Todo Remove code duplication
  */
 (function () {
-
-  /**
-   * Holds all global Type.js event handlers
-   *
-   * @type {{}}
-   */
-  var globalEventCallbacks = {};
 
   /**
    * Register a callback for a global Type event
@@ -83,9 +78,9 @@ var Type = require('./core');
    * @returns {Type}
    */
   this.on = function (eventName, cb) {
-    globalEventCallbacks = globalEventCallbacks || {};
-    globalEventCallbacks[eventName] = globalEventCallbacks[eventName] || [];
-    globalEventCallbacks[eventName].push(cb);
+    this.eventCallbacks = this.eventCallbacks || {};
+    this.eventCallbacks[eventName] = this.eventCallbacks[eventName] || [];
+    this.eventCallbacks[eventName].push(cb);
     return this;
   };
 
@@ -98,10 +93,10 @@ var Type = require('./core');
    * @returns {Type}
    */
   this.off = function (eventName, cb) {
-    globalEventCallbacks = globalEventCallbacks || {};
-    var index = globalEventCallbacks[eventName] ? globalEventCallbacks[eventName].indexOf(cb) : -1;
+    this.eventCallbacks = this.eventCallbacks || {};
+    var index = this.eventCallbacks[eventName] ? this.eventCallbacks[eventName].indexOf(cb) : -1;
     if (index > -1) {
-      globalEventCallbacks[eventName].splice(index, 1);
+      this.eventCallbacks[eventName].splice(index, 1);
     }
     return this;
   };
@@ -117,10 +112,10 @@ var Type = require('./core');
    */
   this.trigger = function (eventName, params) {
     var i;
-    globalEventCallbacks = globalEventCallbacks || {};
-    if (globalEventCallbacks[eventName]) {
-      for (i = 0; i < globalEventCallbacks[eventName].length; i += 1) {
-        globalEventCallbacks[eventName][i].apply(this, params);
+    this.eventCallbacks = this.eventCallbacks || {};
+    if (this.eventCallbacks[eventName]) {
+      for (i = 0; i < this.eventCallbacks[eventName].length; i += 1) {
+        this.eventCallbacks[eventName][i].apply(this, params);
       }
     }
     return this;
