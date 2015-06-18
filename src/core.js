@@ -36,7 +36,7 @@ function Type(options) {
   // Todo Jira TYPE-22
   this.cmd = new Cmd(this.options.root);
 
-  this.eventCallbacks = {};
+  Type.trigger('ready', this);
 
 }
 
