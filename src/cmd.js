@@ -185,7 +185,6 @@ Type.fn.cmd = function (tag, params) {
   return this;
 };
 
-
 /**
  * Todo Alternative Variante, TYPE-22
  */
@@ -196,6 +195,5 @@ Type.fn.cmd = function (tag, params) {
     cmd.cmd(tag, range, params);
   }
 });*/
-
 
 module.exports = Cmd;
