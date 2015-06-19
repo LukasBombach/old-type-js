@@ -141,15 +141,36 @@ function Cmd(constrainingNode) {
 
   /**
    *
-   * @param tag
-   * @param startNode
-   * @param endNode
-   * @param params
+   * @param {String} tag
+   * @param {Node} startNode
+   * @param {Node} endNode
    * @returns {Cmd}
    */
-  this.removeInline = function (tag, startNode, endNode, params) {
+  this.removeInline = function (tag, startNode, endNode) {
 
+    var newEl   = document.createElement(tag),
+      origEl    = startNode.parentNode,
+      elParent  = origEl.parentNode,
+      sibling   = origEl.firstChild;
 
+    elParent.insertBefore(newEl, origEl);
+
+    while (sibling !== startNode) {
+      newEl.appendChild(sibling);
+      sibling = sibling.nextSibling;
+    }
+
+    newEl.appendChild(startNode);
+
+    sibling = origEl.firstChild;
+
+    while (sibling !== endNode) {
+      elParent.insertBefore(sibling, origEl);
+      sibling = sibling.nextSibling;
+    }
+
+    elParent.insertBefore(endNode, origEl);
+    
     return this;
   };
 
