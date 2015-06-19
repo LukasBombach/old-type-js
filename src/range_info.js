@@ -142,7 +142,12 @@ function RangeInfo(rangeOrStartContainer, startOffset, endContainer, endOffset) 
    */
   this.splitStartContainer = function () {
     if (this.startOffset !== 0) {
+      var startsAndEndsInSameNode = this.startsAndEndsInSameNode();
       this.startContainer = this.startContainer.splitText(this.startOffset);
+      if(startsAndEndsInSameNode) {
+        this.endContainer = this.startContainer;
+        this.endOffset -= this.startOffset;
+      }
       this.startOffset = 0;
     }
     return this.startContainer;

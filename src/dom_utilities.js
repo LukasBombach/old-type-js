@@ -224,12 +224,6 @@ function DomUtilities() {
       wrapper = document.createElement(tag),
       i;
 
-    // Remove the tag we want to wrap from contents
-    // so we don't have the same tag nested
-    for (i = 0; i < elms.length; i += 1) {
-      this.removeTag(elms[i], tag, true);
-    }
-
     // If the first element had a sibling, insert the wrapper before the
     // sibling to maintain the HTML structure; otherwise, just append it
     // to the parent.
@@ -242,8 +236,14 @@ function DomUtilities() {
     // Move all elements to the wrapper. Each element is
     // automatically removed from its current parent and
     // from the elms array.
-    while (elms.length) {
-      wrapper.appendChild(elms[0]);
+    for (i = 0; i < elms.length; i += 1) {
+      wrapper.appendChild(elms[i]);
+    }
+
+    // Remove the tag we want to wrap from contents
+    // so we don't have the same tag nested
+    for (i = 0; i < elms.length; i += 1) {
+      this.removeTag(elms[i], tag, true);
     }
 
     // Chaining
@@ -311,7 +311,7 @@ function DomUtilities() {
     }
 
     // Unwrap this tag if it is the tag we want to remove
-    if (el.nodeType === 1 && el.tagName.toLowerCase() === el.toLowerCase()) {
+    if (el.nodeType === 1 && el.tagName.toLowerCase() === tag.toLowerCase()) {
       this.unwrap(el);
     }
 

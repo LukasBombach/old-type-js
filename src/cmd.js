@@ -179,9 +179,9 @@ function Cmd(constrainingNode) {
  */
 Type.fn.cmd = function (tag, params) {
   if (!this._plugins['cmd']) {
-    this._plugins['cmd'] = new Cmd(type.options.root);
+    this._plugins['cmd'] = new Cmd(this.options.root);
   }
-  this._plugins['cmd'](tag, RangeInfo.fromCurrentSelection(), params);
+  this._plugins['cmd'].cmd(tag, RangeInfo.fromCurrentSelection(), params);
   return this;
 };
 
