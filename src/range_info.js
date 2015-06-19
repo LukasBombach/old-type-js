@@ -98,6 +98,14 @@ function RangeInfo(rangeOrStartContainer, startOffset, endContainer, endOffset) 
    *
    * @returns {boolean}
    */
+  this.startsAndEndsInSameElement = function () {
+    return this.getStartElement() === this.getEndElement();
+  };
+
+  /**
+   *
+   * @returns {boolean}
+   */
   this.containsMultipleElements = function () {
     return this.startContainer !== this.endContainer;
   };

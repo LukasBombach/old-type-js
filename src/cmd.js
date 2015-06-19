@@ -48,13 +48,40 @@ function Cmd(constrainingNode) {
    * @returns {Cmd}
    */
   this.cmd = function (tag, rangeInfo, params) {
-    var args, startNode, endNode;
+    //var args, startNode, endNode;
+    //rangeInfo.ensureIsInside(this.constrainingNode);
+    //startNode = this._getStartNode(tag, rangeInfo);
+    //endNode = this._getEndNode(tag, rangeInfo);
+    //params = Array.prototype.slice.call(arguments, 2);
+    //args = [tag, startNode, endNode].concat(params);
+    //this._handlerFor(tag).apply(this, args);
     rangeInfo.ensureIsInside(this.constrainingNode);
+    this._handlerFor(tag).apply(this, arguments);
+    return this;
+  };
+
+  /**
+   *
+   * @param tag
+   * @param rangeInfo
+   * @param params
+   * @returns {Cmd}
+   */
+  this.inline = function (tag, rangeInfo, params) {
+
+    var args, startNode, endNode;
+
     startNode = this._getStartNode(tag, rangeInfo);
-    endNode = this._getEndNode(tag, rangeInfo);
-    params = Array.prototype.slice.call(arguments, 2);
-    args = [tag, startNode, endNode].concat(params);
-    this._handlerFor(tag).apply(this, args);
+    endNode   = this._getEndNode(tag, rangeInfo);
+    params    = Array.prototype.slice.call(arguments, 2);
+    args      = [tag, startNode, endNode].concat(params);
+
+    if (rangeInfo.startsAndEndsInSameElement() && rangeInfo.startTagIs(tag)) {
+      this.removeInline.apply(this, args);
+    } else {
+      this.insertInline.apply(this, args);
+    }
+
     return this;
   };
 
@@ -67,10 +94,10 @@ function Cmd(constrainingNode) {
    * @param {String} tag
    * @param {Node} startNode
    * @param {Node} endNode
-   * @param {...*} params
+   * @param {...*} [params]
    * @returns {Cmd}
    */
-  this.inline = function (tag, startNode, endNode, params) {
+  this.insertInline = function (tag, startNode, endNode, params) {
 
     // Required variables
     var currentNode = startNode,
@@ -93,7 +120,7 @@ function Cmd(constrainingNode) {
     // If the node where we stopped contains the endNode,
     // apply this algorithm on it recursively
     if (currentNode && DomUtil.containsButIsnt(currentNode, endNode)) {
-      this.inline(tag, currentNode.firstChild, endNode);
+      this.insertInline(tag, currentNode.firstChild, endNode);
     }
 
     // If we did not find the endNode but there are no more
@@ -101,7 +128,7 @@ function Cmd(constrainingNode) {
     // apply this algorithm on it recursively
     if (currentNode === null) {
       nextNode = DomUtil.nextNode(startNode.parentNode.lastChild, this.constrainingNode);
-      this.inline(tag, nextNode, endNode);
+      this.insertInline(tag, nextNode, endNode);
     }
 
     // Wrap the nodes we got so far in the provided tag
@@ -110,6 +137,20 @@ function Cmd(constrainingNode) {
     // Chaining
     return this;
 
+  };
+
+  /**
+   *
+   * @param tag
+   * @param startNode
+   * @param endNode
+   * @param params
+   * @returns {Cmd}
+   */
+  this.removeInline = function (tag, startNode, endNode, params) {
+
+
+    return this;
   };
 
   /**
@@ -147,7 +188,7 @@ function Cmd(constrainingNode) {
   };
 
   /**
-   * 
+   *
    * @param tag
    * @param rangeInfo
    * @returns {*}
