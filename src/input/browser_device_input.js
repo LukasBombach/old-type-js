@@ -45,7 +45,7 @@ function BrowserDeviceInput(type, caret) {
 
       var key = e.keyCode || e.which;
 
-      console.log(key);
+      //console.log(key);
 
       // Left arrow
       if(key == 37) {
@@ -86,22 +86,22 @@ function BrowserDeviceInput(type, caret) {
     });
 
     Mousetrap.bind('command+b', function(e) {
-      this._type.cmd('strong', self._getInfoFromRange());
+      self._type.cmd('strong');
       return false;
     });
 
     Mousetrap.bind('command+i', function(e) {
-      this._type.cmd('em', self._getInfoFromRange());
+      self._type.cmd('em');
       return false;
     });
 
     Mousetrap.bind('command+u', function(e) {
-      this._type.cmd('u', self._getInfoFromRange());
+      self._type.cmd('u');
       return false;
     });
 
     Mousetrap.bind('command+s', function(e) {
-      this._type.cmd('s', self._getInfoFromRange());
+      self._type.cmd('s');
       return false;
     });
 
@@ -162,7 +162,7 @@ function BrowserDeviceInput(type, caret) {
     for (var i = 0; i < elements.length; i++) {
       elements[i].onclick = function() {
         cmd = this.getAttribute('data-cmd');
-        this._type.cmd(cmd, self._getInfoFromRange());
+        self._type.cmd(cmd);
       }
     }
 
