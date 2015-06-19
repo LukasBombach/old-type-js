@@ -181,8 +181,8 @@ Type.fn.cmd = function (tag, params) {
   if (!this._plugins['cmd']) {
     this._plugins['cmd'] = new Cmd(type.options.root);
   }
-  var range = RangeInfo.fromCurrentSelection();
-  this._plugins['cmd'](tag, range, params);
+  this._plugins['cmd'](tag, RangeInfo.fromCurrentSelection(), params);
+  return this;
 };
 
 
@@ -190,14 +190,11 @@ Type.fn.cmd = function (tag, params) {
  * Todo Alternative Variante, TYPE-22
  */
 /*Type.on('ready', function(type) {
-
   var cmd = new Cmd(type.options.root);
-
   type.cmd = function (tag, params) {
     var range = RangeInfo.fromCurrentSelection();
     cmd.cmd(tag, range, params);
   }
-
 });*/
 
 
