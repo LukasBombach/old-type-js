@@ -48,11 +48,12 @@ function Cmd(constrainingNode) {
    * @returns {Cmd}
    */
   this.cmd = function (tag, rangeInfo, params) {
-    var args;
+    var args, startNode, endNode;
     rangeInfo.ensureIsInside(this.constrainingNode);
+    startNode = this._getStartNode(tag, rangeInfo);
+    endNode = this._getEndNode(tag, rangeInfo);
     params = Array.prototype.slice.call(arguments, 2);
-    args = [tag, rangeInfo.splitStartContainer(), rangeInfo.splitEndContainer()];
-    args = args.concat(params);
+    args = [tag, startNode, endNode].concat(params);
     this._handlerFor(tag).apply(this, args);
     return this;
   };
@@ -132,6 +133,28 @@ function Cmd(constrainingNode) {
    */
   this.remove = function (tag, typeRange) {
     return this;
+  };
+
+  /**
+   *
+   * @param tag
+   * @param rangeInfo
+   * @returns {*}
+   * @private
+   */
+  this._getStartNode = function (tag, rangeInfo) {
+      return rangeInfo.startTagIs(tag) ? rangeInfo.getStartElement() : rangeInfo.splitStartContainer();
+  };
+
+  /**
+   * 
+   * @param tag
+   * @param rangeInfo
+   * @returns {*}
+   * @private
+   */
+  this._getEndNode = function (tag, rangeInfo) {
+    return rangeInfo.endTagIs(tag) ? rangeInfo.getEndElement() : rangeInfo.splitEndContainer();
   };
 
   /**
