@@ -159,7 +159,7 @@ function Cmd(constrainingNode) {
       //sibling = sibling.nextSibling;
     }
 
-    newEl.appendChild(startNode);
+    //newEl.appendChild(startNode);
 
     //sibling = origEl.firstChild;
 
