@@ -11,7 +11,9 @@ var TEXT_NODE = 3; // todo Node.TEXT oder so, DOM API
  * @class BrowserInput
  * @constructor
  */
-function BrowserInput(rootNode) {
+function BrowserInput(type) {
+  var rootNode = type.options.root;
+  this._type = type;
   this._caret = new Caret(null, rootNode);
   this._rootNode = rootNode;
   this._reader = new DomReader(this._rootNode);
@@ -76,7 +78,7 @@ function BrowserInput(rootNode) {
    * @private
    */
   this._bindKeyboardAndMouse = function(caret) {
-    new DeviceInput(this._rootNode, caret);
+    new DeviceInput(this._type, caret);
     return this;
   }
 

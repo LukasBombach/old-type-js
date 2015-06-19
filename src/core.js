@@ -9,8 +9,8 @@ var EtherpadInput = require('./plugins/Etherpad/input');
 var TypeDocument = require('./type_document');
 var DocumentNode = require('./document_node');
 var BrowserInput = require('./input/browser');
-var Cmd = require('./cmd');
-var Renderer = require('./renderers/html');
+//var Cmd = require('./cmd');
+//var Renderer = require('./renderers/html');
 
 /**
  * The main class and entry point to set up a Type instance in the browser.
@@ -30,8 +30,8 @@ function Type(options) {
 
   options = options || {};
   this.setOptions(options);
-  this._input = new this.options.input(this.options.root);
-  this._input.getDocument(this._setDocument.bind(this));
+  this._input = new this.options.input(this);
+  //this._input.getDocument(this._setDocument.bind(this));
 
   // Todo Jira TYPE-22
   //this.cmd = new Cmd(this.options.root);
@@ -98,6 +98,7 @@ function Type(options) {
    *
    * @returns {EtherpadInput}
    */
+  /*
   this.etherpad = function(options) {
 
     //var reader = new EtherpadReader();
@@ -120,6 +121,7 @@ function Type(options) {
     });
 
   }
+ */
 
 }).call(Type.prototype);
 

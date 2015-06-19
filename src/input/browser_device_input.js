@@ -2,7 +2,7 @@
 
 //var TempDomHelper = require('./TempDomHelper');
 
-function BrowserDeviceInput(element, caret) {
+function BrowserDeviceInput(type, caret) {
 
   if(arguments.length == 1) {
     caret = element;
@@ -10,6 +10,9 @@ function BrowserDeviceInput(element, caret) {
   }
 
   // Todo listening to window.document instead of element
+
+  this._type = type;
+  var element = type.options.root;
 
   this.caret = caret;
   //this.dom = new TempDomHelper();
@@ -83,22 +86,22 @@ function BrowserDeviceInput(element, caret) {
     });
 
     Mousetrap.bind('command+b', function(e) {
-      self.dom.cmd('strong', self._getInfoFromRange());
+      this._type.cmd('strong', self._getInfoFromRange());
       return false;
     });
 
     Mousetrap.bind('command+i', function(e) {
-      self.dom.cmd('em', self._getInfoFromRange());
+      this._type.cmd('em', self._getInfoFromRange());
       return false;
     });
 
     Mousetrap.bind('command+u', function(e) {
-      self.dom.cmd('u', self._getInfoFromRange());
+      this._type.cmd('u', self._getInfoFromRange());
       return false;
     });
 
     Mousetrap.bind('command+s', function(e) {
-      self.dom.cmd('s', self._getInfoFromRange());
+      this._type.cmd('s', self._getInfoFromRange());
       return false;
     });
 
@@ -159,7 +162,7 @@ function BrowserDeviceInput(element, caret) {
     for (var i = 0; i < elements.length; i++) {
       elements[i].onclick = function() {
         cmd = this.getAttribute('data-cmd');
-        self.dom.cmd(cmd, self._getInfoFromRange());
+        this._type.cmd(cmd, self._getInfoFromRange());
       }
     }
 
