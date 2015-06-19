@@ -71,17 +71,15 @@ function Cmd(constrainingNode) {
 
     var args, startNode, endNode;
 
-    startNode = this._getStartNode(tag, rangeInfo);
-    endNode   = this._getEndNode(tag, rangeInfo);
-    params    = Array.prototype.slice.call(arguments, 2);
-    args      = [tag, startNode, endNode].concat(params);
-
     if (rangeInfo.startsAndEndsInSameElement() && rangeInfo.startTagIs(tag)) {
-      this.removeInline.apply(this, args);
+      this.removeInline.(tag, rangeInfo);
     } else {
+      startNode = this._getStartNode(tag, rangeInfo);
+      endNode   = this._getEndNode(tag, rangeInfo);
+      params    = Array.prototype.slice.call(arguments, 2);
+      args      = [tag, startNode, endNode].concat(params);
       this.insertInline.apply(this, args);
     }
-
     return this;
   };
 
@@ -142,16 +140,17 @@ function Cmd(constrainingNode) {
   /**
    *
    * @param {String} tag
-   * @param {Node} startNode
-   * @param {Node} endNode
+   * @param {RangeInfo} rangeInfo
    * @returns {Cmd}
    */
-  this.removeInline = function (tag, startNode, endNode) {
+  this.removeInline = function (tag, rangeInfo) {
 
-    var newEl   = document.createElement(tag),
-      origEl    = startNode.parentNode,
-      elParent  = origEl.parentNode,
-      sibling   = origEl.firstChild;
+    var startNode = rangeInfo.splitStartContainer(),
+      endNode     = rangeInfo.splitStartContainer(),
+      newEl       = document.createElement(tag),
+      origEl      = startNode.parentNode,
+      elParent    = origEl.parentNode,
+      sibling     = origEl.firstChild;
 
     elParent.insertBefore(newEl, origEl);
 
@@ -170,7 +169,7 @@ function Cmd(constrainingNode) {
     }
 
     elParent.insertBefore(endNode, origEl);
-    
+
     return this;
   };
 
