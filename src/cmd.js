@@ -72,7 +72,7 @@ function Cmd(constrainingNode) {
     var args, startNode, endNode;
 
     if (rangeInfo.startsAndEndsInSameElement() && rangeInfo.startTagIs(tag)) {
-      this.removeInline.(tag, rangeInfo);
+      this.removeInline(tag, rangeInfo);
     } else {
       startNode = this._getStartNode(tag, rangeInfo);
       endNode   = this._getEndNode(tag, rangeInfo);
@@ -146,7 +146,7 @@ function Cmd(constrainingNode) {
   this.removeInline = function (tag, rangeInfo) {
 
     var startNode = rangeInfo.splitStartContainer(),
-      endNode     = rangeInfo.splitStartContainer(),
+      endNode     = rangeInfo.splitEndContainer(),
       newEl       = document.createElement(tag),
       origEl      = startNode.parentNode,
       elParent    = origEl.parentNode,
@@ -154,18 +154,18 @@ function Cmd(constrainingNode) {
 
     elParent.insertBefore(newEl, origEl);
 
-    while (sibling !== startNode) {
-      newEl.appendChild(sibling);
-      sibling = sibling.nextSibling;
+    while (origEl.firstChild !== startNode) {
+      newEl.appendChild(origEl.firstChild);
+      //sibling = sibling.nextSibling;
     }
 
     newEl.appendChild(startNode);
 
-    sibling = origEl.firstChild;
+    //sibling = origEl.firstChild;
 
-    while (sibling !== endNode) {
-      elParent.insertBefore(sibling, origEl);
-      sibling = sibling.nextSibling;
+    while (origEl.firstChild !== endNode) {
+      elParent.insertBefore(origEl.firstChild, origEl);
+      //sibling = sibling.nextSibling;
     }
 
     elParent.insertBefore(endNode, origEl);
