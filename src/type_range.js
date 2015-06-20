@@ -213,10 +213,19 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
    * @private
    */
   this._offsetFromNodeToNode = function (containingNode, searchNode, searchOffset) {
-    var range = document.createRange();
+    /*var range = document.createRange();
     range.selectNodeContents(containingNode);
     range.setEnd(searchNode, searchOffset);
-    return range.toString().length;
+    return range.toString().length;*/
+    var node = containingNode,
+      offsetWalked = 0;
+    while (node = DomUtil.nextTextNode(node)) {
+      if (node === searchNode) {
+        return offsetWalked + this.startOffset;
+      }
+      offsetWalked += node.nodeValue.length;
+    }
+    return null;
   };
 
 }).call(TypeRange.prototype);
