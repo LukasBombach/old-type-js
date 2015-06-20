@@ -71,8 +71,12 @@ function Cmd(constrainingNode) {
 
     var args, startNode, endNode;
 
-    if (rangeInfo.startsAndEndsInSameElement() && rangeInfo.startTagIs(tag)) {
+    // If the selection is enclosed the tag we want to format with
+    // remove formatting from selected area
+    if (rangeInfo.startAndEndEnclosedBySame(tag)) {
       this.removeInline(tag, rangeInfo);
+
+    // Otherwise add formatting to selected area
     } else {
       startNode = this._getStartNode(tag, rangeInfo);
       endNode   = this._getEndNode(tag, rangeInfo);
@@ -80,7 +84,7 @@ function Cmd(constrainingNode) {
       args      = [tag, startNode, endNode].concat(params);
       this.insertInline.apply(this, args);
     }
-    
+
     return this;
   };
 
