@@ -196,7 +196,7 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
       startOffset : start,
       endOffset : end
     }
-    
+
   };
 
   /**
