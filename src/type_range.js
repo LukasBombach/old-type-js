@@ -164,6 +164,57 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
     return this.endContainer;
   };
 
+  /**
+   *
+   * @param {Node} containingNode
+   * @returns {{containingNode: Node, startOffset: number, endOffset: number}}
+   */
+  this.serializeRelativeToNode = function (containingNode) {
+    var offsets = this._offsetsFrom(containingNode);
+    return {
+      containingNode : containingNode,
+      startOffset : offsets.start,
+      endOffset : offsets.end
+    }
+  };
+
+  /**
+   *
+   * @param {Node} containingNode
+   * @returns {{startOffset: number, endOffset: number}}
+   * @private
+   */
+  this._offsetsFrom = function (containingNode) {
+
+    var start, end;
+
+    start = this._offsetFromNodeToNode(containingNode, this.startContainer, this.startOffset);
+    end = this.startsAndEndsInSameNode() ? start - this.startOffset + this.endOffset :
+      this._offsetFromNodeToNode(containingNode, this.endContainer, this.endOffset);
+
+    return {
+      startOffset : start,
+      endOffset : end
+    }
+    
+  };
+
+  /**
+   * Todo Crossbrowser compatibility: http://stackoverflow.com/a/4812022/1183252
+   *
+   * @param {HTMLElement} containingNode
+   * @param {Node} searchNode
+   * @param {number} searchOffset
+   * @returns {number}
+   * @private
+   */
+  this._offsetFromNodeToNode = function (containingNode, searchNode, searchOffset) {
+    var range = document.createRange();
+    range.selectNodeContents(containingNode);
+    range.setEnd(searchNode, searchOffset);
+    return range.toString().length;
+  };
+
 }).call(TypeRange.prototype);
 
 
