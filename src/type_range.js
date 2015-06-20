@@ -119,7 +119,7 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
     if (this.isInside(node)) {
       return true;
     }
-    throw new Error('Range is not inside given node.');
+    throw new Error('Range is not contained by given node.');
   };
 
   /**
