@@ -166,25 +166,25 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
 
   /**
    *
-   * @param {Node} containingNode
-   * @returns {{containingNode: Node, start: number, end: number}}
+   * @param {HTMLElement} containingNode
+   * @returns {{containingNode: HTMLElement, startOffset: number, endOffset: number}}
    */
-  this.serializeRelativeToNode = function (containingNode) {
+  this.serializeRelativeToElement = function (containingNode) {
 
     var start, end;
 
     start = this._offsetFromNodeToNode(containingNode, this.startContainer, this.startOffset);
 
     if (this.startsAndEndsInSameNode()) {
-      end = start - this.startOffset + this.endOffset;:
+      end = start - this.startOffset + this.endOffset;
     } else {
       end = this._offsetFromNodeToNode(containingNode, this.endContainer, this.endOffset);
     }
 
     return {
       containingNode : containingNode,
-      start : start,
-      end : end
+      startOffset : start,
+      endOffset : end
     }
 
   };
@@ -207,6 +207,15 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
 
 }).call(TypeRange.prototype);
 
+/**
+ *
+ * @param {{containingNode: HTMLElement, startOffset: number, endOffset: number}} serializedTypeRange
+ * @returns {TypeRange}
+ */
+TypeRange.fromSerializedTypeRange = function (serializedTypeRange) {
+
+  return new TypeRange();
+};
 
 /**
  *
@@ -223,6 +232,27 @@ TypeRange.fromCurrentSelection = function () {
  */
 TypeRange.fromRange = function (range) {
   return new TypeRange(range.startContainer, range.startOffset, range.endContainer, range.endOffset);
+};
+
+/**
+ *
+ * @param containingNode
+ * @param offset
+ * @returns {Node}
+ * @private
+ */
+TypeRange._nodeFromOffset = function (containingNode, offset) {
+  var node = containingNode,
+    offsetWalked = 0;
+
+  while (node = DomUtil.nextTextNode(node)) {
+    offsetWalked += node.nodeValue.length;
+    if (offsetWalked >= offset) {
+      return node;
+    }
+  }
+
+  return null;
 };
 
 module.exports = TypeRange;
