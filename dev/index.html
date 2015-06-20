@@ -27,8 +27,8 @@
 
 <div id="dev-controls" class="controls">
   <span class="group">
-    <button data-cmd="save-selection">save</button>
-    <button data-cmd="restore-selection">restore</button>
+    <button id="save-selection">save</button>
+    <button id="restore-selection">restore</button>
   </span>
 </div>
 
@@ -44,6 +44,18 @@
 <script src="./../dist/type.js"></script>
 <script>
   var Type = new Type({root : document.getElementById('document')});
+
+  var typeRange;
+
+  document.getElementById('save-selection').onclick = function () {
+    typeRange = TypeRange.fromCurrentSelection();
+  };
+
+  document.getElementById('restore-selection').onclick = function () {
+    typeRange = TypeRange.fromSerializedTypeRange(typeRange);
+    typeRange.select();
+  };
+
 </script>
 
 </body>
