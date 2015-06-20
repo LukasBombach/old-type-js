@@ -161,7 +161,9 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
    * @returns {TypeRange}
    */
   this.select = function () {
-
+    var selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(this.getRange());
     return this;
   };
 
