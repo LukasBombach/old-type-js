@@ -223,12 +223,12 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
 
 /**
  *
- * @param {{containingNode: HTMLElement, startOffset: number, endOffset: number}} serializedTypeRange
+ * @param {{containingNode: HTMLElement, startOffset: number, endOffset: number}} serialized
  * @returns {TypeRange}
  */
-TypeRange.fromSerializedTypeRange = function (serializedTypeRange) {
-  var start = TypeRange._nodeFromOffset(serializedTypeRange.containingNode, serializedTypeRange.startOffset),
-    end = TypeRange._nodeFromOffset(serializedTypeRange.containingNode, serializedTypeRange.endOffset);
+TypeRange.fromSerializedTypeRange = function (serialized) {
+  var start = TypeRange._nodeFromOffset(serialized.containingNode, serialized.startOffset),
+    end = TypeRange._nodeFromOffset(serialized.containingNode, serialized.endOffset);
   return new TypeRange(start.node, start.offset, end.node, end.offset);
 };
 
