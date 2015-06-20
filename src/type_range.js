@@ -244,10 +244,16 @@ TypeRange.fromCurrentSelection = function () {
  * @returns {TypeRange}
  */
 TypeRange.fromRange = function (range) {
-  var overselected = range.endContainer == range.startContainer.parentNode,
-    endContainer = overselected ? DomUtil.lastTextNode(range.endContainer) : range.endContainer,
-    endOffset = overselected ? endContainer.length : endOffset;
-  return new TypeRange(range.startContainer, range.startOffset, range.endContainer, range.endOffset);
+
+  var endContainer = range.endContainer,
+    endOffset = range.endOffset;
+
+  if (range.endContainer == range.startContainer.parentNode) {
+    endContainer = DomUtil.lastTextNode(range.endContainer);
+    endOffset = endContainer.length;
+  }
+
+  return new TypeRange(range.startContainer, range.startOffset, endContainer, endOffset); //return new TypeRange(range.startContainer, range.startOffset, range.endContainer, range.endOffset);
 };
 
 /**

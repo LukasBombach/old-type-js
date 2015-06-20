@@ -103,7 +103,7 @@ function DomUtilities() {
    *
    * @param {Node} node
    * @param options
-   * @returns {*}
+   * @returns {Node|null}
    */
   this.prev = function (node, options) {
 
@@ -215,6 +215,11 @@ function DomUtilities() {
     return null;
   };
 
+  /**
+   *
+   * @param {Node} containingNode
+   * @returns {Node|null}
+   */
   this.lastTextNode = function (containingNode) {
     return this.prev(containingNode, this.isTextNodeWithContents);
   };
