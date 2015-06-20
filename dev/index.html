@@ -43,17 +43,19 @@
 <script src="./assets/mousetrap.min.js"></script>
 <script src="./../dist/type.js"></script>
 <script>
-  var Type = new Type({root : document.getElementById('document')});
 
-  var typeRange;
+  var root = document.getElementById('document'),
+    bookmark;
+
+  var Type = new Type({root: root});
 
   document.getElementById('save-selection').onclick = function () {
-    typeRange = TypeRange.fromCurrentSelection();
+    bookmark = TypeRange.fromCurrentSelection().serializeRelativeToElement(root);
+    console.log(bookmark);
   };
 
   document.getElementById('restore-selection').onclick = function () {
-    typeRange = TypeRange.fromSerializedTypeRange(typeRange);
-    typeRange.select();
+    TypeRange.fromSerializedTypeRange(bookmark).select();
   };
 
 </script>

@@ -4,10 +4,10 @@
  * Loads a document from an Etherpad Pad
  * @type {EtherpadReader}
  */
-var EtherpadReader = require('./plugins/Etherpad/reader');
-var EtherpadInput = require('./plugins/Etherpad/input');
-var TypeDocument = require('./type_document');
-var DocumentNode = require('./document_node');
+//var EtherpadReader = require('./plugins/Etherpad/reader');
+//var EtherpadInput = require('./plugins/Etherpad/input');
+//var TypeDocument = require('./type_document');
+//var DocumentNode = require('./document_node');
 var BrowserInput = require('./input/browser');
 //var Cmd = require('./cmd');
 //var Renderer = require('./renderers/html');
