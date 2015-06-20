@@ -248,8 +248,8 @@ TypeRange.fromRange = function (range) {
   var endContainer = range.endContainer,
     endOffset = range.endOffset;
 
-  if (range.endContainer == range.startContainer.parentNode) {
-    endContainer = DomUtil.lastTextNode(range.endContainer);
+  if (endOffset === 0 && endContainer === DomUtil.nextVisible(range.startContainer.parentNode)) {
+    endContainer = DomUtil.lastTextNode(range.startContainer.parentNode);
     endOffset = endContainer.length;
   }
 
