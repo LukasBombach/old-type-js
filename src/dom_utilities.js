@@ -246,8 +246,8 @@ function DomUtilities() {
    * @returns {null|Node}
    */
   this.nextVisible = function (node) {
-    return this.next(node, this.isVisible);
-
+    var self = this;
+    return this.next(node, function(node) { return self.isVisible(node) });
   };
 
   /**
