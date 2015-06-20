@@ -80,6 +80,7 @@ function Cmd(constrainingNode) {
       args      = [tag, startNode, endNode].concat(params);
       this.insertInline.apply(this, args);
     }
+    
     return this;
   };
 

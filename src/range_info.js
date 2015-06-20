@@ -1,5 +1,7 @@
 'use strict';
 
+var DomUtil = require('./dom_utilities');
+
 /**
  * Todo Rename to TypeRange
  *
@@ -100,6 +102,18 @@ function RangeInfo(rangeOrStartContainer, startOffset, endContainer, endOffset) 
    */
   this.startsAndEndsInSameElement = function () {
     return this.getStartElement() === this.getEndElement();
+  };
+
+  /**
+   *
+   * @param {String} tag - A tag name
+   * @param {Node} [constrainingNode]
+   * @returns {boolean}
+   */
+  this.startAndEndEnclosedBySame = function (tag, constrainingNode) {
+    var tagEnclosingStartNode = DomUtil.parent(this.startContainer, tag, constrainingNode);
+    return tagEnclosingStartNode !== null &&
+      tagEnclosingStartNode === DomUtil.parent(this.endContainer, tag, constrainingNode);
   };
 
   /**

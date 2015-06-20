@@ -319,6 +319,46 @@ function DomUtilities() {
     return this;
   };
 
+  /**
+   *
+   * @param {Node} el
+   * @param {String} selector
+   * @param {Node} [constrainingNode]
+   * @returns {*}
+   */
+  this.parent = function(el, selector, constrainingNode) {
+    while (el.parentNode && (!constrainingNode || el !== constrainingNode)) {
+      if (this.matches(el, selector)) {
+        return el;
+      }
+      el = el.parentNode;
+    }
+    return null;
+  };
+
+  /**
+   * Returns true if el matches the CSS selector given as second argument,
+   * otherwise false
+   *
+   * @param el
+   * @param selector
+   * @returns {boolean}
+   */
+  this.matches = function(el, selector) {
+    var _matches = (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector);
+
+    if (_matches) {
+      return _matches.call(el, selector);
+    } else {
+      var nodes = el.parentNode.querySelectorAll(selector);
+      for (var i = nodes.length; i--;) {
+        if (nodes[i] === el)
+          return true;
+      }
+      return false;
+    }
+  };
+
 }).call(DomUtilities.prototype);
 
 singleton = new DomUtilities();
