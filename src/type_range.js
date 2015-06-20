@@ -167,34 +167,24 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
   /**
    *
    * @param {Node} containingNode
-   * @returns {{containingNode: Node, startOffset: number, endOffset: number}}
+   * @returns {{containingNode: Node, start: number, end: number}}
    */
   this.serializeRelativeToNode = function (containingNode) {
-    var offsets = this._offsetsFrom(containingNode);
-    return {
-      containingNode : containingNode,
-      startOffset : offsets.start,
-      endOffset : offsets.end
-    }
-  };
-
-  /**
-   *
-   * @param {Node} containingNode
-   * @returns {{startOffset: number, endOffset: number}}
-   * @private
-   */
-  this._offsetsFrom = function (containingNode) {
 
     var start, end;
 
     start = this._offsetFromNodeToNode(containingNode, this.startContainer, this.startOffset);
-    end = this.startsAndEndsInSameNode() ? start - this.startOffset + this.endOffset :
-      this._offsetFromNodeToNode(containingNode, this.endContainer, this.endOffset);
+
+    if (this.startsAndEndsInSameNode()) {
+      end = start - this.startOffset + this.endOffset;:
+    } else {
+      end = this._offsetFromNodeToNode(containingNode, this.endContainer, this.endOffset);
+    }
 
     return {
-      startOffset : start,
-      endOffset : end
+      containingNode : containingNode,
+      start : start,
+      end : end
     }
 
   };
