@@ -4,32 +4,18 @@ var DomUtil = require('./dom_utilities');
 
 /**
  *
- * @param {Range|Node} rangeOrStartContainer
- * @param {Number} [startOffset]
- * @param {Node} [endContainer]
- * @param {Number} [endOffset]
+ * @param {Node} startContainer
+ * @param {Number} startOffset
+ * @param {Node} endContainer
+ * @param {Number} endOffset
  * @constructor
  */
-function TypeRange (rangeOrStartContainer, startOffset, endContainer, endOffset) {
+function TypeRange (startContainer, startOffset, endContainer, endOffset) {
 
-  // If 1 param has been passed, param should be a Range object
-  if (arguments.length === 1) {
-    this.startContainer = rangeOrStartContainer.startContainer;
-    this.startOffset    = rangeOrStartContainer.startOffset;
-    this.endContainer   = rangeOrStartContainer.endContainer;
-    this.endOffset      = rangeOrStartContainer.endOffset;
-
-  // If 4 params have been passed, all data is given individually
-  } else if (arguments.length === 4) {
-    this.startContainer = rangeOrStartContainer;
-    this.startOffset    = startOffset;
-    this.endContainer   = endContainer;
-    this.endOffset      = endOffset;
-
-  // In case of wrong usage
-  } else {
-    throw new Error('Illegal parameters. Pass either a Range or descriptive parameters. You passed', arguments);
-  }
+  this.startContainer = startContainer;
+  this.startOffset    = startOffset;
+  this.endContainer   = endContainer;
+  this.endOffset      = endOffset;
 
   this.ensureStartNodePrecedesEndNode();
 
@@ -181,8 +167,21 @@ function TypeRange (rangeOrStartContainer, startOffset, endContainer, endOffset)
 }).call(TypeRange.prototype);
 
 
+/**
+ *
+ * @returns {TypeRange}
+ */
 TypeRange.fromCurrentSelection = function () {
-  return new TypeRange(document.getSelection().getRangeAt(0));
+  return TypeRange.fromRange(document.getSelection().getRangeAt(0));
+};
+
+/**
+ *
+ * @param {Range} range
+ * @returns {TypeRange}
+ */
+TypeRange.fromRange = function (range) {
+  return new TypeRange(range.startContainer, range.startOffset, range.endContainer, range.endOffset);
 };
 
 module.exports = TypeRange;
