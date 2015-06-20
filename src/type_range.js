@@ -213,9 +213,9 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
  * @returns {TypeRange}
  */
 TypeRange.fromSerializedTypeRange = function (serializedTypeRange) {
-  var startInfo, startOffset, endContainer, endOffset;
-  startInfo = TypeRange._nodeFromOffset(serializedTypeRange.containingNode, serializedTypeRange.startOffset);
-  return new TypeRange();
+  var start = TypeRange._nodeFromOffset(serializedTypeRange.containingNode, serializedTypeRange.startOffset),
+    end = TypeRange._nodeFromOffset(serializedTypeRange.containingNode, serializedTypeRange.endOffset);
+  return new TypeRange(start.node, start.offset, end.node, end.offset);
 };
 
 /**
@@ -239,7 +239,7 @@ TypeRange.fromRange = function (range) {
  *
  * @param containingNode
  * @param offset
- * @returns {*}
+ * @returns {{node: Node, offset: number}|null}
  * @private
  */
 TypeRange._nodeFromOffset = function (containingNode, offset) {
