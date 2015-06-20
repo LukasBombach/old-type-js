@@ -48,6 +48,13 @@ function Cmd(constrainingNode) {
    * @returns {Cmd}
    */
   this.cmd = function (tag, typeRange, params) {
+    //var args, startNode, endNode;
+    //typeRange.ensureIsInside(this.constrainingNode);
+    //startNode = this._getStartNode(tag, typeRange);
+    //endNode = this._getEndNode(tag, typeRange);
+    //params = Array.prototype.slice.call(arguments, 2);
+    //args = [tag, startNode, endNode].concat(params);
+    //this._handlerFor(tag).apply(this, args);
     typeRange.ensureIsInside(this.constrainingNode);
     this._handlerFor(tag).apply(this, arguments);
     return this;
@@ -160,6 +167,35 @@ function Cmd(constrainingNode) {
 
   /**
    *
+   * @param {String} tag
+   * @param {TypeRange} typeRange
+   * @returns {Cmd}
+   */
+  /*this.removeInlineOld1 = function (tag, typeRange) {
+
+    var startNode = typeRange.splitStartContainer(),
+      endNode     = typeRange.splitEndContainer(),
+      newEl       = document.createElement(tag),
+      origEl      = startNode.parentNode,
+      elParent    = origEl.parentNode;
+
+    elParent.insertBefore(newEl, origEl);
+
+    while (origEl.firstChild !== startNode) {
+      newEl.appendChild(origEl.firstChild);
+    }
+
+    while (origEl.firstChild !== endNode) {
+      elParent.insertBefore(origEl.firstChild, origEl);
+    }
+
+    elParent.insertBefore(endNode, origEl);
+
+    return this;
+  };*/
+
+  /**
+   *
    * @param cmd
    * @param typeRange
    * @param params
@@ -253,5 +289,16 @@ Type.fn.cmd = function (tag, params) {
   this._plugins['cmd'].cmd(tag, TypeRange.fromCurrentSelection(), params);
   return this;
 };
+
+/**
+ * Todo Alternative Variante, TYPE-22
+ */
+/*Type.on('ready', function(type) {
+  var cmd = new Cmd(type.options.root);
+  type.cmd = function (tag, params) {
+    var range = TypeRange.fromCurrentSelection();
+    cmd.cmd(tag, range, params);
+  }
+});*/
 
 module.exports = Cmd;
