@@ -244,6 +244,9 @@ TypeRange.fromCurrentSelection = function () {
  * @returns {TypeRange}
  */
 TypeRange.fromRange = function (range) {
+  var overselected = range.endContainer == range.startContainer.parentNode,
+    endContainer = overselected ? DomUtil.lastTextNode(range.endContainer) : range.endContainer,
+    endOffset = overselected ? endContainer.length : endOffset;
   return new TypeRange(range.startContainer, range.startOffset, range.endContainer, range.endOffset);
 };
 

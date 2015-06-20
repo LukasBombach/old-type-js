@@ -50,6 +50,7 @@
   var Type = new Type({root: root});
 
   document.getElementById('save-selection').onclick = function () {
+    console.log(document.getSelection().getRangeAt(0));
     bookmark = TypeRange.fromCurrentSelection().serializeRelativeToElement(root);
     console.log(bookmark);
   };

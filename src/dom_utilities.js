@@ -68,7 +68,7 @@ function DomUtilities() {
     // For later use
     var parent = node.parentNode;
 
-    // If a node is found in this call, return it, stop the recusion
+    // If a node is found in this call, return it, stop the recursion
     if (options.returnMe === true && (!options.filterFunction || options.filterFunction(node))) {
       return node;
     }
@@ -90,6 +90,61 @@ function DomUtilities() {
     while (parent !== options.constrainingNode) {
       if (parent.nextSibling !== null) {
         return this.nextNode(parent.nextSibling, options);
+      }
+      parent = parent.parentNode;
+    }
+
+    // We have not found a node we were looking for
+    return null;
+
+  };
+
+  /**
+   *
+   * @param {Node} node
+   * @param options
+   * @returns {*}
+   */
+  this.prev = function (node, options) {
+
+    // If no options parameter has been passed
+    options = options || {};
+
+    // If a node has been passed as options parameter
+    if (options.nodeType) {
+      options = {constrainingNode: options};
+    }
+
+    // If a function has been passed as ooptions parameter
+    if (this._isFunction(options)) {
+      options = {filterFunction: options};
+    }
+
+    // For later use
+    var parent = node.parentNode;
+
+    // If a node is found in this call, return it, stop the recursion
+    if (options.returnMe === true && (!options.filterFunction || options.filterFunction(node))) {
+      return node;
+    }
+
+    // Will make future recursive calls consider to return the nodes passed
+    options.returnMe = true;
+
+    // 1. If this node has children, go down the tree
+    if (node.childNodes.length) {
+      return this.prev(node.lastChild, options);
+    }
+
+    // 2. If this node has siblings, move right in the tree
+    if (node.previousSibling !== null) {
+      return this.prev(node.previousSibling, options);
+    }
+
+    // 3. Move up in the node's parents until a parent has a sibling or the constrainingNode is hit
+    while (parent !== options.constrainingNode) {
+      if (parent.previousSibling !== null) {
+        return this.prev(parent.previousSibling, options);
       }
       parent = parent.parentNode;
     }
@@ -160,7 +215,12 @@ function DomUtilities() {
     return null;
   };
 
+  this.lastTextNode = function (containingNode) {
+    return this.prev(containingNode, this.isTextNodeWithContents);
+  };
+
   /**
+   * Todo Perfomancemäßig schlecht immer zu iterieren?
    *
    * @param {...Node} nodes
    * @returns {boolean}
@@ -358,6 +418,16 @@ function DomUtilities() {
       }
       return false;
     }
+  };
+
+  /**
+   *
+   * @param obj
+   * @returns {boolean}
+   * @private
+   */
+  this._isFunction = function(obj) {
+    return !!(obj && obj.constructor && obj.call && obj.apply);
   };
 
 }).call(DomUtilities.prototype);
