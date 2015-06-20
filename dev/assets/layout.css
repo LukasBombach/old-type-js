@@ -35,13 +35,21 @@ body {
  *******************/
 
 #controls {
+  top: -25px;
+}
+
+#dev-controls {
+  top: -15px;
+  background: rgba(60, 60, 60, .8);
+}
+
+.controls {
 
   margin: 0 auto;
   padding: 8px;
   box-sizing: border-box;
 
   position: relative;
-  top: -25px;
 
   max-width: 840px;
   background: rgba(30, 30, 30, .8);
@@ -53,11 +61,11 @@ body {
 
 }
 
-#controls .group {
+.controls .group {
   margin-right: 32px;
 }
 
-#controls button {
+.controls button {
 
   border: none;
   background: rgba(230, 230, 230, .2);
@@ -74,31 +82,31 @@ body {
 
 }
 
-#controls button:hover {
+.controls button:hover {
   background: rgba(230, 230, 230, .3);
 }
 
-#controls button:focus {
+.controls button:focus {
   outline: none;
 }
 
-#controls button:active {
+.controls button:active {
   background: rgba(0, 0, 0, .2);
 }
 
-#controls [data-cmd="strong"] {
+.controls [data-cmd="strong"] {
   font-weight: bold;
 }
 
-#controls [data-cmd="em"] {
+.controls [data-cmd="em"] {
   font-style: italic;
 }
 
-#controls [data-cmd="u"] {
+.controls [data-cmd="u"] {
   text-decoration: underline;
 }
 
-#controls [data-cmd="s"] {
+.controls [data-cmd="s"] {
   text-decoration: line-through;
 }
 

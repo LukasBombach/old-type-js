@@ -95,14 +95,6 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
 
   /**
    *
-   * @returns {boolean}
-   */
-  this.containsMultipleElements = function () {
-    return this.startContainer !== this.endContainer;
-  };
-
-  /**
-   *
    * @param {Node} node
    * @returns {boolean}
    */
@@ -162,6 +154,26 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
       this.endOffset = this.endContainer.length;
     }
     return this.endContainer;
+  };
+
+  /**
+   *
+   * @returns {TypeRange}
+   */
+  this.select = function () {
+
+    return this;
+  };
+
+  /**
+   *
+   * @returns {TextRange|Range}
+   */
+  this.getRange = function () {
+    var range = document.createRange();
+    range.setEnd(this.endContainer, this.endOffset);
+    range.setStart(this.startContainer, this.startOffset);
+    return range;
   };
 
   /**

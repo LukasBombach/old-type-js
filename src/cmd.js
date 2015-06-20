@@ -171,7 +171,7 @@ function Cmd(constrainingNode) {
    * @param {TypeRange} typeRange
    * @returns {Cmd}
    */
-  this.removeInlineOld1 = function (tag, typeRange) {
+  /*this.removeInlineOld1 = function (tag, typeRange) {
 
     var startNode = typeRange.splitStartContainer(),
       endNode     = typeRange.splitEndContainer(),
@@ -192,7 +192,7 @@ function Cmd(constrainingNode) {
     elParent.insertBefore(endNode, origEl);
 
     return this;
-  };
+  };*/
 
   /**
    *
