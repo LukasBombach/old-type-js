@@ -213,7 +213,8 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
  * @returns {TypeRange}
  */
 TypeRange.fromSerializedTypeRange = function (serializedTypeRange) {
-
+  var startInfo, startOffset, endContainer, endOffset;
+  startInfo = TypeRange._nodeFromOffset(serializedTypeRange.containingNode, serializedTypeRange.startOffset);
   return new TypeRange();
 };
 
@@ -238,7 +239,7 @@ TypeRange.fromRange = function (range) {
  *
  * @param containingNode
  * @param offset
- * @returns {Node}
+ * @returns {*}
  * @private
  */
 TypeRange._nodeFromOffset = function (containingNode, offset) {
@@ -248,7 +249,10 @@ TypeRange._nodeFromOffset = function (containingNode, offset) {
   while (node = DomUtil.nextTextNode(node)) {
     offsetWalked += node.nodeValue.length;
     if (offsetWalked >= offset) {
-      return node;
+      return {
+        node: node,
+        offset: offset - (offsetWalked - node.nodeValue.length)
+      };
     }
   }
 
