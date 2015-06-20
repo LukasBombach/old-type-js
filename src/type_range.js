@@ -221,7 +221,7 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
       offsetWalked = 0;
     while (node = DomUtil.nextTextNode(node)) {
       if (node === searchNode) {
-        return offsetWalked + this.startOffset;
+        return offsetWalked + searchOffset;
       }
       offsetWalked += node.nodeValue.length;
     }
