@@ -1,109 +1,188 @@
 'use strict';
 
-var extensions = {
-
-  /**
-   *
-   * @returns {Node}
-   */
-  getStartElement : function () {
-    return this.startContainer.parentNode;
-  },
-
-  /**
-   *
-   * @returns {Node}
-   */
-  getEndElement : function () {
-    return this.endContainer.parentNode;
-  },
-
-  /**
-   *
-   * @returns {string}
-   */
-  getStartTagName : function () {
-    return this.getStartElement().tagName.toLowerCase();
-  },
-
-  /**
-   *
-   * @returns {string}
-   */
-  getEndTagName : function () {
-    return this.getEndElement().tagName.toLowerCase();
-  },
-
-  /**
-   *
-   * @param tagName
-   * @returns {boolean}
-   */
-  startTagIs : function (tagName) {
-    return this.getStartTagName() === tagName.toLowerCase();
-  },
-
-  /**
-   *
-   * @param tagName
-   * @returns {boolean}
-   */
-  endTagIs : function (tagName) {
-    return this.getEndTagName() === tagName.toLowerCase();
-  },
-
-  /**
-   *
-   * @returns {boolean}
-   */
-  containsMultipleElements : function () {
-    return this.startContainer !== this.endContainer;
-  },
-
-  isEnclosedByTag : function () {
-
-  }
-
-  /**
-   *
-   * @param tagName
-   * @returns {boolean}
-   */
-  //startsOrEndsInTag : function (tagName) {
-  //  tagName = tagName.toLowerCase();
-  //  return this.getStartTagName() === tagName ||
-  //    this.getEndTagName() === tagName;
-  //}
-
-};
-
-var shims = {
-
-};
+var DomUtil = require('./dom_utilities');
 
 /**
  *
- * @param {Range} nativeRange
- * @returns {*}
+ * @param {Range|Node} rangeOrStartContainer
+ * @param {Number} [startOffset]
+ * @param {Node} [endContainer]
+ * @param {Number} [endOffset]
  * @constructor
  */
-function TypeRange(nativeRange) {
+function TypeRange (rangeOrStartContainer, startOffset, endContainer, endOffset) {
 
-  // TODO duck type to check if nativeRange really is of type Range
+  // If 1 param has been passed, param should be a Range object
+  if (arguments.length === 1) {
+    this.startContainer = rangeOrStartContainer.startContainer;
+    this.startOffset    = rangeOrStartContainer.startOffset;
+    this.endContainer   = rangeOrStartContainer.endContainer;
+    this.endOffset      = rangeOrStartContainer.endOffset;
 
-  var i;
+  // If 4 params have been passed, all data is given individually
+  } else if (arguments.length === 4) {
+    this.startContainer = rangeOrStartContainer;
+    this.startOffset    = startOffset;
+    this.endContainer   = endContainer;
+    this.endOffset      = endOffset;
 
-  // Extend the native Range with custom methods
-  for (i = 0; i < extensions.length; i++) {
-    nativeRange[i] = this.extensions[i];
+  // In case of wrong usage
+  } else {
+    throw new Error('Illegal parameters. Pass either a Range or descriptive parameters. You passed', arguments);
   }
 
-  // Override native methods with shims to fix browsers
-  for (i = 0; i < shims.shims; i++) {
-    nativeRange[i] = this.shims[i];
-  }
+  this.ensureStartNodePrecedesEndNode();
 
-  return nativeRange;
 }
+
+(function () {
+
+  /**
+   *
+   * @returns {Node}
+   */
+  this.getStartElement = function () {
+    return this.startContainer.parentNode;
+  };
+
+  /**
+   *
+   * @returns {Node}
+   */
+  this.getEndElement = function () {
+    return this.endContainer.parentNode;
+  };
+
+  /**
+   *
+   * @returns {string}
+   */
+  this.getStartTagName = function () {
+    return this.getStartElement().tagName.toLowerCase();
+  };
+
+  /**
+   *
+   * @returns {string}
+   */
+  this.getEndTagName = function () {
+    return this.getEndElement().tagName.toLowerCase();
+  };
+
+  /**
+   *
+   * @param tagName
+   * @returns {boolean}
+   */
+  this.startTagIs = function (tagName) {
+    return this.getStartTagName() === tagName.toLowerCase();
+  };
+
+  /**
+   *
+   * @param tagName
+   * @returns {boolean}
+   */
+  this.endTagIs = function (tagName) {
+    return this.getEndTagName() === tagName.toLowerCase();
+  };
+
+  /**
+   *
+   * @returns {boolean}
+   */
+  this.startsAndEndsInSameNode = function () {
+    return this.startContainer === this.endContainer;
+  };
+
+  /**
+   *
+   * @param {String} tag - A tag name
+   * @param {Node} [constrainingNode]
+   * @returns {boolean}
+   */
+  this.startAndEndEnclosedBySame = function (tag, constrainingNode) {
+    var tagEnclosingStartNode = DomUtil.parent(this.startContainer, tag, constrainingNode);
+    return tagEnclosingStartNode !== null &&
+      tagEnclosingStartNode === DomUtil.parent(this.endContainer, tag, constrainingNode);
+  };
+
+  /**
+   *
+   * @returns {boolean}
+   */
+  this.containsMultipleElements = function () {
+    return this.startContainer !== this.endContainer;
+  };
+
+  /**
+   *
+   * @param {Node} node
+   * @returns {boolean}
+   */
+  this.isInside = function (node) {
+    return node.contains(this.startContainer) && node.contains(this.endContainer);
+  };
+
+  /**
+   *
+   * @param node
+   * @returns {boolean}
+   */
+  this.ensureIsInside = function (node) {
+    if (this.isInside(node)) {
+      return true;
+    }
+    throw new Error('Range is not inside given node.');
+  };
+
+  /**
+   *
+   * @returns {boolean}
+   */
+  this.ensureStartNodePrecedesEndNode = function () {
+    var isSameNode     = this.startContainer === this.endContainer,
+      startPrecedesEnd = this.startContainer.compareDocumentPosition(this.endContainer) & Node.DOCUMENT_POSITION_FOLLOWING;
+    if (isSameNode || startPrecedesEnd) {
+      return true;
+    }
+    throw new Error('Given startContainer does not precede endContainer.');
+  };
+
+  /**
+   *
+   * @returns {Node}
+   */
+  this.splitStartContainer = function () {
+    if (this.startOffset !== 0) {
+      var startsAndEndsInSameNode = this.startsAndEndsInSameNode();
+      this.startContainer = this.startContainer.splitText(this.startOffset);
+      if(startsAndEndsInSameNode) {
+        this.endContainer = this.startContainer;
+        this.endOffset -= this.startOffset;
+      }
+      this.startOffset = 0;
+    }
+    return this.startContainer;
+  };
+
+  /**
+   *
+   * @returns {*|Node}
+   */
+  this.splitEndContainer = function () {
+    if (this.endOffset !== this.endContainer.length) {
+      this.endContainer = this.endContainer.splitText(this.endOffset).previousSibling;
+      this.endOffset = this.endContainer.length;
+    }
+    return this.endContainer;
+  };
+
+}).call(TypeRange.prototype);
+
+
+TypeRange.fromCurrentSelection = function () {
+  return new TypeRange(document.getSelection().getRangeAt(0));
+};
 
 module.exports = TypeRange;

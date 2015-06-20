@@ -1,7 +1,7 @@
 'use strict';
 
 var Type = require('./core');
-var RangeInfo = require('./range_info');
+var TypeRange = require('./type_range');
 var DomUtil = require('./dom_utilities');
 
 /**
@@ -41,21 +41,21 @@ function Cmd(constrainingNode) {
    * this tag yet (the latter would call _noop which would utter no action).
    *
    * @param {String} tag - The tag that we want to format the text with
-   * @param {RangeInfo} rangeInfo - An object containing data on which part
+   * @param {TypeRange} typeRange - An object containing data on which part
    *     of the text to format
    * @param {...*} params - Any number of arguments that specify attributes
    *     for the tag
    * @returns {Cmd}
    */
-  this.cmd = function (tag, rangeInfo, params) {
+  this.cmd = function (tag, typeRange, params) {
     //var args, startNode, endNode;
-    //rangeInfo.ensureIsInside(this.constrainingNode);
-    //startNode = this._getStartNode(tag, rangeInfo);
-    //endNode = this._getEndNode(tag, rangeInfo);
+    //typeRange.ensureIsInside(this.constrainingNode);
+    //startNode = this._getStartNode(tag, typeRange);
+    //endNode = this._getEndNode(tag, typeRange);
     //params = Array.prototype.slice.call(arguments, 2);
     //args = [tag, startNode, endNode].concat(params);
     //this._handlerFor(tag).apply(this, args);
-    rangeInfo.ensureIsInside(this.constrainingNode);
+    typeRange.ensureIsInside(this.constrainingNode);
     this._handlerFor(tag).apply(this, arguments);
     return this;
   };
@@ -63,23 +63,23 @@ function Cmd(constrainingNode) {
   /**
    *
    * @param tag
-   * @param rangeInfo
+   * @param typeRange
    * @param params
    * @returns {Cmd}
    */
-  this.inline = function (tag, rangeInfo, params) {
+  this.inline = function (tag, typeRange, params) {
 
-    var args, startNode, endNode;
+    var args, startNode, endNode, enclosingTag;
 
     // If the selection is enclosed the tag we want to format with
     // remove formatting from selected area
-    if (rangeInfo.startAndEndEnclosedBySame(tag)) {
-      this.removeInline(tag, rangeInfo);
+    if (enclosingTag = typeRange.startAndEndEnclosedBySame(tag)) {
+      this.removeInline(enclosingTag, typeRange);
 
     // Otherwise add formatting to selected area
     } else {
-      startNode = this._getStartNode(tag, rangeInfo);
-      endNode   = this._getEndNode(tag, rangeInfo);
+      startNode = this._getStartNode(tag, typeRange);
+      endNode   = this._getEndNode(tag, typeRange);
       params    = Array.prototype.slice.call(arguments, 2);
       args      = [tag, startNode, endNode].concat(params);
       this.insertInline.apply(this, args);
@@ -144,33 +144,49 @@ function Cmd(constrainingNode) {
 
   /**
    *
-   * @param {String} tag
-   * @param {RangeInfo} rangeInfo
+   * @param {Node} enclosingTag
+   * @param {TypeRange} typeRange
    * @returns {Cmd}
    */
-  this.removeInline = function (tag, rangeInfo) {
+  this.removeInline = function (enclosingTag, typeRange) {
 
-    var startNode = rangeInfo.splitStartContainer(),
-      endNode     = rangeInfo.splitEndContainer(),
+    var tagName = enclosingTag.tagName,
+      leftTagNodes,
+      rightTagNodes;
+
+    leftTagNodes  = {start: enclosingTag.firstChild, end: typeRange.startContainer}; // Todo should be DomUtil.prev(typeRange.startContainer);
+    rightTagNodes = {start: DomUtil.nextNode(typeRange.endContainer), end: enclosingTag.lastChild};
+
+    DomUtil.unwrap(enclosingTag); // Will merge textContainers and destroy them
+
+    this.insertInline(tagName, leftTagNodes.start, leftTagNodes.end);
+    this.insertInline(tagName, rightTagNodes.start, rightTagNodes.end);
+
+    return this;
+  };
+
+  /**
+   *
+   * @param {String} tag
+   * @param {TypeRange} typeRange
+   * @returns {Cmd}
+   */
+  this.removeInlineOld1 = function (tag, typeRange) {
+
+    var startNode = typeRange.splitStartContainer(),
+      endNode     = typeRange.splitEndContainer(),
       newEl       = document.createElement(tag),
       origEl      = startNode.parentNode,
-      elParent    = origEl.parentNode,
-      sibling     = origEl.firstChild;
+      elParent    = origEl.parentNode;
 
     elParent.insertBefore(newEl, origEl);
 
     while (origEl.firstChild !== startNode) {
       newEl.appendChild(origEl.firstChild);
-      //sibling = sibling.nextSibling;
     }
-
-    //newEl.appendChild(startNode);
-
-    //sibling = origEl.firstChild;
 
     while (origEl.firstChild !== endNode) {
       elParent.insertBefore(origEl.firstChild, origEl);
-      //sibling = sibling.nextSibling;
     }
 
     elParent.insertBefore(endNode, origEl);
@@ -204,23 +220,23 @@ function Cmd(constrainingNode) {
   /**
    *
    * @param tag
-   * @param rangeInfo
+   * @param typeRange
    * @returns {*}
    * @private
    */
-  this._getStartNode = function (tag, rangeInfo) {
-      return rangeInfo.startTagIs(tag) ? rangeInfo.getStartElement() : rangeInfo.splitStartContainer();
+  this._getStartNode = function (tag, typeRange) {
+      return typeRange.startTagIs(tag) ? typeRange.getStartElement() : typeRange.splitStartContainer();
   };
 
   /**
    *
    * @param tag
-   * @param rangeInfo
+   * @param typeRange
    * @returns {*}
    * @private
    */
-  this._getEndNode = function (tag, rangeInfo) {
-    return rangeInfo.endTagIs(tag) ? rangeInfo.getEndElement() : rangeInfo.splitEndContainer();
+  this._getEndNode = function (tag, typeRange) {
+    return typeRange.endTagIs(tag) ? typeRange.getEndElement() : typeRange.splitEndContainer();
   };
 
   /**
@@ -270,7 +286,7 @@ Type.fn.cmd = function (tag, params) {
   if (!this._plugins['cmd']) {
     this._plugins['cmd'] = new Cmd(this.options.root);
   }
-  this._plugins['cmd'].cmd(tag, RangeInfo.fromCurrentSelection(), params);
+  this._plugins['cmd'].cmd(tag, TypeRange.fromCurrentSelection(), params);
   return this;
 };
 
@@ -280,7 +296,7 @@ Type.fn.cmd = function (tag, params) {
 /*Type.on('ready', function(type) {
   var cmd = new Cmd(type.options.root);
   type.cmd = function (tag, params) {
-    var range = RangeInfo.fromCurrentSelection();
+    var range = TypeRange.fromCurrentSelection();
     cmd.cmd(tag, range, params);
   }
 });*/

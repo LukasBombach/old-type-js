@@ -292,6 +292,7 @@ function DomUtilities() {
   };
 
   /**
+   * Todo Vielleicht funktioniert das hier effektiver mit querySelectorAll anstatt die childNodes zu traversieren
    *
    * @param el
    * @param tag
