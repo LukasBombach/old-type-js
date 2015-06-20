@@ -108,9 +108,7 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
    * @returns {boolean}
    */
   this.ensureIsInside = function (node) {
-    if (this.isInside(node)) {
-      return true;
-    }
+    if (this.isInside(node)) return true;
     throw new Error('Range is not contained by given node.');
   };
 
@@ -121,9 +119,7 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
   this.ensureStartNodePrecedesEndNode = function () {
     var isSameNode     = this.startContainer === this.endContainer,
       startPrecedesEnd = this.startContainer.compareDocumentPosition(this.endContainer) & Node.DOCUMENT_POSITION_FOLLOWING;
-    if (isSameNode || startPrecedesEnd) {
-      return true;
-    }
+    if (isSameNode || startPrecedesEnd) return true;
     throw new Error('Given startContainer does not precede endContainer.');
   };
 
@@ -213,16 +209,9 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
    * @private
    */
   this._offsetFromNodeToNode = function (containingNode, searchNode, searchOffset) {
-    /*var range = document.createRange();
-    range.selectNodeContents(containingNode);
-    range.setEnd(searchNode, searchOffset);
-    return range.toString().length;*/
-    var node = containingNode,
-      offsetWalked = 0;
+    var node = containingNode, offsetWalked = 0;
     while (node = DomUtil.nextTextNode(node)) {
-      if (node === searchNode) {
-        return offsetWalked + searchOffset;
-      }
+      if (node === searchNode) return offsetWalked + searchOffset;
       offsetWalked += node.nodeValue.length;
     }
     return null;
@@ -266,20 +255,17 @@ TypeRange.fromRange = function (range) {
  * @private
  */
 TypeRange._nodeFromOffset = function (containingNode, offset) {
-  var node = containingNode,
-    offsetWalked = 0;
+
+  var node = containingNode, offsetWalked = 0, length;
 
   while (node = DomUtil.nextTextNode(node)) {
-    offsetWalked += node.nodeValue.length;
-    if (offsetWalked >= offset) {
-      return {
-        node: node,
-        offset: offset - (offsetWalked - node.nodeValue.length)
-      };
-    }
+    length = node.nodeValue.length;
+    if (offsetWalked + length >= offset) return { node: node, offset: offset-offsetWalked };
+    offsetWalked += length;
   }
 
   return null;
+
 };
 
 module.exports = TypeRange;
