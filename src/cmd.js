@@ -215,12 +215,8 @@ function Cmd(constrainingNode) {
    */
   this._handlerFor = function (tag) {
     tag = tag.toLowerCase();
-    if (this._inlineTags.indexOf(tag) > -1) {
-      return this.inline;
-    }
-    if (this._blockTags.indexOf(tag) > -1) {
-      return this.block;
-    }
+    if (this._inlineTags.indexOf(tag) > -1) return this.inline;
+    if (this._blockTags.indexOf(tag) > -1) return this.block;
     console.debug('Tag "' + tag + '" not implemented');
     return this._noop;
   };
@@ -245,9 +241,7 @@ function Cmd(constrainingNode) {
  * @param {...*} params - Any number of arbitrary parameters
  */
 Type.fn.cmd = function (tag, params) {
-  if (!this._plugins['cmd']) {
-    this._plugins['cmd'] = new Cmd(this.options.root);
-  }
+  if (!this._plugins['cmd']) this._plugins['cmd'] = new Cmd(this.options.root);
   this._plugins['cmd'].cmd(tag, TypeRange.fromCurrentSelection(), params);
   return this;
 };
