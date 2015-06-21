@@ -159,15 +159,6 @@ function Cmd(constrainingNode) {
 
     return this;
 
-    //leftTagNodes  = {start: enclosingTag.firstChild, end: typeRange.startContainer}; // Todo should be DomUtil.prev(typeRange.startContainer);
-    //rightTagNodes = {start: DomUtil.nextNode(typeRange.endContainer), end: enclosingTag.lastChild};
-
-    //DomUtil.unwrap(enclosingTag); // Will merge textContainers and destroy them
-
-    //this.insertInline(tagName, leftTagNodes.start, leftTagNodes.end);
-    //this.insertInline(tagName, rightTagNodes.start, rightTagNodes.end);
-
-    //return this;
   };
 
   /**

@@ -222,7 +222,7 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
 
 /**
  *
- * @param {{from: HTMLElement, start: number, end: number}|HTMLElement} positions
+ * @param {HTMLElement|Node|{from: HTMLElement, start: number, end: number}} positions
  * @param {number} [start]
  * @param {number} [end]
  * @returns {TypeRange}
