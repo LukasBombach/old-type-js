@@ -7,9 +7,12 @@
 body {
   background: #eeeeee;
   padding: 50px;
+  text-align: center;
 }
 
 .page {
+
+  text-align: left;
 
   display: inline-block;
 
@@ -46,6 +49,8 @@ body {
 }
 
 .controls {
+
+  text-align: left;
 
   margin: 0 auto;
   padding: 8px;
