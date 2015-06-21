@@ -69,6 +69,8 @@ function TypeInput (type) {
   };
 
   /**
+   * Todo x-browser http://stackoverflow.com/a/8694125/1183252
+   * Todo x-browser http://jsfiddle.net/MBags/ (?)
    *
    * @returns {TypeInput}
    * @private
