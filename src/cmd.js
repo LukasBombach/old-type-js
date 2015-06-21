@@ -144,7 +144,12 @@ function Cmd(constrainingNode) {
   this.removeInline = function (enclosingTag, typeRange) {
 
     var tagName = enclosingTag.tagName,
-      positions = typeRange.getPositions(this.constrainingNode);
+      tagPositions = TypeRange.fromElement(enclosingTag).getPositions(this.constrainingNode),
+      selPositions = typeRange.getPositions(this.constrainingNode),
+      leftRange,
+      rightRange;
+
+    DomUtil.unwrap(enclosingTag);
 
 
 

@@ -221,13 +221,24 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
 
 /**
  *
- * @param {{from: HTMLElement, start: number, end: number}} positions
+ * @param {{from: HTMLElement, start: number, end: number}|HTMLElement} positions
+ * @param {number} [start]
+ * @param {number} [end]
  * @returns {TypeRange}
  */
-TypeRange.fromPositions = function (positions) {
-  var start = TypeRange._nodeFromOffset(positions.from, positions.start),
-    end = TypeRange._nodeFromOffset(positions.from, positions.end);
-  return new TypeRange(start.node, start.offset, end.node, end.offset);
+TypeRange.fromPositions = function (positions, start, end) {
+
+  var startInfo, endInfo;
+
+  if (positions.nodeType) {
+    positions = {from: positions, start: start, end: end}
+  }
+
+  startInfo = TypeRange._nodeFromOffset(positions.from, positions.start);
+  endInfo = TypeRange._nodeFromOffset(positions.from, positions.end);
+
+  return new TypeRange(startInfo.node, startInfo.offset, endInfo.node, endInfo.offset);
+  
 };
 
 /**
@@ -255,6 +266,17 @@ TypeRange.fromRange = function (range) {
   }
 
   return new TypeRange(range.startContainer, range.startOffset, endContainer, endOffset); //return new TypeRange(range.startContainer, range.startOffset, range.endContainer, range.endOffset);
+};
+
+/**
+ *
+ * @param {HTMLElement} el
+ * @returns {TypeRange}
+ */
+TypeRange.fromElement = function (el) {
+  var startNode = DomUtil.firstTextNode(el),
+    endNode = DomUtil.lastTextNode(el);
+  return new TypeRange(startNode, 0, endNode, endNode.nodeValue.length);
 };
 
 /**
