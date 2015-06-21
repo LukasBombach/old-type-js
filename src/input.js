@@ -13,6 +13,28 @@
 
 var Type = require('./core');
 
+
+function TypeInput () {
+
+}
+
+
+(function () {
+
+}).call(TypeInput.prototype);
+
+
+
+
+/**
+ *
+ *
+ *
+ *  DEV CODE
+ *  Needs to go somewhere and play along with input, cmd, caret & Etherpad!
+ *
+ *
+ */
 (function () {
 
   /**
@@ -43,7 +65,6 @@ var Type = require('./core');
   this._invertChangeset = function (changeset) {
 
   };
-
 
 }).call(Type.fn);
 
