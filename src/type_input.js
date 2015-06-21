@@ -22,6 +22,8 @@ function TypeInput (type) {
   this._el = this._createElement();
   this._caret = new Caret(null, type.options.root);
   this._caret.moveTo(DomUtil.firstTextNode(type.options.root))._blink();
+  this._caretStyle = this._caret.caretEl.style;
+  this._elStyle = this._el.style;
   this.catchInput();
 }
 
@@ -44,8 +46,9 @@ function TypeInput (type) {
    * @returns {TypeInput}
    */
   this.catchInput = function () {
-    this._catchKeyDownEvents();
-    this._catchInputEvents();
+    this._bindKeyDownEvents();
+    this._bindInputEvents();
+    this._bindMouseEvents();
     return this;
   };
 
@@ -59,7 +62,7 @@ function TypeInput (type) {
    * @returns {TypeInput}
    * @private
    */
-  this._catchKeyDownEvents = function () {
+  this._bindKeyDownEvents = function () {
     var key;
     this._el.addEventListener('keydown', function(e) {
       key = this._keyNames[e.keyCode];
@@ -75,9 +78,42 @@ function TypeInput (type) {
    * @returns {TypeInput}
    * @private
    */
-  this._catchInputEvents = function () {
+  this._bindInputEvents = function () {
     var self = this;
     this._el.addEventListener('input', function() { self.onInput(); }, false);
+    return this;
+  };
+
+  /**
+   *
+   * @returns {*}
+   * @private
+   */
+  this._bindMouseEvents = function () {
+    var range, textNode, offset,
+      self = this;
+    this._type.options.root.addEventListener('mouseup', function(e) {
+      range = document.caretRangeFromPoint(e.clientX, e.clientY);
+      textNode = range.startContainer;
+      offset = range.startOffset;
+      if (textNode.nodeType == 3) {
+        self._caret.moveTo(textNode, offset);
+      }
+      window.setTimeout(function() { self._el.focus();}, 0);
+    }, false);
+    return this;
+  };
+
+  /**
+   * The input element should be moved with the visible caret because the
+   * page scrolls to the input element when the user enters something.
+   *
+   * @returns {TypeInput}
+   * @private
+   */
+  this._moveElToCaret = function () {
+    this._elStyle.left = this._caretStyle.left;
+    this._elStyle.top  = this._caretStyle.top;
     return this;
   };
 
