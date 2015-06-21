@@ -6,7 +6,7 @@ var DomUtil = require('./dom_utilities');
 
 /**
  *
- * @param constrainingNode
+ * @param {HTMLElement} constrainingNode
  * @constructor
  */
 function Cmd(constrainingNode) {
@@ -151,7 +151,13 @@ function Cmd(constrainingNode) {
 
     DomUtil.unwrap(enclosingTag);
 
+    leftRange = TypeRange.fromPositions(this.constrainingNode, tagPositions.start, selPositions.start);
+    rightRange = TypeRange.fromPositions(this.constrainingNode, selPositions.end, tagPositions.end);
 
+    this.inline(tagName, leftRange);
+    this.inline(tagName, rightRange);
+
+    return this;
 
     //leftTagNodes  = {start: enclosingTag.firstChild, end: typeRange.startContainer}; // Todo should be DomUtil.prev(typeRange.startContainer);
     //rightTagNodes = {start: DomUtil.nextNode(typeRange.endContainer), end: enclosingTag.lastChild};
@@ -161,9 +167,7 @@ function Cmd(constrainingNode) {
     //this.insertInline(tagName, leftTagNodes.start, leftTagNodes.end);
     //this.insertInline(tagName, rightTagNodes.start, rightTagNodes.end);
 
-
-
-    return this;
+    //return this;
   };
 
   /**

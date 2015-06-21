@@ -85,12 +85,13 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
    *
    * @param {String} tag - A tag name
    * @param {Node} [constrainingNode]
-   * @returns {boolean}
+   * @returns {Node|null}
    */
   this.startAndEndEnclosedBySame = function (tag, constrainingNode) {
     var tagEnclosingStartNode = DomUtil.parent(this.startContainer, tag, constrainingNode);
-    return tagEnclosingStartNode !== null &&
-      tagEnclosingStartNode === DomUtil.parent(this.endContainer, tag, constrainingNode);
+    if (tagEnclosingStartNode !== null && tagEnclosingStartNode === DomUtil.parent(this.endContainer, tag, constrainingNode))
+      return tagEnclosingStartNode;
+    return null;
   };
 
   /**
@@ -238,7 +239,7 @@ TypeRange.fromPositions = function (positions, start, end) {
   endInfo = TypeRange._nodeFromOffset(positions.from, positions.end);
 
   return new TypeRange(startInfo.node, startInfo.offset, endInfo.node, endInfo.offset);
-  
+
 };
 
 /**
