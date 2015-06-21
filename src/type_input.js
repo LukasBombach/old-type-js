@@ -93,13 +93,18 @@ function TypeInput (type) {
     var range, textNode, offset,
       self = this;
     this._type.options.root.addEventListener('mouseup', function(e) {
-      range = document.caretRangeFromPoint(e.clientX, e.clientY);
-      textNode = range.startContainer;
-      offset = range.startOffset;
-      if (textNode.nodeType == 3) {
-        self._caret.moveTo(textNode, offset);
+      console.log(window.getSelection());
+      if (window.getSelection().isCollapsed) {
+        range = document.caretRangeFromPoint(e.clientX, e.clientY);
+        textNode = range.startContainer;
+        offset = range.startOffset;
+        if (textNode.nodeType == 3) {
+          self._caret.moveTo(textNode, offset);
+        }
+        window.setTimeout(function() { self._el.focus();}, 0);
+      } else {
+        self._caret._hide();
       }
-      window.setTimeout(function() { self._el.focus();}, 0);
     }, false);
     return this;
   };
