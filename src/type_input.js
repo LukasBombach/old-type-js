@@ -34,7 +34,7 @@ function TypeInput (type) {
    * @returns {TypeInput}
    */
   this.onInput = function () {
-    this._caret.insertText(this._el.innerHTML);
+    this._caret.insertText(this._el.textContent);
     this._el.innerHTML = '';
     return this;
   };
