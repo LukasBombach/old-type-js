@@ -152,9 +152,9 @@ function Cmd(constrainingNode) {
     DomUtil.unwrap(enclosingTag);
 
     leftRange = TypeRange.fromPositions(this.constrainingNode, tagPositions.start, selPositions.start);
-    rightRange = TypeRange.fromPositions(this.constrainingNode, selPositions.end, tagPositions.end);
-
     this.inline(tagName, leftRange);
+
+    rightRange = TypeRange.fromPositions(this.constrainingNode, selPositions.end, tagPositions.end);
     this.inline(tagName, rightRange);
 
     return this;
