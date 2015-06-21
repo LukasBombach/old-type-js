@@ -317,7 +317,8 @@ function DomUtilities() {
    * @returns {Node|null}
    */
   this.lastTextNode = function (containingNode) {
-    return this.prev(containingNode, this.isTextNodeWithContents);
+    var self = this;
+    return this.prev(containingNode, function(node) { return self.isTextNodeWithContents(node) });
   };
 
   /**

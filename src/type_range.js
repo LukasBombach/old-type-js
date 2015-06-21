@@ -248,7 +248,8 @@ TypeRange.fromRange = function (range) {
   var endContainer = range.endContainer,
     endOffset = range.endOffset;
 
-  if (endOffset === 0 && endContainer === DomUtil.nextVisible(range.startContainer.parentNode)) {
+  // Todo This is a solution for a single case, find the pattern of this and process all cases
+  if (endOffset === 0 && endContainer === DomUtil.nextVisible(range.startContainer.parentNode.nextSibling)) {
     endContainer = DomUtil.lastTextNode(range.startContainer.parentNode);
     endOffset = endContainer.length;
   }
