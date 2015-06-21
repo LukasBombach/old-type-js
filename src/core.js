@@ -36,7 +36,7 @@ function Type(options) {
   this.setOptions(options || {});
 
   //this._input = new this.options.input(this);
-  this.input = new TypeInput();
+  this.input = new TypeInput(this);
 
   Type.trigger('ready', this);
 
