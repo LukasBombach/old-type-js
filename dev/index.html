@@ -51,7 +51,7 @@
 
   document.getElementById('save-selection').onclick = function () {
     console.log(document.getSelection().getRangeAt(0));
-    bookmark = TypeRange.fromCurrentSelection().getPositions(root);
+    bookmark = TypeRange.fromCurrentSelection().positions(root);
     console.log(bookmark);
   };
 

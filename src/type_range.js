@@ -180,7 +180,7 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
    * @param {HTMLElement} fromNode
    * @returns {{from: HTMLElement, start: number, end: number}}
    */
-  this.getPositions = function (fromNode) {
+  this.positions = function (fromNode) {
 
     var start, end;
 

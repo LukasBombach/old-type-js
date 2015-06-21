@@ -62,7 +62,9 @@ function Cmd(constrainingNode) {
    */
   this.inline = function (tag, typeRange, params) {
 
-    var args, startNode, endNode, enclosingTag;
+    var args, startNode, endNode, enclosingTag, selPositions;
+
+    selPositions = typeRange.positions(this.constrainingNode);
 
     // If the selection is enclosed the tag we want to format with
     // remove formatting from selected area
@@ -77,6 +79,8 @@ function Cmd(constrainingNode) {
       args      = [tag, startNode, endNode].concat(params);
       this.insertInline.apply(this, args);
     }
+
+    TypeRange.fromPositions(selPositions).select();
 
     return this;
   };
@@ -144,8 +148,8 @@ function Cmd(constrainingNode) {
   this.removeInline = function (enclosingTag, typeRange) {
 
     var tagName = enclosingTag.tagName,
-      tagPositions = TypeRange.fromElement(enclosingTag).getPositions(this.constrainingNode),
-      selPositions = typeRange.getPositions(this.constrainingNode),
+      tagPositions = TypeRange.fromElement(enclosingTag).positions(this.constrainingNode),
+      selPositions = typeRange.positions(this.constrainingNode),
       leftRange,
       rightRange;
 
@@ -156,8 +160,6 @@ function Cmd(constrainingNode) {
 
     rightRange = TypeRange.fromPositions(this.constrainingNode, selPositions.end, tagPositions.end);
     this.inline(tagName, rightRange);
-
-    TypeRange.fromPositions(selPositions).select();
 
     return this;
 
