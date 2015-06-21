@@ -1,6 +1,6 @@
 'use strict';
 
-var Settings = require('../Settings');
+var Settings = require('./settings');
 var DomUtil = require('./dom_utilities');
 
 // todo
