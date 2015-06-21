@@ -157,6 +157,8 @@ function Cmd(constrainingNode) {
     rightRange = TypeRange.fromPositions(this.constrainingNode, selPositions.end, tagPositions.end);
     this.inline(tagName, rightRange);
 
+    TypeRange.fromPositions(selPositions).select();
+
     return this;
 
   };
