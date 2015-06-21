@@ -156,10 +156,12 @@ function Cmd(constrainingNode) {
     DomUtil.unwrap(enclosingTag);
 
     leftRange = TypeRange.fromPositions(this.constrainingNode, tagPositions.start, selPositions.start);
-    this.inline(tagName, leftRange);
+    if (!leftRange.isCollapsed())
+      this.inline(tagName, leftRange);
 
     rightRange = TypeRange.fromPositions(this.constrainingNode, selPositions.end, tagPositions.end);
-    this.inline(tagName, rightRange);
+    if (!rightRange.isCollapsed())
+      this.inline(tagName, rightRange);
 
     return this;
 

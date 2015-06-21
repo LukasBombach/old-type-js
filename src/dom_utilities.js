@@ -512,6 +512,8 @@ function DomUtilities() {
    * Returns true if el matches the CSS selector given as second argument,
    * otherwise false
    *
+   * Todo http://davidwalsh.name/element-matches-selector
+   *
    * @param el
    * @param selector
    * @returns {boolean}

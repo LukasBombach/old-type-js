@@ -81,6 +81,10 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
     return this.startContainer === this.endContainer;
   };
 
+  this.isCollapsed = function () {
+    return this.startOffset === this.endOffset && this.startsAndEndsInSameNode();
+  };
+
   /**
    *
    * @param {String} tag - A tag name
