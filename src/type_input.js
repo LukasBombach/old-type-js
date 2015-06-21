@@ -30,7 +30,6 @@ function TypeInput (type) {
 
 (function () {
 
-
   /**
    *
    * @returns {TypeInput}
@@ -93,7 +92,6 @@ function TypeInput (type) {
     var range, textNode, offset,
       self = this;
     this._type.options.root.addEventListener('mouseup', function(e) {
-      console.log(window.getSelection());
       if (window.getSelection().isCollapsed) {
         range = document.caretRangeFromPoint(e.clientX, e.clientY);
         textNode = range.startContainer;
