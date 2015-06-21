@@ -176,25 +176,25 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
 
   /**
    *
-   * @param {HTMLElement} containingNode
-   * @returns {{containingNode: HTMLElement, startOffset: number, endOffset: number}}
+   * @param {HTMLElement} fromNode
+   * @returns {{from: HTMLElement, start: number, end: number}}
    */
-  this.serializeRelativeToElement = function (containingNode) {
+  this.getPositions = function (fromNode) {
 
     var start, end;
 
-    start = this._offsetFromNodeToNode(containingNode, this.startContainer, this.startOffset);
+    start = this._offsetFromNodeToNode(fromNode, this.startContainer, this.startOffset);
 
     if (this.startsAndEndsInSameNode()) {
       end = start - this.startOffset + this.endOffset;
     } else {
-      end = this._offsetFromNodeToNode(containingNode, this.endContainer, this.endOffset);
+      end = this._offsetFromNodeToNode(fromNode, this.endContainer, this.endOffset);
     }
 
     return {
-      containingNode : containingNode,
-      startOffset : start,
-      endOffset : end
+      from  : fromNode,
+      start : start,
+      end   : end
     }
 
   };
@@ -221,12 +221,12 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
 
 /**
  *
- * @param {{containingNode: HTMLElement, startOffset: number, endOffset: number}} serialized
+ * @param {{from: HTMLElement, start: number, end: number}} positions
  * @returns {TypeRange}
  */
-TypeRange.fromSerializedTypeRange = function (serialized) {
-  var start = TypeRange._nodeFromOffset(serialized.containingNode, serialized.startOffset),
-    end = TypeRange._nodeFromOffset(serialized.containingNode, serialized.endOffset);
+TypeRange.fromPositions = function (positions) {
+  var start = TypeRange._nodeFromOffset(positions.from, positions.start),
+    end = TypeRange._nodeFromOffset(positions.from, positions.end);
   return new TypeRange(start.node, start.offset, end.node, end.offset);
 };
 

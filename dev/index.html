@@ -51,12 +51,12 @@
 
   document.getElementById('save-selection').onclick = function () {
     console.log(document.getSelection().getRangeAt(0));
-    bookmark = TypeRange.fromCurrentSelection().serializeRelativeToElement(root);
+    bookmark = TypeRange.fromCurrentSelection().getPositions(root);
     console.log(bookmark);
   };
 
   document.getElementById('restore-selection').onclick = function () {
-    TypeRange.fromSerializedTypeRange(bookmark).select();
+    TypeRange.fromPositions(bookmark).select();
   };
 
 </script>

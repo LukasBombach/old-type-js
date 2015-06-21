@@ -144,16 +144,19 @@ function Cmd(constrainingNode) {
   this.removeInline = function (enclosingTag, typeRange) {
 
     var tagName = enclosingTag.tagName,
-      leftTagNodes,
-      rightTagNodes;
+      positions = typeRange.getPositions(this.constrainingNode);
 
-    leftTagNodes  = {start: enclosingTag.firstChild, end: typeRange.startContainer}; // Todo should be DomUtil.prev(typeRange.startContainer);
-    rightTagNodes = {start: DomUtil.nextNode(typeRange.endContainer), end: enclosingTag.lastChild};
 
-    DomUtil.unwrap(enclosingTag); // Will merge textContainers and destroy them
 
-    this.insertInline(tagName, leftTagNodes.start, leftTagNodes.end);
-    this.insertInline(tagName, rightTagNodes.start, rightTagNodes.end);
+    //leftTagNodes  = {start: enclosingTag.firstChild, end: typeRange.startContainer}; // Todo should be DomUtil.prev(typeRange.startContainer);
+    //rightTagNodes = {start: DomUtil.nextNode(typeRange.endContainer), end: enclosingTag.lastChild};
+
+    //DomUtil.unwrap(enclosingTag); // Will merge textContainers and destroy them
+
+    //this.insertInline(tagName, leftTagNodes.start, leftTagNodes.end);
+    //this.insertInline(tagName, rightTagNodes.start, rightTagNodes.end);
+
+
 
     return this;
   };
@@ -167,17 +170,6 @@ function Cmd(constrainingNode) {
    * @private
    */
   this.block = function (cmd, typeRange, params) {
-    return this;
-  };
-
-  /**
-   *
-   * @param tag
-   * @param typeRange
-   * @returns {Cmd}
-   * @private
-   */
-  this.remove = function (tag, typeRange) {
     return this;
   };
 
