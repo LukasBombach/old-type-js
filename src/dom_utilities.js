@@ -1,5 +1,7 @@
 'use strict';
 
+var Settings = require('../Settings');
+
 var singleton;
 
 /**
@@ -10,6 +12,16 @@ function DomUtilities() {
 }
 
 (function () {
+
+  /**
+   * The id attribute of the container element where all the helper
+   * elements including carets and input fields of type will be
+   * appended to
+   *
+   * @type {string}
+   * @private
+   */
+  this._containerId = Settings.prefix + 'container';
 
   /**
    * Node.nodeType value for text nodes
@@ -531,6 +543,20 @@ function DomUtilities() {
       }
       return false;
     }
+  };
+
+  /**
+   *
+   * @returns {Element}
+   */
+  this.elementsContainer = function () {
+    var container = window.document.getElementById(this._containerId);
+    if (container === null) {
+      container = window.document.createElement('div');
+      container.setAttribute('id', this._containerId);
+      window.document.body.appendChild(container);
+    }
+    return container;
   };
 
   /**

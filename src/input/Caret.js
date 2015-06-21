@@ -544,7 +544,7 @@ function Caret(color, constrainingNode) {
 
   /**
    * Utility method to add a class to an element
-   * Todo There should be a separate utility module for stuff like this
+   * Todo There should be a separate utility module for stuff like this - yes dom_utilities
    *
    * @param {Element} el - The {Element} that the class should be added to
    * @param {string} className - The class to be removed
@@ -562,7 +562,7 @@ function Caret(color, constrainingNode) {
 
   /**
    * Utility method to remove a class from an element
-   * Todo There should be a separate utility module for stuff like this
+   * Todo There should be a separate utility module for stuff like this - yes dom_utilities
    *
    * @param {Element} el - The {Element} that the class should be removed from
    * @param {string} className - The class to be removed
@@ -690,6 +690,8 @@ function Caret(color, constrainingNode) {
    * All div representations of carets will be appended to a single
    * container. This method returns this container and creates it
    * if it has not been created yet.
+   *
+   * Todo use container from dom_utilites
    *
    * @returns {HTMLElement}
    * @private

@@ -1,5 +1,7 @@
 'use strict';
 
+var Settings = require('../Settings');
+var DomUtil = require('./dom_utilities');
 
 // todo
 // textarea / contenteditable
@@ -15,15 +17,26 @@ var Type = require('./core');
 
 
 function TypeInput () {
-
+  this._el = this._createElement();
 }
 
 
 (function () {
 
+  /**
+   *
+   * @returns {Element}
+   * @private
+   */
+  this._createElement = function () {
+    var div = document.createElement('div');
+    div.setAttribute('contenteditable', 'true');
+    div.className = Settings.prefix + 'input';
+    DomUtil.elementsContainer().appendChild(div);
+    return div;
+  }
+
 }).call(TypeInput.prototype);
-
-
 
 
 /**

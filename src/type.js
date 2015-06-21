@@ -4,6 +4,7 @@ var Type = require('./core');
 
 // Load plugins
 require('./event');
+require('./type_input');
 require('./cmd');
 
 // Expose Type
