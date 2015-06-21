@@ -12,6 +12,9 @@ var BrowserInput = require('./input/browser');
 //var Cmd = require('./cmd');
 //var Renderer = require('./renderers/html');
 
+var TypeInput = require('./type_input');
+
+
 /**
  * The main class and entry point to set up a Type instance in the browser.
  *
@@ -27,16 +30,13 @@ function Type(options) {
   // var renderer = new Renderer(document);
   // var output = renderer.output();
   // elementOut.appendChild(output);
-
-  options = options || {};
-  this.setOptions(options);
-  this._input = new this.options.input(this);
   //this._input.getDocument(this._setDocument.bind(this));
 
-  // Todo Jira TYPE-22
-  //this.cmd = new Cmd(this.options.root);
-
   this._plugins = {};
+  this.setOptions(options || {});
+
+  //this._input = new this.options.input(this);
+  this.input = new TypeInput();
 
   Type.trigger('ready', this);
 
