@@ -95,6 +95,7 @@ function TypeInput (type) {
         range = document.caretRangeFromPoint(e.clientX, e.clientY);
         if (range.startContainer.nodeType == 3) {
           self._caret.moveTo(range.startContainer, range.startOffset);
+          self._caret._blink();
         }
         window.setTimeout(function() { self._el.focus();}, 0);
       } else {
