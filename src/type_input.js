@@ -69,11 +69,20 @@ function TypeInput (type) {
    * @private
    */
   this._bindKeyDownEvents = function () {
-    var key, func;
+    var key;
     this._el.addEventListener('keydown', function(e) {
+
+      // Get the readable name for the key
       key  = this._keyNames[e.keyCode];
-      func = this._caretMethodMap[key];
-      if (func in this._caret) this._caret[func]();
+
+      // Proxy this to the caret
+      if (key in this._caretMethodMap)
+        this._caret[this._caretMethodMap[key]]();
+
+      if (key in this._cmdMethodMap) {
+        this[this._cmdMethodMap[key]]();
+      }
+
     }.bind(this), false);
     return this;
   };
@@ -142,6 +151,7 @@ function TypeInput (type) {
   /**
    * Maps character codes to readable names
    *
+   * @type {Object}
    * @private
    */
   this._keyNames = {
@@ -155,15 +165,24 @@ function TypeInput (type) {
   /**
    * Maps character names to caret methods for keyDown events
    *
+   * @type {Object}
    * @private
    */
   this._caretMethodMap = {
-    backSpace: 'removeCharacter',
     arrLeft  : 'moveLeft',
     arrUp    : 'moveUp',
     arrRight : 'moveRight',
     arrDown  : 'moveDown'
-  }
+  };
+
+  /**
+   *
+   * @type {Object}
+   * @private
+   */
+  this._cmdMethodMap = {
+    backSpace : 'remove'
+  };
 
 }).call(TypeInput.prototype);
 

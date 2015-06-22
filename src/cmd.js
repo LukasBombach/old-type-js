@@ -222,7 +222,7 @@ function Cmd(constrainingNode) {
       this.remove(prev, prev.nodeValue.length, numChars);
       return this;
     }
-    
+
     str = textNode.nodeValue;
 
     if(numChars < 0) {
