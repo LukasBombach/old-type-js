@@ -263,6 +263,25 @@ function DomUtilities() {
   };
 
   /**
+   * Will remove a node and each parent (recursively) if removing
+   * leaves the parent with no *visible* content
+   *
+   * @param {Node} node - The node to remove
+   * @param {Node} [constrainingNode] - The algorithm will stop and
+   *     not remove this node if it reaches it
+   * @returns {Node|null} - Will return the parent node where this
+   *     algorithm stopped (The node it did *not* delete)
+   */
+  this.removeClean = function (node, constrainingNode) {
+    var parent = node.parentNode;
+    if (node === constrainingNode) return node;
+    if (node === document.body) return node;
+    if (parent === null) return null;
+    parent.removeChild(node);
+    if (!this.isVisible(parent)) return this.removeClean(parent, constrainingNode);
+  };
+
+  /**
    * Finds the first visible text node in an element. Will
    * return the element itself, if it is already a text node
    *
@@ -351,12 +370,20 @@ function DomUtilities() {
   };
 
   /**
+   * Returns whether or not the node is or contains any
+   * visible text nodes
    *
    * @param {Node} node
    * @returns {boolean}
    */
   this.isVisible = function (node) {
-    return node.nodeType === 1 || this.isTextNodeWithContents(node);
+    var i;
+    if (this.isTextNodeWithContents(node))
+      return true;
+    for (i = 0; i< node.childNodes.length; i += 1) {
+      if (this.isVisible(node.childNodes[i])) return true;
+    }
+    return false;
   };
 
   /**

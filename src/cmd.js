@@ -180,6 +180,46 @@ function Cmd(constrainingNode) {
   };
 
   /**
+   * Removes one character left from the current offset
+   * and moves the caret accordingly
+   *
+   * Todo this method needs to go somewhere else
+   *
+   * @param textNode
+   * @param offset
+   * @param {number} [numChars] - Home many characters should be removed
+   *     from the caret's position. A negative number will remove
+   *     characters left from the caret, a positive number from the right.
+   * @returns {Caret}
+   */
+  this.remove = function (textNode, offset, numChars) {
+
+    numChars = numChars || -1;
+
+    if (offset === 0 && numChars >= textNode.length) {
+      textNode.parentNode.removeChild(textNode);
+      if (!textNode.parentNode.childNodes.length) textNode.parentNode.removeChild(textNode);
+    }
+
+
+    if ( (offset <= 0 && numChars < 0) || (offset >= textNode.length && numChars > 0) ) {
+      return this;
+    }
+    this._callbacksFor('removeCharacter', numChars);
+    var str = textNode.nodeValue;
+    if(numChars < 0) {
+      textNode.nodeValue = str.substring(0, offset + numChars)
+        + str.substring(offset, str.length);
+      this._setOffset(offset + numChars);
+    } else {
+      textNode.nodeValue = str.substring(0, offset)
+        + str.substring(offset + numChars, str.length);
+    }
+    return this;
+  };
+
+
+  /**
    *
    * @param tag
    * @param typeRange

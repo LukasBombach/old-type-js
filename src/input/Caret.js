@@ -206,6 +206,8 @@ function Caret(color, constrainingNode) {
    * Inserts a given {string} at the caret's current offset in the caret's
    * current text node
    *
+   * Todo this method needs to go somewhere else
+   *
    * @param {string} str - The {string} that will be be inserted
    * @returns {Caret}
    */
@@ -268,6 +270,8 @@ function Caret(color, constrainingNode) {
   /**
    * Removes one character left from the current offset
    * and moves the caret accordingly
+   *
+   * Todo this method needs to go somewhere else
    *
    * @param {number} [numChars] - Home many characters should be removed
    *     from the caret's position. A negative number will remove
