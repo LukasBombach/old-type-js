@@ -4,6 +4,7 @@ var Type = require('../core');
 
 function CommandFilter(type) {
   this._type = type;
+  this._caret = type.input.caret;
 }
 
 (function () {
@@ -13,7 +14,7 @@ function CommandFilter(type) {
   };
 
   this.remove = function () {
-    this._type.plugin('cmd').remove(textNode, offset, numChars);
+    this._type.plugin('cmd').remove(this._caret.textNode, this._caret.offset, -1);
   }
 
 }).call(CommandFilter.prototype);

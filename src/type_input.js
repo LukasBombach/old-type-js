@@ -21,9 +21,9 @@ var Type = require('./core');
 function TypeInput (type) {
   this._type = type;
   this._el = this._createElement();
-  this._caret = new Caret(null, type.options.root);
-  this._caret.moveTo(DomUtil.firstTextNode(type.options.root))._blink();
-  this._caretStyle = this._caret.caretEl.style;
+  this.caret = new Caret(null, type.options.root);
+  this.caret.moveTo(DomUtil.firstTextNode(type.options.root))._blink();
+  this._caretStyle = this.caret.caretEl.style;
   this._elStyle = this._el.style;
   this._loadFilters();
   this.catchInput();
@@ -37,7 +37,7 @@ function TypeInput (type) {
    * @returns {TypeInput}
    */
   this.onInput = function () {
-    this._caret.insertText(this._el.textContent);
+    this.caret.insertText(this._el.textContent);
     this._el.innerHTML = '';
     return this;
   };
@@ -79,7 +79,7 @@ function TypeInput (type) {
 
       // Proxy this to the caret
       if (key in this._caretMethodMap)
-        this._caret[this._caretMethodMap[key]]();
+        this.caret[this._caretMethodMap[key]]();
 
       if (key in this._cmdMethodMap) {
         this[this._cmdMethodMap[key]]();
@@ -113,12 +113,12 @@ function TypeInput (type) {
       if (window.getSelection().isCollapsed) {
         range = document.caretRangeFromPoint(e.clientX, e.clientY);
         if (range.startContainer.nodeType == 3) {
-          self._caret.moveTo(range.startContainer, range.startOffset);
-          self._caret._blink();
+          self.caret.moveTo(range.startContainer, range.startOffset);
+          self.caret._blink();
         }
         window.setTimeout(function() { self._el.focus();}, 0);
       } else {
-        self._caret._hide();
+        self.caret._hide();
       }
     }, false);
     return this;
