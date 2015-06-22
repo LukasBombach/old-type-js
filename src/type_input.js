@@ -71,7 +71,7 @@ function TypeInput (type) {
    * @private
    */
   this._bindKeyDownEvents = function () {
-    var key;
+    var key, k;
     this._el.addEventListener('keydown', function(e) {
 
       // Get the readable name for the key
@@ -81,8 +81,8 @@ function TypeInput (type) {
       if (key in this._caretMethodMap)
         this.caret[this._caretMethodMap[key]]();
 
-      if (key in this._cmdMethodMap) {
-        this[this._cmdMethodMap[key]]();
+      for (k in this._filters) {
+        if (key in this._filters[k].keys) this._filters[k][this._filters[k].keys[key]](); // Todo clean up cryptic code
       }
 
     }.bind(this), false);
@@ -131,7 +131,7 @@ function TypeInput (type) {
    */
   this._loadFilters = function () {
     this._filters = this._filters || {};
-    this._filters['command'] = new CommandFilter(this._type);
+    this._filters['command'] = new CommandFilter(this._type, this);
     return this;
   };
 
@@ -186,15 +186,6 @@ function TypeInput (type) {
     arrUp    : 'moveUp',
     arrRight : 'moveRight',
     arrDown  : 'moveDown'
-  };
-
-  /**
-   *
-   * @type {Object}
-   * @private
-   */
-  this._cmdMethodMap = {
-    backSpace : 'remove'
   };
 
 }).call(TypeInput.prototype);
