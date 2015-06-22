@@ -297,8 +297,8 @@ function Cmd(constrainingNode) {
  * @param {...*} params - Any number of arbitrary parameters
  */
 Type.fn.cmd = function (tag, params) {
-  if (!this._plugins['cmd']) this._plugins['cmd'] = new Cmd(this.options.root);
-  this._plugins['cmd'].cmd(tag, TypeRange.fromCurrentSelection(), params);
+  var cmd = this.plugin('cmd', new Cmd(this.options.root));
+  cmd.cmd(tag, TypeRange.fromCurrentSelection(), params);
   return this;
 };
 

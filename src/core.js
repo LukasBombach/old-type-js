@@ -82,6 +82,19 @@ function Type(options) {
   };
 
   /**
+   * Get or set a plugin
+   *
+   * @param {string} name - The name of the plugin that should
+   *     be gotten and set
+   * @param {*} [value] - The value to be set for the plugin
+   * @returns {*}
+   */
+  this.plugin = function (name, value) {
+    if (value !== null) this._plugins[name] = value;
+    return this._plugins[name];
+  };
+
+  /**
    * Setter for the internal document representation
    *
    * @param doc
