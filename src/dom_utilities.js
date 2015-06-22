@@ -272,13 +272,15 @@ function DomUtilities() {
    * @returns {Node|null} - Will return the parent node where this
    *     algorithm stopped (The node it did *not* delete)
    */
-  this.removeClean = function (node, constrainingNode) {
+  this.removeVisible = function (node, constrainingNode) {
     var parent = node.parentNode;
     if (node === constrainingNode) return node;
     if (node === document.body) return node;
     if (parent === null) return null;
     parent.removeChild(node);
-    if (!this.isVisible(parent)) return this.removeClean(parent, constrainingNode);
+    if (!this.isVisible(parent))
+      return this.removeVisible(parent, constrainingNode);
+    return parent;
   };
 
   /**
@@ -340,6 +342,19 @@ function DomUtilities() {
     }
 
     return null;
+  };
+
+  /**
+   *
+   * @param {Node} node
+   * @param {Node} constrainingNode
+   * @returns {Node|null|*}
+   */
+  this.prevTextNode = function (node, constrainingNode) {
+    var self = this, options = {};
+    options.filterFunction = function(node) { return self.isTextNodeWithContents(node) };
+    options.constrainingNode = constrainingNode;
+    return this.prev(node, options);
   };
 
   /**

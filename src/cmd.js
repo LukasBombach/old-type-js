@@ -194,27 +194,49 @@ function Cmd(constrainingNode) {
    */
   this.remove = function (textNode, offset, numChars) {
 
+    var parent, prev, str;
+
     numChars = numChars || -1;
 
-    if (offset === 0 && numChars >= textNode.length) {
-      textNode.parentNode.removeChild(textNode);
-      if (!textNode.parentNode.childNodes.length) textNode.parentNode.removeChild(textNode);
-    }
-
-
-    if ( (offset <= 0 && numChars < 0) || (offset >= textNode.length && numChars > 0) ) {
+    if (offset === 0 && numChars === textNode.nodeValue.length) {
+      DomUtil.removeVisible(textNode);
       return this;
     }
-    this._callbacksFor('removeCharacter', numChars);
-    var str = textNode.nodeValue;
-    if(numChars < 0) {
-      textNode.nodeValue = str.substring(0, offset + numChars)
-        + str.substring(offset, str.length);
-      this._setOffset(offset + numChars);
-    } else {
-      textNode.nodeValue = str.substring(0, offset)
-        + str.substring(offset + numChars, str.length);
+
+    if (offset === 0 && numChars > textNode.nodeValue.length) {
+      numChars -= textNode.nodeValue.length;
+      parent = DomUtil.removeVisible(textNode);
+      this.remove(DomUtil.nextTextNode(parent), 0, numChars);
+      return this;
     }
+
+    if (offset === textNode.nodeValue.length && numChars * -1 === textNode.nodeValue.length) {
+      DomUtil.removeVisible(textNode);
+      return this;
+    }
+
+    if (offset === textNode.nodeValue.length && numChars * -1 > textNode.nodeValue.length) {
+      numChars += textNode.nodeValue.length;
+      parent = DomUtil.removeVisible(textNode);
+      prev = DomUtil.prevTextNode(parent, this.constrainingNode);
+      this.remove(prev, prev.nodeValue.length, numChars);
+      return this;
+    }
+
+    //if ( (offset <= 0 && numChars < 0) || (offset >= textNode.length && numChars > 0) ) {
+    //  return this;
+    //}
+
+    //this._callbacksFor('removeCharacter', numChars);
+
+    str = textNode.nodeValue;
+
+    if(numChars < 0) {
+      textNode.nodeValue = str.substring(0, offset + numChars) + str.substring(offset, str.length);
+    } else {
+      textNode.nodeValue = str.substring(0, offset) + str.substring(offset + numChars, str.length);
+    }
+    
     return this;
   };
 
