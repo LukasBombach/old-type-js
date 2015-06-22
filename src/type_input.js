@@ -3,6 +3,7 @@
 var Settings = require('./settings');
 var DomUtil = require('./dom_utilities');
 var Caret = require('./input/caret');
+var CommandFilter = require('./input_filters/command');
 
 // todo
 // textarea / contenteditable
@@ -24,6 +25,7 @@ function TypeInput (type) {
   this._caret.moveTo(DomUtil.firstTextNode(type.options.root))._blink();
   this._caretStyle = this._caret.caretEl.style;
   this._elStyle = this._el.style;
+  this._loadFilters();
   this.catchInput();
 }
 
@@ -102,7 +104,7 @@ function TypeInput (type) {
 
   /**
    *
-   * @returns {*}
+   * @returns {TypeInput}
    * @private
    */
   this._bindMouseEvents = function () {
@@ -119,6 +121,17 @@ function TypeInput (type) {
         self._caret._hide();
       }
     }, false);
+    return this;
+  };
+
+  /**
+   *
+   * @returns {TypeInput}
+   * @private
+   */
+  this._loadFilters = function () {
+    this._filters = this._filters || {};
+    this._filters['command'] = new CommandFilter(this._type);
     return this;
   };
 
