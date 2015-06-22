@@ -222,13 +222,7 @@ function Cmd(constrainingNode) {
       this.remove(prev, prev.nodeValue.length, numChars);
       return this;
     }
-
-    //if ( (offset <= 0 && numChars < 0) || (offset >= textNode.length && numChars > 0) ) {
-    //  return this;
-    //}
-
-    //this._callbacksFor('removeCharacter', numChars);
-
+    
     str = textNode.nodeValue;
 
     if(numChars < 0) {
@@ -236,7 +230,7 @@ function Cmd(constrainingNode) {
     } else {
       textNode.nodeValue = str.substring(0, offset) + str.substring(offset + numChars, str.length);
     }
-    
+
     return this;
   };
 
