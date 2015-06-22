@@ -40,6 +40,13 @@ function TypeInput (type) {
     return this;
   };
 
+  this.onContextMenu = function () {
+
+    // Wenn das clipboard beim copy befehel direkt veränderbar ist, muss nichts weiter gemacht werden
+    // Wenn nicht, aktuelle selektion in das contenteditable ding kopieren
+
+  };
+
   /**
    *
    * @returns {TypeInput}
@@ -62,10 +69,11 @@ function TypeInput (type) {
    * @private
    */
   this._bindKeyDownEvents = function () {
-    var key;
+    var key, func;
     this._el.addEventListener('keydown', function(e) {
-      key = this._keyNames[e.keyCode];
-      this._caret[this._caretMethodMap[key]]();
+      key  = this._keyNames[e.keyCode];
+      func = this._caretMethodMap[key];
+      if (func in this._caret) this._caret[func]();
     }.bind(this), false);
     return this;
   };
