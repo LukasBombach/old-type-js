@@ -304,23 +304,4 @@ Type.fn.cmd = function (cmd, params) {
   });
 };
 
-/*Type.fn.cmdOld = function (cmd, params) {
-
-  params = Array.prototype.slice.call(arguments, 1);
-
-  var cmdPlugin = this.pluginInstance('cmd', Cmd, this.options.root),
-    result;
-
-  if (cmd in cmdPlugin) {
-    result = cmdPlugin[cmd].apply(cmdPlugin, params);
-  } else {
-    result = cmdPlugin.cmd(cmd, TypeRange.fromCurrentSelection(), params);
-  }
-
-  return result === cmdPlugin ? type : result;
-
-};*/
-
-
-
 module.exports = Cmd;
