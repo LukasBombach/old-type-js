@@ -298,9 +298,7 @@ function Cmd(constrainingNode) {
  */
 Type.fn.cmd = function (cmd, params) {
 
-  //var cmdPlugin = this.plugin('cmd') || this.plugin('cmd', new Cmd(this.options.root)),
-
-  var cmdPlugin = this.plugin('cmd', Cmd, this.options.root),
+  var cmdPlugin = this.pluginInstance('cmd', Cmd, this.options.root),
     result;
 
   if (cmd in cmdPlugin) {
