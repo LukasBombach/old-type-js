@@ -124,6 +124,28 @@ function Type(options) {
   };
 
   /**
+   *
+   * @param module
+   * @param method
+   * @param params
+   * @param fallback
+   * @returns {Type|*}
+   */
+  this.callMethodFrom = function (module, method, params, fallback) {
+
+    var result;
+
+    if (method in module) {
+      result = module[method].apply(module, params);
+    } else if (fallback) {
+      result = fallback()
+    }
+
+    return result === module ? this : result;
+
+  };
+
+  /**
    * Setter for the internal document representation
    *
    * @param doc

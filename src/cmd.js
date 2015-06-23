@@ -297,6 +297,14 @@ function Cmd(constrainingNode) {
  * @param {...*} params - Any number of arbitrary parameters
  */
 Type.fn.cmd = function (cmd, params) {
+  params = Array.prototype.slice.call(arguments, 1);
+  var cmdPlugin = this.pluginInstance('cmd', Cmd, this.options.root);
+  return this.callMethodFrom(cmdPlugin, cmd, params, function (params) {
+    cmdPlugin.cmd(cmd, params);
+  });
+};
+
+/*Type.fn.cmdOld = function (cmd, params) {
 
   params = Array.prototype.slice.call(arguments, 1);
 
@@ -311,6 +319,8 @@ Type.fn.cmd = function (cmd, params) {
 
   return result === cmdPlugin ? type : result;
 
-};
+};*/
+
+
 
 module.exports = Cmd;
