@@ -298,6 +298,8 @@ function Cmd(constrainingNode) {
  */
 Type.fn.cmd = function (cmd, params) {
 
+  params = Array.prototype.slice.call(arguments, 1);
+
   var cmdPlugin = this.pluginInstance('cmd', Cmd, this.options.root),
     result;
 
