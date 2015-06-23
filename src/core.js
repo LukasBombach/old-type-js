@@ -133,7 +133,7 @@ function Type(options) {
    */
   this.callMethodFrom = function (module, method, params, fallback) {
 
-    var result;
+    var result = null;
 
     if (method in module) {
       result = module[method].apply(module, params);
