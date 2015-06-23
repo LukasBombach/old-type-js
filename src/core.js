@@ -86,11 +86,27 @@ function Type(options) {
    *
    * @param {string} name - The name of the plugin that should
    *     be gotten and set
-   * @param {*} [value] - The value to be set for the plugin
+   * @param {*} [value] - The value to be set for the plugin.
+   *     If you pass an instance of a function, this instance
+   *     will be set. If you pass an uninstantiated function,
+   *     it will be instantiated.
+   * @param {...*} params - Arguments passed to the instance
+   *     that will be created for value
    * @returns {*}
    */
-  this.plugin = function (name, value) {
-    if (value !== null) this._plugins[name] = value;
+  this.plugin = function (name, value, params) {
+
+    params = Array.prototype.slice.call(arguments, 2);
+
+    if (this._plugins[name])
+      return this._plugins[name];
+
+    if (value instanceof Function) {
+      this._plugins[name] = new (Function.prototype.bind.apply(value, params));
+    } else {
+      this._plugins[name] = value;
+    }
+
     return this._plugins[name];
   };
 

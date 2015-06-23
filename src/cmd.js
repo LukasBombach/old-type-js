@@ -293,13 +293,24 @@ function Cmd(constrainingNode) {
  * Public interface for the command plugin
  * Formats the current selection with a given tag
  *
- * @param {String} tag -
+ * @param {String} cmd -
  * @param {...*} params - Any number of arbitrary parameters
  */
-Type.fn.cmd = function (tag, params) {
-  var cmd = this.plugin('cmd', new Cmd(this.options.root));
-  cmd.cmd(tag, TypeRange.fromCurrentSelection(), params);
-  return this;
+Type.fn.cmd = function (cmd, params) {
+
+  //var cmdPlugin = this.plugin('cmd') || this.plugin('cmd', new Cmd(this.options.root)),
+
+  var cmdPlugin = this.plugin('cmd', Cmd, this.options.root),
+    result;
+
+  if (cmd in cmdPlugin) {
+    result = cmdPlugin[cmd].apply(cmdPlugin, params);
+  } else {
+    result = cmdPlugin.cmd(cmd, TypeRange.fromCurrentSelection(), params);
+  }
+
+  return result === cmdPlugin ? type : result;
+
 };
 
 module.exports = Cmd;
