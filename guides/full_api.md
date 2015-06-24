@@ -51,26 +51,28 @@ type.selection('restore', sel)
 // Takes an object returned by type.selection('save') as a second argument to recreate a stored selection
 ```
 
-## Cmd
+## Format
 
 ```javascript
-type.cmd(tagName)
+type.format(tagName, [...params])
 // Formats the currently selected text with the given tag.
 // E.g. use type.cmd('strong') to format the currently selected text bold   
+```
 
-type.cmd('remove')
+## Remove
+
+```javascript
+type.remove()
 // Deletes the currently selected text. Does nothing if there is no selection.
 
-type.cmd('remove', numChars)
+type.remove(numChars)
 // Removes a number of characters from the caret's position. A negative number will remove characters left
 // of the caret, a positive number from the right. If there is a selection, the characters will be removed
 // from the end of the selection.
 
-type.cmd('remove', startOffset, endOffset)
+type.remove(startOffset, endOffset)
 // Will remove characters between the given offsets
-
 ```
-
 
 ## Settings
 ```javascript
