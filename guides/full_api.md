@@ -101,6 +101,7 @@ type.remove(startOffset, endOffset)
 ```
 
 ## Settings
+
 ```javascript
 type.settings()
 // Returns all settings
