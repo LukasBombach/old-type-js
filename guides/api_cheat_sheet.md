@@ -1,3 +1,5 @@
+# Type Js API cheat sheet
+
 ## Caret
 
 ```javascript
