@@ -33,6 +33,7 @@ function Type(options) {
   //this._input.getDocument(this._setDocument.bind(this));
 
   this._plugins = {};
+  this.root = options.root;
   this.setOptions(options || {});
 
   //this._input = new this.options.input(this);
@@ -138,7 +139,9 @@ function Type(options) {
     if (method in module) {
       result = module[method].apply(module, params);
     } else if (fallback) {
-      result = fallback()
+      result = fallback.apply(module, [method].concat(params));
+    } else {
+      throw new Error('Method ' + method + 'cannot be found in given module');
     }
 
     return result === module ? this : result;

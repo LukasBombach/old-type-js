@@ -6,11 +6,11 @@ var DomUtil = require('./dom_utilities');
 
 /**
  *
- * @param {HTMLElement} constrainingNode
+ * @param {HTMLElement} type
  * @constructor
  */
-function Cmd(constrainingNode) {
-  this.constrainingNode = constrainingNode;
+function Cmd(type) {
+  this._type = type;
 }
 
 (function () {
@@ -48,7 +48,7 @@ function Cmd(constrainingNode) {
    * @returns {Cmd}
    */
   this.cmd = function (tag, typeRange, params) {
-    typeRange.ensureIsInside(this.constrainingNode);
+    typeRange.ensureIsInside(this._type.root);
     this._handlerFor(tag).apply(this, arguments);
     return this;
   };
@@ -64,7 +64,7 @@ function Cmd(constrainingNode) {
 
     var args, startNode, endNode, enclosingTag, selPositions;
 
-    selPositions = typeRange.positions(this.constrainingNode);
+    selPositions = typeRange.positions(this._type.root);
 
     // If the selection is enclosed the tag we want to format with
     // remove formatting from selected area
@@ -127,7 +127,7 @@ function Cmd(constrainingNode) {
     // siblings, find the next node in the document flow and
     // apply this algorithm on it recursively
     if (currentNode === null) {
-      nextNode = DomUtil.nextNode(startNode.parentNode.lastChild, this.constrainingNode);
+      nextNode = DomUtil.nextNode(startNode.parentNode.lastChild, this._type.root);
       this.insertInline(tag, nextNode, endNode);
     }
 
@@ -148,18 +148,18 @@ function Cmd(constrainingNode) {
   this.removeInline = function (enclosingTag, typeRange) {
 
     var tagName = enclosingTag.tagName,
-      tagPositions = TypeRange.fromElement(enclosingTag).positions(this.constrainingNode),
-      selPositions = typeRange.positions(this.constrainingNode),
+      tagPositions = TypeRange.fromElement(enclosingTag).positions(this._type.root),
+      selPositions = typeRange.positions(this._type.root),
       leftRange,
       rightRange;
 
     DomUtil.unwrap(enclosingTag);
 
-    leftRange = TypeRange.fromPositions(this.constrainingNode, tagPositions.start, selPositions.start);
+    leftRange = TypeRange.fromPositions(this._type.root, tagPositions.start, selPositions.start);
     if (!leftRange.isCollapsed())
       this.inline(tagName, leftRange);
 
-    rightRange = TypeRange.fromPositions(this.constrainingNode, selPositions.end, tagPositions.end);
+    rightRange = TypeRange.fromPositions(this._type.root, selPositions.end, tagPositions.end);
     if (!rightRange.isCollapsed())
       this.inline(tagName, rightRange);
 
@@ -180,6 +180,35 @@ function Cmd(constrainingNode) {
   };
 
   /**
+   *
+   * @param params
+   * @returns {*}
+   */
+  this.remove = function (params) {
+
+    if (this._type.selection('exists'))
+
+
+    var caret, textNode, offset, numChars, absoluteOffset;
+
+    if (params.length === 0) {
+      caret = this._type.caret;
+      return this._remove(caret.textNode, caret.offset, -1);
+    }
+
+    if (params.length === 1) {
+      numChars = params[0];
+    }
+
+    if (params.length === 2) {
+      numChars = params[1] - params[0];
+      absoluteOffset = params[0];
+    }
+
+    return this;
+  };
+
+  /**
    * Removes one character left from the current offset
    * and moves the caret accordingly
    *
@@ -192,7 +221,7 @@ function Cmd(constrainingNode) {
    *     characters left from the caret, a positive number from the right.
    * @returns {Caret}
    */
-  this.remove = function (textNode, offset, numChars) {
+  this._remove = function (textNode, offset, numChars) {
 
     var parent, prev, str;
 
@@ -206,7 +235,7 @@ function Cmd(constrainingNode) {
     if (offset === 0 && numChars > textNode.nodeValue.length) {
       numChars -= textNode.nodeValue.length;
       parent = DomUtil.removeVisible(textNode);
-      this.remove(DomUtil.nextTextNode(parent), 0, numChars);
+      this._remove(DomUtil.nextTextNode(parent), 0, numChars);
       return this;
     }
 
@@ -218,8 +247,8 @@ function Cmd(constrainingNode) {
     if (offset === textNode.nodeValue.length && numChars * -1 > textNode.nodeValue.length) {
       numChars += textNode.nodeValue.length;
       parent = DomUtil.removeVisible(textNode);
-      prev = DomUtil.prevTextNode(parent, this.constrainingNode);
-      this.remove(prev, prev.nodeValue.length, numChars);
+      prev = DomUtil.prevTextNode(parent, this._type.root);
+      this._remove(prev, prev.nodeValue.length, numChars);
       return this;
     }
 
@@ -299,9 +328,7 @@ function Cmd(constrainingNode) {
 Type.fn.cmd = function (cmd, params) {
   params = Array.prototype.slice.call(arguments, 1);
   var cmdPlugin = this.pluginInstance('cmd', Cmd, this.options.root);
-  return this.callMethodFrom(cmdPlugin, cmd, params, function (params) {
-    cmdPlugin.cmd(cmd, params);
-  });
+  return this.callMethodFrom(cmdPlugin, cmd, params, cmdPlugin.cmd);
 };
 
 module.exports = Cmd;

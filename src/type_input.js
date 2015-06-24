@@ -13,8 +13,6 @@ var CommandFilter = require('./input_filters/command');
 // verhalten bei bestimmten elementen (br löschen oder am löschen wenn man am anfang eines elements ist)
 
 
-'use strict';
-
 var Type = require('./core');
 
 

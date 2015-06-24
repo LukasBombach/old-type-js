@@ -17,7 +17,7 @@ function CommandFilter(type, input) {
   this.remove = function () {
     this._type.cmd('remove', this._caret.textNode, this._caret.offset, -1);
     this._caret.moveLeft();
-  }
+  };
 
 }).call(CommandFilter.prototype);
 

@@ -81,6 +81,10 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
     return this.startContainer === this.endContainer;
   };
 
+  /**
+   *
+   * @returns {boolean}
+   */
   this.isCollapsed = function () {
     return this.startOffset === this.endOffset && this.startsAndEndsInSameNode();
   };
@@ -122,7 +126,7 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
    * @returns {boolean}
    */
   this.ensureStartNodePrecedesEndNode = function () {
-    var isSameNode     = this.startContainer === this.endContainer,
+    var isSameNode = this.startContainer === this.endContainer,
       startPrecedesEnd = this.startContainer.compareDocumentPosition(this.endContainer) & Node.DOCUMENT_POSITION_FOLLOWING;
     if (isSameNode || startPrecedesEnd) return true;
     throw new Error('Given startContainer does not precede endContainer.');
@@ -196,16 +200,12 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
       end = this._offsetFromNodeToNode(fromNode, this.endContainer, this.endOffset);
     }
 
-    return {
-      from  : fromNode,
-      start : start,
-      end   : end
-    }
+    return { from: fromNode, start: start, end: end }
 
   };
 
   /**
-   * Todo Crossbrowser compatibility: http://stackoverflow.com/a/4812022/1183252
+   * Todo cross-browser compatibility: http://stackoverflow.com/a/4812022/1183252
    *
    * @param {HTMLElement} containingNode
    * @param {Node} searchNode
@@ -270,7 +270,7 @@ TypeRange.fromRange = function (range) {
     endOffset = endContainer.length;
   }
 
-  return new TypeRange(range.startContainer, range.startOffset, endContainer, endOffset); //return new TypeRange(range.startContainer, range.startOffset, range.endContainer, range.endOffset);
+  return new TypeRange(range.startContainer, range.startOffset, endContainer, endOffset);
 };
 
 /**
