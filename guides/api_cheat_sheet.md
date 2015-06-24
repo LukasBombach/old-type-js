@@ -6,17 +6,17 @@
 type.caret()
 // Returns the offset of the caret
 
+type.caret('show')
+// Show the caret
+
+type.caret('hide')
+// Hides the caret
+
 type.caret(10)
 // Moves the caret to the 10th character
 
 type.caret(10, 20)
 // Selects characters 10 to 20
-
-type.caret('hide')
-// Hides the caret
-
-type.caret('show')
-// Show the caret
 ```
 
 ## Selection
