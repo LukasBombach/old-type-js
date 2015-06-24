@@ -35,6 +35,15 @@ type.selection(10)
 type.selection(10, 20)
 // Selects characters 10 to 20
 
+type.selection(element)
+// Select an element
+
+type.selection(element1, element2)
+// Creates a selection between 2 elements
+
+type.selection(jQueryCollection)
+// Creates a selection between the first and last element in the jQuery Collection
+
 type.selection('save')
 // Returns an object that can be passed to type.selection('restore') to store and recreate a selection
 
