@@ -51,12 +51,38 @@ type.selection('restore', sel)
 // Takes an object returned by type.selection('save') as a second argument to recreate a stored selection
 ```
 
+## Insert
+
+```javascript
+type.insert(str)
+// Inserts plain text at the caret's position, regardless if str contains html. Will overwrite the current
+// selection if there is one.
+
+type.insert('html', str)
+// Inserts formatted text at the caret's position. Will overwrite the current selection if there is one.
+
+type.insert(str, 10)
+// Inserts str at the offset given as second parameter
+
+type.insert(str, 10, 20)
+// Replaces text between offset 10 and 20 with the text given as str
+ 
+type.insert('html', str, 10)
+// Same as type.insert(str, 10) but inserts formatted text given as html string
+
+type.insert('html', str, 10, 20)
+// Same as type.insert(str, 10, 20) but inserts formatted text given as html string
+```
+
 ## Format
 
 ```javascript
 type.format(tagName, [...params])
 // Formats the currently selected text with the given tag.
-// E.g. use type.cmd('strong') to format the currently selected text bold   
+// E.g. use type.cmd('strong') to format the currently selected text bold
+   
+type.format(startOffset, endOffset, tagName, [...params])
+// Applies type.format to a specific text range
 ```
 
 ## Remove
