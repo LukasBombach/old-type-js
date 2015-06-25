@@ -114,18 +114,27 @@ var TypeRange = require('./type_range');
 
     // type.insert(str)
     if (arguments.length === 1) {
-      this.input.insert('text', arguments[0]);
+      this.input.insertText(arguments[0]);
       return this;
     }
 
     // type.insert('html', str)
     if (arguments.length === 2 && arguments[0] === 'html') {
-      this.input.insert('text', arguments[1]);
+      this.input.insertHTML(arguments[1]);
       return this;
     }
 
     // type.insert(str, 10)
+    if (arguments.length === 2 && typeof arguments[1] === 'number') {
+      this.input.insertText(arguments[0], arguments[1]);
+      return this;
+    }
+
     // type.insert('html', str, 10)
+    if (arguments.length === 3 && arguments[0] === 'html') {
+      this.input.insertHTML(arguments[1], arguments[2]);
+      return this;
+    }
 
     return this;
 
