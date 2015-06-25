@@ -213,6 +213,15 @@ function Type(options) {
   };
 
   /**
+   * Getter for this instance's text
+   *
+   * @returns {TypeText}
+   */
+  this.getText = function () {
+    return this._text;
+  };
+
+  /**
    * Getter for this instance's input
    *
    * @returns {TypeInput}
