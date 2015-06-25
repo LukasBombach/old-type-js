@@ -147,6 +147,7 @@ function Type(options) {
 
     if (value instanceof Function) {
       this._plugins[name] = new (Function.prototype.bind.apply(value, params));
+
     } else {
       this._plugins[name] = value;
     }
@@ -199,8 +200,9 @@ function Type(options) {
    * @private
    */
   this._extend = function(copyTo, copyFrom) {
-    for(var i=1; i<arguments.length; i++)
-      for(var key in arguments[i])
+    var i, key;
+    for (i = 1; i < arguments.length; i += 1)
+      for (key in arguments[i])
         if(arguments[i].hasOwnProperty(key))
           arguments[0][key] = arguments[i][key];
     return arguments[0];
