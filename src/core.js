@@ -42,35 +42,57 @@ function Type(options) {
    * will be extended by the options passed to each instance
    * on instantiation.
    *
-   * @type {{root: null}}
+   * @type {{el: null}}
    * @private
    */
   this._defaultoOptions = {
-    root  : null
+    el : null
   };
 
   /**
-   * Sets the options to be used by this Type instance. Takes
-   * either a plain object or a key value combination to set
-   * a single, specific option. In the latter case, the key
-   * must be a {string}.
+   * Sets or gets the options to be used by this Type instance.
+   *
+   * Pass a single string to get an option:
+   * this.options('el')
+   * -> returns your editor's contents baseelement
+   *
+   * Pass a name value combination to set a specific option
+   * this.options('el', myElement)
+   * -> sets the base element
+   *
+   * Pass an object to set multiple options
+   * this.options({el: myElement, foo:bar})
+   * -> sets both parameters
    *
    * @param {(string|Object)} options - Either a plain object
    *     with keys and values to be set or a string that will
-   *     be used as a key to set a single specific value
+   *     be used as a name for a option. If you pass a string,
+   *     pass a second parameter to set that option or no
+   *     second parameter to retrieve that option.
    * @param {*} [value] - If the first parameter is a string,
    *     this value will be set to the key of the given first
    *     parameter. Any arbitrary value can be set.
-   * @returns {Type}
+   * @returns {Type|*} Returns the type instance if you set an
+   *     option or the according value if you get an option
    */
-  this.setOptions = function (options, value) {
+  this.options = function (options, value) {
 
-    this.options = this.options || this._extend({}, this._defaultoOptions);
+    this._options = this._options || this._extend({}, this._defaultoOptions);
 
-    if (typeof options === "string") {
-      this.options[options] = value;
-    } else {
-      this._extend(this.options, options);
+    if (typeof options === "string" && arguments.length === 1) {
+      return this._options[options];
+    }
+
+    if (typeof options === "string" && arguments.length === 2) {
+      options = {options: value};
+    }
+
+    if (typeof options === "object") {
+      this._extend(this._options, options);
+    }
+
+    if (options.el) {
+      this.root = options.el;
     }
 
     return this;
