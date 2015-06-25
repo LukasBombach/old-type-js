@@ -1,6 +1,17 @@
 'use strict';
 
-var DomUtil = require('./dom_utilities');
+/**
+ * Loads a document from an Etherpad Pad
+ * @type {EtherpadReader}
+ */
+//var EtherpadReader = require('./plugins/Etherpad/reader');
+//var EtherpadInput = require('./plugins/Etherpad/input');
+//var TypeDocument = require('./type_document');
+//var DocumentNode = require('./document_node');
+var BrowserInput = require('./input/browser');
+//var Cmd = require('./cmd');
+//var Renderer = require('./renderers/html');
+
 var TypeInput = require('./type_input');
 
 
@@ -13,24 +24,21 @@ var TypeInput = require('./type_input');
  */
 function Type(options) {
 
-  // Allow passing an element as only parameter
-  if (DomUtil.isEl(options)) {
-    options = { el: options };
-  }
+  // var DomReader = require('./readers/dom');
+  // var reader = new DomReader(element);
+  // var document = reader.getDocument();
+  // var renderer = new Renderer(document);
+  // var output = renderer.output();
+  // elementOut.appendChild(output);
+  //this._input.getDocument(this._setDocument.bind(this));
 
-  // If no element has been passed, interrupt
-  if (!options.el) {
-    throw new Error('You must provide an element as root node for the editor\'s contents.');
-  }
-
-  // Save settings for this editor
-  this.setOptions(options); // todo -> this.root = options.el;
-
-  // Set up core editor modules
   this._plugins = {};
+  this.root = options.root;
+  this.setOptions(options || {});
+
+  //this._input = new this.options.input(this);
   this.input = new TypeInput(this);
 
-  // Trigger events
   Type.trigger('ready', this);
 
 }
@@ -38,14 +46,13 @@ function Type(options) {
 (function () {
 
   /**
-   * Holds the default options for every editor. These options
-   * will be extended by the options passed to each instance
-   * on instantiation.
+   * This object holds the settings for this Type instance
+   * Todo All Instances will share the same options, make this "defaultOptions"
    *
-   * @type {{root: null}}
-   * @private
+   * @type {{reader: null, renderer: null}}
    */
-  this._defaultoOptions = {
+  this.options = {
+    input : BrowserInput,
     root  : null
   };
 
@@ -59,22 +66,20 @@ function Type(options) {
    *     with keys and values to be set or a string that will
    *     be used as a key to set a single specific value
    * @param {*} [value] - If the first parameter is a string,
-   *     this value will be set to the key of the given first
+   *     this value will be set to the key of the give first
    *     parameter. Any arbitrary value can be set.
    * @returns {Type}
    */
-  this.setOptions = function (options, value) {
-
-    this.options = this.options || this._extend({}, this._defaultoOptions);
-
+  this.setOptions = function(options, value) {
+    var prop;
     if (typeof options === "string") {
       this.options[options] = value;
     } else {
-      this._extend(this.options, options);
+      for (prop in options) {
+        this.options[prop] = options[prop];
+      }
     }
-
     return this;
-
   };
 
   /**
@@ -184,22 +189,6 @@ function Type(options) {
 
   }
  */
-
-  /**
-   *
-   * @param {...{}} objects
-   * @returns {*}
-   * @private
-   */
-  this._extend = function(objects) {
-    for(var i=1; i<arguments.length; i++)
-      for(var key in arguments[i])
-        if(arguments[i].hasOwnProperty(key))
-          arguments[0][key] = arguments[i][key];
-    return arguments[0];
-  }
-
-
 
 }).call(Type.prototype);
 
