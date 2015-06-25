@@ -17,14 +17,19 @@ var CommandFilter = require('./input_filters/command');
  * @constructor
  */
 function TypeInput(type) {
+
   this._type = type;
   this._contents = type.getContents();
+
   this._el = this._createElement();
+
   this._elStyle = this._el.style;
   this._caretStyle = type.getCaret().caretEl.style;
-  this._catchInput = true;
+
   this._loadFilters();
   this._bindEvents();
+  this.catchInput();
+  
 }
 
 (function () {
@@ -33,7 +38,7 @@ function TypeInput(type) {
    * If set to true, input events will be processed.
    * If set to false, input events will be ignored.
    *
-   * @param {boolean} val - Should input events be processed
+   * @param {boolean} [val] - Should input events be processed
    * @returns {boolean}
    */
   this.catchInput = function (val) {
