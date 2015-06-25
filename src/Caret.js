@@ -18,7 +18,7 @@ var DomUtil = require('./dom_utilities');
  */
 function Caret(options) {
 
-  options = options || {};
+  options = options || {constrainingNode: null, color: null};
 
   if (DomUtil.isEl(options)) {
     options = { constrainingNode: options, color: null };
