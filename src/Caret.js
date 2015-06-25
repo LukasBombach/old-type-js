@@ -12,6 +12,7 @@ var DomUtil = require('./dom_utilities');
  * Creates a new Caret and adds a hidden div (visual representation of the caret) to
  * the DOM
  *
+ * @param {Node|{constrainingNode:Node,color:string}} options
  * @class Caret
  * @constructor
  */
@@ -20,7 +21,7 @@ function Caret(options) {
   options = options || {};
 
   if (DomUtil.isEl(options)) {
-    options = { constrainingNode: options };
+    options = { constrainingNode: options, color: null };
   }
 
   this.callbacks = {};
