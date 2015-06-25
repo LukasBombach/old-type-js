@@ -38,8 +38,7 @@ var TypeRange = require('./type_range');
 
     // type.caret(10, 20)
     if (arguments.length === 2) {
-      new TypeRange(this.root, arguments[0], arguments[1]).select();
-      return this;
+      return this.selection(arguments[0], arguments[1]);
     }
 
     return this;
@@ -65,8 +64,7 @@ var TypeRange = require('./type_range');
 
     // type.selection(10)
     if (arguments.length === 1 && typeof arguments[0] === "number") {
-      this._caret.absoluteOffset(arguments[0]);
-      return this;
+      return this.caret(arguments[0]);
     }
 
     // type.selection(10, 20)
@@ -107,20 +105,66 @@ var TypeRange = require('./type_range');
 
   };
 
+  /**
+   *
+   * @param params
+   * @returns {*}
+   */
   this.insert = function (params) {
 
+    // type.insert(str)
+    if (arguments.length === 1) {
+      this.input.insert('text', arguments[0]);
+      return this;
+    }
+
+    // type.insert('html', str)
+    if (arguments.length === 2 && arguments[0] === 'html') {
+      this.input.insert('text', arguments[1]);
+      return this;
+    }
+
+    // type.insert(str, 10)
+    // type.insert('html', str, 10)
+
+    return this;
+
   };
 
+  /**
+   *
+   * @param params
+   * @returns {*}
+   */
+  this.replace = function (params) {
+    return this;
+  };
+
+  /**
+   *
+   * @param params
+   * @returns {*}
+   */
   this.format = function (params) {
-
+    return this;
   };
 
+  /**
+   *
+   * @param params
+   * @returns {*}
+   */
   this.remove = function (params) {
-
+    return this;
   };
 
+  /**
+   *
+   * @param params
+   * @returns {*}
+   */
   this.settings = function (params) {
-
+    return this;
   };
 
 }).call(Type.fn);

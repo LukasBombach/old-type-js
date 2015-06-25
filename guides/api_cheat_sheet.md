@@ -16,7 +16,7 @@ type.caret(10)
 // Moves the caret to the 10th character
 
 type.caret(10, 20)
-// Selects characters 10 to 20
+// Convenience function for type.select(10, 20)
 ```
 
 ## Selection
@@ -32,7 +32,7 @@ type.selection('html')
 // Return the currently selected HTML
 
 type.selection(10)
-// Moves the caret to the 10th character (does not select anything)
+// Convenience function for type.caret(10)
 
 type.selection(10, 20)
 // Selects characters 10 to 20
@@ -65,15 +65,20 @@ type.insert('html', str)
 
 type.insert(str, 10)
 // Inserts str at the offset given as second parameter
-
-type.insert(str, 10, 20)
-// Replaces text between offset 10 and 20 with the text given as str
  
 type.insert('html', str, 10)
 // Same as type.insert(str, 10) but inserts formatted text given as html string
+```
 
-type.insert('html', str, 10, 20)
-// Same as type.insert(str, 10, 20) but inserts formatted text given as html string
+## Replace
+
+```javascript
+type.replace(str, 10, 20)
+// Replaces text between offset 10 and 20 with the text given as str
+
+
+type.replace('html', str, 10, 20)
+// Same as type.replace(str, 10, 20) but inserts formatted text given as html string
 ```
 
 ## Format
