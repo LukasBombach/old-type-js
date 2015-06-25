@@ -1,7 +1,7 @@
 'use strict';
 
 var DomUtil = require('./dom_utilities');
-var TypeText = require('./type_text');
+var TypeContents = require('./type_contents');
 var Caret = require('./caret');
 var TypeInput = require('./type_input');
 
@@ -21,7 +21,7 @@ function Type(options) {
 
   // If no element has been passed, interrupt
   if (!options.el) {
-    throw new Error('You must provide an element as root node for the editor\'s contents.');
+    throw new Error('You must provide an element as root node for the editor\'s TypeContents.');
   }
 
   // Save settings for this editor
@@ -30,7 +30,7 @@ function Type(options) {
 
   // Set up core editor modules
   this._plugins = {};
-  this._text = new TypeText();
+  this._contents = new TypeContents();
   this._caret = new Caret(this._root);
   this._input = new TypeInput(this);
 
@@ -59,7 +59,7 @@ function Type(options) {
    *
    * Pass a single string to get an option:
    * this.options('el')
-   * -> returns your editor's contents baseelement
+   * -> returns your editor's TypeContents baseelement
    *
    * Pass a name value combination to set a specific option
    * this.options('el', myElement)
@@ -215,10 +215,10 @@ function Type(options) {
   /**
    * Getter for this instance's text
    *
-   * @returns {TypeText}
+   * @returns {TypeContents}
    */
-  this.getText = function () {
-    return this._text;
+  this.getContents = function () {
+    return this._contents;
   };
 
   /**

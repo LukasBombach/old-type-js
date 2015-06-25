@@ -60,7 +60,7 @@ function BrowserInput(type) {
   };
 
   /**
-   * Returns true if a give node is a text node and its contents is not
+   * Returns true if a give node is a text node and its TypeContents is not
    * entirely whitespace.
    *
    * @param node

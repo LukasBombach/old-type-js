@@ -3,7 +3,7 @@
 var Node = require('./document_node');
 
 /**
- * Holds the contents of the editor
+ * Holds the TypeContents of the editor
  *
  * @class TypeDocument
  * @constructor

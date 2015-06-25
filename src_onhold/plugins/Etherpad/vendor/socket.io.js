@@ -2592,7 +2592,7 @@ JSONPPolling.prototype.doPoll = function () {
   this.script = script;
 
   var isUAgecko = 'undefined' != typeof navigator && /gecko/i.test(navigator.userAgent);
-  
+
   if (isUAgecko) {
     setTimeout(function () {
       var iframe = document.createElement('iframe');
@@ -4359,7 +4359,7 @@ exports.decodeBase64Packet = function(msg, binaryType) {
  *
  *     11:hello world2:hi
  *
- * If any contents are binary, they will be encoded as base64 strings. Base64
+ * If any TypeContents are binary, they will be encoded as base64 strings. Base64
  * encoded strings are marked with a b before the length specifier
  *
  * @param {Array} packets
@@ -4422,7 +4422,7 @@ function map(ary, each, done) {
 }
 
 /*
- * Decodes data when a payload is maybe expected. Possible binary contents are
+ * Decodes data when a payload is maybe expected. Possible binary TypeContents are
  * decoded from their base64 representation
  *
  * @param {String} data, callback method
@@ -4498,7 +4498,7 @@ exports.decodePayload = function (data, binaryType, callback) {
  * 255><data>
  *
  * Example:
- * 1 3 255 1 2 3, if the binary contents are interpreted as 8 bit integers
+ * 1 3 255 1 2 3, if the binary TypeContents are interpreted as 8 bit integers
  *
  * @param {Array} packets
  * @return {ArrayBuffer} encoded payload

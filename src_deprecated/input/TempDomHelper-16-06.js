@@ -172,7 +172,7 @@ function TempDomHelper(constrainingNode) {
       DomUtil.wrap(tag, nodesToWrap);
 
       // The node where we stopped contains the endNode. We wrap up what
-      // we have and apply this algorithm recursively to the contents of
+      // we have and apply this algorithm recursively to the TypeContents of
       // the node where we stopped
     } else if (currentNode && currentNode.contains(endNode)) {
       DomUtil.wrap(tag, nodesToWrap);
@@ -277,7 +277,7 @@ function TempDomHelper(constrainingNode) {
       DomUtil.wrap(tag, nodesToWrap);
 
     // The node where we stopped contains the endNode. We wrap up what
-    // we have and apply this algorithm recursively to the contents of
+    // we have and apply this algorithm recursively to the TypeContents of
     // that node
     } else if (currentNode && currentNode.contains(endNode)) {
       DomUtil.wrap(tag, nodesToWrap);

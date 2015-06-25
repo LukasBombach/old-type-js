@@ -402,7 +402,7 @@ function DomUtilities() {
   };
 
   /**
-   * Returns true if a give node is a text node and its contents is not
+   * Returns true if a give node is a text node and its TypeContents is not
    * entirely whitespace.
    *
    * Todo allow infinite arguments just like isTextNode
@@ -465,7 +465,7 @@ function DomUtilities() {
       wrapper.appendChild(elms[i]);
     }
 
-    // Remove the tag we want to wrap from contents
+    // Remove the tag we want to wrap from TypeContents
     // so we don't have the same tag nested
     for (i = 0; i < elms.length; i += 1) {
       this.removeTag(elms[i], tag, true);

@@ -19,7 +19,7 @@ function EtherpadReader() {
    * @returns {EtherpadReader}
    */
   this.getDocument = function (callback) {
-    this.etherpad.call('getText', {padID:"Test"}, function(err, res){
+    this.etherpad.call('getContents', {padID:"Test"}, function(err, res){
       if(err === 0) {
         var node = new DocumentNode('P');
         node.childNodes.push(new DocumentNode('TEXT', res.data.text));

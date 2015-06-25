@@ -1,6 +1,6 @@
 'use strict';
 
-function TypeText() {
+function TypeContents() {
 }
 
 
@@ -11,7 +11,7 @@ function TypeText() {
    * @param textNode
    * @param offset
    * @param str
-   * @returns {TypeText}
+   * @returns {TypeContents}
    */
   this.insertText = function (textNode, offset, str) {
 
@@ -46,7 +46,7 @@ function TypeText() {
    * @param textNode
    * @param offset
    * @param numChars
-   * @returns {TypeText}
+   * @returns {TypeContents}
    */
   this.remove = function (textNode, offset, numChars) {
 
@@ -56,7 +56,7 @@ function TypeText() {
   /**
    *
    * @param {number} steps
-   * @returns {TypeText}
+   * @returns {TypeContents}
    */
   this.undo = function (steps) {
     steps = steps === null ? 1 : steps;
@@ -66,7 +66,7 @@ function TypeText() {
   /**
    *
    * @param {number} steps
-   * @returns {TypeText}
+   * @returns {TypeContents}
    */
   this.redo = function (steps) {
     steps = steps === null ? 1 : steps;
@@ -76,7 +76,7 @@ function TypeText() {
   /**
    *
    * @param {string} changeset
-   * @returns {TypeText}
+   * @returns {TypeContents}
    */
   this.applyChangeset = function (changeset) {
     return this;
@@ -85,7 +85,7 @@ function TypeText() {
   /**
    *
    * @param {string} changeset
-   * @returns {TypeText}
+   * @returns {TypeContents}
    */
   this.removeChangeset = function (changeset) {
     this.applyChangeset(this._invertChangeset(changeset));
@@ -95,13 +95,13 @@ function TypeText() {
   /**
    *
    * @param {string} changeset
-   * @returns {TypeText}
+   * @returns {TypeContents}
    * @private
    */
   this._invertChangeset = function (changeset) {
 
   };
 
-}).call(TypeText.protoype);
+}).call(TypeContents.protoype);
 
-module.exports = TypeText;
+module.exports = TypeContents;

@@ -18,7 +18,7 @@ var CommandFilter = require('./input_filters/command');
  */
 function TypeInput(type) {
   this._type = type;
-  this._text = type.getText();
+  this._contents = type.getContents();
   this._el = this._createElement();
   this._elStyle = this._el.style;
   this._caretStyle = type.getCaret().caretEl.style;
@@ -79,7 +79,7 @@ function TypeInput(type) {
    * @returns {TypeInput}
    */
   this._onInput = function () {
-    this._text.insertText(this._el.textContent);
+    this._contents.insertText(this._el.textContent);
     this._el.innerHTML = '';
     return this;
   };
