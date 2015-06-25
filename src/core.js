@@ -24,6 +24,7 @@ function Type(options) {
   }
 
   // Save settings for this editor
+  this._root = null;
   this.setOptions(options);
 
   // Set up core editor modules
@@ -188,6 +189,33 @@ function Type(options) {
 
     return result === module ? this : result;
 
+  };
+
+  /**
+   * Getter for this instance's root element
+   *
+   * @returns {Element}
+   */
+  this.getRoot = function () {
+    return this._root;
+  };
+
+  /**
+   * Getter for this instance's caret
+   *
+   * @returns {Caret}
+   */
+  this.getCaret = function () {
+    return this._caret;
+  };
+
+  /**
+   * Getter for this instance's input
+   *
+   * @returns {TypeInput}
+   */
+  this.getInput = function () {
+    return this._input;
   };
 
   /**

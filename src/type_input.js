@@ -1,62 +1,96 @@
 'use strict';
 
+var Type = require('./core');
 var Settings = require('./settings');
 var DomUtil = require('./dom_utilities');
 var Caret = require('./input/caret');
 var CommandFilter = require('./input_filters/command');
 
-// todo
-// textarea / contenteditable
-// einfache eingaben
-// pasting
-// backspace und delete
-// verhalten bei bestimmten elementen (br löschen oder am löschen wenn man am anfang eines elements ist)
-
-
-var Type = require('./core');
-
-
-function TypeInput (type) {
+/**
+ * todo textarea / contenteditable
+ * todo einfache eingaben
+ * todo pasting
+ * todo backspace und delete
+ * todo verhalten bei bestimmten elementen (br löschen oder am löschen wenn man am anfang eines elements ist)
+ *
+ * @param {Type} type
+ * @constructor
+ */
+function TypeInput(type) {
   this._type = type;
   this._el = this._createElement();
-  this.caret = new Caret(null, type.options.root);
-  this.caret.moveTo(DomUtil.firstTextNode(type.options.root))._blink();
-  this._caretStyle = this.caret.caretEl.style;
   this._elStyle = this._el.style;
+  this._caretStyle = type.getCaret().caretEl.style;
+  this._catchInput = true;
   this._loadFilters();
-  this.catchInput();
+  this._bindEvents();
 }
-
 
 (function () {
 
   /**
+   * If set to true, input events will be processed.
+   * If set to false, input events will be ignored.
    *
-   * @returns {TypeInput}
+   * @param {boolean} val - Should input events be processed
+   * @returns {boolean}
    */
-  this.onInput = function () {
-    this.caret.insertText(this._el.textContent);
-    this._el.innerHTML = '';
-    return this;
-  };
-
-  this.onContextMenu = function () {
-
-    // Wenn das clipboard beim copy befehel direkt veränderbar ist, muss nichts weiter gemacht werden
-    // Wenn nicht, aktuelle selektion in das contenteditable ding kopieren
-
+  this.catchInput = function (val) {
+    this._catchInput = (val !== false);
+    return this._catchInput;
   };
 
   /**
+   * Unbinds keyboard and mouse events used by this class
    *
    * @returns {TypeInput}
    */
-  this.catchInput = function () {
+  this.unload = function () {
+    this._unbindEvents();
+    return this;
+  };
+
+  /**
+   * Binds events on type's root element to catch keyboard
+   * and mouse input.
+   *
+   * @returns {TypeInput}
+   * @private
+   */
+  this._bindEvents = function () {
     this._bindKeyDownEvents();
     this._bindInputEvents();
     this._bindMouseEvents();
     return this;
   };
+
+  /**
+   * todo implement
+   * @returns {TypeInput}
+   * @private
+   */
+  this._unbindEvents = function () {
+    return this;
+  };
+
+  /**
+   * todo trigger events
+   * @returns {TypeInput}
+   */
+  this._onInput = function () {
+    this.caret.insertText(this._el.textContent);
+    this._el.innerHTML = '';
+    return this;
+  };
+
+  /**
+   * todo Wenn das clipboard beim copy befehel direkt veränderbar ist, muss nichts weiter gemacht werden
+   * todo Wenn nicht, aktuelle selektion in das contenteditable ding kopieren
+   * todo trigger events
+   */
+  this._onContextMenu = function () {
+  };
+
 
   /**
    * Some inputs needs to be interrupted and caught before it gets inserted
@@ -107,7 +141,7 @@ function TypeInput (type) {
    */
   this._bindMouseEvents = function () {
     var range, self = this;
-    this._type.options.root.addEventListener('mouseup', function(e) {
+    this._type.getRoot().addEventListener('mouseup', function(e) {
       if (window.getSelection().isCollapsed) {
         range = document.caretRangeFromPoint(e.clientX, e.clientY);
         if (range.startContainer.nodeType == 3) {
