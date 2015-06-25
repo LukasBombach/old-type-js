@@ -3,7 +3,6 @@
 var DomUtil = require('./dom_utilities');
 var TypeInput = require('./type_input');
 
-
 /**
  * The main class and entry point to set up a Type instance in the browser.
  *
