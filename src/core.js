@@ -99,20 +99,33 @@ function Type(options) {
   };
 
   /**
-   * Get or set a plugin
+   * Get or set a plugin. Will return the plugin with the given
+   * name. Pass a second parameter to set the plugin to the
+   * given name.
    *
    * @param {string} name - The name of the plugin that should
-   *     be gotten and set
+   *     be gotten or set
    * @param {*} [value] - The value to be set for the plugin
    * @returns {*}
    */
   this.plugin = function (name, value) {
-    if (value !== null) this._plugins[name] = value;
+    if (value !== null) {
+      this._plugins[name] = value;
+    }
     return this._plugins[name];
   };
 
   /**
-   * Get or set a plugin
+   * Get or set a plugin. There are 2 essential differences to
+   * this.plugin.
+   *
+   * 1) If the plugin given as name already exists, it will not
+   * be set, even if you pass subsequent parameters.
+   *
+   * 2) If the value passed is a Function object (not an instance)
+   * it will be instantiated with the given params and saved
+   * under the given name. If value is an instantiated object it
+   * will simply be written to name, just as this.plugin would.
    *
    * @param {string} name - The name of the plugin that should
    *     be gotten and set
@@ -128,8 +141,9 @@ function Type(options) {
 
     params = Array.prototype.slice.call(arguments, 2);
 
-    if (this._plugins[name])
+    if (this._plugins[name]) {
       return this._plugins[name];
+    }
 
     if (value instanceof Function) {
       this._plugins[name] = new (Function.prototype.bind.apply(value, params));
@@ -159,10 +173,12 @@ function Type(options) {
 
     var result = null;
 
-    if (method in module) {
+    if (module.hasOwnProperty(method)) {
       result = module[method].apply(module, params);
+
     } else if (fallback) {
       result = fallback.apply(module, [method].concat(params));
+
     } else {
       throw new Error('Method ' + method + 'cannot be found in given module');
     }
