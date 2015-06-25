@@ -24,7 +24,7 @@ function Type(options) {
   }
 
   // Save settings for this editor
-  this.setOptions(options); // todo -> this.root = options.el;
+  this.setOptions(options);
 
   // Set up core editor modules
   this._plugins = {};
@@ -142,6 +142,13 @@ function Type(options) {
   };
 
   /**
+   * Call a method from an object (usually a plugin). If the called
+   * method returns the plugin, return this type instance instead.
+   * If the given method name is not a method in the object, call the
+   * given callback.
+   *
+   * callMethodFrom purpose is to provide a shorthand way to expose
+   * the API of a plugin as API of Type
    *
    * @param module
    * @param method
@@ -166,54 +173,17 @@ function Type(options) {
   };
 
   /**
-   * Setter for the internal document representation
+   * This behaves similar to jQuery's extend method. Writes all properties
+   * from the objects passed as copyFrom to the object passed  as copyTo.
+   * Copying starts from left to right and will overwrite each setting
+   * subsequently.
    *
-   * @param doc
-   * @returns {Type}
-   * @private
-   */
-  this._setDocument = function(doc) {
-    this._document = doc;
-    return this;
-  };
-
-  /**
-   * Etherpad Dev code
-   *
-   * @returns {EtherpadInput}
-   */
-  /*
-  this.etherpad = function(options) {
-
-    //var reader = new EtherpadReader();
-    //reader.getDocument(function(document) {
-    //  console.log(document);
-    //  var renderer = new Renderer(document);
-    //  renderTo.appendChild(renderer.output());
-    //});
-
-    return new EtherpadInput({
-      onContentLoaded : function(text, input) {
-        var node = new DocumentNode('P');
-        node.childNodes.push(new DocumentNode('TEXT', text));
-        var document = new TypeDocument(node);
-        var renderer = new Renderer(document);
-        options.renderTo.appendChild(renderer.output());
-        input.caret.moveTo(options.renderTo.childNodes[0].childNodes[0], 0)._blink();
-        options.onload(input);
-      }
-    });
-
-  }
- */
-
-  /**
-   *
-   * @param {...{}} objects
+   * @param {*} copyTo
+   * @param {...{}} copyFrom
    * @returns {*}
    * @private
    */
-  this._extend = function(objects) {
+  this._extend = function(copyTo, copyFrom) {
     for(var i=1; i<arguments.length; i++)
       for(var key in arguments[i])
         if(arguments[i].hasOwnProperty(key))
