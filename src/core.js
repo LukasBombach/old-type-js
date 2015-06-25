@@ -201,13 +201,10 @@ function Type(options) {
    */
   this._extend = function (copyTo, copyFrom) {
     var i, key;
-    for (i = 1; i < arguments.length; i += 1) {
-      for (key in arguments[i]) {
-        if (arguments[i].hasOwnProperty(key)) {
+    for (i = 1; i < arguments.length; i += 1)
+      for (key in arguments[i])
+        if (arguments[i].hasOwnProperty(key))
           arguments[0][key] = arguments[i][key];
-        }
-      }
-    }
     return arguments[0];
   };
 
