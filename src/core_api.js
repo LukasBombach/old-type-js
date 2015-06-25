@@ -5,7 +5,6 @@ var TypeRange = require('./type_range');
 
 (function () {
 
-
   /**
    *
    * @param params
