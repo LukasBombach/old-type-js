@@ -1,6 +1,7 @@
 'use strict';
 
-var Settings = require('../Settings');
+var Settings = require('./settings');
+var DomUtil = require('./dom_utilities');
 
 /**
  * An editor's caret. We cannot use the browser's native caret since we do not utilize
@@ -14,11 +15,19 @@ var Settings = require('../Settings');
  * @class Caret
  * @constructor
  */
-function Caret(color, constrainingNode) {
-  this._constrainingNode = constrainingNode || document.body;
-  this.caretEl = this._createElement(color);
-  this._hide();
+function Caret(options) {
+
+  options = options || {};
+
+  if (DomUtil.isEl(options)) {
+    options = { constrainingNode: options };
+  }
+
+  this._constrainingNode = options.constrainingNode || document.body;
+  this.caretEl = this._createElement(options.color);
   this.callbacks = {};
+  this._hide();
+
 }
 
 (function () {
