@@ -1,6 +1,7 @@
 'use strict';
 
 var DomUtil = require('./dom_utilities');
+var TypeText = require('./type_text');
 var Caret = require('./caret');
 var TypeInput = require('./type_input');
 
@@ -29,6 +30,7 @@ function Type(options) {
 
   // Set up core editor modules
   this._plugins = {};
+  this._text = new TypeText();
   this._caret = new Caret(this._root);
   this._input = new TypeInput(this);
 
@@ -48,7 +50,8 @@ function Type(options) {
    * @private
    */
   this._defaultoOptions = {
-    el : null
+    el        : null,
+    undoSteps : 20
   };
 
   /**

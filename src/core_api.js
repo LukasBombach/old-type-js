@@ -168,6 +168,24 @@ var TypeRange = require('./type_range');
 
   /**
    *
+   * @param steps
+   * @returns {*}
+   */
+  this.undo = function (steps) {
+    return this;
+  };
+
+  /**
+   *
+   * @param steps
+   * @returns {*}
+   */
+  this.redo = function (steps) {
+    return this;
+  };
+
+  /**
+   *
    * @param params
    * @returns {*}
    */

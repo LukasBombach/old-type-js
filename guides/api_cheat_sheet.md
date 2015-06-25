@@ -107,6 +107,15 @@ type.remove(startOffset, endOffset)
 // Will remove characters between the given offsets
 ```
 
+# Undo / Redo
+
+```javascript
+type.undo()
+type.undo(steps)
+type.redo()
+type.redo(steps)
+```
+
 ## Settings
 
 ```javascript

@@ -91,7 +91,6 @@ function TypeInput(type) {
   this._onContextMenu = function () {
   };
 
-
   /**
    * Some inputs needs to be interrupted and caught before it gets inserted
    * to the input element. This includes return keys for example
