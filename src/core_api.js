@@ -42,6 +42,8 @@ var TypeRange = require('./type_range');
       return this;
     }
 
+    return this;
+
   };
 
   /**
@@ -52,7 +54,7 @@ var TypeRange = require('./type_range');
   this.selection = function (params) {
 
     // type.selection() || type.selection('text')
-    if (!arguments.length || (arguments.length === 1 && arguments[0] === 'text')) {
+    if (!arguments.length || arguments[0] === 'text') {
       return TypeRange.fromCurrentSelection().text();
     }
 
@@ -68,7 +70,7 @@ var TypeRange = require('./type_range');
     }
 
     // type.selection(10, 20)
-    if (arguments.length === 2) {
+    if (arguments.length === 2 && typeof arguments[0] === "number") {
       new TypeRange(this.root, arguments[0], arguments[1]).select();
       return this;
     }
@@ -92,7 +94,16 @@ var TypeRange = require('./type_range');
     }
 
     // type.selection('save')
+    if (arguments[0] === 'save') {
+      return TypeRange.fromCurrentSelection().save();
+    }
+
     // type.selection('restore', sel)
+    if (arguments[0] === 'restore') {
+      return TypeRange.fromCurrentSelection().restore(arguments[1]);
+    }
+
+    return this;
 
   };
 
