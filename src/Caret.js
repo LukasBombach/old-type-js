@@ -23,9 +23,11 @@ function Caret(options) {
     options = { constrainingNode: options };
   }
 
+  this.callbacks = {};
+
   this._constrainingNode = options.constrainingNode || document.body;
   this.caretEl = this._createElement(options.color);
-  this.callbacks = {};
+  this.moveTo(this._constrainingNode);
   this._hide();
 
 }
@@ -200,8 +202,11 @@ function Caret(options) {
    * @returns {Caret}
    */
   this.moveTo = function (node, offset) {
-    if (!(node instanceof Node) || node.nodeType !== Node.TEXT_NODE) {
-      throw new Error('node parameter must be a Node of type Node.TEXT_NODE');
+    if (/*!(node instanceof Node) || */node.nodeType !== Node.TEXT_NODE) {
+      node = DomUtil.firstTextNode(node);
+    }
+    if (node === null) {
+      throw new Error('Node parameter must be or contain a text node');
     }
     if (node === this.textNode && offset === null) {
       return this;
