@@ -1,6 +1,7 @@
 'use strict';
 
 var DomUtil = require('./dom_utilities');
+var Caret = require('./caret');
 var TypeInput = require('./type_input');
 
 /**
@@ -27,7 +28,8 @@ function Type(options) {
 
   // Set up core editor modules
   this._plugins = {};
-  this.input = new TypeInput(this);
+  this._caret = new Caret(this);
+  this._input = new TypeInput(this);
 
   // Trigger events
   Type.trigger('ready', this);
