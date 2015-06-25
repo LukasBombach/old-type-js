@@ -28,7 +28,7 @@ function Type(options) {
 
   // Set up core editor modules
   this._plugins = {};
-  this._caret = new Caret(this);
+  this._caret = new Caret(this._root);
   this._input = new TypeInput(this);
 
   // Trigger events
@@ -93,7 +93,7 @@ function Type(options) {
     }
 
     if (options.el) {
-      this.root = options.el;
+      this._root = options.el;
     }
 
     return this;
