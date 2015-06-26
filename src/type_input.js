@@ -58,24 +58,6 @@ function TypeInput(type) {
   };
 
   /**
-   * todo trigger events
-   * @returns {TypeInput}
-   */
-  this._onInput = function () {
-    this._contents.insertText(this._el.textContent);
-    this._el.innerHTML = '';
-    return this;
-  };
-
-  /**
-   * todo Wenn das clipboard beim copy befehel direkt veränderbar ist, muss nichts weiter gemacht werden
-   * todo Wenn nicht, aktuelle selektion in das contenteditable ding kopieren
-   * todo trigger events
-   */
-  this._onContextMenu = function () {
-  };
-
-  /**
    * Some inputs needs to be interrupted and caught before it gets inserted
    * to the input element. This includes return keys for example
    *
@@ -151,18 +133,11 @@ function TypeInput(type) {
   };
 
   /**
-   * The input element should be moved with the visible caret because the
-   * page scrolls to the input element when the user enters something.
    *
-   * @returns {TypeInput}
+   * @param sync
+   * @returns {*}
    * @private
    */
-  this._moveElToCaret = function () {
-    this._elStyle.left = this._caretStyle.left;
-    this._elStyle.top  = this._caretStyle.top;
-    return this;
-  };
-
   this._focusInput = function (sync) {
     if (sync) {
       this._el.focus();
@@ -185,33 +160,20 @@ function TypeInput(type) {
     return div;
   };
 
-  /**
-   * Maps character codes to readable names
-   *
-   * @type {Object}
-   * @private
-   */
-  this._keyNames = {
-    8  : 'backSpace',
-    37 : 'arrLeft',
-    38 : 'arrUp',
-    39 : 'arrRight',
-    40 : 'arrDown'
-  };
-
-  /**
-   * Maps character names to caret methods for keyDown events
-   *
-   * @type {Object}
-   * @private
-   */
-  this._caretMethodMap = {
-    arrLeft  : 'moveLeft',
-    arrUp    : 'moveUp',
-    arrRight : 'moveRight',
-    arrDown  : 'moveDown'
-  };
-
 }).call(TypeInput.prototype);
+
+/**
+ * Maps character codes to readable names
+ *
+ * @type {Object}
+ * @private
+ */
+TypeInput.keyNames = {
+  8  : 'backSpace',
+  37 : 'arrLeft',
+  38 : 'arrUp',
+  39 : 'arrRight',
+  40 : 'arrDown'
+};
 
 module.exports = TypeInput;
