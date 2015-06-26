@@ -41,3 +41,13 @@ this._caretMethodMap = {
   arrRight : 'moveRight',
   arrDown  : 'moveDown'
 };
+
+// backup
+// todo remove
+// Get the readable name for the key
+//key  = this._keyNames[e.keyCode];
+
+// Proxy this to the caret
+//if (key in this._caretMethodMap) {
+//  this.caret[this._caretMethodMap[key]]();
+//}

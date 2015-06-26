@@ -4,6 +4,8 @@ var Type = require('./core');
 var Settings = require('./settings');
 var DomUtil = require('./dom_utilities');
 var Caret = require('./input/caret');
+
+var CaretFilter = require('./input_filters/caret');
 var RemoveFilter = require('./input_filters/remove');
 
 /**
@@ -35,7 +37,6 @@ function TypeInput(type) {
  * Maps character codes to readable names
  *
  * @type {Object}
- * @private
  */
 TypeInput.keyNames = {
   8  : 'backSpace',
@@ -54,7 +55,8 @@ TypeInput.keyNames = {
    */
   this._loadFilters = function () {
     this._filters = this._filters || {};
-    this._filters.remove = new RemoveFilter(this._type, this);
+    this._filters.caret = new CaretFilter(this._type, this);
+    //this._filters.remove = new RemoveFilter(this._type, this);
     return this;
   };
 
@@ -83,28 +85,28 @@ TypeInput.keyNames = {
    * @private
    */
   this._bindKeyDownEvents = function () {
-    var key, k;
-    this._el.addEventListener('keydown', function(e) {
+    //var key, k;
+    var key, func, name,
+      filters = this._filters;
+    this._el.addEventListener('keydown', function (e) {
+
+      key = TypeInput.keyNames[e.keyCode] || e.keyCode;
 
       var inputEvent = {
-        key : TypeInput.keyNames[e.keyCode] || e.keyCode,
-        shift : e.shiftKey,
-        alt   : e.altKey,
-        ctrl  : e.ctrlKey,
-        meta  : e.metaKey,
-        cmd   : (!this._isMac && e.ctrlKey) || (this._isMac && e.metaKey)
+        key    : key,
+        shift  : e.shiftKey,
+        alt    : e.altKey,
+        ctrl   : e.ctrlKey,
+        meta   : e.metaKey,
+        cmd    : (!this._isMac && e.ctrlKey) || (this._isMac && e.metaKey),
+        cancel : false
       };
 
-      // Get the readable name for the key
-      key  = this._keyNames[e.keyCode];
-
-      // Proxy this to the caret
-      if (key in this._caretMethodMap) {
-        this.caret[this._caretMethodMap[key]]();
-      }
-
-      for (k in this._filters) {
-        if (key in this._filters[k].keys) this._filters[k][this._filters[k].keys[key]](); // Todo clean up cryptic code
+      for (name in filters) {
+        if (filters.hasOwnProperty(name) && (func = filters[name].keys)) {
+          filters[name][func](inputEvent);
+          if (inputEvent.cancel) break;
+        }
       }
 
     }.bind(this), false);
