@@ -10,7 +10,6 @@ var CaretFilter = require('./input_filters/caret');
 var RemoveFilter = require('./input_filters/remove');
 
 /**
- * todo einfache eingaben
  * todo pasting
  * todo backspace und delete
  * todo verhalten bei bestimmten elementen (br löschen oder am löschen wenn man am anfang eines elements ist)
@@ -44,7 +43,7 @@ function TypeInput(type) {
   this._loadFilters = function () {
     this._filters = this._filters || {};
     this._filters.caret = new CaretFilter(this._type, this);
-    //this._filters.remove = new RemoveFilter(this._type, this);
+    this._filters.remove = new RemoveFilter(this._type, this);
     return this;
   };
 

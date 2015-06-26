@@ -2,20 +2,25 @@
 
 var Type = require('../core');
 
+/**
+ *
+ * @param {Type} type
+ * @param {TypeInput} input
+ * @constructor
+ */
 function RemoveFilter(type, input) {
-  this._type = type;
-  //this._cmd = type.plugin('cmd');
-  this._caret = input.caret;
+  this._contents = type.getContents();
+  this._caret = type.getCaret();
 }
 
 (function () {
 
   this.keys = {
-    backspace : 'remove'
+    backspace : 'backspace'
   };
 
-  this.remove = function () {
-    this._type.cmd('remove', this._caret.textNode, this._caret.offset, -1);
+  this.backspace = function () {
+    this._contents.remove(this._caret.textNode, this._caret.offset, -1);
     this._caret.moveLeft();
   };
 
