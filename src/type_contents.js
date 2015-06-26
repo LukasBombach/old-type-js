@@ -26,14 +26,12 @@ function TypeContents() {
     } else {
 
       nodeText = textNode.nodeValue;
+
       if (offset > 0) {
-        textNode.nodeValue = nodeText.substring(0, offset)
-          + str
-          + nodeText.substring(offset, nodeText.length);
+        textNode.nodeValue = nodeText.substring(0, offset) + str + nodeText.substring(offset, nodeText.length);
       } else {
         textNode.nodeValue = str + nodeText;
       }
-      this._setOffset(offset + str.length);
 
     }
 

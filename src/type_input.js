@@ -84,8 +84,8 @@ function TypeInput(type) {
    * @private
    */
   this._bindInputEvents = function () {
-    this._el.addEventListener('input', function (e) {
-      this._onInput(e);
+    this._el.addEventListener('input', function () {
+      this._onInput();
     }.bind(this), false);
     return this;
   };
@@ -138,12 +138,12 @@ function TypeInput(type) {
 
   /**
    *
-   * @param {TypeInputEvent} e
    * @returns {TypeInput}
    * @private
    */
-  this._onInput = function (e) {
+  this._onInput = function () {
     this._contents.insertText(this._caret.textNode, this._caret.offset, this._el.textContent);
+    this._caret._setOffset(this._caret.offset + this._el.textContent.length); // todo better api
     this._el.innerHTML = '';
     return this;
   };
