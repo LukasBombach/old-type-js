@@ -1,5 +1,6 @@
 'use strict';
 
+var TypeEnv = require('./type_environment');
 var DomUtil = require('./dom_utilities');
 var TypeContents = require('./type_contents');
 var Caret = require('./caret');
@@ -30,6 +31,7 @@ function Type(options) {
 
   // Set up core editor modules
   this._plugins = {};
+  this._env = new TypeEnv(); // todo make static
   this._contents = new TypeContents();
   this._caret = new Caret(this._root);
   this._input = new TypeInput(this);
@@ -228,6 +230,15 @@ function Type(options) {
    */
   this.getInput = function () {
     return this._input;
+  };
+
+  /**
+   * Getter for this instance's environment
+   *
+   * @returns {TypeInput}
+   */
+  this.getEnv = function () {
+    return this._env;
   };
 
   /**

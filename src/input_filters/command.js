@@ -11,12 +11,18 @@ function CommandFilter(type, input) {
 (function () {
 
   this.keys = {
-    backSpace : 'remove'
+    b : 'command',
+    i : 'command',
+    u : 'command',
+    s : 'command'
   };
 
-  this.remove = function () {
-    this._type.cmd('remove', this._caret.textNode, this._caret.offset, -1);
-    this._caret.moveLeft();
+  /**
+   *
+   * @param e
+   */
+  this.command = function (e) {
+
   };
 
 }).call(CommandFilter.prototype);

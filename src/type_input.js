@@ -4,7 +4,7 @@ var Type = require('./core');
 var Settings = require('./settings');
 var DomUtil = require('./dom_utilities');
 var Caret = require('./input/caret');
-var CommandFilter = require('./input_filters/command');
+var RemoveFilter = require('./input_filters/remove');
 
 /**
  * todo textarea / contenteditable
@@ -25,10 +25,25 @@ function TypeInput(type) {
 
   this._elStyle = this._el.style;
   this._caretStyle = type.getCaret().caretEl.style;
+  this._isMac = type.getEnv().mac;
 
   this._loadFilters();
   this._bindEvents();
 }
+
+/**
+ * Maps character codes to readable names
+ *
+ * @type {Object}
+ * @private
+ */
+TypeInput.keyNames = {
+  8  : 'backSpace',
+  37 : 'arrLeft',
+  38 : 'arrUp',
+  39 : 'arrRight',
+  40 : 'arrDown'
+};
 
 (function () {
 
@@ -39,7 +54,7 @@ function TypeInput(type) {
    */
   this._loadFilters = function () {
     this._filters = this._filters || {};
-    this._filters.command = new CommandFilter(this._type, this);
+    this._filters.remove = new RemoveFilter(this._type, this);
     return this;
   };
 
@@ -70,6 +85,15 @@ function TypeInput(type) {
   this._bindKeyDownEvents = function () {
     var key, k;
     this._el.addEventListener('keydown', function(e) {
+
+      var inputEvent = {
+        key : TypeInput.keyNames[e.keyCode] || e.keyCode,
+        shift : e.shiftKey,
+        alt   : e.altKey,
+        ctrl  : e.ctrlKey,
+        meta  : e.metaKey,
+        cmd   : (!this._isMac && e.ctrlKey) || (this._isMac && e.metaKey)
+      };
 
       // Get the readable name for the key
       key  = this._keyNames[e.keyCode];
@@ -161,19 +185,5 @@ function TypeInput(type) {
   };
 
 }).call(TypeInput.prototype);
-
-/**
- * Maps character codes to readable names
- *
- * @type {Object}
- * @private
- */
-TypeInput.keyNames = {
-  8  : 'backSpace',
-  37 : 'arrLeft',
-  38 : 'arrUp',
-  39 : 'arrRight',
-  40 : 'arrDown'
-};
 
 module.exports = TypeInput;
