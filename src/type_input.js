@@ -28,31 +28,18 @@ function TypeInput(type) {
 
   this._loadFilters();
   this._bindEvents();
-  this.catchInput();
-  
 }
 
 (function () {
 
   /**
-   * If set to true, input events will be processed.
-   * If set to false, input events will be ignored.
-   *
-   * @param {boolean} [val] - Should input events be processed
-   * @returns {boolean}
-   */
-  this.catchInput = function (val) {
-    this._catchInput = (val !== false);
-    return this._catchInput;
-  };
-
-  /**
-   * Unbinds keyboard and mouse events used by this class
    *
    * @returns {TypeInput}
+   * @private
    */
-  this.unload = function () {
-    this._unbindEvents();
+  this._loadFilters = function () {
+    this._filters = this._filters || {};
+    this._filters.command = new CommandFilter(this._type, this);
     return this;
   };
 
@@ -67,15 +54,6 @@ function TypeInput(type) {
     this._bindKeyDownEvents();
     this._bindInputEvents();
     this._bindMouseEvents();
-    return this;
-  };
-
-  /**
-   * todo implement
-   * @returns {TypeInput}
-   * @private
-   */
-  this._unbindEvents = function () {
     return this;
   };
 
@@ -115,8 +93,9 @@ function TypeInput(type) {
       key  = this._keyNames[e.keyCode];
 
       // Proxy this to the caret
-      if (key in this._caretMethodMap)
+      if (key in this._caretMethodMap) {
         this.caret[this._caretMethodMap[key]]();
+      }
 
       for (k in this._filters) {
         if (key in this._filters[k].keys) this._filters[k][this._filters[k].keys[key]](); // Todo clean up cryptic code
@@ -134,8 +113,7 @@ function TypeInput(type) {
    * @private
    */
   this._bindInputEvents = function () {
-    var self = this;
-    this._el.addEventListener('input', function() { self.onInput(); }, false);
+    this._el.addEventListener('input', function() { this.onInput(); }.bind(this), false);
     return this;
   };
 
@@ -145,30 +123,30 @@ function TypeInput(type) {
    * @private
    */
   this._bindMouseEvents = function () {
-    var range, self = this;
     this._type.getRoot().addEventListener('mouseup', function(e) {
       if (window.getSelection().isCollapsed) {
-        range = document.caretRangeFromPoint(e.clientX, e.clientY);
-        if (range.startContainer.nodeType == 3) {
-          self.caret.moveTo(range.startContainer, range.startOffset);
-          self.caret._blink();
-        }
-        window.setTimeout(function() { self._el.focus();}, 0);
+        this._moveCaretToMousePosition(e.clientX, e.clientY);
+        this._focusInput()
       } else {
-        self.caret._hide();
+        this.caret._hide();
       }
-    }, false);
+    }.bind(this), false);
     return this;
   };
 
   /**
    *
-   * @returns {TypeInput}
+   * @param x
+   * @param y
+   * @returns {*}
    * @private
    */
-  this._loadFilters = function () {
-    this._filters = this._filters || {};
-    this._filters['command'] = new CommandFilter(this._type, this);
+  this._moveCaretToMousePosition = function(x, y) {
+    var range = document.caretRangeFromPoint(x, y);
+    if (range.startContainer.nodeType == 3) {
+      this.caret.moveTo(range.startContainer, range.startOffset);
+      this.caret._blink();
+    }
     return this;
   };
 
@@ -182,6 +160,15 @@ function TypeInput(type) {
   this._moveElToCaret = function () {
     this._elStyle.left = this._caretStyle.left;
     this._elStyle.top  = this._caretStyle.top;
+    return this;
+  };
+
+  this._focusInput = function (sync) {
+    if (sync) {
+      this._el.focus();
+    } else {
+      window.setTimeout(function() { this._el.focus();}.bind(this), 0);
+    }
     return this;
   };
 
