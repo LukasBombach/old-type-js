@@ -85,14 +85,16 @@ TypeInput.keyNames = {
    * @private
    */
   this._bindKeyDownEvents = function () {
-    //var key, k;
-    var key, func, name,
-      filters = this._filters;
+
+    var filters = this._filters;
+
     this._el.addEventListener('keydown', function (e) {
+
+      var key, func, name, inputEvent;
 
       key = TypeInput.keyNames[e.keyCode] || e.keyCode;
 
-      var inputEvent = {
+      inputEvent = {
         key    : key,
         shift  : e.shiftKey,
         alt    : e.altKey,
