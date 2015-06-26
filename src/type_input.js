@@ -4,6 +4,8 @@ var Type = require('./core');
 var Settings = require('./settings');
 var DomUtil = require('./dom_utilities');
 
+var TypeInputEvent = require('./events/input');
+
 var CaretFilter = require('./input_filters/caret');
 var RemoveFilter = require('./input_filters/remove');
 
@@ -26,27 +28,12 @@ function TypeInput(type) {
 
   this._el = this._createElement();
 
-  this._isMac = type.getEnv().mac;
-
   this._elStyle = this._el.style;
   this._caretStyle = this._caret.caretEl.style;
 
   this._loadFilters();
   this._bindEvents();
 }
-
-/**
- * Maps character codes to readable names
- *
- * @type {Object}
- */
-TypeInput.keyNames = {
-  8  : 'backspace',
-  37 : 'left',
-  38 : 'up',
-  39 : 'right',
-  40 : 'down'
-};
 
 (function () {
 
@@ -80,10 +67,6 @@ TypeInput.keyNames = {
    * Some inputs needs to be interrupted and caught before it gets inserted
    * to the input element. This includes return keys for example
    *
-   * Todo keyCode : https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
-   * Todo keyCode : http://stackoverflow.com/questions/1444477/keycode-and-charcode
-   * Todo inputEvent Vielleicht wirklich als Klasse, allein schon wegen abgabe
-   *
    * @returns {TypeInput}
    * @private
    */
@@ -95,17 +78,8 @@ TypeInput.keyNames = {
 
       var key, func, name, inputEvent;
 
-      key = TypeInput.keyNames[e.keyCode] || e.keyCode;
-
-      inputEvent = {
-        key    : key,
-        shift  : e.shiftKey,
-        alt    : e.altKey,
-        ctrl   : e.ctrlKey,
-        meta   : e.metaKey,
-        cmd    : (!this._isMac && e.ctrlKey) || (this._isMac && e.metaKey),
-        cancel : false
-      };
+      inputEvent = TypeInputEvent.fromKeyDown(e);
+      key = inputEvent.key;
 
       for (name in filters) {
         if (filters.hasOwnProperty(name) && (func = filters[name].keys[key])) {
@@ -152,7 +126,7 @@ TypeInput.keyNames = {
 
   /**
    *
-   * @param {InputEvent} e
+   * @param {TypeInputEvent} e
    * @returns {TypeInput}
    * @private
    */
