@@ -102,6 +102,6 @@ function TypeContents() {
 
   };
 
-}).call(TypeContents.protoype);
+}).call(TypeContents.prototype);
 
 module.exports = TypeContents;

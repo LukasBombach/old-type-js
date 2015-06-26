@@ -27,7 +27,7 @@ function Type(options) {
 
   // Save settings for this editor
   this._root = null;
-  this.setOptions(options);
+  this.options(options);
 
   // Set up core editor modules
   this._plugins = {};

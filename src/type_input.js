@@ -111,7 +111,7 @@ TypeInput.keyNames = {
         if (filters.hasOwnProperty(name) && (func = filters[name].keys[key])) {
           filters[name][func](inputEvent);
           if (inputEvent.cancel) {
-            e.preventDefault();
+            e.preventDefault(); // todo event still bubbles
             break;
           }
         }
@@ -157,7 +157,7 @@ TypeInput.keyNames = {
    * @private
    */
   this._onInput = function (e) {
-    this._contents.insertText(this._el.textContent);
+    this._contents.insertText(this._caret.textNode, this._caret.offset, this._el.textContent);
     this._el.innerHTML = '';
     return this;
   };
