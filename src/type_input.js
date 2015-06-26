@@ -70,37 +70,9 @@ function TypeInput(type) {
    * @private
    */
   this._bindKeyDownEvents = function () {
-
-    // Shorthand variable for better readability
-    var filters = this._filters;
-
-    // Catch input before it's written to the input field
     this._el.addEventListener('keydown', function (e) {
-
-      // Required variables
-      var key, func, name, inputEvent;
-
-      // Create type event from keydown event
-      inputEvent = TypeInputEvent.fromKeyDown(e);
-      key = inputEvent.key;
-
-      // Iterate through all filters
-      for (name in filters) {
-
-        // Call filter's methods if the registered for the key pressed
-        if (filters.hasOwnProperty(name) && (func = filters[name].keys[key])) {
-
-          // if the method returns false or cancels the event, do not proceed
-          if (filters[name][func](inputEvent) === false || inputEvent.cancel) {
-            e.preventDefault();
-            break;
-          }
-        }
-      }
-
+      this._processFilters(e);
     }.bind(this), false);
-
-    // Chaining
     return this;
   };
 
@@ -112,7 +84,9 @@ function TypeInput(type) {
    * @private
    */
   this._bindInputEvents = function () {
-    this._el.addEventListener('input', function(e) { this._onInput(e); }.bind(this), false);
+    this._el.addEventListener('input', function (e) {
+      this._onInput(e);
+    }.bind(this), false);
     return this;
   };
 
@@ -122,15 +96,44 @@ function TypeInput(type) {
    * @private
    */
   this._bindMouseEvents = function () {
-    this._type.getRoot().addEventListener('mouseup', function(e) {
+    this._type.getRoot().addEventListener('mouseup', function (e) {
       if (window.getSelection().isCollapsed) {
         this._moveCaretToMousePosition(e.clientX, e.clientY);
-        this._focusInput()
+        this._focusInput();
       } else {
         this._caret._hide();
       }
     }.bind(this), false);
     return this;
+  };
+
+  /**
+   * Takes a {KeyboardEvent} and passes it to all registered
+   * filters. Returns the resulting {TypeInputEvent}
+   *
+   * @param {KeyboardEvent} e
+   * @returns {TypeInputEvent}
+   * @private
+   */
+  this._processFilters = function (e) {
+
+    var inputEvent, key, filters, name, func;
+
+    inputEvent = TypeInputEvent.fromKeyDown(e);
+    filters = this._filters;
+    key = inputEvent.key;
+
+    for (name in filters) {
+      if (filters.hasOwnProperty(name) && (func = filters[name].keys[key])) {
+        if (filters[name][func](inputEvent) === false || inputEvent.cancel) {
+          e.preventDefault();
+          break;
+        }
+      }
+    }
+
+    return inputEvent;
+
   };
 
   /**
