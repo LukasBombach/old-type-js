@@ -81,6 +81,7 @@ TypeInput.keyNames = {
    *
    * Todo keyCode : https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
    * Todo keyCode : http://stackoverflow.com/questions/1444477/keycode-and-charcode
+   * Todo inputEvent Vielleicht wirklich als Klasse, allein schon wegen abgabe
    *
    * @returns {TypeInput}
    * @private
@@ -169,7 +170,7 @@ TypeInput.keyNames = {
    */
   this._moveCaretToMousePosition = function(x, y) {
     var range = document.caretRangeFromPoint(x, y);
-    if (range.startContainer.nodeType == 3) {
+    if (range.startContainer.nodeType === 3) {
       this.caret.moveTo(range.startContainer, range.startOffset);
       this.caret._blink();
     }
