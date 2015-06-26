@@ -1,6 +1,7 @@
 'use strict';
 
-var Type = require('./core');
+var Type = require('../core');
+var TypeEnv = require('../type_environment');
 
 function TypeInputEvent(key, shift, alt, ctrl, meta, mac) {
   this.key   = key;
@@ -29,12 +30,14 @@ TypeInputEvent.keyNames = {
  * Todo keyCode : https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
  * Todo keyCode : http://stackoverflow.com/questions/1444477/keycode-and-charcode
  *
+ * Todo TypeEnv.mac should be Type.env.mac
+ *
  * @param {KeyboardEvent} e
  * @returns {TypeInputEvent}
  */
 TypeInputEvent.fromKeyDown = function (e) {
   var key = TypeInputEvent.keyNames[e.keyCode] || e.keyCode;
-  return new TypeInputEvent(key, e.shiftKey, e.altKey, e.ctrlKey, e.metaKey, Type.env.mac);
+  return new TypeInputEvent(key, e.shiftKey, e.altKey, e.ctrlKey, e.metaKey, TypeEnv.mac);
 };
 
 (function () {

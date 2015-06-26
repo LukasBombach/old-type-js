@@ -45,8 +45,7 @@ function Type(options) {
  *
  * @type {TypeEnvironment}
  */
-Type.env = new TypeEnv();
-
+Type.env = TypeEnv;
 
 (function () {
 

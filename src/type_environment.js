@@ -1,7 +1,11 @@
 'use strict';
 
+var singleton;
+
 function TypeEnvironment() {
   this.mac = navigator.appVersion.indexOf("Mac") !== -1;
 }
 
-module.exports = TypeEnvironment;
+singleton = new TypeEnvironment();
+
+module.exports = singleton;
