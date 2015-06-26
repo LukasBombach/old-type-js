@@ -71,17 +71,26 @@ function TypeInput(type) {
    */
   this._bindKeyDownEvents = function () {
 
+    // Shorthand variable for better readability
     var filters = this._filters;
 
+    // Catch input before it's written to the input field
     this._el.addEventListener('keydown', function (e) {
 
+      // Required variables
       var key, func, name, inputEvent;
 
+      // Create type event from keydown event
       inputEvent = TypeInputEvent.fromKeyDown(e);
       key = inputEvent.key;
 
+      // Iterate through all filters
       for (name in filters) {
+
+        // Call filter's methods if the registered for the key pressed
         if (filters.hasOwnProperty(name) && (func = filters[name].keys[key])) {
+
+          // if the method returns false or cancels the event, do not proceed
           if (filters[name][func](inputEvent) === false || inputEvent.cancel) {
             e.preventDefault();
             break;
@@ -90,6 +99,8 @@ function TypeInput(type) {
       }
 
     }.bind(this), false);
+
+    // Chaining
     return this;
   };
 
