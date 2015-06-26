@@ -3,7 +3,6 @@
 var Type = require('./core');
 var Settings = require('./settings');
 var DomUtil = require('./dom_utilities');
-var Caret = require('./input/caret');
 
 var CaretFilter = require('./input_filters/caret');
 var RemoveFilter = require('./input_filters/remove');
@@ -23,12 +22,14 @@ function TypeInput(type) {
 
   this._type = type;
   this._contents = type.getContents();
+  this._caret = type.getCaret();
 
   this._el = this._createElement();
 
-  this._elStyle = this._el.style;
-  this._caretStyle = type.getCaret().caretEl.style;
   this._isMac = type.getEnv().mac;
+
+  this._elStyle = this._el.style;
+  this._caretStyle = this._caret.caretEl.style;
 
   this._loadFilters();
   this._bindEvents();
@@ -143,7 +144,7 @@ TypeInput.keyNames = {
         this._moveCaretToMousePosition(e.clientX, e.clientY);
         this._focusInput()
       } else {
-        this.caret._hide();
+        this._caret._hide();
       }
     }.bind(this), false);
     return this;
@@ -171,8 +172,8 @@ TypeInput.keyNames = {
   this._moveCaretToMousePosition = function(x, y) {
     var range = document.caretRangeFromPoint(x, y);
     if (range.startContainer.nodeType === 3) {
-      this.caret.moveTo(range.startContainer, range.startOffset);
-      this.caret._blink();
+      this._caret.moveTo(range.startContainer, range.startOffset);
+      this._caret._blink();
     }
     return this;
   };

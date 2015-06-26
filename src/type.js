@@ -10,6 +10,6 @@ require('./cmd');
 window.Type = Type;
 
 // Dev
-window.Caret = require('./input/caret');
-window.Etherpad = require('./plugins/Etherpad/EtherpadLite');
-window.TypeRange = require('./type_range');
+//window.Caret = require('./input/caret');
+//window.Etherpad = require('./plugins/Etherpad/EtherpadLite');
+//window.TypeRange = require('./type_range');

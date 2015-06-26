@@ -16,7 +16,7 @@ var TypeInput = require('./type_input');
 function Type(options) {
 
   // Allow passing an element as only parameter
-  if (DomUtil.isEl(options)) {
+  if (DomUtil.isNode(options)) {
     options = { el: options };
   }
 

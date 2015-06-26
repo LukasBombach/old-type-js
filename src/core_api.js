@@ -73,13 +73,13 @@ var TypeRange = require('./type_range');
     }
 
     // type.selection(element)
-    if (DomUtil.isEl(arguments[0])) {
+    if (DomUtil.isNode(arguments[0])) {
       new TypeRange(arguments[0]).select();
       return this;
     }
 
     // type.selection(element1, element2)
-    if (arguments.length === 2 && DomUtil.isEl(arguments)) {
+    if (arguments.length === 2 && DomUtil.isNode(arguments)) {
       new TypeRange(arguments[0], arguments[1]).select();
       return this;
     }

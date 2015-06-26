@@ -605,6 +605,15 @@ function DomUtilities() {
    *
    * @param obj
    * @returns {boolean}
+   */
+  this.isNode = function (obj) {
+    return !!(obj && obj.nodeType);
+  };
+
+  /**
+   *
+   * @param obj
+   * @returns {boolean}
    * @private
    */
   this._isFunction = function(obj) {

@@ -20,7 +20,7 @@ function Caret(options) {
 
   options = options || {constrainingNode: null, color: null};
 
-  if (DomUtil.isEl(options)) {
+  if (DomUtil.isNode(options)) {
     options = { constrainingNode: options, color: null };
   }
 

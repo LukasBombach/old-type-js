@@ -47,7 +47,7 @@
   var root = document.getElementById('document'),
     bookmark;
 
-  var Type = new Type({root: root});
+  var type = new Type(root);
 
   document.getElementById('save-selection').onclick = function () {
     console.log(document.getSelection().getRangeAt(0));
