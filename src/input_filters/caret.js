@@ -14,10 +14,10 @@ function CaretFilter(type) {
 (function () {
 
   this.keys = {
-    arrLeft  : 'moveLeft',
-    arrUp    : 'moveUp',
-    arrRight : 'moveRight',
-    arrDown  : 'moveDown'
+    left  : 'moveLeft',
+    up    : 'moveUp',
+    right : 'moveRight',
+    down  : 'moveDown'
   };
 
   /**

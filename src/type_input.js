@@ -14,6 +14,7 @@ var RemoveFilter = require('./input_filters/remove');
  * todo pasting
  * todo backspace und delete
  * todo verhalten bei bestimmten elementen (br löschen oder am löschen wenn man am anfang eines elements ist)
+ * todo trigger events
  *
  * @param {Type} type
  * @constructor
@@ -39,11 +40,11 @@ function TypeInput(type) {
  * @type {Object}
  */
 TypeInput.keyNames = {
-  8  : 'backSpace',
-  37 : 'arrLeft',
-  38 : 'arrUp',
-  39 : 'arrRight',
-  40 : 'arrDown'
+  8  : 'backspace',
+  37 : 'left',
+  38 : 'up',
+  39 : 'right',
+  40 : 'down'
 };
 
 (function () {
@@ -105,9 +106,12 @@ TypeInput.keyNames = {
       };
 
       for (name in filters) {
-        if (filters.hasOwnProperty(name) && (func = filters[name].keys)) {
+        if (filters.hasOwnProperty(name) && (func = filters[name].keys[key])) {
           filters[name][func](inputEvent);
-          if (inputEvent.cancel) break;
+          if (inputEvent.cancel) {
+            e.preventDefault();
+            break;
+          }
         }
       }
 
@@ -123,7 +127,7 @@ TypeInput.keyNames = {
    * @private
    */
   this._bindInputEvents = function () {
-    this._el.addEventListener('input', function() { this.onInput(); }.bind(this), false);
+    this._el.addEventListener('input', function(e) { this._onInput(e); }.bind(this), false);
     return this;
   };
 
@@ -141,6 +145,18 @@ TypeInput.keyNames = {
         this.caret._hide();
       }
     }.bind(this), false);
+    return this;
+  };
+
+  /**
+   *
+   * @param {InputEvent} e
+   * @returns {TypeInput}
+   * @private
+   */
+  this._onInput = function (e) {
+    this._contents.insertText(this._el.textContent);
+    this._el.innerHTML = '';
     return this;
   };
 

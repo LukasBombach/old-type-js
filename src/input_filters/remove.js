@@ -11,7 +11,7 @@ function RemoveFilter(type, input) {
 (function () {
 
   this.keys = {
-    backSpace : 'remove'
+    backspace : 'remove'
   };
 
   this.remove = function () {

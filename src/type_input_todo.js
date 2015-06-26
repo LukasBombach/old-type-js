@@ -1,14 +1,4 @@
 /**
- * todo trigger events
- * @returns {TypeInput}
- */
-this._onInput = function () {
-  this._contents.insertText(this._el.textContent);
-  this._el.innerHTML = '';
-  return this;
-};
-
-/**
  * todo Wenn das clipboard beim copy befehel direkt veränderbar ist, muss nichts weiter gemacht werden
  * todo Wenn nicht, aktuelle selektion in das contenteditable ding kopieren
  * todo trigger events
