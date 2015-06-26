@@ -10,7 +10,6 @@ var CaretFilter = require('./input_filters/caret');
 var RemoveFilter = require('./input_filters/remove');
 
 /**
- * todo textarea / contenteditable
  * todo einfache eingaben
  * todo pasting
  * todo backspace und delete
@@ -83,9 +82,8 @@ function TypeInput(type) {
 
       for (name in filters) {
         if (filters.hasOwnProperty(name) && (func = filters[name].keys[key])) {
-          filters[name][func](inputEvent);
-          if (inputEvent.cancel) {
-            e.preventDefault(); // todo event still bubbles
+          if (filters[name][func](inputEvent) === false || inputEvent.cancel) {
+            e.preventDefault();
             break;
           }
         }
