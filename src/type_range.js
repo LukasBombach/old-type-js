@@ -247,11 +247,12 @@ TypeRange.fromPositions = function (positions, start, end) {
 };
 
 /**
- *
+ * Todo Check if selection is actually inside editor and return null if not
  * @returns {TypeRange}
  */
 TypeRange.fromCurrentSelection = function () {
-  return TypeRange.fromRange(document.getSelection().getRangeAt(0));
+  var sel = document.getSelection();
+  return sel.isCollapsed ? null : TypeRange.fromRange(sel.getRangeAt(0));
 };
 
 /**

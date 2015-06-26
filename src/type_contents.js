@@ -92,6 +92,7 @@ function TypeContents() {
     }
 
     return this;
+
   };
 
   /**

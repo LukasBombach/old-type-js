@@ -1,6 +1,7 @@
 'use strict';
 
-var Type = require('../core');
+var TypeRange = require('../type_range');
+
 
 /**
  *
@@ -19,9 +20,23 @@ function RemoveFilter(type, input) {
     backspace : 'backspace'
   };
 
-  this.backspace = function () {
-    this._contents.remove(this._caret.textNode, this._caret.offset, -1);
-    this._caret.moveLeft();
+  /**
+   *
+   * @param {TypeInputEvent} e
+   */
+  this.backspace = function (e) {
+
+    var range = TypeRange.fromCurrentSelection();
+
+    if (range === null) {
+      this._contents.remove(this._caret.textNode, this._caret.offset, -1);
+      this._caret.moveLeft();
+    } else {
+      this._contents.removeRange(range);
+    }
+
+    e.cancel();
+
   };
 
 }).call(RemoveFilter.prototype);
