@@ -97,6 +97,34 @@ function TypeContents() {
 
   /**
    *
+   * @param {TypeRange} range
+   */
+  this.removeRange = function (range) {
+
+    var startNode = range.splitStartContainer(),
+      endNode = range.splitEndContainer(),
+      current = startNode,
+      next = startNode;
+
+    if (startNode === endNode) {
+      DomUtil.removeVisible(startNode);
+      return this;
+    }
+
+    do {
+      next = DomUtil.next(current);
+      DomUtil.removeVisible(current);
+      current = next;
+    } while (next && next !== endNode);
+
+    DomUtil.removeVisible(endNode);
+
+    return this;
+
+  };
+
+  /**
+   *
    * @param {number} steps
    * @returns {TypeContents}
    */

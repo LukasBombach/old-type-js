@@ -69,9 +69,15 @@ function TypeInput(type) {
    * @private
    */
   this._bindKeyDownEvents = function () {
+
     this._el.addEventListener('keydown', function (e) {
       this._processFilters(e);
     }.bind(this), false);
+
+    this._type.getRoot().addEventListener('keydown', function (e) {
+      this._processFilters(e);
+    }.bind(this), false);
+
     return this;
   };
 
