@@ -4,6 +4,7 @@ var TypeEnv = require('./type_environment');
 var DomUtil = require('./dom_utilities');
 var TypeContents = require('./type_contents');
 var Caret = require('./caret');
+var TypeSelection = require('./type_selection');
 var TypeInput = require('./type_input');
 
 /**
@@ -33,6 +34,7 @@ function Type(options) {
   this._plugins = {};
   this._contents = new TypeContents();
   this._caret = new Caret(this._root);
+  this._selection = new TypeSelection();
   this._input = new TypeInput(this);
 
   // Trigger events
@@ -218,6 +220,15 @@ Type.env = TypeEnv;
    */
   this.getCaret = function () {
     return this._caret;
+  };
+
+  /**
+   * Getter for this instance's selection
+   *
+   * @returns {TypeSelection}
+   */
+  this.getSelection = function () {
+    return this._selection;
   };
 
   /**
