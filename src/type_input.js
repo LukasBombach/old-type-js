@@ -74,7 +74,8 @@ function TypeInput(type) {
       this._processFilters(e);
     }.bind(this), false);
 
-    this._type.getRoot().addEventListener('keydown', function (e) {
+    // TODO REMOVE DEV HACK
+    document.body.addEventListener('keydown', function (e) {
       this._processFilters(e);
     }.bind(this), false);
 

@@ -112,7 +112,7 @@ function TypeContents() {
     }
 
     do {
-      next = DomUtil.next(current);
+      next = DomUtil.nextTextNode(current);
       DomUtil.removeVisible(current);
       current = next;
     } while (next && next !== endNode);
