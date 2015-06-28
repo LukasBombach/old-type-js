@@ -98,19 +98,12 @@ function TypeInput(type) {
   };
 
   /**
+   * Todo Legacy Internet Explorer and attachEvent https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
    *
    * @returns {TypeInput}
    * @private
    */
   this._bindMouseEvents = function () {
-    //this._type.getRoot().addEventListener('mouseup', function (e) {
-    //  if (window.getSelection().isCollapsed) {
-    //    this._moveCaretToMousePosition(e.clientX, e.clientY);
-    //    this._focusInput();
-    //  } else {
-    //    this._caret._hide();
-    //  }
-    //}.bind(this), false);
 
     var self = this;
 
@@ -142,6 +135,7 @@ function TypeInput(type) {
     this._type.getRoot().addEventListener('mouseup', caret, false);
 
     return this;
+    
   };
 
 
