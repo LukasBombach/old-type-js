@@ -111,16 +111,20 @@ function TypeInput(type) {
     //    this._caret._hide();
     //  }
     //}.bind(this), false);
-    this._type.getRoot().addEventListener('mousedown', function (e) {
-      this._startDraggingSelection(e);
-    }.bind(this), false);
+
+    //this._type.getRoot().addEventListener('mousedown', function (e) {
+    //  this._startDraggingSelection(e);
+    //}.bind(this), false);
+
+    this._type.getRoot().addEventListener('mousedown', this._startDraggingSelection.bind(this), false);
+
     return this;
   };
 
   this._startDraggingSelection = function (e) {
     this._selection.start(e.clientX, e.clientY);
-    document.addEventListener('mousemove', this._dragSelection);
-    document.addEventListener('mouseup', this._stopDraggingSelection);
+    document.addEventListener('mousemove', this._dragSelection.bind(this));
+    document.addEventListener('mouseup', this._stopDraggingSelection.bind(this));
   };
 
   this._stopDraggingSelection = function () {
