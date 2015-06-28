@@ -18,9 +18,18 @@ function TypeSelection() {
    * @param y
    * @returns {TypeSelection}
    */
-  this.start = function (x, y) {
+  this.startAtPos = function (x, y) {
     this.unselect();
     this._overlays.push(new TypeSelectionOverlay(x, y, 0, 14));
+    return this;
+  };
+
+  /**
+   *
+   * @param offset
+   * @returns {TypeSelection}
+   */
+  this.startAtOffset = function (offset) {
     return this;
   };
 
@@ -30,10 +39,20 @@ function TypeSelection() {
    * @param y
    * @returns {TypeSelection}
    */
-  this.moveEnd = function (x, y) {
+  this.moveEndToPos = function (x, y) {
     this._overlays[0].update(null, null, x - this._overlays[0].x, y - this._overlays[0].y);
     return this;
   };
+
+  /**
+   *
+   * @param offset
+   * @returns {TypeSelection}
+   */
+  this.moveEndToOffset = function (offset) {
+    return this;
+  };
+
 
   /**
    *

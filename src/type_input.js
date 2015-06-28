@@ -108,7 +108,7 @@ function TypeInput(type) {
     var self = this;
 
     function dragSelection(e) {
-      self._selection.moveEnd(e.clientX, e.clientY);
+      self._selection.moveEndToPos(e.clientX, e.clientY);
     }
 
     function stopDraggingSelection() {
@@ -117,7 +117,7 @@ function TypeInput(type) {
     }
 
     function startDraggingSelection(e) {
-      self._selection.start(e.clientX, e.clientY);
+      self._selection.startAtPos(e.clientX, e.clientY);
       document.addEventListener('mousemove', dragSelection, false);
       document.addEventListener('mouseup', stopDraggingSelection, false);
     }
