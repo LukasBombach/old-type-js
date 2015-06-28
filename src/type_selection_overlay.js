@@ -37,6 +37,15 @@ function TypeSelectionOverlay(x, y, width, height, draw) {
   };
 
   /**
+   * Returns whether or not this overlay is actually visible
+   *
+   * @returns {boolean}
+   */
+  this.visible = function () {
+    return !(this.width === 0 || this.height === 0);
+  };
+
+  /**
    * Removes the overlay div and resets all position and
    * dimension values
    *
