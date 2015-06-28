@@ -72,6 +72,8 @@ function TypeSelectionOverlay(x, y, width, height, draw) {
   };
 
   /**
+   * Sets dimension and position values to th element's style
+   * unless they are not different to the current values.
    *
    * @param {number} [x] - Horizontal position of the overlay
    * @param {number} [y] - Vertical position of the overlay
@@ -82,14 +84,15 @@ function TypeSelectionOverlay(x, y, width, height, draw) {
    */
   this._draw = function (x, y, width, height) {
     var style = this._el.style;
-    if (x) style.left = x;
-    if (y) style.top = y;
-    if (width) style.width = width;
-    if (height) style.height = height;
+    if (x && x !== this.x) style.left = x;
+    if (y && y !== this.y) style.top = y;
+    if (width && width !== this.width) style.width = width;
+    if (height && height !== this.height) style.height = height;
     return this;
   };
 
   /**
+   * Creates and returns the visible selection overlay element
    *
    * @returns {Element}
    * @private
