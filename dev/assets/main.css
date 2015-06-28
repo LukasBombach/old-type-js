@@ -6,6 +6,11 @@
 }*/
 
 
+.typejs-selection {
+  position: absolute;
+  background: rgba(253, 108, 93, 0.6);
+}
+
 .typejs-input {
   background: #fff;
   border: 1px solid #0658b5;

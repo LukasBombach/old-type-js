@@ -23,6 +23,7 @@ function TypeInput(type) {
   this._type = type;
   this._contents = type.getContents();
   this._caret = type.getCaret();
+  this._selection = this._type.getSelection();
 
   this._el = this._createElement();
 
@@ -102,15 +103,33 @@ function TypeInput(type) {
    * @private
    */
   this._bindMouseEvents = function () {
-    this._type.getRoot().addEventListener('mouseup', function (e) {
-      if (window.getSelection().isCollapsed) {
-        this._moveCaretToMousePosition(e.clientX, e.clientY);
-        this._focusInput();
-      } else {
-        this._caret._hide();
-      }
+    //this._type.getRoot().addEventListener('mouseup', function (e) {
+    //  if (window.getSelection().isCollapsed) {
+    //    this._moveCaretToMousePosition(e.clientX, e.clientY);
+    //    this._focusInput();
+    //  } else {
+    //    this._caret._hide();
+    //  }
+    //}.bind(this), false);
+    this._type.getRoot().addEventListener('mousedown', function (e) {
+      this._startDraggingSelection(e);
     }.bind(this), false);
     return this;
+  };
+
+  this._startDraggingSelection = function (e) {
+    this._selection.start(e.clientX, e.clientY);
+    document.addEventListener('mousemove', this._dragSelection);
+    document.addEventListener('mouseup', this._stopDraggingSelection);
+  };
+
+  this._stopDraggingSelection = function () {
+    document.removeEventListener('mousemove', this._dragSelection);
+    document.removeEventListener('mouseup', this._stopDraggingSelection);
+  };
+
+  this._dragSelection = function (e) {
+    this._selection.moveEnd(e.clientX, e.clientY);
   };
 
   /**
