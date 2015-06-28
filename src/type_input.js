@@ -135,7 +135,7 @@ function TypeInput(type) {
     this._type.getRoot().addEventListener('mouseup', caret, false);
 
     return this;
-    
+
   };
 
 

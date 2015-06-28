@@ -49,8 +49,22 @@ function TypeSelection() {
    * @returns {boolean}
    */
   this.exists = function () {
-    return !!this._overlays.length && !(this._overlays.length === 1 && !this._overlays[0].visible());
+    return !!this._overlays.length && !this._overlays[0].visible();
+    //return !!this._overlays.length && !this._isVisible();
   };
+
+  /**
+   * Returns whether or not any of the selection overlays are visible
+   * @returns {boolean}
+   * @private
+   */
+  //this._isVisible = function () {
+  //  var i;
+  //  for (i = 0; i < this._overlays.length; i += 1) {
+  //    if (this._overlays[i].visible()) return true;
+  //  }
+  //  return false;
+  //}
 
 }).call(TypeSelection.prototype);
 
