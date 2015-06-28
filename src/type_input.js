@@ -186,7 +186,7 @@ function TypeInput(type) {
   };
 
   /**
-   *
+   * Todo generalise and formalise and normalise adding elements to the domUtil.elementsContainer
    * @returns {Element}
    * @private
    */

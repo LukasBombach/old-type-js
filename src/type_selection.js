@@ -2,8 +2,9 @@
 
 var TypeRange = require('./type_range');
 
-function TypeSelection () {
+function TypeSelection() {
   this._range = null;
+  this._overlays = [];
 }
 
 (function () {
@@ -15,7 +16,8 @@ function TypeSelection () {
    * @returns {TypeSelection}
    */
   this.select = function (range) {
-    this.unselect();
+    //this.unselect();
+    this._drawSlection(range);
     this._range = range;
     return this;
   };
@@ -45,6 +47,30 @@ function TypeSelection () {
    */
   this.exists = function () {
     return this._range === null;
+  };
+
+  /**
+   *
+   * @param {TypeRange} range
+   * @returns {TypeSelection}
+   * @private
+   */
+  this._drawSlection = function (range) {
+
+    return this;
+  };
+
+  /**
+   *
+   * @param {Range} range
+   * @returns {Object}
+   * @private
+   */
+  this._rectsFromRange = function (range) {
+
+    var rangeRects = range.getClientRects();
+
+    return {};
   };
 
 }).call(TypeSelection.prototype);

@@ -588,6 +588,29 @@ function DomUtilities() {
   };
 
   /**
+   * Todo Use me wherever you find document.createElement or this.elementsContainer
+   * @param {string} tagName
+   * @param {string} [className]
+   * @returns {Element}
+   */
+  this.addElement = function (tagName, className) {
+    var el = document.createElement(tagName);
+    if (className) el.className = Settings.prefix + className;
+    this.elementsContainer().appendChild(el);
+    return el;
+  };
+
+  /**
+   *
+   * @param {HTMLElement} el
+   * @returns {*}
+   */
+  this.removeElement = function (el) {
+    el.parentNode.removeChild(el);
+    return this;
+  };
+
+  /**
    *
    * @returns {Element}
    */
