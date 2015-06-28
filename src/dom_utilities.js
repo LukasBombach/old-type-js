@@ -602,7 +602,7 @@ function DomUtilities() {
 
   /**
    *
-   * @param {HTMLElement} el
+   * @param {Element} el
    * @returns {*}
    */
   this.removeElement = function (el) {
