@@ -2,6 +2,10 @@
 
 var TypeSelectionOverlay = require('./type_selection_overlay');
 
+/**
+ *
+ * @constructor
+ */
 function TypeSelection() {
   this._overlays = [];
 }
@@ -50,24 +54,8 @@ function TypeSelection() {
    */
   this.exists = function () {
     return !!this._overlays.length && this._overlays[0].visible();
-    //return !!this._overlays.length && !this._isVisible();
   };
 
-  /**
-   * Returns whether or not any of the selection overlays are visible
-   * @returns {boolean}
-   * @private
-   */
-  //this._isVisible = function () {
-  //  var i;
-  //  for (i = 0; i < this._overlays.length; i += 1) {
-  //    if (this._overlays[i].visible()) return true;
-  //  }
-  //  return false;
-  //}
-
 }).call(TypeSelection.prototype);
-
-
 
 module.exports = TypeSelection;
