@@ -116,25 +116,29 @@ function TypeInput(type) {
     //  this._startDraggingSelection(e);
     //}.bind(this), false);
 
-    this._type.getRoot().addEventListener('mousedown', this._startDraggingSelection.bind(this), false);
+    var self = this;
+
+    function dragSelection(e) {
+      self._selection.moveEnd(e.clientX, e.clientY);
+    }
+
+    function stopDraggingSelection() {
+      document.removeEventListener('mousemove', dragSelection, false);
+      document.removeEventListener('mouseup', stopDraggingSelection, false);
+    }
+
+    function startDraggingSelection(e) {
+      self._selection.start(e.clientX, e.clientY);
+      document.addEventListener('mousemove', dragSelection, false);
+      document.addEventListener('mouseup', stopDraggingSelection, false);
+    }
+
+    this._type.getRoot().addEventListener('mousedown', startDraggingSelection, false);
 
     return this;
   };
 
-  this._startDraggingSelection = function (e) {
-    this._selection.start(e.clientX, e.clientY);
-    document.addEventListener('mousemove', this._dragSelection.bind(this));
-    document.addEventListener('mouseup', this._stopDraggingSelection.bind(this));
-  };
 
-  this._stopDraggingSelection = function () {
-    document.removeEventListener('mousemove', this._dragSelection);
-    document.removeEventListener('mouseup', this._stopDraggingSelection);
-  };
-
-  this._dragSelection = function (e) {
-    this._selection.moveEnd(e.clientX, e.clientY);
-  };
 
   /**
    * Takes a {KeyboardEvent} and passes it to all registered

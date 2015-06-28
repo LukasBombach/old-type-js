@@ -14,8 +14,8 @@ var DomUtil = require('./dom_utilities');
  */
 function TypeSelectionOverlay(x, y, width, height, draw) {
   this._el = this._createElement();
-  this._set(x, y, width, height);
   if (draw !== false) this._draw(x, y, width, height);
+  this._set(x, y, width, height);
 }
 
 (function () {
@@ -83,11 +83,10 @@ function TypeSelectionOverlay(x, y, width, height, draw) {
    * @private
    */
   this._draw = function (x, y, width, height) {
-    var style = this._el.style;
-    if (x && x !== this.x) style.left = x;
-    if (y && y !== this.y) style.top = y;
-    if (width && width !== this.width) style.width = width;
-    if (height && height !== this.height) style.height = height;
+    if (x !== null && x !== this.x) this._el.style.left = x + 'px';
+    if (y !== null && y !== this.y) this._el.style.top = y + 'px';
+    if (width !== null && width !== this.width) this._el.style.width = width + 'px';
+    if (height !== null && height !== this.height) this._el.style.height = height + 'px';
     return this;
   };
 

@@ -1,76 +1,29 @@
 'use strict';
 
-var TypeRange = require('./type_range');
+var TypeSelectionOverlay = require('./type_selection_overlay');
 
 function TypeSelection() {
-  this._range = null;
   this._overlays = [];
 }
 
 (function () {
 
-  /**
-   * Selects the text encapsulated by the give Range
-   *
-   * @param {TypeRange} range
-   * @returns {TypeSelection}
-   */
-  this.select = function (range) {
-    //this.unselect();
-    this._drawSlection(range);
-    this._range = range;
-    return this;
+  this.start = function (x, y) {
+    this.unselect();
+    this._overlays.push(new TypeSelectionOverlay(x, y, 0, 14));
   };
 
-  /**
-   *
-   * @returns {TypeSelection}
-   */
+  this.moveEnd = function (x, y) {
+    this._overlays[0].update(null, null, x - this._overlays[0].x, y - this._overlays[0].y);
+  };
+
   this.unselect = function () {
-    this._range = null;
+    var i;
+    for (i = 0; i < this._overlays.length; i += 1) {
+      this._overlays[i].remove();
+    }
+    this._overlays = [];
     return this;
-  };
-
-  /**
-   * Returns the {TypeRange} that the selection spans over
-   *
-   * @returns {TypeRange|null}
-   */
-  this.getRange = function () {
-    return this._range;
-  };
-
-  /**
-   * Returns whether or not there is currently a selection
-   *
-   * @returns {boolean}
-   */
-  this.exists = function () {
-    return this._range === null;
-  };
-
-  /**
-   *
-   * @param {TypeRange} range
-   * @returns {TypeSelection}
-   * @private
-   */
-  this._drawSlection = function (range) {
-
-    return this;
-  };
-
-  /**
-   *
-   * @param {Range} range
-   * @returns {Object}
-   * @private
-   */
-  this._rectsFromRange = function (range) {
-
-    var rangeRects = range.getClientRects();
-
-    return {};
   };
 
 }).call(TypeSelection.prototype);

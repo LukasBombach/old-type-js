@@ -9,6 +9,7 @@
 .typejs-selection {
   position: absolute;
   background: rgba(253, 108, 93, 0.6);
+  pointer-events: none;
 }
 
 .typejs-input {
