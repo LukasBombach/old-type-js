@@ -112,10 +112,6 @@ function TypeInput(type) {
     //  }
     //}.bind(this), false);
 
-    //this._type.getRoot().addEventListener('mousedown', function (e) {
-    //  this._startDraggingSelection(e);
-    //}.bind(this), false);
-
     var self = this;
 
     function dragSelection(e) {
@@ -133,7 +129,17 @@ function TypeInput(type) {
       document.addEventListener('mouseup', stopDraggingSelection, false);
     }
 
+    function caret(e) {
+      if (self._selection.exists()) {
+        self._caret._hide();
+      } else {
+        self._moveCaretToMousePosition(e.clientX, e.clientY);
+        self._focusInput();
+      }
+    }
+
     this._type.getRoot().addEventListener('mousedown', startDraggingSelection, false);
+    this._type.getRoot().addEventListener('mouseup', caret, false);
 
     return this;
   };
