@@ -49,7 +49,7 @@ function TypeSelection() {
    * @returns {boolean}
    */
   this.exists = function () {
-    return !!this._overlays.length || !this._overlays[0].visible();
+    return !!this._overlays.length && this._overlays[0].visible();
     //return !!this._overlays.length && !this._isVisible();
   };
 
