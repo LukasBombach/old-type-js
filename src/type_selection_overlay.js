@@ -4,10 +4,10 @@ var DomUtil = require('./dom_utilities');
 
 /**
  *
- * @param {number} x - Horizontal position of the overlay
- * @param {number} y - Vertical position of the overlay
- * @param {number} width - Width of the overlay
- * @param {number} height - Height of the overlay
+ * @param {number} [x] - Horizontal position of the overlay
+ * @param {number} [y] - Vertical position of the overlay
+ * @param {number} [width] - Width of the overlay
+ * @param {number} [height] - Height of the overlay
  * @param {boolean} [draw] - Set to false if you do not wish
  *     for the element to be shown. Defaults to true
  * @constructor
@@ -24,10 +24,10 @@ function TypeSelectionOverlay(x, y, width, height, draw) {
    * Will set the position and dimension values and update
    * the div styles
    *
-   * @param {number} x - Horizontal position of the overlay
-   * @param {number} y - Vertical position of the overlay
-   * @param {number} width - Width of the overlay
-   * @param {number} height - Height of the overlay
+   * @param {number} [x] - Horizontal position of the overlay
+   * @param {number} [y] - Vertical position of the overlay
+   * @param {number} [width] - Width of the overlay
+   * @param {number} [height] - Height of the overlay
    * @returns {TypeSelectionOverlay} - This instance
    */
   this.update  = function (x, y, width, height) {
@@ -37,7 +37,8 @@ function TypeSelectionOverlay(x, y, width, height, draw) {
   };
 
   /**
-   * Removes the 
+   * Removes the overlay div and resets all position and
+   * dimension values
    *
    * @returns {TypeSelectionOverlay} - This instance
    */
@@ -52,11 +53,13 @@ function TypeSelectionOverlay(x, y, width, height, draw) {
   };
 
   /**
+   * Sets all dimension and position values to the given
+   * values unless null is given
    *
-   * @param {number} x - Horizontal position of the overlay
-   * @param {number} y - Vertical position of the overlay
-   * @param {number} width - Width of the overlay
-   * @param {number} height - Height of the overlay
+   * @param {number} [x] - Horizontal position of the overlay
+   * @param {number} [y] - Vertical position of the overlay
+   * @param {number} [width] - Width of the overlay
+   * @param {number} [height] - Height of the overlay
    * @returns {TypeSelectionOverlay} - This instance
    * @private
    */
@@ -70,10 +73,10 @@ function TypeSelectionOverlay(x, y, width, height, draw) {
 
   /**
    *
-   * @param {number} x - Horizontal position of the overlay
-   * @param {number} y - Vertical position of the overlay
-   * @param {number} width - Width of the overlay
-   * @param {number} height - Height of the overlay
+   * @param {number} [x] - Horizontal position of the overlay
+   * @param {number} [y] - Vertical position of the overlay
+   * @param {number} [width] - Width of the overlay
+   * @param {number} [height] - Height of the overlay
    * @returns {TypeSelectionOverlay} - This instance
    * @private
    */
