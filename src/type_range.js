@@ -184,6 +184,14 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
+   * todo use this wherever I use range methods for this, namely selection and selection overlay
+   * todo caching
+   */
+  this.getPositions = function () {
+    //this.getRange().getClientRects()
+  };
+
+  /**
    *
    * @param {HTMLElement} fromNode
    * @returns {{from: HTMLElement, start: number, end: number}}

@@ -29,6 +29,15 @@ function TypeSelection() {
     return this;
   };
 
+  this.selectToPos = function (x, y) {
+    if (y < this._overlays[0].y) {
+      this.moveStartToPos(x, y);
+    } else {
+      this.moveEndToPos(x, y);
+    }
+    return this;
+  };
+
   /**
    *
    * @param offset
