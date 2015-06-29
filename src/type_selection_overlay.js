@@ -14,11 +14,12 @@ var DomUtil = require('./dom_utilities');
  *     for the element to be shown. Defaults to true
  * @constructor
  */
-function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
+function TypeSelectionOverlay(x1, y1, x2, y2, draw, textNode) {
   this._el = this._createElement();
   if (draw !== false) this._draw(x1, y1, x2, y2);
   this._setValues(x1, y1, x2, y2);
   this._anchor = {x: x1, y: y1};
+  this.textNode = textNode;
 }
 
 (function () {
@@ -27,15 +28,40 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
    * Will set the position and dimension values and update
    * the div styles
    *
-   * @param {number} [x1] - Horizontal position of the overlay
+   * @param {number|string} [x1] - Horizontal position of the overlay
+   *     or either one of the strings 'left', 'right' or 'line', which
+   *     will span the overlay to the left side of the line of the
+   *     textNode, the right side or the entire line
    * @param {number} [y1] - Vertical position of the overlay
    * @param {number} [x2] - x2 of the overlay
    * @param {number} [y2] - y2 of the overlay
    * @returns {TypeSelectionOverlay} - This instance
    */
   this.set  = function (x1, y1, x2, y2) {
+
+    if (x1 === 'left') {
+      x1 = this._textleft();
+      x2 = null;
+    }
+
+    if (x1 === 'right') {
+      x1 = null;
+      x2 = this._textRight();
+    }
+
+    if (x1 === 'line') {
+      x1 = this._textleft();
+      x2 = this._textRight();
+    }
+
+    x1 = x1 === undefined ? null : x1;
+    y1 = y1 === undefined ? null : y1;
+    x2 = x2 === undefined ? null : x2;
+    y2 = y2 === undefined ? null : y2;
+
     this._draw(x1, y1, x2, y2);
     this._setValues(x1, y1, x2, y2);
+
     return this;
   };
 
@@ -76,6 +102,8 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
     this.y1 = null;
     this.x2 = null;
     this.y2 = null;
+    this._anchor = null;
+    this.textNode = null;
     return this;
   };
 
@@ -91,6 +119,7 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
    * @private
    */
   this._setValues = function (x1, y1, x2, y2) {
+    console.log(x1, y1, x2, y2);
     if (x1 !== null) this.x1 = x1;
     if (y1 !== null) this.y1 = y1;
     if (x2 !== null) this.x2 = x2;
@@ -138,6 +167,26 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
     return this;
   };
 
+
+  /**
+   *
+   * @returns {Number}
+   * @private
+   */
+  this._textleft = function () {
+    return this.textNode.parentNode.getBoundingClientRect().left;
+  };
+
+  /**
+   *
+   * @returns {Number}
+   * @private
+   */
+  this._textRight = function () {
+    return this.textNode.parentNode.getBoundingClientRect().right;
+  };
+
+
   /**
    * Creates and returns the visible selection overlay element
    *
@@ -157,7 +206,18 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
  */
 TypeSelectionOverlay.fromRange = function (range) {
   var rect = TypeSelectionOverlay._getPositionsFromRange(range);
-  return new TypeSelectionOverlay(rect.left, rect.top, rect.right, rect.bottom);
+  return new TypeSelectionOverlay(rect.left, rect.top, rect.right, rect.bottom, true, range.startContainer);
+};
+
+/**
+ *
+ * @param x
+ * @param y
+ * @returns {TypeSelectionOverlay}
+ */
+TypeSelectionOverlay.fromPosition = function (x, y) {
+  var range = document.caretRangeFromPoint(x, y);
+  return TypeSelectionOverlay.fromRange(range)
 };
 
 /**
