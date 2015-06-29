@@ -70,8 +70,7 @@ function TypeSelection(type) {
     if (y > last.y2) {
       last.set('right');
       overlay = TypeSelectionOverlay.fromPosition(x, y);
-      overlay.set('left');
-      overlay.anchor('left');
+      overlay.set('left').anchor('left');
       this._overlays.push(overlay);
     }
 
