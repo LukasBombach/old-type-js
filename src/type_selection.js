@@ -69,6 +69,8 @@ function TypeSelection(type) {
 
     // Cursor is below last selected line
     if (y > last.y2) {
+      // todo einen anchor in der selektion machen anstatt in den oberlays
+      // todo der anchor kann verwendet werden um eine Range von x,y bis da hin zu machen und die cleient rects durchzugehen um daraus dan die inzelnen overlays zu machen
       last.setXFromAnchor();
       last.set('right');
       overlay = TypeSelectionOverlay.fromPosition(x, y);
