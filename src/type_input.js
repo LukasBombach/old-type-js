@@ -117,7 +117,7 @@ function TypeInput(type) {
     }
 
     function startDraggingSelection(e) {
-      self._selection.startAtPos(e.clientX, e.clientY);
+      self._selection.beginNewAtPos(e.clientX, e.clientY);
       document.addEventListener('mousemove', dragSelection, false);
       document.addEventListener('mouseup', stopDraggingSelection, false);
     }

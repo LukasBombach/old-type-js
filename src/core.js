@@ -255,6 +255,8 @@ Type.env = TypeEnv;
    * Copying starts from left to right and will overwrite each setting
    * subsequently.
    *
+   * Todo use utilities.extend
+   *
    * @param {*} copyTo
    * @param {...{}} copyFrom
    * @returns {*}
