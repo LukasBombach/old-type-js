@@ -34,7 +34,7 @@ function Type(options) {
   this._plugins = {};
   this._contents = new TypeContents();
   this._caret = new Caret(this._root);
-  this._selection = new TypeSelection();
+  this._selection = new TypeSelection(this);
   this._input = new TypeInput(this);
 
   // Trigger events

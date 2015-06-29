@@ -4,9 +4,12 @@ var TypeSelectionOverlay = require('./type_selection_overlay');
 
 /**
  *
+ * @param {Type} type
  * @constructor
  */
-function TypeSelection() {
+function TypeSelection(type) {
+  this._root = type.getRoot();
+  this._rootRect = this._root.getBoundingClientRect();
   this._overlays = [];
   this._start = null;
   this._end = null;
@@ -55,7 +58,8 @@ function TypeSelection() {
    */
   this.moveEndToPos = function (x, y) {
 
-    var last = this._overlays[this._overlays.length - 1];
+    var last = this._overlays[this._overlays.length - 1],
+      range, newOverlay;
 
     // Cursor is above last selected line
     if (y < last.y1) {
@@ -69,7 +73,11 @@ function TypeSelection() {
 
     // Cursor is below last selected line
     if (y > last.y2) {
-
+      last.set(this._rootRect.left, null, this._rootRect.right, null);
+      range = this._rangeFromOffset(x, y);
+      newOverlay = TypeSelectionOverlay.fromRange(range);
+      newOverlay.set(this._rootRect.left);
+      this._overlays.push(newOverlay);
     }
 
     //this._overlays[0].update(null, null, x - this._overlays[0].x, y - this._overlays[0].y);
