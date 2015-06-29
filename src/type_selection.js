@@ -58,16 +58,18 @@ function TypeSelection(type) {
 
     // Cursor is above last selected line
     if (y < last.y1) {
-
+      this._overlays.pop().remove();
+      last = this._overlays[this._overlays.length - 1];
     }
 
     // Cursor is horizontally aligned with last selected line
     if (y >= last.y1 && y <= last.y2) {
-      last.setX(x);
+      last.setXFromAnchor(this._rectFromOffset(x, y).left);
     }
 
     // Cursor is below last selected line
     if (y > last.y2) {
+      last.setXFromAnchor();
       last.set('right');
       overlay = TypeSelectionOverlay.fromPosition(x, y);
       overlay.set('left').anchor('left');
@@ -125,6 +127,17 @@ function TypeSelection(type) {
    */
   this._rangeFromOffset = function (x, y) {
     return document.caretRangeFromPoint(x, y);
+  };
+
+  /**
+   *
+   * @param x
+   * @param y
+   * @returns {*}
+   * @private
+   */
+  this._rectFromOffset  = function (x, y) {
+    return document.caretRangeFromPoint(x, y).getClientRects()[0];
   };
 
   /**

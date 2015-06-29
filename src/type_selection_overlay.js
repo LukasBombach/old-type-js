@@ -104,9 +104,13 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw, textNode) {
    * @param {number} x - The horizontal position
    * @returns {TypeSelectionOverlay} - This instance
    */
-  this.setX = function (x) {
-    if (x < this._anchor.x) this.set(x, null, this._anchor.x, null);
-    if (x > this._anchor.x) this.set(this._anchor.x, null, x, null);
+  this.setXFromAnchor = function (x) {
+    if (x === null || x === undefined) {
+      this.set(this._anchor.x, null, this._anchor.x, null);
+    } else {
+      if (x < this._anchor.x) this.set(x, null, this._anchor.x, null);
+      if (x > this._anchor.x) this.set(this._anchor.x, null, x, null);
+    }
     return this;
   };
 
@@ -149,7 +153,6 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw, textNode) {
    * @private
    */
   this._setValues = function (x1, y1, x2, y2) {
-    console.log(x1, y1, x2, y2);
     if (x1 !== null) this.x1 = x1;
     if (y1 !== null) this.y1 = y1;
     if (x2 !== null) this.x2 = x2;
