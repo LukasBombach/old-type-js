@@ -54,8 +54,27 @@ function TypeSelection() {
    * @returns {TypeSelection}
    */
   this.moveEndToPos = function (x, y) {
-    this._overlays[0].update(null, null, x - this._overlays[0].x, y - this._overlays[0].y);
-    this._end = this._posToNodeOffset(x, y);
+
+    var last = this._overlays[this._overlays.length - 1];
+
+    // Cursor is above last selected line
+    if (y < last.y1) {
+
+    }
+
+    // Cursor is horizontally aligned with last selected line
+    if (y >= last.y1 && y <= last.y2) {
+      last.setEnd(x);
+    }
+
+    // Cursor is below last selected line
+    if (y > last.y2) {
+
+    }
+
+    //this._overlays[0].update(null, null, x - this._overlays[0].x, y - this._overlays[0].y);
+    //this._end = this._posToNodeOffset(x, y);
+
     return this;
   };
 

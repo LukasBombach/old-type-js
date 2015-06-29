@@ -6,18 +6,18 @@ var DomUtil = require('./dom_utilities');
  *
  * todo internal differenciation of x and y and scroll positions for easier redrawing
  *
- * @param {number} [x1] - Horizontal position of the overlay
- * @param {number} [y1] - Vertical position of the overlay
- * @param {number} [x2] - x2 of the overlay
- * @param {number} [y2] - y2 of the overlay
+ * @param {number} [x] - Horizontal position of the overlay
+ * @param {number} [y] - Vertical position of the overlay
+ * @param {number} [width] - Width of the overlay
+ * @param {number} [height] - Height of the overlay
  * @param {boolean} [draw] - Set to false if you do not wish
  *     for the element to be shown. Defaults to true
  * @constructor
  */
-function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
+function TypeSelectionOverlay(x, y, width, height, draw) {
   this._el = this._createElement();
-  if (draw !== false) this._draw(x1, y1, x2, y2);
-  this._setValues(x1, y1, x2, y2);
+  if (draw !== false) this._draw(x, y, width, height);
+  this._setValues(x, y, width, height);
 }
 
 (function () {
@@ -26,27 +26,30 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
    * Will set the position and dimension values and update
    * the div styles
    *
-   * @param {number} [x1] - Horizontal position of the overlay
-   * @param {number} [y1] - Vertical position of the overlay
-   * @param {number} [x2] - x2 of the overlay
-   * @param {number} [y2] - y2 of the overlay
+   * @param {number} [x] - Horizontal position of the overlay
+   * @param {number} [y] - Vertical position of the overlay
+   * @param {number} [width] - Width of the overlay
+   * @param {number} [height] - Height of the overlay
    * @returns {TypeSelectionOverlay} - This instance
    */
-  this.set  = function (x1, y1, x2, y2) {
-    this._draw(x1, y1, x2, y2);
-    this._setValues(x1, y1, x2, y2);
+  this.set  = function (x, y, width, height) {
+    this._draw(x, y, width, height);
+    this._setValues(x, y, width, height);
     return this;
   };
 
-
-  this.setEnd = function (x) {
-    if (x > this.x1) {
-      this.set(null, null, x, null);
+  /**
+   * Will calculate the width and set the right end of the
+   * overlay to this position.
+   *
+   * @param {number} x - An absolute position on the page
+   */
+  this.setRight = function (x) {
+    if (x >= this.x) {
+      this.set(null, null, x - this.x, null);
+    } else {
+      this.set(x, null, this.x - x + this.width, null);
     }
-    if (x < this.x1) {
-      this.set(x, null, null, null);
-    }
-    return this;
   };
 
   /**
@@ -55,7 +58,7 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
    * @returns {boolean}
    */
   this.visible = function () {
-    return !(this.x1 === this.x2 || this.y1 === this.y2);
+    return !(this.width === 0 || this.height === 0);
   };
 
   /**
@@ -67,10 +70,10 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
   this.remove = function () {
     DomUtil.removeElement(this._el);
     this._el = null;
-    this.x1 = null;
-    this.y1 = null;
-    this.x2 = null;
-    this.y2 = null;
+    this.x = null;
+    this.y = null;
+    this.width = null;
+    this.height = null;
     return this;
   };
 
@@ -78,18 +81,18 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
    * Sets all dimension and position values to the given
    * values unless null is given
    *
-   * @param {number} [x1] - Horizontal position of the overlay
-   * @param {number} [y1] - Vertical position of the overlay
-   * @param {number} [x2] - x2 of the overlay
-   * @param {number} [y2] - y2 of the overlay
+   * @param {number} [x] - Horizontal position of the overlay
+   * @param {number} [y] - Vertical position of the overlay
+   * @param {number} [width] - Width of the overlay
+   * @param {number} [height] - Height of the overlay
    * @returns {TypeSelectionOverlay} - This instance
    * @private
    */
-  this._setValues = function (x1, y1, x2, y2) {
-    if (x1 !== null) this.x1 = x1;
-    if (y1 !== null) this.y1 = y1;
-    if (x2 !== null) this.x2 = x2;
-    if (y2 !== null) this.y2 = y2;
+  this._setValues = function (x, y, width, height) {
+    this.x = x !== null ? x : this.x;
+    this.y = y !== null ? y : this.y;
+    this.width = width !== null ? width : this.width;
+    this.height = height !== null ? height : this.height;
     return this;
   };
 
@@ -97,45 +100,18 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
    * Sets dimension and position values to th element's style
    * unless they are not different to the current values.
    *
-   * @param {number} [x1] - Horizontal position of the overlay
-   * @param {number} [y1] - Vertical position of the overlay
-   * @param {number} [x2] - x2 of the overlay
-   * @param {number} [y2] - y2 of the overlay
+   * @param {number} [x] - Horizontal position of the overlay
+   * @param {number} [y] - Vertical position of the overlay
+   * @param {number} [width] - Width of the overlay
+   * @param {number} [height] - Height of the overlay
    * @returns {TypeSelectionOverlay} - This instance
    * @private
    */
-  this._draw = function (x1, y1, x2, y2) {
-
-
-    console.log('x1', x1, 'y1', y1, 'x2', x2, 'y2', y2);
-
-    // If x1 has changed, reposition
-    if (x1 !== null && x1 !== this.x1) {
-      this._el.style.left   = x1 + 'px';
-    }
-
-    // If x1 or x2 have changed, recalculate the width
-    if ((x1 !== null && x1 !== this.x1) || (x2 !== null && x2 !== this.x2)) {
-      x1 = x1 !== null ? x1 : this.x1;
-      x2 = x2 !== null ? x2 : this.x2;
-      this._el.style.width  = (x2-x1) + 'px';
-    }
-
-    // If y1 has changed, reposition
-    if (y1 !== null && y1 !== this.y1) {
-      this._el.style.top   = y1 + 'px';
-    }
-
-    // If y1 or y2 have changed, recalculate the height
-    if ((y1 !== null && y1 !== this.y1) || (y2 !== null && y2 !== this.y2)) {
-      y1 = y1 !== null ? y1 : this.y1;
-      y2 = y2 !== null ? y2 : this.y2;
-      this._el.style.height  = (y2-y1) + 'px';
-    }
-
-    console.log('w', (x2-x1), 'h', (y2-y1));
-    console.log('—');
-
+  this._draw = function (x, y, width, height) {
+    if (x !== null && x !== this.x) this._el.style.left = x + 'px';
+    if (y !== null && y !== this.y) this._el.style.top = y + 'px';
+    if (width !== null && width !== this.width) this._el.style.width = width + 'px';
+    if (height !== null && height !== this.height) this._el.style.height = height + 'px';
     return this;
   };
 
@@ -157,8 +133,10 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
  * @returns {TypeSelectionOverlay}
  */
 TypeSelectionOverlay.fromRange = function (range) {
-  var rect = TypeSelectionOverlay._getPositionsFromRange(range);
-  return new TypeSelectionOverlay(rect.left, rect.top, rect.right, rect.bottom);
+  var rect = TypeSelectionOverlay._getPositionsFromRange(range),
+    width  = rect.right - rect.left,
+    height = rect.bottom - rect.top;
+  return new TypeSelectionOverlay(rect.left, rect.top, width, height);
 };
 
 /**
