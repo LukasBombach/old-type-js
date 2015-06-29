@@ -43,6 +43,7 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
   /**
    * Sets the horizontal start or end of this overlay depending
    * whether the value given is left or right of the anchor.
+   * Will also set the other end to the anchor's position.
    *
    * @param {number} x - The horizontal position
    * @returns {TypeSelectionOverlay} - This instance
