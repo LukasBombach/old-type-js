@@ -67,6 +67,36 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw, textNode) {
 
 
   /**
+   *
+   * @param {number|string} x
+   * @param {number} [y]
+   * @returns {TypeSelectionOverlay} - This instance
+   */
+  this.anchor = function (x, y) {
+
+    if (x === 'left') {
+      x = this._textleft();
+      y = null;
+    }
+
+    if (x === 'right') {
+      x = this._textRight();
+      y = null;
+    }
+
+    if (x !== null && x !== undefined) {
+      this._anchor.x = x;
+    }
+
+    if (y !== null && y !== undefined) {
+      this._anchor.y = y;
+    }
+
+    return this;
+
+  };
+
+  /**
    * Sets the horizontal start or end of this overlay depending
    * whether the value given is left or right of the anchor.
    * Will also set the other end to the anchor's position.
