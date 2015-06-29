@@ -64,7 +64,7 @@ function TypeSelection() {
 
     // Cursor is horizontally aligned with last selected line
     if (y >= last.y1 && y <= last.y2) {
-      last.setEnd(x);
+      last.setX(x);
     }
 
     // Cursor is below last selected line

@@ -4,7 +4,7 @@ var DomUtil = require('./dom_utilities');
 
 /**
  *
- * todo internal differenciation of x and y and scroll positions for easier redrawing
+ * todo internal differenciation of x and y *and scroll positions* for easier redrawing
  *
  * @param {number} [x1] - Horizontal position of the overlay
  * @param {number} [y1] - Vertical position of the overlay
@@ -18,6 +18,7 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
   this._el = this._createElement();
   if (draw !== false) this._draw(x1, y1, x2, y2);
   this._setValues(x1, y1, x2, y2);
+  this._anchor = {x: x1, y: y1};
 }
 
 (function () {
@@ -39,13 +40,16 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
   };
 
 
-  this.setEnd = function (x) {
-    if (x > this.x1) {
-      this.set(null, null, x, null);
-    }
-    if (x < this.x1) {
-      this.set(x, null, null, null);
-    }
+  /**
+   * Sets the horizontal start or end of this overlay depending
+   * whether the value given is left or right of the anchor.
+   *
+   * @param {number} x - The horizontal position
+   * @returns {TypeSelectionOverlay} - This instance
+   */
+  this.setX = function (x) {
+    if (x < this._anchor.x) this.set(x, null, this._anchor.x, null);
+    if (x > this._anchor.x) this.set(this._anchor.x, null, x, null);
     return this;
   };
 
@@ -106,9 +110,6 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
    */
   this._draw = function (x1, y1, x2, y2) {
 
-
-    console.log('x1', x1, 'y1', y1, 'x2', x2, 'y2', y2);
-
     // If x1 has changed, reposition
     if (x1 !== null && x1 !== this.x1) {
       this._el.style.left   = x1 + 'px';
@@ -132,9 +133,6 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
       y2 = y2 !== null ? y2 : this.y2;
       this._el.style.height  = (y2-y1) + 'px';
     }
-
-    console.log('w', (x2-x1), 'h', (y2-y1));
-    console.log('—');
 
     return this;
   };
