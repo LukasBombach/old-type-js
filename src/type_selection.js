@@ -1,6 +1,5 @@
 'use strict';
 
-var Util = require('./utilities');
 var TypeSelectionOverlay = require('./type_selection_overlay');
 
 /**
@@ -22,10 +21,11 @@ function TypeSelection() {
    * @returns {TypeSelection}
    */
   this.beginNewAtPos = function (x, y) {
+    var range = this._rangeFromOffset(x, y);
     this.unselect();
-    this._start = this._posToNodeOffset(x, y);
-    this._end = Util.extend({}, this._start);
-    this._overlays.push(new TypeSelectionOverlay(x, y, 0, 14));
+    this._start = this._nodeAndOffset(range);
+    this._end = this._nodeAndOffset(range);
+    this._overlays.push(TypeSelectionOverlay.fromRange(range));
     return this;
   };
 
@@ -83,17 +83,30 @@ function TypeSelection() {
     return !!this._overlays.length && this._overlays[0].visible();
   };
 
+  this._addOverlay = function () {
+
+  };
+
   /**
    * todo https://developer.mozilla.org/en-US/docs/Web/API/document/caretRangeFromPoint
    * todo https://gist.github.com/unicornist/ac997a15bc3211ba1235
    *
    * @param x
    * @param y
+   * @returns {*}
+   * @private
+   */
+  this._rangeFromOffset = function (x, y) {
+    return document.caretRangeFromPoint(x, y);
+  };
+
+  /**
+   *
+   * @param range
    * @returns {{node: Node, offset: number}}
    * @private
    */
-  this._posToNodeOffset = function (x, y) {
-    var range = document.caretRangeFromPoint(x, y);
+  this._nodeAndOffset = function (range) {
     return {
       node: range.startContainer,
       offset: range.startOffset

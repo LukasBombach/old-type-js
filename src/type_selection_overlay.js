@@ -4,6 +4,8 @@ var DomUtil = require('./dom_utilities');
 
 /**
  *
+ * todo internal differenciation of x and y and scroll positions for easier redrawing
+ *
  * @param {number} [x] - Horizontal position of the overlay
  * @param {number} [y] - Vertical position of the overlay
  * @param {number} [width] - Width of the overlay
@@ -110,5 +112,57 @@ function TypeSelectionOverlay(x, y, width, height, draw) {
   };
 
 }).call(TypeSelectionOverlay.prototype);
+
+/**
+ *
+ * @param {Range} range
+ * @returns {TypeSelectionOverlay}
+ */
+TypeSelectionOverlay.fromRange = function (range) {
+  var rect = TypeSelectionOverlay._getPositionsFromRange(range),
+    width  = rect.right - rect.left,
+    height = rect.bottom - rect.top;
+  return new TypeSelectionOverlay(rect.left, rect.top, width, height);
+};
+
+/**
+ * Return's the window's horizontal an vertical scroll positions
+ *
+ * todo code duplication to caret._getScrollPosition
+ *
+ * @returns {{top: (number), left: (number)}}
+ * @private
+ */
+TypeSelectionOverlay._getScrollPosition = function () {
+  return {
+    top  : window.pageYOffset || document.documentElement.scrollTop,
+    left : window.pageXOffset || document.documentElement.scrollLeft
+  };
+};
+
+/**
+ * Returns the positions from a {ClientRect} relative to the scroll
+ * position
+ *
+ * todo code duplication to caret._getPositionsFromRange
+ *
+ * @param {Range} range The {Range} that should be measured
+ * @returns {{top: number, right: number, bottom: number, left: number}}
+ * @private
+ */
+
+TypeSelectionOverlay._getPositionsFromRange = function (range) {
+  var scroll = TypeSelectionOverlay._getScrollPosition();
+  var rect = range.getClientRects()[0];
+  if(!rect) {
+    return null;
+  }
+  return {
+    top    : rect.top + scroll.top,
+    right  : rect.right + scroll.left,
+    bottom : rect.bottom + scroll.top,
+    left   : rect.left + scroll.left
+  };
+};
 
 module.exports = TypeSelectionOverlay;
