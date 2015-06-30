@@ -14,11 +14,12 @@ var DomUtil = require('./dom_utilities');
  *     for the element to be shown. Defaults to true
  * @constructor
  */
-function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
+function TypeSelectionOverlay(x1, y1, x2, y2, draw, textNode) {
   this._el = this._createElement();
   if (draw !== false) this._draw(x1, y1, x2, y2);
   this._setValues(x1, y1, x2, y2);
   this._anchor = {x: x1, y: y1};
+  this.textNode = textNode;
 }
 
 (function () {
@@ -136,6 +137,7 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
     this.x2 = null;
     this.y2 = null;
     this._anchor = null;
+    this.textNode = null;
     return this;
   };
 
@@ -197,6 +199,26 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
 
     return this;
   };
+
+
+  /**
+   *
+   * @returns {Number}
+   * @private
+   */
+  this._textleft = function () {
+    return this.textNode.parentNode.getBoundingClientRect().left;
+  };
+
+  /**
+   *
+   * @returns {Number}
+   * @private
+   */
+  this._textRight = function () {
+    return this.textNode.parentNode.getBoundingClientRect().right;
+  };
+
 
   /**
    * Creates and returns the visible selection overlay element

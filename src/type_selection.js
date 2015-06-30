@@ -95,6 +95,25 @@ function TypeSelection() {
    */
   this._imitateRange = function () {
 
+    var rects = this._range.getClientRects(),
+      overlay,
+      i;
+
+    console.log(rects);
+
+    for (i = 0; i < rects.length; i += 1) {
+      if (!this._overlays[i]) {
+        overlay = new TypeSelectionOverlay(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom);
+        this._overlays.push(overlay);
+      } else {
+        this._overlays[i].set(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom);
+      }
+    }
+
+    while (this._overlays.length > rects.length) {
+      this._overlays.pop().remove();
+    }
+
     return this;
   };
 
