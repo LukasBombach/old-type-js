@@ -137,6 +137,9 @@ function TypeSelection() {
       overlay,
       i;
 
+    //console.clear();
+    //console.log(this._elements, rects);
+
     // Resize and add overlays to match the range's rects
     for (i = rects.length - 1; i >= 0; i -= 1) {
       if (this._overlays[i]) {
@@ -206,40 +209,19 @@ function TypeSelection() {
     el = el.nodeType === 3 ? el.parentNode : el;
     rect = el.getBoundingClientRect();
     key = this._stringifyRect(rect);
-    if (!this._elements.hasOwnProperty(key)) {
-      this._elements[key] = rect;
-    }
+    this._elements[key] = rect;
     return this;
   };
 
   /**
    *
-   * @param {ClientRect} r
+   * @param {ClientRect} rect
    * @private
    */
-  this._matchesElementDimensions = function (r) {
-    var el, elr;
-    for (el in this._elements) {
-      if (this._elements.hasOwnProperty(el)) {
-        elr = this._elements[el];
-        if (elr.top === r.top) {
-          return true;
-        }
-      }
-    }
-    return false;
+  this._matchesElementDimensions = function (rect) {
+    var key = this._stringifyRect(rect);
+    return this._elements.hasOwnProperty(key);
   };
-
-  /**
-   *
-   * @param {Node|Element} el - An element or a text node
-   * @returns {ClientRect|null}
-   * @private
-   */
-  //this._getElementRect = function (el) {
-  //  el = el.nodeType === 3 ? el.parentNode : el;
-  //  return this._elements[el] || null;
-  //};
 
   /**
    * Removes all selection overlays
