@@ -8,8 +8,7 @@ var TypeSelectionOverlay = require('./type_selection_overlay');
  * @constructor
  */
 function TypeSelection(type) {
-  this._root = type.getRoot();
-  this._rootRect = this._root.getBoundingClientRect();
+  this._rootRect = type.getRoot().getBoundingClientRect();
   this._overlays = [];
   this._startNode = null;
   this._startOffset = null;
