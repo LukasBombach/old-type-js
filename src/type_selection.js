@@ -99,8 +99,6 @@ function TypeSelection() {
       overlay,
       i;
 
-    console.log(rects);
-
     for (i = 0; i < rects.length; i += 1) {
       if (!this._overlays[i]) {
         overlay = new TypeSelectionOverlay(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom);
