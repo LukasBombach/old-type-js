@@ -550,7 +550,7 @@ function DomUtilities() {
    * @param {Node} el
    * @param {String} selector
    * @param {Node} [constrainingNode]
-   * @returns {*}
+   * @returns {HTMLElement|null}
    */
   this.parent = function(el, selector, constrainingNode) {
     while (el.parentNode && (!constrainingNode || el !== constrainingNode)) {

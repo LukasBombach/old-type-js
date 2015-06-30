@@ -73,7 +73,7 @@ function Cmd(constrainingNode) {
 
     // If the selection is enclosed the tag we want to format with
     // remove formatting from selected area
-    if (enclosingTag = typeRange.startAndEndEnclosedBySame(tag)) {
+    if (enclosingTag = typeRange.elementEnclosingStartAndEnd(tag)) {
       this.removeInline(enclosingTag, typeRange);
 
     // Otherwise add formatting to selected area

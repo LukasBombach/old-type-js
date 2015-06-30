@@ -36,6 +36,7 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
 (function () {
 
   /**
+   * Returns the element containing the startContainer.
    *
    * @returns {Node}
    */
@@ -44,6 +45,7 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
+   * Returns the element containing the endContainer.
    *
    * @returns {Node}
    */
@@ -52,6 +54,8 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
+   * Returns the tag name of the element containing the
+   * startContainer.
    *
    * @returns {string}
    */
@@ -60,6 +64,8 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
+   * Returns the tag name of the element containing the
+   * endContainer.
    *
    * @returns {string}
    */
@@ -68,8 +74,10 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
+   * Returns whether or not the the element containing the
+   * startContainer is of the given tagName.
    *
-   * @param tagName
+   * @param {string} tagName - The tag name to compare.
    * @returns {boolean}
    */
   this.startTagIs = function (tagName) {
@@ -77,8 +85,10 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
+   * Returns whether or not the the element containing the
+   * endContainer is of the given tagName.
    *
-   * @param tagName
+   * @param {string} tagName - The tag name to compare.
    * @returns {boolean}
    */
   this.endTagIs = function (tagName) {
@@ -86,6 +96,8 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
+   * Returns whether or not the startContainer equals the
+   * endContainer.
    *
    * @returns {boolean}
    */
@@ -94,6 +106,8 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
+   * Returns whether or not this range spans over no characters
+   * at all.
    *
    * @returns {boolean}
    */
@@ -102,37 +116,61 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
+   * If the startContainer and the endContainer are enclosed by
+   * the same element matching the selector, that element will
+   * be returned. Otherwise null will be returned.
+   * todo call this commonAncestor and make the selector optional
    *
-   * @param {String} tag - A tag name
-   * @param {Node} [constrainingNode]
-   * @returns {Node|null}
+   * @param {String} selector - This method will only return a
+   *     common ancestor matched by this selector.
+   * @param {HTMLElement} [constrainingNode] - If given, this
+   *     method will stop traversing the DOM tree when it hits
+   *     this element.
+   * @returns {HTMLElement|null} - Will either return the common
+   *     ancestor matching the selector or null otherwise.
    */
-  this.startAndEndEnclosedBySame = function (tag, constrainingNode) {
-    var tagEnclosingStartNode = DomUtil.parent(this.startContainer, tag, constrainingNode);
-    if (tagEnclosingStartNode !== null) {
-      if (tagEnclosingStartNode === DomUtil.parent(this.endContainer, tag, constrainingNode)) {
-        return tagEnclosingStartNode;
-      }
+  this.elementEnclosingStartAndEnd = function (selector, constrainingNode) {
+
+    var tagEnclosingStartNode = DomUtil.parent(this.startContainer, selector, constrainingNode),
+      tagEnclosingEndNode;
+
+    if (tagEnclosingStartNode === null) {
+      return null;
     }
+
+    tagEnclosingEndNode = DomUtil.parent(this.endContainer, selector, constrainingNode);
+
+    if (tagEnclosingStartNode === tagEnclosingEndNode) {
+      return tagEnclosingStartNode;
+    }
+
     return null;
   };
 
   /**
+   * Will return whether or not the whole range (the
+   * startContainer and the endContainer are both children
+   * of the given element.
    *
-   * @param {Node} node
+   * @param {HTMLElement} el - The element to check if it
+   *     is a parent to the start and endContainer.
    * @returns {boolean}
    */
-  this.isInside = function (node) {
-    return node.contains(this.startContainer) && node.contains(this.endContainer);
+  this.isInside = function (el) {
+    return el.contains(this.startContainer) && el.contains(this.endContainer);
   };
 
   /**
+   * Will throw an error if the start and endContainer are
+   * not children to the given element. Returns true if
+   * they are.
    *
-   * @param node
+   * @param {HTMLElement} el - The element to check if it
+   *     is a parent to the start and endContainer.
    * @returns {boolean}
    */
-  this.ensureIsInside = function (node) {
-    if (this.isInside(node)) {
+  this.ensureIsInside = function (el) {
+    if (this.isInside(el)) {
       return true;
     }
     throw new Error('Range is not contained by given node.');
