@@ -10,7 +10,7 @@ var DomUtil = require('./dom_utilities');
  * @param {Number} endOffset
  * @constructor
  */
-function TypeRange (startContainer, startOffset, endContainer, endOffset) {
+function TypeRange(startContainer, startOffset, endContainer, endOffset) {
 
   this.startContainer = startContainer;
   this.startOffset    = startOffset;
@@ -20,6 +20,12 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
   this.ensureStartNodePrecedesEndNode();
 
 }
+
+/**
+ *
+ * @type {null|boolean}
+ */
+TypeRange.getClientRectsIsBroken = null;
 
 (function () {
 
@@ -191,6 +197,14 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
     //this.getRange().getClientRects()
   };
 
+  this.getRects = function () {
+    if (this._getClientRectsNeedsFix()) {
+
+    } else {
+      this.getNativeRange().getClientRects();
+    }
+  };
+
   /**
    *
    * @param {HTMLElement} fromNode
@@ -228,6 +242,58 @@ function TypeRange (startContainer, startOffset, endContainer, endOffset) {
       offsetWalked += node.nodeValue.length;
     }
     return null;
+  };
+
+  /**
+   * Will test and return if the browser has a broken
+   * model for {Range.prototype.getClientRects}. This
+   * is usually the case with WebKit.
+   *
+   * @returns {boolean}
+   * @private
+   */
+  this._getClientRectsNeedsFix = function () {
+    if (TypeRange.getClientRectsIsBroken === null) {
+      TypeRange.getClientRectsIsBroken = this._getClientRectsIsBroken();
+    }
+    return TypeRange.getClientRectsIsBroken;
+  };
+
+  /**
+   * WebKit browsers sometimes create unnecessary and
+   * overlapping {ClientRects} in {Range.prototype.getClientRects}
+   * This method creates 2 elements, creates a range
+   * and tests for this behaviour.
+   *
+   * From {@link https://github.com/edg2s/rangefix}
+   * (modified)
+   *
+   * Copyright (c) 2014 Ed Sanders under the
+   * terms of The MIT License (MIT)
+   *
+   * @returns {boolean}
+   * @private
+   */
+  this._getClientRectsIsBroken = function () {
+
+    var range = document.createRange(),
+      p1 = DomUtil.addElement('p'),
+      p2 = DomUtil.addElement('p'),
+      needsFix;
+
+    p1.appendChild(document.createTextNode('aa'));
+    p2.appendChild(document.createTextNode('aa'));
+
+    range.setStart(p1.firstChild, 1);
+    range.setEnd(p2.firstChild, 1);
+
+    needsFix = range.getClientRects().length > 2;
+
+    DomUtil.removeElement(p1);
+    DomUtil.removeElement(p2);
+
+    return needsFix;
+
   };
 
 }).call(TypeRange.prototype);
