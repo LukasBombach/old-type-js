@@ -7,10 +7,7 @@ var TypeSelectionOverlay = require('./type_selection_overlay');
  * @constructor
  */
 function TypeSelection() {
-  this._overlays = [];
-  this._elements = [];
-  this._range = null;
-  this._start = null;
+  this.unselect();
 }
 
 (function () {
@@ -51,7 +48,7 @@ function TypeSelection() {
    */
   this.unselect = function () {
     this._removeOverlays();
-    this._elements = [];
+    this._elements = {};
     this._range = null;
     this._start = null;
     return this;
@@ -170,6 +167,7 @@ function TypeSelection() {
 
     // Required variables
     var rects = this._range.getClientRects(),
+      draw,
       overlay,
       i;
 
@@ -181,7 +179,8 @@ function TypeSelection() {
       if (this._overlays[i]) {
         this._overlays[i].set(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom);
       } else {
-        overlay = new TypeSelectionOverlay(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom);
+        draw = !this._matchesElementDimensions(rects[i]);
+        overlay = new TypeSelectionOverlay(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom, draw);
         this._overlays.push(overlay);
       }
     }
@@ -197,18 +196,48 @@ function TypeSelection() {
   };
 
   /**
+   * Todo scrolling
    *
-   * @param {Node|Element} el
+   * @param {Node|Element} el - An element or a text node
    * @returns {TypeSelection} - This instance
    * @private
    */
   this._addElement = function (el) {
     el = el.nodeType === 3 ? el.parentNode : el;
-    if (this._elements.indexOf(el) === -1) {
-      this._elements.push(el);
+    if (!this._elements[el]) {
+      this._elements[el] = el.getBoundingClientRect();
     }
     return this;
   };
+
+  /**
+   *
+   * @param {ClientRect} r
+   * @private
+   */
+  this._matchesElementDimensions = function (r) {
+    var el, elr;
+    for (el in this._elements) {
+      if (this._elements.hasOwnProperty(el)) {
+        elr = this._elements[el];
+        if (elr.top === r.top) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
+  /**
+   *
+   * @param {Node|Element} el - An element or a text node
+   * @returns {ClientRect|null}
+   * @private
+   */
+  //this._getElementRect = function (el) {
+  //  el = el.nodeType === 3 ? el.parentNode : el;
+  //  return this._elements[el] || null;
+  //};
 
   /**
    * Removes all selection overlays
@@ -218,6 +247,9 @@ function TypeSelection() {
    */
   this._removeOverlays = function () {
     var i;
+    if (!this._overlays) {
+      this._overlays = [];
+    }
     for (i = 0; i < this._overlays.length; i += 1) {
       this._overlays[i].remove();
     }
