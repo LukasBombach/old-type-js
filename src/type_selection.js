@@ -146,6 +146,7 @@ function TypeSelection() {
         this._overlays[i].set(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom);
       } else {
         draw = !this._matchesElementDimensions(rects[i]);
+        console.log('————', draw);
         overlay = new TypeSelectionOverlay(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom, draw);
         this._overlays.unshift(overlay);
       }
@@ -220,6 +221,7 @@ function TypeSelection() {
    */
   this._matchesElementDimensions = function (rect) {
     var key = this._stringifyRect(rect);
+    console.log(rect.top, '||', this._elements);
     return this._elements.hasOwnProperty(key);
   };
 
