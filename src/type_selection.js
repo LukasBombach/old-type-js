@@ -133,6 +133,7 @@ function TypeSelection() {
 
     // Required variables
     var rects = this._range.getClientRects(),
+      draw,
       overlay,
       i;
 
@@ -141,7 +142,8 @@ function TypeSelection() {
       if (this._overlays[i]) {
         this._overlays[i].set(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom);
       } else {
-        overlay = new TypeSelectionOverlay(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom);
+        draw = !this._matchesElementDimensions(rects[i]);
+        overlay = new TypeSelectionOverlay(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom, draw);
         this._overlays.unshift(overlay);
       }
     }
@@ -170,9 +172,6 @@ function TypeSelection() {
       draw,
       overlay,
       i;
-
-    console.clear();
-    console.log(this._range, rects);
 
     // Resize and add overlays to match the range's rects
     for (i = 0; i < rects.length; i += 1) {
@@ -203,9 +202,12 @@ function TypeSelection() {
    * @private
    */
   this._addElement = function (el) {
+    var rect, key;
     el = el.nodeType === 3 ? el.parentNode : el;
-    if (!this._elements[el]) {
-      this._elements[el] = el.getBoundingClientRect();
+    rect = el.getBoundingClientRect();
+    key = this._stringifyRect(rect);
+    if (!this._elements.hasOwnProperty(key)) {
+      this._elements[key] = rect;
     }
     return this;
   };
@@ -255,6 +257,20 @@ function TypeSelection() {
     }
     this._overlays = [];
     return this;
+  };
+
+  /**
+   *
+   * @param {ClientRect} rect
+   * @returns {string}
+   * @private
+   */
+  this._stringifyRect = function (rect) {
+    var top  = rect.top.toString(),
+      left   = rect.left.toString(),
+      bottom = rect.bottom.toString(),
+      right  = rect.right.toString();
+    return top + left + bottom + right;
   };
 
 }).call(TypeSelection.prototype);

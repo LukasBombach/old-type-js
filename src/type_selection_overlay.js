@@ -10,13 +10,14 @@ var DomUtil = require('./dom_utilities');
  * @param {number} [y1] - Vertical position of the overlay
  * @param {number} [x2] - x2 of the overlay
  * @param {number} [y2] - y2 of the overlay
- * @param {boolean} [draw] - Set to false if you do not wish
+ * @param {boolean} [show] - Set to false if you do not wish
  *     for the element to be shown. Defaults to true
  * @constructor
  */
-function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
-  this._el = this._createElement();
-  if (draw !== false) this._draw(x1, y1, x2, y2);
+function TypeSelectionOverlay(x1, y1, x2, y2, show) {
+  if (show !== false) {
+    this.show(x1, y1, x2, y2);
+  }
   this._setValues(x1, y1, x2, y2);
   this._anchor = {x: x1, y: y1};
 }
@@ -64,6 +65,29 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
     return this;
   };
 
+  /**
+   *
+   * @param x1
+   * @param y1
+   * @param x2
+   * @param y2
+   * @returns {TypeSelectionOverlay} - This instance
+   */
+  this.show = function (x1, y1, x2, y2) {
+    this._el = this._createElement();
+    this._draw(x1, y1, x2, y2);
+    return this;
+  };
+
+  /**
+   *
+   * @returns {TypeSelectionOverlay} - This instance
+   */
+  this.hide = function () {
+    DomUtil.removeElement(this._el);
+    this._el = null;
+    return this;
+  };
 
   /**
    *
@@ -71,7 +95,7 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
    * @param {number} [y]
    * @returns {TypeSelectionOverlay} - This instance
    */
-  this.anchor = function (x, y) {
+  /*this.anchor = function (x, y) {
 
     if (x === 'left') {
       x = this._textleft();
@@ -93,7 +117,7 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
 
     return this;
 
-  };
+  };*/
 
   /**
    * Sets the horizontal start or end of this overlay depending
@@ -103,7 +127,7 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
    * @param {number} x - The horizontal position
    * @returns {TypeSelectionOverlay} - This instance
    */
-  this.setXFromAnchor = function (x) {
+  /*this.setXFromAnchor = function (x) {
     if (x === null || x === undefined) {
       this.set(this._anchor.x, null, this._anchor.x, null);
     } else {
@@ -111,7 +135,7 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
       if (x > this._anchor.x) this.set(this._anchor.x, null, x, null);
     }
     return this;
-  };
+  };*/
 
   /**
    * Returns whether or not this overlay is actually visible
@@ -129,7 +153,9 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
    * @returns {TypeSelectionOverlay} - This instance
    */
   this.remove = function () {
-    DomUtil.removeElement(this._el);
+    if (this._el) {
+      DomUtil.removeElement(this._el);
+    }
     this._el = null;
     this.x1 = null;
     this.y1 = null;
@@ -170,6 +196,10 @@ function TypeSelectionOverlay(x1, y1, x2, y2, draw) {
    * @private
    */
   this._draw = function (x1, y1, x2, y2) {
+
+    if (!this._el) {
+      return this;
+    }
 
     // If x1 has changed, reposition
     if (x1 !== null && x1 !== this.x1) {
