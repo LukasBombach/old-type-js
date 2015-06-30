@@ -103,8 +103,10 @@ TypeRange._getClientRectsNeedsFix = null;
    */
   this.startAndEndEnclosedBySame = function (tag, constrainingNode) {
     var tagEnclosingStartNode = DomUtil.parent(this.startContainer, tag, constrainingNode);
-    if (tagEnclosingStartNode !== null && tagEnclosingStartNode === DomUtil.parent(this.endContainer, tag, constrainingNode))
+    if (tagEnclosingStartNode !== null &&
+      tagEnclosingStartNode === DomUtil.parent(this.endContainer, tag, constrainingNode)) {
       return tagEnclosingStartNode;
+    }
     return null;
   };
 
@@ -380,26 +382,8 @@ TypeRange._getClientRectsNeedsFix = null;
   };
 
   /**
-   *
-   * @param containingNode
-   * @param offset
-   * @returns {{node: Node, offset: number}|null}
-   * @private
-   */
-  TypeRange._nodeFromOffset = function (containingNode, offset) {
-    var node = containingNode, offsetWalked = 0, length;
-    while (node = DomUtil.nextTextNode(node)) {
-      length = node.nodeValue.length;
-      if (offsetWalked + length >= offset) return { node: node, offset: offset-offsetWalked };
-      offsetWalked += length;
-    }
-    return null;
-  };
-
-  /**
-   * Will test and return if the browser has a broken
-   * model for {Range.prototype.getClientRects}. This
-   * is usually the case with WebKit.
+   * Will return if the browser has a broken model for {Range.prototype.getClientRects}.
+   * This is usually the case with WebKit.
    *
    * @returns {boolean}
    * @private
@@ -412,10 +396,9 @@ TypeRange._getClientRectsNeedsFix = null;
   };
 
   /**
-   * WebKit browsers sometimes create unnecessary and
-   * overlapping {ClientRect}s in {Range.prototype.getClientRects}
-   * This method creates 2 elements, creates a range
-   * and tests for this behaviour.
+   * WebKit browsers sometimes create unnecessary and overlapping {ClientRect}s in
+   * {Range.prototype.getClientRects}. This method creates 2 elements, creates a
+   * range and tests for this behaviour.
    *
    * From {@link https://github.com/edg2s/rangefix}
    * (modified)
@@ -448,8 +431,24 @@ TypeRange._getClientRectsNeedsFix = null;
 
   };
 
-}).call(TypeRange);
+  /**
+   *
+   *
+   * @param containingNode
+   * @param offset
+   * @returns {{node: Node, offset: number}|null}
+   * @private
+   */
+  TypeRange._nodeFromOffset = function (containingNode, offset) {
+    var node = containingNode, offsetWalked = 0, length;
+    while (node = DomUtil.nextTextNode(node)) {
+      length = node.nodeValue.length;
+      if (offsetWalked + length >= offset) return { node: node, offset: offset-offsetWalked };
+      offsetWalked += length;
+    }
+    return null;
+  };
 
-
+}).call();
 
 module.exports = TypeRange;
