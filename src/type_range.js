@@ -303,7 +303,8 @@ TypeRange._getClientRectsNeedsFix = null;
    *
    * @param {Range} range - The {Range} that should be <em>migrated</em>
    *     to a {TypeRange}
-   * @returns {TypeRange} - The {TypeRange} equal to the given {Range}
+   * @returns {TypeRange} - The {TypeRange} corresponding to the given
+   *     {Range}
    */
   TypeRange.fromRange = function (range) {
     var endContainer = range.endContainer,
@@ -316,12 +317,15 @@ TypeRange._getClientRectsNeedsFix = null;
   };
 
   /**
-   * Will find the first and last text nodes inside a given element and
-   * span a range beginning at the start of the first text node and end
-   * at the end of the last text node.
+   * Will create a {TypeRange} containing the given element's text by
+   * finding the first and last text nodes inside the element and spanning
+   * a range beginning at the start of the first text node and at the end
+   * of the last text node.
    *
-   * @param {HTMLElement} el - The element
-   * @returns {TypeRange}
+   * @param {HTMLElement} el - The element that should be <em>covered</em>
+   *     by the returned {TypeRange}.
+   * @returns {TypeRange} - A {TypeRange} spanning over the contents of the
+   *     given element.
    */
   TypeRange.fromElement = function (el) {
     var startNode = DomUtil.firstTextNode(el),
@@ -330,10 +334,9 @@ TypeRange._getClientRectsNeedsFix = null;
   };
 
   /**
-   * WebKit browsers sometimes create unnecessary and
-   * overlapping {ClientRects} in {Range.prototype.getClientRects}
-   * This method takes a {Range}, fixes the {ClientRect} if
-   * necessary and returns them
+   * WebKit browsers sometimes create unnecessary and overlapping {ClientRect}s
+   * in {Range.prototype.getClientRects}. This method takes a {Range}, fixes
+   * the {ClientRect}s (if necessary) and returns them.
    *
    * From {@link https://github.com/edg2s/rangefix}
    * (modified)
@@ -342,7 +345,7 @@ TypeRange._getClientRectsNeedsFix = null;
    * terms of The MIT License (MIT)
    *
    * @param {Range} range - A native {Range}
-   * @return {ClientRectList|ClientRect[]} ClientRectList or list of
+   * @return {ClientRect[]} ClientRectList or list of
    *     ClientRect objects describing range
    */
   TypeRange.getClientRects = function (range) {
