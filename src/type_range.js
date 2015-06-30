@@ -3,11 +3,23 @@
 var DomUtil = require('./dom_utilities');
 
 /**
+ * {TypeRange} is a shim for the browsers' native {Range} objects and
+ * is being used in Type for anything related to text ranges.
  *
- * @param {Node} startContainer
- * @param {Number} startOffset
- * @param {Node} endContainer
- * @param {Number} endOffset
+ * Native ranges are often buggy, lack essential features and should
+ * not be used other than for performance reasons. This class avoids
+ * and / or fixes common issues with ranges and adds many methods
+ * useful for text editing.
+ *
+ * Among many other factory methods, you can use the {TypeRange.fromRange}
+ * method to create a {TypeRange} from a native {Range}.
+ *
+ * @param {Node} startContainer - A text node that the range should start in.
+ * @param {number} startOffset - The offset (of characters) inside the
+ *     startContainer where the range should begin.
+ * @param {Node} endContainer - A text node that the range should end in.
+ * @param {number} endOffset - The offset (of characters) inside the
+ *     endContainer where the range should stop.
  * @constructor
  */
 function TypeRange(startContainer, startOffset, endContainer, endOffset) {
@@ -127,7 +139,8 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
-   *
+   * Todo this should just switch start and end nodes and not thrown an error
+   * Todo should also switch offsets then
    * @returns {boolean}
    */
   this.ensureStartNodePrecedesEndNode = function () {
