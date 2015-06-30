@@ -246,8 +246,15 @@ TypeRange._getClientRectsNeedsFix = null;
    * offset given as end, counting the characters contained by the given
    * el. This function should be used with the save method of {TypeRange}.
    *
-   * @param {{from: HTMLElement, start: number, end: number}} bookmark
-   * @returns {TypeRange}
+   * @param {{from: HTMLElement, start: number, end: number}} bookmark -
+   *     An object as returned by {TypeRange.save}
+   * @param {HTMLElement} bookmark.from - The root element from which the
+   *     start and end offsets should be counted
+   * @param {number} bookmark.start - The offsets (number of characters)
+   *     where the selection should start
+   * @param {number} bookmark.end - The offsets (number of characters)
+   *     where the selection should end
+   * @returns {TypeRange} - A {TypeRange} instance
    */
   TypeRange.load = function (bookmark) {
     return TypeRange.fromPositions(bookmark.from, bookmark.start, bookmark.end);
@@ -259,12 +266,12 @@ TypeRange._getClientRectsNeedsFix = null;
    * el.
    *
    * @param {HTMLElement|Node} el - The root element from which the start
-   *     end end offsets should be counted
+   *     and end offsets should be counted
    * @param {number} start - The offsets (number of characters) where the
    *     selection should start
    * @param {number} end - The offsets (number of characters) where the
    *     selection should end
-   * @returns {TypeRange}
+   * @returns {TypeRange} - A {TypeRange} instance
    */
   TypeRange.fromPositions = function (el, start, end) {
     var startInfo, endInfo;
