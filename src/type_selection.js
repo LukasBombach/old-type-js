@@ -4,11 +4,9 @@ var TypeSelectionOverlay = require('./type_selection_overlay');
 
 /**
  *
- * @param {Type} type
  * @constructor
  */
-function TypeSelection(type) {
-  this._rootRect = type.getRoot().getBoundingClientRect();
+function TypeSelection() {
   this._overlays = [];
   this._range = null;
 }
@@ -89,6 +87,8 @@ function TypeSelection(type) {
   };
 
   /**
+   * Creates {TypeSelectionOverlay}s that mimic the appearance of
+   * the selection as drawn by {this._range}
    *
    * @returns {TypeSelection} - This instance
    * @private
