@@ -3,7 +3,9 @@
 var DomUtil = require('./dom_utilities');
 
 /**
- * {TypeRange} is a shim for the browsers' native {Range} objects and
+ * Crates a new TypeRange
+ *
+ * TypeRange is a shim for the browsers' native {Range} objects and
  * is being used in Type for anything related to text ranges.
  *
  * Native ranges are often buggy, lack essential features and should
