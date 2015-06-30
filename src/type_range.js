@@ -103,9 +103,10 @@ TypeRange._getClientRectsNeedsFix = null;
    */
   this.startAndEndEnclosedBySame = function (tag, constrainingNode) {
     var tagEnclosingStartNode = DomUtil.parent(this.startContainer, tag, constrainingNode);
-    if (tagEnclosingStartNode !== null &&
-      tagEnclosingStartNode === DomUtil.parent(this.endContainer, tag, constrainingNode)) {
-      return tagEnclosingStartNode;
+    if (tagEnclosingStartNode !== null) {
+      if (tagEnclosingStartNode === DomUtil.parent(this.endContainer, tag, constrainingNode)) {
+        return tagEnclosingStartNode;
+      }
     }
     return null;
   };
@@ -125,7 +126,9 @@ TypeRange._getClientRectsNeedsFix = null;
    * @returns {boolean}
    */
   this.ensureIsInside = function (node) {
-    if (this.isInside(node)) return true;
+    if (this.isInside(node)) {
+      return true;
+    }
     throw new Error('Range is not contained by given node.');
   };
 
@@ -136,7 +139,9 @@ TypeRange._getClientRectsNeedsFix = null;
   this.ensureStartNodePrecedesEndNode = function () {
     var isSameNode = this.startContainer === this.endContainer,
       startPrecedesEnd = this.startContainer.compareDocumentPosition(this.endContainer) & Node.DOCUMENT_POSITION_FOLLOWING;
-    if (isSameNode || startPrecedesEnd) return true;
+    if (isSameNode || startPrecedesEnd) {
+      return true;
+    }
     throw new Error('Given startContainer does not precede endContainer.');
   };
 
@@ -432,18 +437,26 @@ TypeRange._getClientRectsNeedsFix = null;
   };
 
   /**
+   * Will walk through and count all visible characters in the given
+   * containingNode and return the text node where the offset ends in.
+   * The method will also return the remaining offset inside that text
+   * node.
    *
-   *
-   * @param containingNode
-   * @param offset
-   * @returns {{node: Node, offset: number}|null}
+   * @param {Element} containingElement - The element of which the text
+   *     should be walked through
+   * @param {number} offset - The offset of the character of the text
+   *     contained by the given element
+   * @returns {{node: Node, offset: number}|null} - The text node and
+   *     offset in which the given offset ends
    * @private
    */
-  TypeRange._nodeFromOffset = function (containingNode, offset) {
-    var node = containingNode, offsetWalked = 0, length;
+  TypeRange._nodeFromOffset = function (containingElement, offset) {
+    var node = containingElement, offsetWalked = 0, length;
     while (node = DomUtil.nextTextNode(node)) {
       length = node.nodeValue.length;
-      if (offsetWalked + length >= offset) return { node: node, offset: offset-offsetWalked };
+      if (offsetWalked + length >= offset) {
+        return { node: node, offset: offset-offsetWalked };
+      }
       offsetWalked += length;
     }
     return null;
