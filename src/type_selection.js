@@ -11,89 +11,59 @@ function TypeSelection(type) {
   this._root = type.getRoot();
   this._rootRect = this._root.getBoundingClientRect();
   this._overlays = [];
+  this._startNode = null;
+  this._startOffset = null;
 }
 
 (function () {
 
   /**
    *
-   * @param x
-   * @param y
-   * @returns {TypeSelection}
+   * @param {number} x - Absolute horizontal position on the document
+   * @param {number} y - Absolute vertical position on the document
+   * @returns {TypeSelection} - This instance
    */
   this.beginNewAtPos = function (x, y) {
-    this.unselect();
-    this._overlays.push(TypeSelectionOverlay.fromPosition(x, y));
-    return this;
+    var range =  document.caretRangeFromPoint(x, y);
+    return this.beginNewAt(range.startContainer, range.startOffset);
   };
 
-  this.selectToPos = function (x, y) {
-    if (y < this._overlays[0].y) {
-      this.moveStartToPos(x, y);
-    } else {
-      this.moveEndToPos(x, y);
-    }
+  /**
+   *
+   * @param {Node} node - The text node that the selection should start in
+   * @param {number} offset - The offset in the text node that the selection should start in
+   * @returns {TypeSelection} - This instance
+   */
+  this.beginNewAt = function (node, offset) {
+    this.unselect();
     return this;
   };
 
   /**
    *
-   * @param offset
-   * @returns {TypeSelection}
-   */
-  this.beginNewAtOffset = function (offset) {
-    return this;
-  };
-
-  /**
-   * Todo maybe not use this._posToNodeOffset every time for performance reasons
-   * @param x
-   * @param y
-   * @returns {TypeSelection}
+   * @param {number} x - Absolute horizontal position on the document
+   * @param {number} y - Absolute vertical position on the document
+   * @returns {TypeSelection} - This instance
    */
   this.moveEndToPos = function (x, y) {
-
-    var last = this._overlays[this._overlays.length - 1],
-      overlay;
-
-    // Cursor is above last selected line
-    if (y < last.y1) {
-      this._overlays.pop().remove();
-      last = this._overlays[this._overlays.length - 1];
-    }
-
-    // Cursor is horizontally aligned with last selected line
-    if (y >= last.y1 && y <= last.y2) {
-      last.setXFromAnchor(this._rectFromOffset(x, y).left);
-    }
-
-    // Cursor is below last selected line
-    if (y > last.y2) {
-      // todo einen anchor in der selektion machen anstatt in den oberlays
-      // todo der anchor kann verwendet werden um eine Range von x,y bis da hin zu machen und die cleient rects durchzugehen um daraus dan die inzelnen overlays zu machen
-      last.setXFromAnchor();
-      last.set('right');
-      overlay = TypeSelectionOverlay.fromPosition(x, y);
-      overlay.set('left').anchor('left');
-      this._overlays.push(overlay);
-    }
-
     return this;
   };
 
   /**
    *
-   * @param offset
-   * @returns {TypeSelection}
+   * @param {Node} node - The text node that the selection should end in
+   * @param {number} offset - The offset in the text node that the selection should end in
+   * @returns {TypeSelection} - This instance
    */
-  this.moveEndToOffset = function (offset) {
+  this.moveEndTo = function (node, offset) {
     return this;
   };
 
 
   /**
+   * Removes all selection overlays and resets internal variables
    *
-   * @returns {TypeSelection}
+   * @returns {TypeSelection} - This instance
    */
   this.unselect = function () {
     var i;
@@ -101,58 +71,18 @@ function TypeSelection(type) {
       this._overlays[i].remove();
     }
     this._overlays = [];
-    this._start = null;
-    this._end = null;
+    this._startNode = null;
+    this._startOffset = null;
     return this;
   };
 
   /**
+   * Returns whether or not this selection is visible
    *
    * @returns {boolean}
    */
   this.exists = function () {
     return !!this._overlays.length && this._overlays[0].visible();
-  };
-
-  this._addOverlay = function () {
-
-  };
-
-  /**
-   * todo https://developer.mozilla.org/en-US/docs/Web/API/document/caretRangeFromPoint
-   * todo https://gist.github.com/unicornist/ac997a15bc3211ba1235
-   *
-   * @param x
-   * @param y
-   * @returns {*}
-   * @private
-   */
-  this._rangeFromOffset = function (x, y) {
-    return document.caretRangeFromPoint(x, y);
-  };
-
-  /**
-   *
-   * @param x
-   * @param y
-   * @returns {*}
-   * @private
-   */
-  this._rectFromOffset  = function (x, y) {
-    return document.caretRangeFromPoint(x, y).getClientRects()[0];
-  };
-
-  /**
-   *
-   * @param range
-   * @returns {{node: Node, offset: number}}
-   * @private
-   */
-  this._nodeAndOffset = function (range) {
-    return {
-      node: range.startContainer,
-      offset: range.startOffset
-    };
   };
 
 }).call(TypeSelection.prototype);
