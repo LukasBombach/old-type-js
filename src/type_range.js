@@ -197,12 +197,9 @@ TypeRange._getClientRectsNeedsFix = null;
     //this.getRange().getClientRects()
   };
 
-  this.getRects = function () {
-    if (this._getClientRectsNeedsFix()) {
 
-    } else {
-      this.getNativeRange().getClientRects();
-    }
+  this.getRects = function () {
+    TypeRange.getClientRects(this.getNativeRange);
   };
 
   /**
@@ -210,20 +207,15 @@ TypeRange._getClientRectsNeedsFix = null;
    * @param {HTMLElement} fromNode
    * @returns {{from: HTMLElement, start: number, end: number}}
    */
-  this.positions = function (fromNode) {
-
+  this.save = function (fromNode) {
     var start, end;
-
     start = this._offsetFromNodeToNode(fromNode, this.startContainer, this.startOffset);
-
     if (this.startsAndEndsInSameNode()) {
       end = start - this.startOffset + this.endOffset;
     } else {
       end = this._offsetFromNodeToNode(fromNode, this.endContainer, this.endOffset);
     }
-
     return { from: fromNode, start: start, end: end }
-
   };
 
   /**
@@ -244,6 +236,142 @@ TypeRange._getClientRectsNeedsFix = null;
     return null;
   };
 
+}).call(TypeRange.prototype);
+
+
+(function () {
+
+  /**
+   * Will create a range spanning from the offset given as start to the
+   * offset given as end, counting the characters contained by the given
+   * el. This function should be used with the save method of {TypeRange}.
+   *
+   * @param {{from: HTMLElement, start: number, end: number}} bookmark
+   * @returns {TypeRange}
+   */
+  TypeRange.load = function (bookmark) {
+    return TypeRange.fromPositions(bookmark.from, bookmark.start, bookmark.end);
+  };
+
+  /**
+   * Will create a range spanning from the offset given as start to the
+   * offset given as end, counting the characters contained by the given
+   * el.
+   *
+   * @param {HTMLElement|Node} el - The root element from which the start
+   *     end end offsets should be counted
+   * @param {number} start - The offsets (number of characters) where the
+   *     selection should start
+   * @param {number} end - The offsets (number of characters) where the
+   *     selection should end
+   * @returns {TypeRange}
+   */
+  TypeRange.fromPositions = function (el, start, end) {
+    var startInfo, endInfo;
+    startInfo = TypeRange._nodeFromOffset(el, start);
+    endInfo = TypeRange._nodeFromOffset(el, end);
+    return new TypeRange(startInfo.node, startInfo.offset, endInfo.node, endInfo.offset);
+  };
+
+  /**
+   * Todo Check if selection is actually inside editor and return null if not
+   * @returns {TypeRange}
+   */
+  TypeRange.fromCurrentSelection = function () {
+    var sel = document.getSelection();
+    return sel.isCollapsed ? null : TypeRange.fromRange(sel.getRangeAt(0));
+  };
+
+  /**
+   * Todo This is a solution for a single case, find the pattern of this and process all cases
+   * @param {Range} range
+   * @returns {TypeRange}
+   */
+  TypeRange.fromRange = function (range) {
+    var endContainer = range.endContainer,
+      endOffset = range.endOffset;
+    if (endOffset === 0 && endContainer === DomUtil.nextVisible(range.startContainer.parentNode.nextSibling)) {
+      endContainer = DomUtil.lastTextNode(range.startContainer.parentNode);
+      endOffset = endContainer.length;
+    }
+    return new TypeRange(range.startContainer, range.startOffset, endContainer, endOffset);
+  };
+
+  /**
+   *
+   * @param {HTMLElement} el
+   * @returns {TypeRange}
+   */
+  TypeRange.fromElement = function (el) {
+    var startNode = DomUtil.firstTextNode(el),
+      endNode = DomUtil.lastTextNode(el);
+    return new TypeRange(startNode, 0, endNode, endNode.nodeValue.length);
+  };
+
+  /**
+   * WebKit browsers sometimes create unnecessary and
+   * overlapping {ClientRects} in {Range.prototype.getClientRects}
+   * This method takes a {Range}, fixes the {ClientRect} if
+   * necessary and returns them
+   *
+   * From {@link https://github.com/edg2s/rangefix}
+   * (modified)
+   *
+   * Copyright (c) 2014 Ed Sanders under the
+   * terms of The MIT License (MIT)
+   *
+   * @param {Range} range - A native {Range}
+   * @return {ClientRectList|ClientRect[]} ClientRectList or list of
+   *     ClientRect objects describing range
+   */
+  TypeRange.getClientRects = function (range) {
+
+    if (!TypeRange._getClientRectsNeedsFix()) {
+      return range.getClientRects();
+    }
+
+    var partialRange = document.createRange(),
+      endContainer = range.endContainer,
+      endOffset = range.endOffset,
+      rects = [];
+
+    while (endContainer !== range.commonAncestorContainer) {
+
+      partialRange.setStart(endContainer, 0);
+      partialRange.setEnd(endContainer, endOffset);
+
+      Array.prototype.push.apply(rects, partialRange.getClientRects());
+
+      endOffset = Array.prototype.indexOf.call( endContainer.parentNode.childNodes, endContainer );
+      endContainer = endContainer.parentNode;
+
+    }
+
+    partialRange = range.cloneRange();
+    partialRange.setEnd(endContainer, endOffset);
+    Array.prototype.push.apply(rects, partialRange.getClientRects());
+
+    return rects;
+
+  };
+
+  /**
+   *
+   * @param containingNode
+   * @param offset
+   * @returns {{node: Node, offset: number}|null}
+   * @private
+   */
+  TypeRange._nodeFromOffset = function (containingNode, offset) {
+    var node = containingNode, offsetWalked = 0, length;
+    while (node = DomUtil.nextTextNode(node)) {
+      length = node.nodeValue.length;
+      if (offsetWalked + length >= offset) return { node: node, offset: offset-offsetWalked };
+      offsetWalked += length;
+    }
+    return null;
+  };
+
   /**
    * Will test and return if the browser has a broken
    * model for {Range.prototype.getClientRects}. This
@@ -252,7 +380,7 @@ TypeRange._getClientRectsNeedsFix = null;
    * @returns {boolean}
    * @private
    */
-  this._getClientRectsNeedsFix = function () {
+  TypeRange._getClientRectsNeedsFix = function () {
     if (typeof TypeRange._getClientRectsNeedsFix !== 'boolean') {
       TypeRange._getClientRectsNeedsFix = this._testGetClientRectsNeedsFix();
     }
@@ -261,7 +389,7 @@ TypeRange._getClientRectsNeedsFix = null;
 
   /**
    * WebKit browsers sometimes create unnecessary and
-   * overlapping {ClientRects} in {Range.prototype.getClientRects}
+   * overlapping {ClientRect}s in {Range.prototype.getClientRects}
    * This method creates 2 elements, creates a range
    * and tests for this behaviour.
    *
@@ -274,7 +402,7 @@ TypeRange._getClientRectsNeedsFix = null;
    * @returns {boolean}
    * @private
    */
-  this._testGetClientRectsNeedsFix = function () {
+  TypeRange._testGetClientRectsNeedsFix = function () {
 
     var range = document.createRange(),
       p1 = DomUtil.addElement('p'),
@@ -296,88 +424,8 @@ TypeRange._getClientRectsNeedsFix = null;
 
   };
 
-}).call(TypeRange.prototype);
+}).call(TypeRange);
 
-/**
- *
- * @param {HTMLElement|Node|{from: HTMLElement, start: number, end: number}} positions
- * @param {number} [start]
- * @param {number} [end]
- * @returns {TypeRange}
- */
-TypeRange.fromPositions = function (positions, start, end) {
 
-  var startInfo, endInfo;
-
-  if (positions.nodeType) {
-    positions = {from: positions, start: start, end: end}
-  }
-
-  startInfo = TypeRange._nodeFromOffset(positions.from, positions.start);
-  endInfo = TypeRange._nodeFromOffset(positions.from, positions.end);
-
-  return new TypeRange(startInfo.node, startInfo.offset, endInfo.node, endInfo.offset);
-
-};
-
-/**
- * Todo Check if selection is actually inside editor and return null if not
- * @returns {TypeRange}
- */
-TypeRange.fromCurrentSelection = function () {
-  var sel = document.getSelection();
-  return sel.isCollapsed ? null : TypeRange.fromRange(sel.getRangeAt(0));
-};
-
-/**
- *
- * @param {Range} range
- * @returns {TypeRange}
- */
-TypeRange.fromRange = function (range) {
-
-  var endContainer = range.endContainer,
-    endOffset = range.endOffset;
-
-  // Todo This is a solution for a single case, find the pattern of this and process all cases
-  if (endOffset === 0 && endContainer === DomUtil.nextVisible(range.startContainer.parentNode.nextSibling)) {
-    endContainer = DomUtil.lastTextNode(range.startContainer.parentNode);
-    endOffset = endContainer.length;
-  }
-
-  return new TypeRange(range.startContainer, range.startOffset, endContainer, endOffset);
-};
-
-/**
- *
- * @param {HTMLElement} el
- * @returns {TypeRange}
- */
-TypeRange.fromElement = function (el) {
-  var startNode = DomUtil.firstTextNode(el),
-    endNode = DomUtil.lastTextNode(el);
-  return new TypeRange(startNode, 0, endNode, endNode.nodeValue.length);
-};
-
-/**
- *
- * @param containingNode
- * @param offset
- * @returns {{node: Node, offset: number}|null}
- * @private
- */
-TypeRange._nodeFromOffset = function (containingNode, offset) {
-
-  var node = containingNode, offsetWalked = 0, length;
-
-  while (node = DomUtil.nextTextNode(node)) {
-    length = node.nodeValue.length;
-    if (offsetWalked + length >= offset) return { node: node, offset: offset-offsetWalked };
-    offsetWalked += length;
-  }
-
-  return null;
-
-};
 
 module.exports = TypeRange;
