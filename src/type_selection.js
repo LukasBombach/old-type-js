@@ -10,8 +10,7 @@ var TypeSelectionOverlay = require('./type_selection_overlay');
 function TypeSelection(type) {
   this._rootRect = type.getRoot().getBoundingClientRect();
   this._overlays = [];
-  this._startNode = null;
-  this._startOffset = null;
+  this._range = null;
 }
 
 (function () {
@@ -35,6 +34,9 @@ function TypeSelection(type) {
    */
   this.beginNewAt = function (node, offset) {
     this.unselect();
+    this._range = window.document.createRange();
+    this._range.setStart(node, offset);
+    this._range.setEnd(node, offset);
     return this;
   };
 
@@ -45,7 +47,8 @@ function TypeSelection(type) {
    * @returns {TypeSelection} - This instance
    */
   this.moveEndToPos = function (x, y) {
-    return this;
+    var range =  document.caretRangeFromPoint(x, y);
+    return this.moveEndTo(range.endContainer, range.endOffset);
   };
 
   /**
@@ -55,6 +58,8 @@ function TypeSelection(type) {
    * @returns {TypeSelection} - This instance
    */
   this.moveEndTo = function (node, offset) {
+    this._range.setEnd(node, offset);
+    this._imitateRange();
     return this;
   };
 
@@ -70,8 +75,7 @@ function TypeSelection(type) {
       this._overlays[i].remove();
     }
     this._overlays = [];
-    this._startNode = null;
-    this._startOffset = null;
+    this._range = null;
     return this;
   };
 
@@ -82,6 +86,16 @@ function TypeSelection(type) {
    */
   this.exists = function () {
     return !!this._overlays.length && this._overlays[0].visible();
+  };
+
+  /**
+   *
+   * @returns {TypeSelection} - This instance
+   * @private
+   */
+  this._imitateRange = function () {
+
+    return this;
   };
 
 }).call(TypeSelection.prototype);
