@@ -177,17 +177,33 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
-   * Todo this should just switch start and end nodes and not thrown an error
-   * Todo should also switch offsets then
-   * @returns {boolean}
+   * Will swap start and end containers as well as offsets if
+   * either the containers or the offsets are in the wrong
+   * order (the start container / offset should precede the end)
+   *
+   * @returns {TypeRange} - This instance
    */
   this.ensureStartNodePrecedesEndNode = function () {
-    var isSameNode = this.startContainer === this.endContainer,
-      startPrecedesEnd = this.startContainer.compareDocumentPosition(this.endContainer) & Node.DOCUMENT_POSITION_FOLLOWING;
-    if (isSameNode || startPrecedesEnd) {
-      return true;
+
+    var startIsEnd, startPrecedesEnd;
+    startIsEnd = this.startContainer === this.endContainer;
+
+    if (startIsEnd && this.startOffset <= this.endOffset) {
+      return this;
     }
-    throw new Error('Given startContainer does not precede endContainer.');
+
+    if (startIsEnd && this.startOffset > this.endOffset) {
+      return this._swapOffsets();
+    }
+
+    startPrecedesEnd = this.startContainer.compareDocumentPosition(this.endContainer);
+    startPrecedesEnd = startPrecedesEnd  & Node.DOCUMENT_POSITION_FOLLOWING;
+
+    if (startPrecedesEnd) {
+      this._swapStartAndEnd();
+    }
+
+    return this;
   };
 
   /**
@@ -198,7 +214,7 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
     if (this.startOffset !== 0) {
       var startsAndEndsInSameNode = this.startsAndEndsInSameNode();
       this.startContainer = this.startContainer.splitText(this.startOffset);
-      if(startsAndEndsInSameNode) {
+      if (startsAndEndsInSameNode) {
         this.endContainer = this.startContainer;
         this.endOffset -= this.startOffset;
       }
@@ -286,6 +302,31 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
       offsetWalked += node.nodeValue.length;
     }
     return null;
+  };
+
+  this._swapStartAndEnd = function () {
+    this._swapContainers();
+    this._swapOffsets();
+    return this;
+  };
+
+  this._swapContainers = function () {
+    var swapContainer = this.startContainer;
+    this.startContainer = this.endContainer;
+    this.endContainer = swapContainer;
+    return this;
+  };
+
+  /**
+   *
+   * @returns {*}
+   * @private
+   */
+  this._swapOffsets = function () {
+    var swapOffset = this.startOffset;
+    this.startOffset = this.endOffset;
+    this.endOffset = swapOffset;
+    return this;
   };
 
 }).call(TypeRange.prototype);
