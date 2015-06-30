@@ -8,8 +8,9 @@ var TypeSelectionOverlay = require('./type_selection_overlay');
  */
 function TypeSelection() {
   this._overlays = [];
+  this._elements = [];
   this._range = null;
-  this._startPos = null;
+  this._start = null;
 }
 
 (function () {
@@ -21,10 +22,9 @@ function TypeSelection() {
    * @returns {TypeSelection} - This instance
    */
   this.beginAt = function (x, y) {
-    var range = document.caretRangeFromPoint(x, y);
     this.unselect();
-    this._startPos = {x: x, y: y};
-    return this._beginNewAt(range.startContainer, range.startOffset);
+    this._setStart(x, y);
+    return this._beginNewAt(this._start.node, this._start.offset);
   };
 
   /**
@@ -35,7 +35,8 @@ function TypeSelection() {
    */
   this.moveTo = function (x, y) {
     var range = document.caretRangeFromPoint(x, y);
-    if (x < this._startPos.x || y < this._startPos.y) {
+    this._addElement(range.endContainer);
+    if (x < this._start.x || y < this._start.y) {
       this._moveStartTo(range.endContainer, range.endOffset);
     } else {
       this._moveEndTo(range.endContainer, range.endOffset);
@@ -50,8 +51,9 @@ function TypeSelection() {
    */
   this.unselect = function () {
     this._removeOverlays();
+    this._elements = [];
     this._range = null;
-    this._startPos = null;
+    this._start = null;
     return this;
   };
 
@@ -84,11 +86,11 @@ function TypeSelection() {
    * @returns {TypeSelection} - This instance
    */
   this._moveStartTo = function (node, offset) {
-    if (node === this._range.startContainer && offset === this._range.startOffset) {
-      return this;
-    }
+    //if (node === this._range.startContainer && offset === this._range.startOffset) {
+    //  return this;
+    //}
     this._range.setStart(node, offset);
-    this._range.setEnd(this._range.endContainer, this._range.endOffset);
+    this._range.setEnd(this._start.node, this._start.offset);
     this._imitateRangePrepending();
     return this;
   };
@@ -100,12 +102,26 @@ function TypeSelection() {
    * @returns {TypeSelection} - This instance
    */
   this._moveEndTo = function (node, offset) {
-    if (node === this._range.endContainer && offset === this._range.endOffset) {
-      return this;
-    }
-    this._range.setStart(this._range.startContainer, this._range.startOffset);
+    //if (node === this._range.endContainer && offset === this._range.endOffset) {
+    //  return this;
+    //}
+    this._range.setStart(this._start.node, this._start.offset);
     this._range.setEnd(node, offset);
     this._imitateRangeAppending();
+    return this;
+  };
+
+  /**
+   *
+   * @param {number} x - Absolute horizontal position on the document
+   * @param {number} y - Absolute vertical position on the document
+   * @returns {TypeSelection} - This instance
+   * @private
+   */
+  this._setStart = function (x, y) {
+    var range = document.caretRangeFromPoint(x, y);
+    this._start = {x: x, y: y, node: range.startContainer, offset: range.startOffset};
+    this._addElement(this._start.node);
     return this;
   };
 
@@ -157,6 +173,9 @@ function TypeSelection() {
       overlay,
       i;
 
+    console.clear();
+    console.log(this._range, rects);
+
     // Resize and add overlays to match the range's rects
     for (i = 0; i < rects.length; i += 1) {
       if (this._overlays[i]) {
@@ -175,6 +194,20 @@ function TypeSelection() {
     // Chaining
     return this;
 
+  };
+
+  /**
+   *
+   * @param {Node|Element} el
+   * @returns {TypeSelection} - This instance
+   * @private
+   */
+  this._addElement = function (el) {
+    el = el.nodeType === 3 ? el.parentNode : el;
+    if (this._elements.indexOf(el) === -1) {
+      this._elements.push(el);
+    }
+    return this;
   };
 
   /**
