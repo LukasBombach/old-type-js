@@ -25,7 +25,7 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
  *
  * @type {null|boolean}
  */
-TypeRange.getClientRectsIsBroken = null;
+TypeRange._getClientRectsNeedsFix = null;
 
 (function () {
 
@@ -253,10 +253,10 @@ TypeRange.getClientRectsIsBroken = null;
    * @private
    */
   this._getClientRectsNeedsFix = function () {
-    if (typeof TypeRange.getClientRectsIsBroken !== 'boolean') {
-      TypeRange.getClientRectsIsBroken = this._getClientRectsIsBroken();
+    if (typeof TypeRange._getClientRectsNeedsFix !== 'boolean') {
+      TypeRange._getClientRectsNeedsFix = this._testGetClientRectsNeedsFix();
     }
-    return TypeRange.getClientRectsIsBroken;
+    return TypeRange._getClientRectsNeedsFix;
   };
 
   /**
@@ -274,7 +274,7 @@ TypeRange.getClientRectsIsBroken = null;
    * @returns {boolean}
    * @private
    */
-  this._getClientRectsIsBroken = function () {
+  this._testGetClientRectsNeedsFix = function () {
 
     var range = document.createRange(),
       p1 = DomUtil.addElement('p'),
