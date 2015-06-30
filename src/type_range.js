@@ -253,7 +253,7 @@ TypeRange.getClientRectsIsBroken = null;
    * @private
    */
   this._getClientRectsNeedsFix = function () {
-    if (TypeRange.getClientRectsIsBroken === null) {
+    if (typeof TypeRange.getClientRectsIsBroken !== 'boolean') {
       TypeRange.getClientRectsIsBroken = this._getClientRectsIsBroken();
     }
     return TypeRange.getClientRectsIsBroken;
