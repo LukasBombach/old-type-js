@@ -1,5 +1,6 @@
 'use strict';
 
+var TypeRange = require('./type_range');
 var TypeSelectionOverlay = require('./type_selection_overlay');
 
 /**
@@ -132,13 +133,10 @@ function TypeSelection() {
   this._imitateRangePrepending = function () {
 
     // Required variables
-    var rects = this._range.getClientRects(),
+    var rects = TypeRange.getClientRects(this._range),//this._range.getClientRects(),
       draw,
       overlay,
       i;
-
-    //console.clear();
-    //console.log(this._elements, rects);
 
     // Resize and add overlays to match the range's rects
     for (i = rects.length - 1; i >= 0; i -= 1) {
@@ -146,7 +144,6 @@ function TypeSelection() {
         this._overlays[i].set(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom);
       } else {
         draw = !this._matchesElementDimensions(rects[i]);
-        console.log('————', draw);
         overlay = new TypeSelectionOverlay(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom, draw);
         this._overlays.unshift(overlay);
       }
@@ -221,7 +218,6 @@ function TypeSelection() {
    */
   this._matchesElementDimensions = function (rect) {
     var key = this._stringifyRect(rect);
-    console.log(rect.top, '||', this._elements);
     return this._elements.hasOwnProperty(key);
   };
 

@@ -21,12 +21,6 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
 
 }
 
-/**
- *
- * @type {null|boolean}
- */
-TypeRange._getClientRectsNeedsFix = null;
-
 (function () {
 
   /**
@@ -249,6 +243,12 @@ TypeRange._getClientRectsNeedsFix = null;
 (function () {
 
   /**
+   *
+   * @type {null|boolean}
+   */
+  TypeRange._getClientRectsIsBroken = null;
+
+  /**
    * Will create a range spanning from the offset given as start to the
    * offset given as end, counting the characters contained by the given
    * el. This function should be used with the save method of {TypeRange}.
@@ -341,6 +341,56 @@ TypeRange._getClientRectsNeedsFix = null;
   };
 
   /**
+   * WebKit browsers sometimes create unnecessary and overlapping {ClientRect}s in
+   * {Range.prototype.getClientRects}. This method creates 2 elements, creates a
+   * range and tests for this behaviour.
+   *
+   * From {@link https://github.com/edg2s/rangefix}
+   * (modified)
+   *
+   * Copyright (c) 2014 Ed Sanders under the
+   * terms of The MIT License (MIT)
+   *
+   * @returns {boolean}
+   * @private
+   */
+  TypeRange._testGetClientRectsNeedsFix = function () {
+
+    var range = document.createRange(),
+      p1 = DomUtil.addElement('p'),
+      p2 = DomUtil.addElement('p'),
+      needsFix;
+
+    p1.appendChild(document.createTextNode('aa'));
+    p2.appendChild(document.createTextNode('aa'));
+
+    range.setStart(p1.firstChild, 1);
+    range.setEnd(p2.firstChild, 1);
+
+    needsFix = range.getClientRects().length > 2;
+
+    DomUtil.removeElement(p1);
+    DomUtil.removeElement(p2);
+
+    return needsFix;
+
+  };
+
+  /**
+   * Will return if the browser has a broken model for {Range.prototype.getClientRects}.
+   * This is usually the case with WebKit.
+   *
+   * @returns {boolean}
+   * @private
+   */
+  TypeRange._getClientRectsNeedsFix = function () {
+    if (typeof TypeRange._getClientRectsIsBroken !== 'boolean') {
+      TypeRange._getClientRectsIsBroken = this._testGetClientRectsNeedsFix();
+    }
+    return TypeRange._getClientRectsIsBroken;
+  };
+
+  /**
    * WebKit browsers sometimes create unnecessary and overlapping {ClientRect}s
    * in {Range.prototype.getClientRects}. This method takes a {Range}, fixes
    * the {ClientRect}s (if necessary) and returns them.
@@ -383,56 +433,6 @@ TypeRange._getClientRectsNeedsFix = null;
     Array.prototype.push.apply(rects, partialRange.getClientRects());
 
     return rects;
-
-  };
-
-  /**
-   * Will return if the browser has a broken model for {Range.prototype.getClientRects}.
-   * This is usually the case with WebKit.
-   *
-   * @returns {boolean}
-   * @private
-   */
-  TypeRange._getClientRectsNeedsFix = function () {
-    if (typeof TypeRange._getClientRectsNeedsFix !== 'boolean') {
-      TypeRange._getClientRectsNeedsFix = this._testGetClientRectsNeedsFix();
-    }
-    return TypeRange._getClientRectsNeedsFix;
-  };
-
-  /**
-   * WebKit browsers sometimes create unnecessary and overlapping {ClientRect}s in
-   * {Range.prototype.getClientRects}. This method creates 2 elements, creates a
-   * range and tests for this behaviour.
-   *
-   * From {@link https://github.com/edg2s/rangefix}
-   * (modified)
-   *
-   * Copyright (c) 2014 Ed Sanders under the
-   * terms of The MIT License (MIT)
-   *
-   * @returns {boolean}
-   * @private
-   */
-  TypeRange._testGetClientRectsNeedsFix = function () {
-
-    var range = document.createRange(),
-      p1 = DomUtil.addElement('p'),
-      p2 = DomUtil.addElement('p'),
-      needsFix;
-
-    p1.appendChild(document.createTextNode('aa'));
-    p2.appendChild(document.createTextNode('aa'));
-
-    range.setStart(p1.firstChild, 1);
-    range.setEnd(p2.firstChild, 1);
-
-    needsFix = range.getClientRects().length > 2;
-
-    DomUtil.removeElement(p1);
-    DomUtil.removeElement(p2);
-
-    return needsFix;
 
   };
 
