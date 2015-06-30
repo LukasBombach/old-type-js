@@ -22,6 +22,7 @@ function TypeSelection() {
    */
   this.beginAt = function (x, y) {
     var range = document.caretRangeFromPoint(x, y);
+    this.unselect();
     this._startPos = {x: x, y: y};
     return this._beginNewAt(range.startContainer, range.startOffset);
   };
@@ -70,7 +71,6 @@ function TypeSelection() {
    * @returns {TypeSelection} - This instance
    */
   this._beginNewAt = function (node, offset) {
-    this.unselect();
     this._range = window.document.createRange();
     this._range.setStart(node, offset);
     this._range.setEnd(node, offset);
@@ -84,9 +84,9 @@ function TypeSelection() {
    * @returns {TypeSelection} - This instance
    */
   this._moveStartTo = function (node, offset) {
-    //if (node === this._range.startContainer && offset === this._range.startOffset) {
-    //  return this;
-    //}
+    if (node === this._range.startContainer && offset === this._range.startOffset) {
+      return this;
+    }
     this._range.setStart(node, offset);
     this._range.setEnd(this._range.endContainer, this._range.endOffset);
     this._imitateRangePrepending();
@@ -100,9 +100,9 @@ function TypeSelection() {
    * @returns {TypeSelection} - This instance
    */
   this._moveEndTo = function (node, offset) {
-    //if (node === this._range.endContainer && offset === this._range.endOffset) {
-    //  return this;
-    //}
+    if (node === this._range.endContainer && offset === this._range.endOffset) {
+      return this;
+    }
     this._range.setStart(this._range.startContainer, this._range.startOffset);
     this._range.setEnd(node, offset);
     this._imitateRangeAppending();
@@ -118,10 +118,12 @@ function TypeSelection() {
    */
   this._imitateRangePrepending = function () {
 
+    // Required variables
     var rects = this._range.getClientRects(),
       overlay,
       i;
 
+    // Resize and add overlays to match the range's rects
     for (i = rects.length - 1; i >= 0; i -= 1) {
       if (this._overlays[i]) {
         this._overlays[i].set(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom);
@@ -131,10 +133,12 @@ function TypeSelection() {
       }
     }
 
+    // Remove overlays prepending the current range's rects
     while (this._overlays.length > rects.length) {
       this._overlays.shift().remove();
     }
 
+    // Chaining
     return this;
 
   };
@@ -148,23 +152,27 @@ function TypeSelection() {
    */
   this._imitateRangeAppending = function () {
 
+    // Required variables
     var rects = this._range.getClientRects(),
       overlay,
       i;
 
+    // Resize and add overlays to match the range's rects
     for (i = 0; i < rects.length; i += 1) {
-      if (!this._overlays[i]) {
+      if (this._overlays[i]) {
+        this._overlays[i].set(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom);
+      } else {
         overlay = new TypeSelectionOverlay(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom);
         this._overlays.push(overlay);
-      } else {
-        this._overlays[i].set(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom);
       }
     }
 
+    // Remove overlays coming after the current range's rects
     while (this._overlays.length > rects.length) {
       this._overlays.pop().remove();
     }
 
+    // Chaining
     return this;
 
   };
