@@ -281,8 +281,12 @@ TypeRange._getClientRectsNeedsFix = null;
   };
 
   /**
-   * Todo Check if selection is actually inside editor and return null if not
-   * @returns {TypeRange}
+   * Will read the current {Selection} on the document and create a {TypeRange}
+   * spanning over the {Range}(s) contained by the selection. Will return
+   * null if there is no selection on the document.
+   * todo Check if selection is actually inside editor and return null if not
+   *
+   * @returns {TypeRange|null} - A {TypeRange} instance or null
    */
   TypeRange.fromCurrentSelection = function () {
     var sel = document.getSelection();
@@ -290,9 +294,16 @@ TypeRange._getClientRectsNeedsFix = null;
   };
 
   /**
-   * Todo This is a solution for a single case, find the pattern of this and process all cases
-   * @param {Range} range
-   * @returns {TypeRange}
+   * Will create a {TypeRange} based on the start and end containers and
+   * offsets of the given {Range}. This will also take care of browser
+   * issues (especially WebKit) when the range is fetched from a selection
+   * that ends at the end of an element.
+   * todo The "fix" is a solution for a single case
+   * todo find the pattern of this and process all cases
+   *
+   * @param {Range} range - The {Range} that should be <em>migrated</em>
+   *     to a {TypeRange}
+   * @returns {TypeRange} - The {TypeRange} equal to the given {Range}
    */
   TypeRange.fromRange = function (range) {
     var endContainer = range.endContainer,
@@ -305,8 +316,11 @@ TypeRange._getClientRectsNeedsFix = null;
   };
 
   /**
+   * Will find the first and last text nodes inside a given element and
+   * span a range beginning at the start of the first text node and end
+   * at the end of the last text node.
    *
-   * @param {HTMLElement} el
+   * @param {HTMLElement} el - The element
    * @returns {TypeRange}
    */
   TypeRange.fromElement = function (el) {
