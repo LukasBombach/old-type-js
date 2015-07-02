@@ -21,8 +21,8 @@ function TypeSelection() {
    */
   this.beginAt = function (x, y) {
     this.unselect();
-    this._setStart(x, y);
-    return this._beginNewAt(this._start.node, this._start.offset);
+    this._setAnchor(x, y);
+    return this._beginNewAt(this._anchor.node, this._anchor.offset);
   };
 
   /**
@@ -34,7 +34,7 @@ function TypeSelection() {
   this.moveTo = function (x, y) {
     var range = document.caretRangeFromPoint(x, y);
     this._addElement(range.endContainer);
-    if (x < this._start.x || y < this._start.y) {
+    if (x < this._anchor.x || y < this._anchor.y) {
       this._moveStartTo(range.endContainer, range.endOffset);
     } else {
       this._moveEndTo(range.endContainer, range.endOffset);
@@ -51,7 +51,9 @@ function TypeSelection() {
     this._removeOverlays();
     this._elements = {};
     this._range = null;
+    this._anchor = null;
     this._start = null;
+    this._end = null;
     return this;
   };
 
@@ -88,7 +90,7 @@ function TypeSelection() {
     //  return this;
     //}
     this._range.setStart(node, offset);
-    this._range.setEnd(this._start.node, this._start.offset);
+    this._range.setEnd(this._anchor.node, this._anchor.offset);
     this._imitateRangePrepending();
     return this;
   };
@@ -103,23 +105,54 @@ function TypeSelection() {
     //if (node === this._range.endContainer && offset === this._range.endOffset) {
     //  return this;
     //}
-    this._range.setStart(this._start.node, this._start.offset);
+    this._range.setStart(this._anchor.node, this._anchor.offset);
     this._range.setEnd(node, offset);
     this._imitateRangeAppending();
     return this;
   };
 
   /**
+   * Sets the anchor node, offset and position in this screen for this selection.
+   * When a user draws a selection, what is being selected depends on whether he /
+   * she moves his / her mouse before or behind the point he / she started to draw
+   * the selection. The information in the anchor needs to be saved to implement
+   * this behaviour.
    *
    * @param {number} x - Absolute horizontal position on the document
    * @param {number} y - Absolute vertical position on the document
    * @returns {TypeSelection} - This instance
    * @private
    */
-  this._setStart = function (x, y) {
+  this._setAnchor = function (x, y) {
     var range = document.caretRangeFromPoint(x, y);
-    this._start = {x: x, y: y, node: range.startContainer, offset: range.startOffset};
-    this._addElement(this._start.node);
+    this._anchor = {x: x, y: y, node: range.startContainer, offset: range.startOffset};
+    this._addElement(this._anchor.node);
+    return this;
+  };
+
+  /**
+   * Sets the start node and offset for this selection
+   *
+   * @param {Node} node - A text node
+   * @param {number} offset - The character offset inside the text node
+   * @returns {TypeSelection} - This instance
+   * @private
+   */
+  this._setStart = function (node, offset) {
+    this._start = {node: node, offset: offset};
+    return this;
+  };
+
+  /**
+   * Sets the end node and offset for this selection
+   *
+   * @param {Node} node - A text node
+   * @param {number} offset - The character offset inside the text node
+   * @returns {TypeSelection} - This instance
+   * @private
+   */
+  this._setStart = function (node, offset) {
+    this._end = {node: node, offset: offset};
     return this;
   };
 
