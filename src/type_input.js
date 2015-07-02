@@ -32,6 +32,7 @@ function TypeInput(type) {
 
   this._loadFilters();
   this._bindEvents();
+
 }
 
 (function () {
@@ -72,12 +73,7 @@ function TypeInput(type) {
   this._bindKeyDownEvents = function () {
 
     this._el.addEventListener('keydown', function (e) {
-      this._processFilters(e);
-    }.bind(this), false);
-
-    // TODO REMOVE DEV HACK
-    document.body.addEventListener('keydown', function (e) {
-      this._processFilters(e);
+      this._processFilterPipeline(e);
     }.bind(this), false);
 
     return this;
@@ -118,18 +114,18 @@ function TypeInput(type) {
 
     function startDraggingSelection(e) {
       e.preventDefault();
+      self._caret._hide();
       self._selection.beginAt(e.clientX, e.clientY);
       document.addEventListener('mousemove', dragSelection, false);
       document.addEventListener('mouseup', stopDraggingSelection, false);
     }
 
     function caret(e) {
-      if (self._selection.exists()) {
-        self._caret._hide();
-      } else {
+      if (self._selection.collapsed()) {
         self._moveCaretToMousePosition(e.clientX, e.clientY);
-        self._focusInput();
+        self._caret._blink();
       }
+      self._focusInput();
     }
 
     this._type.getRoot().addEventListener('mousedown', startDraggingSelection, false);
@@ -139,27 +135,26 @@ function TypeInput(type) {
 
   };
 
-
-
   /**
-   * Takes a {KeyboardEvent} and passes it to all registered
-   * filters. Returns the resulting {TypeInputEvent}
+   * Takes a {KeyboardEvent} and creates a {TypeInputEvent}. Then
+   * iterates over all registered input filters in the pipeline and
+   * has them process it in order. Will stop processing the event
+   * when any handler of an input filter cancels the event. Returns
+   * the resulting {TypeInputEvent}
    *
    * @param {KeyboardEvent} e
    * @returns {TypeInputEvent}
    * @private
    */
-  this._processFilters = function (e) {
+  this._processFilterPipeline = function (e) {
 
-    var inputEvent, key, filters, name, func;
+    var inputEvent = TypeInputEvent.fromKeyDown(e),
+      name;
 
-    inputEvent = TypeInputEvent.fromKeyDown(e);
-    filters = this._filters;
-    key = inputEvent.key;
-
-    for (name in filters) {
-      if (filters.hasOwnProperty(name) && (func = filters[name].keys[key])) {
-        if (filters[name][func](inputEvent) === false || inputEvent.cancel) {
+    for (name in this._filters) {
+      if (this._filters.hasOwnProperty(name)) {
+        this._processFilter(this._filters[name], inputEvent);
+        if (inputEvent.canceled) {
           e.preventDefault();
           break;
         }
@@ -168,6 +163,23 @@ function TypeInput(type) {
 
     return inputEvent;
 
+  };
+
+  /**
+   *
+   * @param filter
+   * @param {TypeInputEvent} e
+   * @private
+   */
+  this._processFilter = function (filter, e) {
+    var func = filter.keys[e.key];
+    if (func) {
+      filter[func](e);
+    }
+    if (!e.canceled && filter.keys.all) {
+      filter[filter.keys.all](e)
+    }
+    return e;
   };
 
   /**

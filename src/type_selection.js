@@ -51,7 +51,6 @@ function TypeSelection() {
 
   /**
    * Removes all selection overlays and resets internal variables.
-   *
    * @returns {TypeSelection} - This instance
    */
   this.unselect = function () {
@@ -63,15 +62,46 @@ function TypeSelection() {
   };
 
   /**
+   * Returns the {Range} this selection spans over or null if nothing has been
+   * selected yet.
+   * @returns {Range|null}
+   */
+  this.getRange = function () {
+    return this._range;
+  };
+
+  /**
+   * Returns the start node and offset of this selection.
+   * @returns {{node: Node, offset: number}|null}
+   */
+  this.getStart = function () {
+    if (this._range) {
+      return {node: this._range.startContainer, offset: this._range.startOffset};
+    }
+    return null;
+  };
+
+  /**
+   * Returns the end node and offset of this selection.
+   * @returns {{node: Node, offset: number}|null}
+   */
+  this.getEnd = function () {
+    if (this._range) {
+      return {node: this._range.endContainer, offset: this._range.endOffset};
+    }
+    return null;
+  };
+
+  /**
    * Returns whether or not this selection is visible. By checking if there currently
    * are any overlays and if the first overlay is actually visible. There should be
    * no case where there are visible overlays but the first overlay wouldn't be visible,
    * so this is a quick and performant way to check for the selection's visibility.
    *
-   * @returns {boolean}
+   * @returns {boolean} - True if selection is hidden, false if there is a selection
    */
-  this.exists = function () {
-    return !!this._overlays.length && this._overlays[0].visible();
+  this.collapsed = function () {
+    return !this._overlays.length || !this._overlays[0].visible();
   };
 
   /**
