@@ -344,6 +344,37 @@ function Caret(options) {
   };
 
   /**
+   * Returns the offset of the caret in the text
+   * To be specific, this returns the character offset relative to the
+   * given constraining element.
+   * todo implement
+   * @returns {number|null}
+   */
+  this.getOffset = function () {
+
+  };
+
+  /**
+   * Returns the offset of the caret relative to its current text node
+   * todo Use this method on every public access to this variable
+   * todo make offset private
+   * @returns {number|null}
+   */
+  this.getNodeOffset = function () {
+    return this.offset;
+  };
+
+  /**
+   * Getter for this instance's text node
+   * todo Use this method on every public access to this variable
+   * todo make textNode private
+   * @returns {Node|null}
+   */
+  this.getNode = function () {
+    return this.textNode;
+  };
+
+  /**
    * Sets the offset and displays the caret at the according
    * position
    *

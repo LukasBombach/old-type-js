@@ -5,7 +5,7 @@ var Settings = require('./settings');
 var singleton;
 
 /**
- *
+ * todo holy fuck. refactor me.
  * @constructor
  */
 function DomUtilities() {
@@ -649,6 +649,51 @@ function DomUtilities() {
    */
   this.isNode = function (obj) {
     return !!(obj && obj.nodeType);
+  };
+
+
+  /**
+   * todo constraining node
+   * @param {Node} fromNode
+   * @param {number} offset
+   * @param {number} [startOffset]
+   * @returns {{node:Node,offset:number}|null} - The node and the offset to its
+   *     start or null if no node could be found
+   */
+  this.textNodeAt = function (fromNode, offset, startOffset) {
+
+    var node = fromNode,
+      offsetWalked = 0,
+      length;
+
+    startOffset = startOffset || 0;
+    offset = offset >= 0 ? offset-startOffset : offset+startOffset;
+
+    if (fromNode.nodeType === 3 && offset >= 0 && offset <= fromNode.nodeValue.length) {
+      return { node: fromNode, offset: offset };
+    }
+
+    if (offset < 0) {
+      while (node = this.prevTextNode(node)) {
+        length = node.nodeValue.length;
+        if (offsetWalked - length <= offset) {
+          return { node: node, offset: length+(offset-offsetWalked) };
+        }
+        offsetWalked -= length;
+      }
+
+    } else {
+      while (node = this.nextTextNode(node)) {
+        length = node.nodeValue.length;
+        if (offsetWalked + length >= offset) {
+          return { node: node, offset: offset-offsetWalked };
+        }
+        offsetWalked += length;
+      }
+    }
+
+    return null;
+
   };
 
   /**

@@ -1,6 +1,7 @@
 'use strict';
 
 var DomUtil = require('./dom_utilities');
+var TypeRange = require('./type_range');
 
 function TypeContents() {
 }
@@ -52,7 +53,7 @@ function TypeContents() {
    *     characters left from the caret, a positive number from the right.
    * @returns {Caret}
    */
-  this.remove = function (textNode, offset, numChars) {
+  /*this.remove = function (textNode, offset, numChars) {
 
     var parent, prev, str;
 
@@ -93,21 +94,30 @@ function TypeContents() {
 
     return this;
 
-  };
+  };*/
 
   /**
    *
-   * @param {TypeRange} range
+   * remove(range)
+   * remove(caret, -1)
+   *
+   * @param {TypeRange|Caret} range
+   * @param {number} [numChars]
    */
-  this.removeRange = function (range) {
+  this.remove = function (range, numChars) {
 
-    var startNode = range.splitStartContainer(),
-      endNode = range.splitEndContainer(),
-      startParent = startNode.parentNode,
-      current = endNode,
-      prev = endNode,
-      startRemoved = false,
-      currentParent;
+    var startNode, endNode, startParent, current, prev, startRemoved, currentParent;
+
+    if (arguments.length === 2) {
+      range = TypeRange.fromCaret(range, numChars);
+    }
+
+    startNode = range.splitStartContainer();
+    endNode = range.splitEndContainer();
+    startParent = startNode.parentNode;
+    current = endNode;
+    prev = endNode;
+    startRemoved = false;
 
     while (!startRemoved) {
 

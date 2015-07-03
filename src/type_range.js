@@ -368,17 +368,16 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
    *
    * @param {HTMLElement|Node} el - The root element from which the start
    *     and end offsets should be counted
-   * @param {number} start - The offsets (number of characters) where the
+   * @param {number} startOffset - The offsets (number of characters) where the
    *     selection should start
-   * @param {number} end - The offsets (number of characters) where the
+   * @param {number} endOffset - The offsets (number of characters) where the
    *     selection should end
    * @returns {TypeRange} - A {TypeRange} instance
    */
-  TypeRange.fromPositions = function (el, start, end) {
-    var startInfo, endInfo;
-    startInfo = TypeRange._nodeFromOffset(el, start);
-    endInfo = TypeRange._nodeFromOffset(el, end);
-    return new TypeRange(startInfo.node, startInfo.offset, endInfo.node, endInfo.offset);
+  TypeRange.fromPositions = function (el, startOffset, endOffset) {
+    var start = DomUtil.textNodeAt(el, startOffset),
+      end = DomUtil.textNodeAt(el, endOffset);
+    return new TypeRange(start.node, start.offset, end.node, end.offset);
   };
 
   /**
@@ -415,6 +414,19 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
       endOffset = endContainer.length;
     }
     return new TypeRange(range.startContainer, range.startOffset, endContainer, endOffset);
+  };
+
+  /**
+   *
+   * @param {Caret} caret
+   * @param {number} selectedChars
+   * @returns {TypeRange}
+   */
+  TypeRange.fromCaret = function (caret, selectedChars) {
+    var startNode = caret.getNode(),
+      startOffset = caret.getNodeOffset(),
+      end = DomUtil.textNodeAt(startNode, selectedChars, startOffset);
+    return new TypeRange(startNode, startOffset, end.node, end.offset);
   };
 
   /**
@@ -528,32 +540,6 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
 
     return rects;
 
-  };
-
-  /**
-   * Will walk through and count all visible characters in the given
-   * containingNode and return the text node where the offset ends in.
-   * The method will also return the remaining offset inside that text
-   * node.
-   *
-   * @param {Element} containingElement - The element of which the text
-   *     should be walked through
-   * @param {number} offset - The offset of the character of the text
-   *     contained by the given element
-   * @returns {{node: Node, offset: number}|null} - The text node and
-   *     offset in which the given offset ends
-   * @private
-   */
-  TypeRange._nodeFromOffset = function (containingElement, offset) {
-    var node = containingElement, offsetWalked = 0, length;
-    while (node = DomUtil.nextTextNode(node)) {
-      length = node.nodeValue.length;
-      if (offsetWalked + length >= offset) {
-        return { node: node, offset: offset-offsetWalked };
-      }
-      offsetWalked += length;
-    }
-    return null;
   };
 
 }).call();
