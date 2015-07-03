@@ -12,8 +12,6 @@ var CommandFilter = require('./input_filters/command');
 
 /**
  * todo pasting
- * todo backspace und delete
- * todo verhalten bei bestimmten elementen (br löschen oder am löschen wenn man am anfang eines elements ist)
  * todo trigger events
  *
  * @param {Type} type
