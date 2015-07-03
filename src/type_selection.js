@@ -50,6 +50,59 @@ function TypeSelection() {
   };
 
   /**
+   * todo we should really use type ranges and much of this implementation should go there
+   * todo this does not work when spanning over multiple text nodes (for instance in case of formatting)
+   * todo since multiple nodes making up a single text or sometimes even words, maybe there should be an abstraction and layer / class for this
+   * @param x
+   * @param y
+   * @returns {*}
+   */
+  this.selectWordAt = function (x, y) {
+
+    var charAtStart, charAtEnd,
+      whitespace = new RegExp('\\s'),
+      endLength = this._range.endContainer.nodeValue.length,
+      startOffset = this._range.startOffset,
+      endOffset = this._range.endOffset,
+      startFound = false,
+      endFound = false;
+
+    this.beginAt(x, y);
+
+    do {
+      charAtStart = this._range.startContainer.nodeValue.charAt(this._range.startOffset - 1);
+
+      if (startOffset > 1 && !whitespace.test(charAtStart)) {
+        if (startOffset > 1) {
+          startOffset -= 1;
+          this._range.setStart(this._range.startContainer, startOffset);
+        }
+      } else {
+        startFound = true;
+      }
+
+    } while (!startFound);
+
+    do {
+      charAtEnd = this._range.endContainer.nodeValue.charAt(this._range.endOffset);
+
+      if (endOffset < endLength && !whitespace.test(charAtEnd)) {
+        if (endOffset < endLength) {
+          endOffset += 1;
+          this._range.setEnd(this._range.endContainer, endOffset);
+        }
+      } else {
+        endFound = true;
+      }
+
+    } while (!endFound);
+
+    this._imitateRangeAppending();
+
+    return this;
+  };
+
+  /**
    * Removes all selection overlays and resets internal variables.
    * @returns {TypeSelection} - This instance
    */

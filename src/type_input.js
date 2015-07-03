@@ -130,8 +130,13 @@ function TypeInput(type) {
       self._focusInput();
     }
 
+    function selectWord(e) {
+      self._selection.selectWordAt(e.clientX, e.clientY);
+    }
+
     this._type.getRoot().addEventListener('mousedown', startDraggingSelection, false);
     this._type.getRoot().addEventListener('mouseup', caret, false);
+    this._type.getRoot().addEventListener('dblclick', selectWord, false);
 
     return this;
 
