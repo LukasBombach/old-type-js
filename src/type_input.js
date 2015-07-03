@@ -8,7 +8,7 @@ var TypeInputEvent = require('./events/input');
 
 var CaretFilter = require('./input_filters/caret');
 var RemoveFilter = require('./input_filters/remove');
-var InsertFilter = require('./input_filters/insert');
+var CommandFilter = require('./input_filters/command');
 
 /**
  * todo pasting
@@ -45,9 +45,9 @@ function TypeInput(type) {
    */
   this._loadFilters = function () {
     this._filters = this._filters || {};
+    this._filters.cmd = new CommandFilter(this._type, this);
     this._filters.caret = new CaretFilter(this._type, this);
     this._filters.remove = new RemoveFilter(this._type, this);
-    //this._filters.insert = new RemoveFilter(this._type, this);
     return this;
   };
 

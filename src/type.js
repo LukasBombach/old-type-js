@@ -4,7 +4,7 @@ var Type = require('./core');
 
 // Load plugins
 require('./event');
-require('./cmd');
+//require('./cmd');
 
 // Expose Type
 window.Type = Type;

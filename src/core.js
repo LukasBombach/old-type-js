@@ -3,6 +3,7 @@
 var TypeEnv = require('./type_environment');
 var DomUtil = require('./dom_utilities');
 var TypeContents = require('./type_contents');
+var Formatting = require('./formatting');
 var Caret = require('./caret');
 var TypeSelection = require('./type_selection');
 var TypeInput = require('./type_input');
@@ -33,6 +34,7 @@ function Type(options) {
   // Set up core editor modules
   this._plugins = {};
   this._contents = new TypeContents();
+  this._formatting = new Formatting(this);
   this._caret = new Caret(this._root);
   this._selection = new TypeSelection(this);
   this._input = new TypeInput(this);
@@ -238,6 +240,15 @@ Type.env = TypeEnv;
    */
   this.getContents = function () {
     return this._contents;
+  };
+
+  /**
+   * Getter for this instance's text
+   *
+   * @returns {Formatting}
+   */
+  this.getFormatting = function () {
+    return this._formatting;
   };
 
   /**
