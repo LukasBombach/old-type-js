@@ -26,7 +26,9 @@ function InsertFilter(type, input) {
    * @param {TypeInputEvent} e
    */
   this.insert = function (e) {
-
+    //this._contents.insertText(this._caret.textNode, this._caret.offset, this._el.textContent);
+    //this._caret._setOffset(this._caret.offset + this._el.textContent.length); // todo better api
+    //this._el.innerHTML = '';
   };
 
 }).call(InsertFilter.prototype);

@@ -103,21 +103,29 @@ function TypeContents() {
 
     var startNode = range.splitStartContainer(),
       endNode = range.splitEndContainer(),
-      current = startNode,
-      next = startNode;
+      startParent = startNode.parentNode,
+      current = endNode,
+      prev = endNode,
+      startRemoved = false,
+      currentParent;
 
-    if (startNode === endNode) {
-      DomUtil.removeVisible(startNode);
-      return this;
+    while (!startRemoved) {
+
+      prev = DomUtil.prevTextNode(current);
+
+      if (current !== startNode && current === DomUtil.firstTextNode(current.parentNode)) {
+        currentParent = current.parentNode;
+        DomUtil.moveAfter(prev, current.parentNode.childNodes);
+        DomUtil.removeVisible(currentParent);
+      }
+
+      startRemoved = current === startNode;
+      DomUtil.removeVisible(current);
+      current = prev;
+
     }
 
-    do {
-      next = DomUtil.nextTextNode(current);
-      DomUtil.removeVisible(current);
-      current = next;
-    } while (next && next !== endNode);
-
-    DomUtil.removeVisible(endNode);
+    startParent.normalize();
 
     return this;
 

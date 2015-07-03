@@ -199,9 +199,9 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
     }
 
     startPrecedesEnd = this.startContainer.compareDocumentPosition(this.endContainer);
-    startPrecedesEnd = startPrecedesEnd  & Node.DOCUMENT_POSITION_FOLLOWING;
+    startPrecedesEnd = startPrecedesEnd & Node.DOCUMENT_POSITION_FOLLOWING;
 
-    if (startPrecedesEnd) {
+    if (!startPrecedesEnd) {
       this._swapStartAndEnd();
     }
 

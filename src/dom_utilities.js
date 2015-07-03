@@ -37,6 +37,8 @@ function DomUtilities() {
    * siblings (in that order) to find the next node in the DOM tree as
    * displayed by the document flow.
    *
+   * todo use next(), this is deprecated
+   *
    * @param {Node} node - The node from which the search should start
    * @param {Object|Node} [options] - If an object is passed, it should
    *     contain settings determining what node to return, see specifics
@@ -117,6 +119,8 @@ function DomUtilities() {
    * as first argument. Will traverse the children, siblings and parents'
    * siblings (in that order) to find the next node in the DOM tree as
    * displayed by the document flow.
+   *
+   * todo https://developer.mozilla.org/en-US/docs/Web/API/Document/createTreeWalker
    *
    * @param {Node} node - The node from which the search should start
    * @param {Object|Node} [options] - If an object is passed, it should
@@ -347,7 +351,7 @@ function DomUtilities() {
   /**
    *
    * @param {Node} node
-   * @param {Node} constrainingNode
+   * @param {Node} [constrainingNode]
    * @returns {Node|null|*}
    */
   this.prevTextNode = function (node, constrainingNode) {
@@ -476,29 +480,15 @@ function DomUtilities() {
   };
 
   /**
-   *
+   * Todo use this.moveAfter()
    * @param {Node} el
    * @returns {DomUtilities}
    */
   this.unwrap = function (el) {
 
-    var prev     = el.previousSibling,
-      next       = el.nextSibling,
+    var next     = el.nextSibling,
       parent     = el.parentNode,
       childNodes = el.childNodes;
-
-    // Commented out in favour of normalize()
-    // Todo decide to use normalize or my own methods
-
-    //if (this.isTextNode(prev, el.firstChild)) {
-    //  prev.nodeValue += el.firstChild.nodeValue;
-    //  el.parentNode.removeChild(el.firstChild);
-    //}
-
-    //if (this.isTextNode(next, el.lastChild)) {
-    //  next.nodeValue = el.lastChild.nodeValue + next.nodeValue;
-    //  el.parentNode.removeChild(el.lastChild);
-    //}
 
     if (next) {
       while (childNodes.length) {
@@ -512,6 +502,34 @@ function DomUtilities() {
 
     parent.removeChild(el);
     parent.normalize();
+
+    return this;
+  };
+
+  /**
+   *
+   * @param reference
+   * @param elems
+   * @returns {*}
+   */
+  this.moveAfter = function (reference, elems) {
+
+    var i;
+
+    var next = reference.nextSibling,
+      parent = reference.parentNode;
+
+    elems = !elems.length ? [elems] : Array.prototype.slice.call(elems, 0);
+
+    if (next) {
+      for (i = 0; i < elems.length; i += 1) {
+        parent.insertBefore(elems[i], next);
+      }
+    } else {
+      for (i = 0; i < elems.length; i += 1) {
+        parent.appendChild(elems[i]);
+      }
+    }
 
     return this;
   };
