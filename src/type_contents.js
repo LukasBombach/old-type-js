@@ -97,6 +97,7 @@ function TypeContents() {
   };*/
 
   /**
+   * todo refactor var names "a" and "b"
    *
    * remove(range)
    * remove(caret, -1)
@@ -106,7 +107,7 @@ function TypeContents() {
    */
   this.remove = function (range, numChars) {
 
-    var startNode, endNode, startParent, current, prev, startRemoved, currentParent;
+    var startNode, endNode, startParent, current, prev, startRemoved, currentParent, a, b;
 
     if (arguments.length === 2) {
       range = TypeRange.fromCaret(range, numChars);
@@ -123,7 +124,10 @@ function TypeContents() {
 
       prev = DomUtil.prevTextNode(current);
 
-      if (current !== startNode && current === DomUtil.firstTextNode(current.parentNode)) {
+      a = (current === endNode && range.endOffset === 0);
+      b = (current !== startNode && current === DomUtil.firstTextNode(current.parentNode));
+
+      if (a || b) {
         currentParent = current.parentNode;
         DomUtil.moveAfter(prev, current.parentNode.childNodes);
         DomUtil.removeVisible(currentParent);

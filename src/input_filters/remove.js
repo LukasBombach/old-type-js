@@ -30,16 +30,15 @@ function RemoveFilter(type, input) {
     var range;
 
     if (this._selection.collapsed()) {
-      //this._contents.remove(this._caret.textNode, this._caret.offset, -1);
-      this._contents.remove(this._caret, -1);
-      this._caret.moveLeft();
+      range = TypeRange.fromCaret(this._caret, -1);
     } else {
       range = TypeRange.fromRange(this._selection.getRange()); // todo TypeRange.fromSelection
-      this._caret.moveTo(range.startContainer, range.startOffset); // todo do not use native low level stuff
       this._selection.unselect();
       this._caret._blink();
-      this._contents.remove(range);
     }
+
+    this._caret.moveTo(range.startContainer, range.startOffset); // todo do not use native low level stuff
+    this._contents.remove(range);
 
     e.cancel();
 
