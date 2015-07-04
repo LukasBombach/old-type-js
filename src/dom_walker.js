@@ -3,7 +3,7 @@
 var Util = require('./type_utilities');
 
 function DomWalker(node, options) {
-  this._setOptions(options);
+  this.setOptions(options, false);
   this.setNode(node, false);
   this.setFilter(this._options.filter, false);
   this._updateTreeWalker();
@@ -13,7 +13,7 @@ function DomWalker(node, options) {
 
   /**
    *
-   * @type {{text: string}}
+   * @type {Object}
    * @private
    */
   this._filterFunctions = {
@@ -58,12 +58,11 @@ function DomWalker(node, options) {
    * @param {boolean} [updateTreeWalker]
    */
   this.setNode = function (node, updateTreeWalker) {
-    updateTreeWalker = updateTreeWalker !== false;
     if (!node.nodeType) {
       throw new Error('The given node is not a DOM node');
     }
     this._node = node;
-    if (updateTreeWalker) {
+    if (updateTreeWalker !== false) {
       this._updateTreeWalker();
     }
     return this;
@@ -75,9 +74,8 @@ function DomWalker(node, options) {
    * @param {boolean} [updateTreeWalker]
    */
   this.setFilter = function (filter, updateTreeWalker) {
-    updateTreeWalker = updateTreeWalker !== false;
     this._filter = typeof filter === 'string' ? this._filterFunctions[filter] : filter;
-    if (updateTreeWalker) {
+    if (updateTreeWalker !== false) {
       this._updateTreeWalker();
     }
     return this;
@@ -85,13 +83,11 @@ function DomWalker(node, options) {
 
   /**
    *
-   * @returns {Node|null}
+   * @param options
+   * @param updateTreeWalker
+   * @returns {*}
    */
-  this.getNode = function () {
-    return this._node;
-  };
-
-  this._setOptions = function (options) {
+  this.setOptions = function (options, updateTreeWalker) {
 
     // If no options parameter has been passed
     options = options || {};
@@ -106,11 +102,27 @@ function DomWalker(node, options) {
       options = {filter: options};
     }
 
-    // Save options and allow chaining
+    // Save options and allow
     this._options = options;
+
+    // updating options should update the tree walker
+    if (updateTreeWalker !== false) {
+      this._updateTreeWalker();
+    }
+
+    // Chaining
     return this;
 
   };
+
+  /**
+   *
+   * @returns {Node|null}
+   */
+  this.getNode = function () {
+    return this._node;
+  };
+
 
   /**
    * Returns true if a give node is a text node and its content is not
@@ -142,7 +154,7 @@ function DomWalker(node, options) {
    * @private
    */
   this._treeWalkerShow = function () {
-    return this._filter === 'text' ? NodeFilter.SHOW_TEXT : NodeFilter.SHOW_ELEMENT;
+    return this._filter === this._filterFunctions.text ? NodeFilter.SHOW_TEXT : NodeFilter.SHOW_ELEMENT;
   };
 
   /**
