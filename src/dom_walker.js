@@ -174,6 +174,8 @@ function DomWalker(node, options) {
    * siblings (in that order) to find the next node in the DOM tree as
    * displayed by the document flow.
    *
+   * todo make returnMe 3rd parameter
+   *
    * @param {Node} node - The node from which the search should start
    * @param {Object|Node} [options] - If an object is passed, it should
    *     contain settings determining what node to return, see specifics
@@ -246,6 +248,8 @@ function DomWalker(node, options) {
    * siblings (in that order) to find the next node in the DOM tree as
    * displayed by the document flow.
    *
+   * todo make returnMe 3rd parameter
+   *
    * @param {Node} node - The node from which the search should start
    * @param {Object|Node} [options] - If an object is passed, it should
    *     contain settings determining what node to return, see specifics
@@ -313,11 +317,5 @@ function DomWalker(node, options) {
   };
 
 }).call(DomWalker.prototype);
-
-DomWalker.treeWalkerAvailable = (function () { return !!document.createTreeWalker; }());
-
-DomWalker.NONE = 'none';
-DomWalker.TEXT = 'text';
-DomWalker.FUNC = 'function';
 
 module.exports = DomWalker;
