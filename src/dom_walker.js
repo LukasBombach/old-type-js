@@ -123,7 +123,6 @@ function DomWalker(node, options) {
     return this._node;
   };
 
-
   /**
    * Returns true if a give node is a text node and its content is not
    * entirely whitespace.
@@ -135,7 +134,6 @@ function DomWalker(node, options) {
   this._isTextNodeWithContents = function (node) {
     return node.nodeType === this._TEXT_NODE && /[^\t\n\r ]/.test(node.textContent);
   };
-
 
   /**
    *
@@ -163,7 +161,7 @@ function DomWalker(node, options) {
    * @private
    */
   this._treeWalkerFilter = function () {
-    if (typeof this._filter === 'function') {
+    if (this._filter && this._filter !== this._filterFunctions.text) {
       return {acceptNode: this._filter};
     }
   };
