@@ -55,10 +55,7 @@ function DomWalker(node, options) {
    */
   this.next = function () {
 
-    var node;
-
-    this.options.returnMe = false;
-    node = this._nextNode(this._node, this.options);
+    var node = this._nextNode(this._node, this.options);
 
     if (node === null) {
       return null;
@@ -75,10 +72,7 @@ function DomWalker(node, options) {
    */
   this.prev = function () {
 
-    var node;
-
-    this.options.returnMe = false;
-    node = this._previousNode(this._node, this.options);
+    var node = this._previousNode(this._node, this.options);
 
     if (node === null) {
       return null;
@@ -192,7 +186,7 @@ function DomWalker(node, options) {
    *     passing a DOM node as this parameter, traversing up will stop at
    *     this node and return null. This is useful when you want to permit
    *     traversing outside the editor's root node.
-   * @param {boolean} [options.returnMe] This should not be passed by the
+   * @param {boolean} [returnMe] This should not be passed by the
    *     programmer, it is used internally for recursive function calls to
    *     determine if the current node should be returned or not. If the
    *     programmer passes a node and does *not* pass this argument, the
@@ -206,33 +200,30 @@ function DomWalker(node, options) {
    *     if none is found for the options.filterFunction criteria or
    *     options.constrainingNode has been hit.
    */
-  this._nextNode = function (node, options) {
+  this._nextNode = function (node, options, returnMe) {
 
     // For later use
     var parent = node.parentNode;
 
     // If a node is found in this call, return it, stop the recursion
-    if (options.returnMe === true && (!options.filterFunction || options.filterFunction(node))) {
+    if (returnMe === true && (!options.filterFunction || options.filterFunction(node))) {
       return node;
     }
 
-    // Will make future recursive calls consider to return the nodes passed
-    options.returnMe = true;
-
     // 1. If this node has children, go down the tree
     if (node.childNodes.length) {
-      return this._nextNode(node.childNodes[0], options);
+      return this._nextNode(node.childNodes[0], options, true);
     }
 
     // 2. If this node has siblings, move right in the tree
     if (node.nextSibling !== null) {
-      return this._nextNode(node.nextSibling, options);
+      return this._nextNode(node.nextSibling, options, true);
     }
 
     // 3. Move up in the node's parents until a parent has a sibling or the constrainingNode is hit
     while (parent !== options.constrainingNode) {
       if (parent.nextSibling !== null) {
-        return this._nextNode(parent.nextSibling, options);
+        return this._nextNode(parent.nextSibling, options, true);
       }
       parent = parent.parentNode;
     }
@@ -247,8 +238,6 @@ function DomWalker(node, options) {
    * as first argument. Will traverse the children, siblings and parents'
    * siblings (in that order) to find the next node in the DOM tree as
    * displayed by the document flow.
-   *
-   * todo make returnMe 3rd parameter
    *
    * @param {Node} node - The node from which the search should start
    * @param {Object|Node} [options] - If an object is passed, it should
@@ -266,7 +255,7 @@ function DomWalker(node, options) {
    *     passing a DOM node as this parameter, traversing up will stop at
    *     this node and return null. This is useful when you want to permit
    *     traversing outside the editor's root node.
-   * @param {boolean} [options.returnMe] This should not be passed by the
+   * @param {boolean} [returnMe] This should not be passed by the
    *     programmer, it is used internally for recursive function calls to
    *     determine if the current node should be returned or not. If the
    *     programmer passes a node and does *not* pass this argument, the
@@ -280,33 +269,30 @@ function DomWalker(node, options) {
    *     if none is found for the options.filterFunction criteria or
    *     options.constrainingNode has been hit.
    */
-  this._previousNode = function (node, options) {
+  this._previousNode = function (node, options, returnMe) {
 
     // For later use
     var parent = node.parentNode;
 
     // If a node is found in this call, return it, stop the recursion
-    if (options.returnMe === true && (!options.filterFunction || options.filterFunction(node))) {
+    if (returnMe === true && (!options.filterFunction || options.filterFunction(node))) {
       return node;
     }
 
-    // Will make future recursive calls consider to return the nodes passed
-    options.returnMe = true;
-
     // 1. If this node has children, go down the tree
     if (node.childNodes.length) {
-      return this._previousNode(node.lastChild, options);
+      return this._previousNode(node.lastChild, options, true);
     }
 
     // 2. If this node has siblings, move right in the tree
     if (node.previousSibling !== null) {
-      return this._previousNode(node.previousSibling, options);
+      return this._previousNode(node.previousSibling, options, true);
     }
 
     // 3. Move up in the node's parents until a parent has a sibling or the constrainingNode is hit
     while (parent !== options.constrainingNode) {
       if (parent.previousSibling !== null) {
-        return this._previousNode(parent.previousSibling, options);
+        return this._previousNode(parent.previousSibling, options, true);
       }
       parent = parent.parentNode;
     }
