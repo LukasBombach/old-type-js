@@ -5,7 +5,6 @@ var Settings = require('./settings');
 var singleton;
 
 /**
- * todo holy fuck. refactor me.
  * @constructor
  */
 function DomUtilities() {
