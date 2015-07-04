@@ -2,9 +2,11 @@
 
 var Util = require('./type_utilities');
 
-function DomWalker(startNode, filter) {
-  this.setNode(startNode);
-  this.setFilter(filter);
+function DomWalker(node, options) {
+  this._setOptions(options);
+  this.setNode(node, false);
+  this.setFilter(this._options.filter, false);
+  this._updateTreeWalker();
 }
 
 (function () {
@@ -15,7 +17,7 @@ function DomWalker(startNode, filter) {
    * @private
    */
   this._filterFunctions = {
-    text : 'isTextNodeWithContents'
+    text : '_isTextNodeWithContents'
   };
 
   /**
@@ -23,23 +25,29 @@ function DomWalker(startNode, filter) {
    * @returns {null|Node|Node|*}
    */
   this.next = function () {
+    var node;
     if (null !== this._treeWalker) {
-      this._node = this._treeWalker.nextNode();
+      node = this._treeWalker.nextNode();
+      //if (this._options.constrainingNode && !this._options.constrainingNode.contains(node)) {
+      //  node = null;
+      //  this._treeWalker.previousNode();
+      //}
     } else {
-      this._node = this._nextNode(this._node);
+      node = this._nextNode(this._node, this._cloneOptions());
     }
+    this._node = node;
     return this._node;
   };
 
   /**
-   * 
+   *
    * @returns {null|Node|Node|*}
    */
   this.prev = function () {
     if (null !== this._treeWalker) {
       this._node = this._treeWalker.previousNode();
     } else {
-      this._node = this._previousNode(this._node);
+      this._node = this._previousNode(this._node, this._cloneOptions());
     }
     return this._node;
   };
@@ -47,13 +55,32 @@ function DomWalker(startNode, filter) {
   /**
    * Setter for _node
    * @param {Node} node
+   * @param {boolean} [updateTreeWalker]
    */
-  this.setNode = function (node) {
+  this.setNode = function (node, updateTreeWalker) {
+    updateTreeWalker = updateTreeWalker !== false;
     if (!node.nodeType) {
       throw new Error('The given node is not a DOM node');
     }
     this._node = node;
-    this._treeWalker = this._createTreeWalker(node);
+    if (updateTreeWalker) {
+      this._updateTreeWalker();
+    }
+    return this;
+  };
+
+  /**
+   *
+   * @param filter
+   * @param {boolean} [updateTreeWalker]
+   */
+  this.setFilter = function (filter, updateTreeWalker) {
+    updateTreeWalker = updateTreeWalker !== false;
+    this._filter = typeof filter === 'string' ? this._filterFunctions[filter] : filter;
+    if (updateTreeWalker) {
+      this._updateTreeWalker();
+    }
+    return this;
   };
 
   /**
@@ -64,13 +91,25 @@ function DomWalker(startNode, filter) {
     return this._node;
   };
 
-  /**
-   *
-   * @param filter
-   */
-  this.setFilter = function (filter) {
-    this._filter = typeof filter === 'string' ? this._filterFunctions[filter] : filter;
+  this._setOptions = function (options) {
+
+    // If no options parameter has been passed
+    options = options || {};
+
+    // If a node has been passed as options parameter
+    if (options.nodeType) {
+      options = {constrainingNode: options};
+    }
+
+    // If a function has been passed as ooptions parameter
+    if (Util.isFunction(options)) {
+      options = {filter: options};
+    }
+
+    // Save options and allow chaining
+    this._options = options;
     return this;
+
   };
 
   /**
@@ -81,20 +120,20 @@ function DomWalker(startNode, filter) {
    * @returns {boolean}
    * @private
    */
-  this.isTextNodeWithContents = function (node) {
+  this._isTextNodeWithContents = function (node) {
     return node.nodeType === this._TEXT_NODE && /[^\t\n\r ]/.test(node.textContent);
   };
+
+
   /**
    *
-   * @param {Node} node
    * @returns {DomWalker|null}
    * @private
    */
-  this._createTreeWalker = function (node) {
+  this._updateTreeWalker = function () {
     if (DomWalker.treeWalkerAvailable) {
-      return document.createTreeWalker(node, this._treeWalkerShow(), this._treeWalkerFilter());
+      this._treeWalker = document.createTreeWalker(this._node, this._treeWalkerShow(), this._treeWalkerFilter());
     }
-    return null;
   };
 
   /**
@@ -115,6 +154,15 @@ function DomWalker(startNode, filter) {
     if (typeof this._filter === 'function') {
       return {acceptNode: this._filter};
     }
+  };
+
+  /**
+   *
+   * @returns {Object}
+   * @private
+   */
+  this._cloneOptions = function () {
+    return Util.extend({}, this._options);
   };
 
   /**
@@ -154,19 +202,6 @@ function DomWalker(startNode, filter) {
    *     options.constrainingNode has been hit.
    */
   this._nextNode = function (node, options) {
-
-    // If no options parameter has been passed
-    options = options || {};
-
-    // If a node has been passed as options parameter
-    if (options.nodeType) {
-      options = {constrainingNode: options};
-    }
-
-    // If a function has been passed as ooptions parameter
-    if (Util.isFunction(options)) {
-      options = {filterFunction: options};
-    }
 
     // For later use
     var parent = node.parentNode;
@@ -239,19 +274,6 @@ function DomWalker(startNode, filter) {
    *     options.constrainingNode has been hit.
    */
   this._previousNode = function (node, options) {
-
-    // If no options parameter has been passed
-    options = options || {};
-
-    // If a node has been passed as options parameter
-    if (options.nodeType) {
-      options = {constrainingNode: options};
-    }
-
-    // If a function has been passed as ooptions parameter
-    if (Util.isFunction(options)) {
-      options = {filterFunction: options};
-    }
 
     // For later use
     var parent = node.parentNode;

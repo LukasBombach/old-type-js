@@ -298,7 +298,7 @@ function DomUtilities() {
    */
   this.firstTextNode = function (el) {
     var i, child;
-    if (this.isTextNodeWithContents(el)) {
+    if (this._isTextNodeWithContents(el)) {
       return el;
     }
     for (i = 0; i < el.childNodes.length; i += 1) {
@@ -326,7 +326,7 @@ function DomUtilities() {
 
     var parent = el.parentNode;
 
-    if (returnMe === true && this.isTextNodeWithContents(el)) {
+    if (returnMe === true && this._isTextNodeWithContents(el)) {
       return el;
     }
 
@@ -356,7 +356,7 @@ function DomUtilities() {
    */
   this.prevTextNode = function (node, constrainingNode) {
     var self = this, options = {};
-    options.filterFunction = function(node) { return self.isTextNodeWithContents(node) };
+    options.filterFunction = function(node) { return self._isTextNodeWithContents(node) };
     options.constrainingNode = constrainingNode;
     return this.prev(node, options);
   };
@@ -368,7 +368,7 @@ function DomUtilities() {
    */
   this.lastTextNode = function (containingNode) {
     var self = this;
-    return this.prev(containingNode, function(node) { return self.isTextNodeWithContents(node) });
+    return this.prev(containingNode, function(node) { return self._isTextNodeWithContents(node) });
   };
 
   /**
@@ -397,7 +397,7 @@ function DomUtilities() {
    */
   this.isVisible = function (node) {
     var i;
-    if (this.isTextNodeWithContents(node))
+    if (this._isTextNodeWithContents(node))
       return true;
     for (i = 0; i< node.childNodes.length; i += 1) {
       if (this.isVisible(node.childNodes[i])) return true;
@@ -415,7 +415,7 @@ function DomUtilities() {
    * @returns {boolean}
    * @private
    */
-  this.isTextNodeWithContents = function (node) {
+  this._isTextNodeWithContents = function (node) {
     return node.nodeType === this._TEXT_NODE && /[^\t\n\r ]/.test(node.textContent);
   };
 

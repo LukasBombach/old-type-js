@@ -17,7 +17,6 @@ function Utilities() {
    * @param {*} copyTo
    * @param {...{}} copyFrom
    * @returns {*}
-   * @private
    */
   this.extend = function (copyTo, copyFrom) {
     var i, key;
