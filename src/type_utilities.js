@@ -28,6 +28,14 @@ function Utilities() {
     return arguments[0];
   };
 
+  /**
+   *
+   * @param obj
+   * @returns {boolean}
+   */
+  this.isFunction = function(obj) {
+    return !!(obj && obj.constructor && obj.call && obj.apply);
+  };
 
 }
 
