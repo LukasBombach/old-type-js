@@ -5,18 +5,116 @@ var Util = require('./type_utilities');
 function DomWalker(startNode, filter) {
   this.setNode(startNode);
   this.setFilter(filter);
-  this._createTreeWalker();
 }
 
 (function () {
 
+  /**
+   *
+   * @type {{text: string}}
+   * @private
+   */
+  this._filterFunctions = {
+    text : 'isTextNodeWithContents'
+  };
+
+  /**
+   *
+   * @returns {null|Node|Node|*}
+   */
   this.next = function () {
     if (null !== this._treeWalker) {
       this._node = this._treeWalker.nextNode();
     } else {
-      this._node = this._nextNode(this._node)
+      this._node = this._nextNode(this._node);
     }
     return this._node;
+  };
+
+  /**
+   * 
+   * @returns {null|Node|Node|*}
+   */
+  this.prev = function () {
+    if (null !== this._treeWalker) {
+      this._node = this._treeWalker.previousNode();
+    } else {
+      this._node = this._previousNode(this._node);
+    }
+    return this._node;
+  };
+
+  /**
+   * Setter for _node
+   * @param {Node} node
+   */
+  this.setNode = function (node) {
+    if (!node.nodeType) {
+      throw new Error('The given node is not a DOM node');
+    }
+    this._node = node;
+    this._treeWalker = this._createTreeWalker(node);
+  };
+
+  /**
+   *
+   * @returns {Node|null}
+   */
+  this.getNode = function () {
+    return this._node;
+  };
+
+  /**
+   *
+   * @param filter
+   */
+  this.setFilter = function (filter) {
+    this._filter = typeof filter === 'string' ? this._filterFunctions[filter] : filter;
+    return this;
+  };
+
+  /**
+   * Returns true if a give node is a text node and its content is not
+   * entirely whitespace.
+   *
+   * @param {Node} node The node to be checked.
+   * @returns {boolean}
+   * @private
+   */
+  this.isTextNodeWithContents = function (node) {
+    return node.nodeType === this._TEXT_NODE && /[^\t\n\r ]/.test(node.textContent);
+  };
+  /**
+   *
+   * @param {Node} node
+   * @returns {DomWalker|null}
+   * @private
+   */
+  this._createTreeWalker = function (node) {
+    if (DomWalker.treeWalkerAvailable) {
+      return document.createTreeWalker(node, this._treeWalkerShow(), this._treeWalkerFilter());
+    }
+    return null;
+  };
+
+  /**
+   *
+   * @returns {*}
+   * @private
+   */
+  this._treeWalkerShow = function () {
+    return this._filter === 'text' ? NodeFilter.SHOW_TEXT : NodeFilter.SHOW_ELEMENT;
+  };
+
+  /**
+   *
+   * @returns {{acceptNode: *}}
+   * @private
+   */
+  this._treeWalkerFilter = function () {
+    if (typeof this._filter === 'function') {
+      return {acceptNode: this._filter};
+    }
   };
 
   /**
@@ -140,7 +238,7 @@ function DomWalker(startNode, filter) {
    *     if none is found for the options.filterFunction criteria or
    *     options.constrainingNode has been hit.
    */
-  this._prevNode = function (node, options) {
+  this._previousNode = function (node, options) {
 
     // If no options parameter has been passed
     options = options || {};
@@ -168,18 +266,18 @@ function DomWalker(startNode, filter) {
 
     // 1. If this node has children, go down the tree
     if (node.childNodes.length) {
-      return this._prevNode(node.lastChild, options);
+      return this._previousNode(node.lastChild, options);
     }
 
     // 2. If this node has siblings, move right in the tree
     if (node.previousSibling !== null) {
-      return this._prevNode(node.previousSibling, options);
+      return this._previousNode(node.previousSibling, options);
     }
 
     // 3. Move up in the node's parents until a parent has a sibling or the constrainingNode is hit
     while (parent !== options.constrainingNode) {
       if (parent.previousSibling !== null) {
-        return this._prevNode(parent.previousSibling, options);
+        return this._previousNode(parent.previousSibling, options);
       }
       parent = parent.parentNode;
     }
@@ -189,64 +287,12 @@ function DomWalker(startNode, filter) {
 
   };
 
-  /**
-   * Setter for _node
-   * @param {Node} node
-   */
-  this.setNode = function (node) {
-    if (!node.nodeType) {
-      throw new Error('The given node is not a DOM node');
-    }
-    this._node = node;
-  };
-
-  /**
-   *
-   * @returns {Node|null}
-   */
-  this.getNode = function () {
-    return this._node;
-  };
-
-  /**
-   *
-   * @param filter
-   */
-  this.setFilter = function (filter) {
-    this._filter = filter;
-    if (filter === DomWalker.TEXT) {
-      this._filterFunc = this._textFilter;
-    }
-  };
-
-  //this._textFilter
-
-  /**
-   *
-   * @returns {DomWalker}
-   * @private
-   */
-  this._createTreeWalker = function () {
-
-    var show, filter;
-
-    if (!document.createTreeWalker) {
-      this._treeWalker = null;
-      return this;
-    }
-
-    show = this._filter === DomWalker.TEXT ? NodeFilter.SHOW_TEXT : NodeFilter.SHOW_ELEMENT;
-    filter = Util.isFunction(this._filter) ? {acceptNode:this._filter} : undefined;
-
-    this._treeWalker = document.createTreeWalker(this._node, show, filter);
-
-    return this;
-
-  };
-
-
 }).call(DomWalker.prototype);
 
+DomWalker.treeWalkerAvailable = (function () { return !!document.createTreeWalker; }());
+
+DomWalker.NONE = 'none';
 DomWalker.TEXT = 'text';
+DomWalker.FUNC = 'function';
 
 module.exports = DomWalker;
