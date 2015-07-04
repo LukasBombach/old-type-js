@@ -24,246 +24,22 @@ function DomUtilities() {
   this._containerId = Settings.prefix + 'container';
 
   /**
-   * Node.nodeType value for text nodes
    *
-   * @type {number}
-   * @private
-   */
-  this._TEXT_NODE = 3;
-
-  /**
-   * Traverses the DOM tree and finds the next node after the node passed
-   * as first argument. Will traverse the children, siblings and parents'
-   * siblings (in that order) to find the next node in the DOM tree as
-   * displayed by the document flow.
-   *
-   * todo use next(), this is deprecated
-   *
-   * @param {Node} node - The node from which the search should start
-   * @param {Object|Node} [options] - If an object is passed, it should
-   *     contain settings determining what node to return, see specifics
-   *     below. If a {Node} is passed, this acts as options.constrainingNode
-   * @param {Function} [options.filterFunction] - nextNode traverses the
-   *     DOM tree and passes each node to this function. This function
-   *     should return true if the node passed is a node that we look for
-   *     or false otherwise. E.g. if we want to find the next text node
-   *     in the tree, the function should check if the node passed is of
-   *     nodeType === 3. If this parameter is not set, any node found
-   *     will be returned.
-   * @param {Node} [options.constrainingNode] While traversing the DOM,
-   *     this method will check nodes' parents and parents' parents. By
-   *     passing a DOM node as this parameter, traversing up will stop at
-   *     this node and return null. This is useful when you want to permit
-   *     traversing outside the editor's root node.
-   * @param {boolean} [options.returnMe] This should not be passed by the
-   *     programmer, it is used internally for recursive function calls to
-   *     determine if the current node should be returned or not. If the
-   *     programmer passes a node and does *not* pass this argument, the
-   *     node passed will not be considered for returning. After that,
-   *     internally, this will be set to true and be passed on with the
-   *     next node in the DOM to a recursive call. The node then passed to
-   *     this method might be the node we are looking for, so having this
-   *     set to true will return that node (given that the filterFunction
-   *     also returns true for that node)
-   * @returns {null|Node} The next node in the DOM tree found or null
-   *     if none is found for the options.filterFunction criteria or
-   *     options.constrainingNode has been hit.
-   * @deprecated
-   */
-  this.nextNode = function (node, options) {
-
-    // If no options parameter has been passed
-    options = options || {};
-
-    // If a node has been passed as options parameter
-    if (options.nodeType) {
-      options = {constrainingNode: options};
-    }
-
-    // For later use
-    var parent = node.parentNode;
-
-    // If a node is found in this call, return it, stop the recursion
-    if (options.returnMe === true && (!options.filterFunction || options.filterFunction(node))) {
-      return node;
-    }
-
-    // Will make future recursive calls consider to return the nodes passed
-    options.returnMe = true;
-
-    // 1. If this node has children, go down the tree
-    if (node.childNodes.length) {
-      return this.nextNode(node.childNodes[0], options);
-    }
-
-    // 2. If this node has siblings, move right in the tree
-    if (node.nextSibling !== null) {
-      return this.nextNode(node.nextSibling, options);
-    }
-
-    // 3. Move up in the node's parents until a parent has a sibling or the constrainingNode is hit
-    while (parent !== options.constrainingNode) {
-      if (parent.nextSibling !== null) {
-        return this.nextNode(parent.nextSibling, options);
-      }
-      parent = parent.parentNode;
-    }
-
-    // We have not found a node we were looking for
-    return null;
-
-  };
-
-  /**
-   * Traverses the DOM tree and finds the next node after the node passed
-   * as first argument. Will traverse the children, siblings and parents'
-   * siblings (in that order) to find the next node in the DOM tree as
-   * displayed by the document flow.
-   *
-   * todo https://developer.mozilla.org/en-US/docs/Web/API/Document/createTreeWalker
-   *
-   * @param {Node} node - The node from which the search should start
-   * @param {Object|Node} [options] - If an object is passed, it should
-   *     contain settings determining what node to return, see specifics
-   *     below. If a {Node} is passed, this acts as options.constrainingNode
-   * @param {Function} [options.filterFunction] - nextNode traverses the
-   *     DOM tree and passes each node to this function. This function
-   *     should return true if the node passed is a node that we look for
-   *     or false otherwise. E.g. if we want to find the next text node
-   *     in the tree, the function should check if the node passed is of
-   *     nodeType === 3. If this parameter is not set, any node found
-   *     will be returned.
-   * @param {Node} [options.constrainingNode] While traversing the DOM,
-   *     this method will check nodes' parents and parents' parents. By
-   *     passing a DOM node as this parameter, traversing up will stop at
-   *     this node and return null. This is useful when you want to permit
-   *     traversing outside the editor's root node.
-   * @param {boolean} [options.returnMe] This should not be passed by the
-   *     programmer, it is used internally for recursive function calls to
-   *     determine if the current node should be returned or not. If the
-   *     programmer passes a node and does *not* pass this argument, the
-   *     node passed will not be considered for returning. After that,
-   *     internally, this will be set to true and be passed on with the
-   *     next node in the DOM to a recursive call. The node then passed to
-   *     this method might be the node we are looking for, so having this
-   *     set to true will return that node (given that the filterFunction
-   *     also returns true for that node)
-   * @returns {null|Node} The next node in the DOM tree found or null
-   *     if none is found for the options.filterFunction criteria or
-   *     options.constrainingNode has been hit.
-   */
-  this.next = function (node, options) {
-
-    // If no options parameter has been passed
-    options = options || {};
-
-    // If a node has been passed as options parameter
-    if (options.nodeType) {
-      options = {constrainingNode: options};
-    }
-
-    // If a function has been passed as ooptions parameter
-    if (this._isFunction(options)) {
-      options = {filterFunction: options};
-    }
-
-    // For later use
-    var parent = node.parentNode;
-
-    // If a node is found in this call, return it, stop the recursion
-    if (options.returnMe === true && (!options.filterFunction || options.filterFunction(node))) {
-      return node;
-    }
-
-    // Will make future recursive calls consider to return the nodes passed
-    options.returnMe = true;
-
-    // 1. If this node has children, go down the tree
-    if (node.childNodes.length) {
-      return this.next(node.childNodes[0], options);
-    }
-
-    // 2. If this node has siblings, move right in the tree
-    if (node.nextSibling !== null) {
-      return this.next(node.nextSibling, options);
-    }
-
-    // 3. Move up in the node's parents until a parent has a sibling or the constrainingNode is hit
-    while (parent !== options.constrainingNode) {
-      if (parent.nextSibling !== null) {
-        return this.next(parent.nextSibling, options);
-      }
-      parent = parent.parentNode;
-    }
-
-    // We have not found a node we were looking for
-    return null;
-
-  };
-
-  /**
-   *
+   * @param {Node} container
    * @param {Node} node
-   * @param options
-   * @returns {Node|null}
+   * @returns {boolean}
    */
-  this.prev = function (node, options) {
-
-    // If no options parameter has been passed
-    options = options || {};
-
-    // If a node has been passed as options parameter
-    if (options.nodeType) {
-      options = {constrainingNode: options};
-    }
-
-    // If a function has been passed as ooptions parameter
-    if (this._isFunction(options)) {
-      options = {filterFunction: options};
-    }
-
-    // For later use
-    var parent = node.parentNode;
-
-    // If a node is found in this call, return it, stop the recursion
-    if (options.returnMe === true && (!options.filterFunction || options.filterFunction(node))) {
-      return node;
-    }
-
-    // Will make future recursive calls consider to return the nodes passed
-    options.returnMe = true;
-
-    // 1. If this node has children, go down the tree
-    if (node.childNodes.length) {
-      return this.prev(node.lastChild, options);
-    }
-
-    // 2. If this node has siblings, move right in the tree
-    if (node.previousSibling !== null) {
-      return this.prev(node.previousSibling, options);
-    }
-
-    // 3. Move up in the node's parents until a parent has a sibling or the constrainingNode is hit
-    while (parent !== options.constrainingNode) {
-      if (parent.previousSibling !== null) {
-        return this.prev(parent.previousSibling, options);
-      }
-      parent = parent.parentNode;
-    }
-
-    // We have not found a node we were looking for
-    return null;
-
+  this.containsButIsnt = function (container, node) {
+    return container !== node && container.contains(node);
   };
 
   /**
    *
-   * @param {Node} node
-   * @returns {null|Node}
+   * @param obj
+   * @returns {boolean}
    */
-  this.nextVisible = function (node) {
-    var self = this;
-    return this.next(node, function(node) { return self.isVisible(node) });
+  this.isNode = function (obj) {
+    return !!(obj && obj.nodeType);
   };
 
   /**
@@ -285,148 +61,6 @@ function DomUtilities() {
     if (!this.isVisible(parent))
       return this.removeVisible(parent, constrainingNode);
     return parent;
-  };
-
-  /**
-   * Finds the first visible text node in an element. Will
-   * return the element itself, if it is already a text node
-   *
-   * Todo Can be removed by using nextTextNode - I think (maybe this method is faster though (still unnecessary code))
-   *
-   * @param {Node} el The element to be searched in.
-   * @returns {Node|null}
-   */
-  this.firstTextNode = function (el) {
-    var i, child;
-    if (this._isTextNodeWithContents(el)) {
-      return el;
-    }
-    for (i = 0; i < el.childNodes.length; i += 1) {
-      child = this.firstTextNode(el.childNodes[i]);
-      if (child) {
-        return child;
-      }
-    }
-    return null;
-  };
-
-  /**
-   *
-   * @param el
-   * @param returnMe
-   * @param constrainingNode
-   * @returns {null|Node}
-   */
-  this.nextTextNode = function (el, returnMe, constrainingNode) {
-
-    if (typeof returnMe !== "boolean") {
-      constrainingNode = returnMe;
-      returnMe = false;
-    }
-
-    var parent = el.parentNode;
-
-    if (returnMe === true && this._isTextNodeWithContents(el)) {
-      return el;
-    }
-
-    if (el.childNodes.length) {
-      return this.nextTextNode(el.childNodes[0], true, constrainingNode);
-    }
-
-    if (el.nextSibling !== null) {
-      return this.nextTextNode(el.nextSibling, true, constrainingNode);
-    }
-
-    while (parent !== constrainingNode) {
-      if (parent.nextSibling !== null) {
-        return this.nextTextNode(parent.nextSibling, true, constrainingNode);
-      }
-      parent = parent.parentNode;
-    }
-
-    return null;
-  };
-
-  /**
-   *
-   * @param {Node} node
-   * @param {Node} [constrainingNode]
-   * @returns {Node|null|*}
-   */
-  this.prevTextNode = function (node, constrainingNode) {
-    var self = this, options = {};
-    options.filterFunction = function(node) { return self._isTextNodeWithContents(node) };
-    options.constrainingNode = constrainingNode;
-    return this.prev(node, options);
-  };
-
-  /**
-   *
-   * @param {Node} containingNode
-   * @returns {Node|null}
-   */
-  this.lastTextNode = function (containingNode) {
-    var self = this;
-    return this.prev(containingNode, function(node) { return self._isTextNodeWithContents(node) });
-  };
-
-  /**
-   * Todo Perfomancemäßig schlecht immer zu iterieren?
-   *
-   * @param {...Node} nodes
-   * @returns {boolean}
-   */
-  this.isTextNode = function (nodes) {
-    var i;
-    nodes = arguments.length ? arguments : [arguments];
-    for (i = 0; i < nodes.length; i += 1) {
-      if (nodes[i] && nodes[i].nodeType !== this._TEXT_NODE) {
-        return false;
-      }
-    }
-    return true;
-  };
-
-  /**
-   * Returns whether or not the node is or contains any
-   * visible text nodes
-   *
-   * @param {Node} node
-   * @returns {boolean}
-   */
-  this.isVisible = function (node) {
-    var i;
-    if (this._isTextNodeWithContents(node))
-      return true;
-    for (i = 0; i< node.childNodes.length; i += 1) {
-      if (this.isVisible(node.childNodes[i])) return true;
-    }
-    return false;
-  };
-
-  /**
-   * Returns true if a give node is a text node and its TypeContents is not
-   * entirely whitespace.
-   *
-   * Todo allow infinite arguments just like isTextNode
-   *
-   * @param {Node} node The node to be checked.
-   * @returns {boolean}
-   * @private
-   */
-  this._isTextNodeWithContents = function (node) {
-    return node.nodeType === this._TEXT_NODE && /[^\t\n\r ]/.test(node.textContent);
-  };
-
-  /**
-   *
-   * @param {Node} container
-   * @param {Node} node
-   * @returns {boolean}
-   */
-  this.containsButIsnt = function (container, node) {
-    return container !== node && container.contains(node);
   };
 
   /**
@@ -564,6 +198,7 @@ function DomUtilities() {
   };
 
   /**
+   * Todo move to dom walker??
    *
    * @param {Node} el
    * @param {String} selector
@@ -643,16 +278,6 @@ function DomUtilities() {
   };
 
   /**
-   *
-   * @param obj
-   * @returns {boolean}
-   */
-  this.isNode = function (obj) {
-    return !!(obj && obj.nodeType);
-  };
-
-
-  /**
    * todo constraining node
    * @param {Node} fromNode
    * @param {number} offset
@@ -719,16 +344,6 @@ function DomUtilities() {
 
     return null;
 
-  };
-
-  /**
-   *
-   * @param obj
-   * @returns {boolean}
-   * @private
-   */
-  this._isFunction = function(obj) {
-    return !!(obj && obj.constructor && obj.call && obj.apply);
   };
 
 }).call(DomUtilities.prototype);

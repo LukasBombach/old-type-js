@@ -36,7 +36,8 @@ function DomWalker(node, options) {
    * @private
    */
   this._filterFunctions = {
-    text : '_isTextNodeWithContents'
+    text    : '_isTextNodeWithContents',
+    visible : '_isVisible'
   };
 
   /**
@@ -144,6 +145,16 @@ function DomWalker(node, options) {
    */
   this._isTextNodeWithContents = function (node) {
     return node.nodeType === this._TEXT_NODE && /[^\t\n\r ]/.test(node.textContent);
+  };
+
+  /**
+   *
+   * @param node
+   * @returns {boolean}
+   * @private
+   */
+  this._isVisible = function (node) {
+    return !!node.offsetHeight;
   };
 
   /**
