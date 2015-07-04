@@ -19,20 +19,23 @@ function RemoveFilter(type, input) {
 (function () {
 
   this.keys = {
-    backspace : 'backspace'
+    backspace : 'remove',
+    del       : 'remove'
   };
 
   /**
    *
    * @param {TypeInputEvent} e
    */
-  this.backspace = function (e) {
+  this.remove = function (e) {
 
-    var range, offset;
+    var range, offset, removeChars, moveChars;
 
     if (this._selection.collapsed()) {
-      range = TypeRange.fromCaret(this._caret, -1);
-      offset = this._caret.getOffset() - 1;
+      removeChars = e.key === 'backspace' ? -1 : 1;
+      moveChars = e.key === 'backspace' ? -1 : 0;
+      range = TypeRange.fromCaret(this._caret, removeChars);
+      offset = this._caret.getOffset() + moveChars;
     } else {
       range = TypeRange.fromRange(this._selection.getRange()); // todo TypeRange.fromSelection
       offset = range.getStartOffset(this._root);
@@ -46,6 +49,7 @@ function RemoveFilter(type, input) {
     e.cancel();
 
   };
+
 
 }).call(RemoveFilter.prototype);
 

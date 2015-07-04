@@ -667,7 +667,7 @@ function DomUtilities() {
       length;
 
     startOffset = startOffset || 0;
-    offset = offset >= 0 ? offset-startOffset : offset+startOffset;
+    offset += startOffset;
 
     if (fromNode.nodeType === 3 && offset >= 0 && offset <= fromNode.nodeValue.length) {
       return { node: fromNode, offset: offset };
