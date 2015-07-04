@@ -2,6 +2,13 @@
 
 var Util = require('./type_utilities');
 
+/**
+ * todo whatToShow and filter in ie 9 not supported -> https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator
+ * todo http://ejohn.org/blog/unimpressed-by-nodeiterator/
+ * @param node
+ * @param options
+ * @constructor
+ */
 function DomWalker(node, options) {
   this.setOptions(options, false);
   this.setNode(node, false);
@@ -25,18 +32,22 @@ function DomWalker(node, options) {
    * @returns {null|Node|Node|*}
    */
   this.next = function () {
+
     var node;
+
     if (null !== this._treeWalker) {
-      node = this._treeWalker.nextNode();
-      //if (this._options.constrainingNode && !this._options.constrainingNode.contains(node)) {
-      //  node = null;
-      //  this._treeWalker.previousNode();
-      //}
+      node = this._nextTreeWalkerNode();
     } else {
       node = this._nextNode(this._node, this._cloneOptions());
     }
+
+    if (node === null) {
+      return null;
+    }
+
     this._node = node;
-    return this._node;
+    return node;
+
   };
 
   /**
@@ -44,12 +55,22 @@ function DomWalker(node, options) {
    * @returns {null|Node|Node|*}
    */
   this.prev = function () {
+
+    var node;
+
     if (null !== this._treeWalker) {
-      this._node = this._treeWalker.previousNode();
+      node = this._previousTreeWalkerNode();
     } else {
-      this._node = this._previousNode(this._node, this._cloneOptions());
+      node = this._nextNode(this._node, this._cloneOptions());
     }
-    return this._node;
+
+    if (node === null) {
+      return null;
+    }
+
+    this._node = node;
+    return node;
+
   };
 
   /**
@@ -176,10 +197,50 @@ function DomWalker(node, options) {
   };
 
   /**
+   *
+   * @returns {*}
+   * @private
+   */
+  this._nextTreeWalkerNode = function () {
+    var node = this._treeWalker.nextNode();
+    if (!this._isContained(node)) {
+      this._treeWalker.previousNode();
+      return null;
+    }
+    return node;
+  };
+
+  /**
+   *
+   * @returns {*}
+   * @private
+   */
+  this._previousTreeWalkerNode = function () {
+    var node = this._treeWalker.previousNode();
+    if (!this._isContained(node)) {
+      this._treeWalker.previousNode();
+      return null;
+    }
+    return node;
+  };
+
+  /**
+   *
+   * @param node
+   * @returns {boolean|*}
+   * @private
+   */
+  this._isContained = function (node) {
+    return !this._options.constrainingNode || this._options.constrainingNode.contains(node);
+  };
+
+  /**
    * Traverses the DOM tree and finds the next node after the node passed
    * as first argument. Will traverse the children, siblings and parents'
    * siblings (in that order) to find the next node in the DOM tree as
    * displayed by the document flow.
+   *
+   * todo this should mimic TreeWalker nextNode so we can use it the same way in next()
    *
    * @param {Node} node - The node from which the search should start
    * @param {Object|Node} [options] - If an object is passed, it should
@@ -252,6 +313,8 @@ function DomWalker(node, options) {
    * as first argument. Will traverse the children, siblings and parents'
    * siblings (in that order) to find the next node in the DOM tree as
    * displayed by the document flow.
+   *
+   * todo this should mimic TreeWalker previousNode so we can use it the same way in prev()
    *
    * @param {Node} node - The node from which the search should start
    * @param {Object|Node} [options] - If an object is passed, it should
