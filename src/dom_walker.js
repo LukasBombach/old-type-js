@@ -3,8 +3,34 @@
 var Util = require('./type_utilities');
 
 /**
- * @param node
- * @param options
+ * @param {Node} node - The node to be used as the starting point for the
+ *     first traversal operation.
+ * @param {Object|Node} [options] - If an object is passed, it should
+ *     contain settings determining what node to return, see specifics
+ *     below. If a {Node} is passed, this acts as options.constrainingNode
+ * @param {Function|string} [options.filterFunction] - nextNode traverses
+ *     the DOM tree and passes each node to this function. This function
+ *     should return true if the node passed is a node that we look for
+ *     or false otherwise. E.g. if we want to find the next text node
+ *     in the tree, the function should check if the node passed is of
+ *     nodeType === 3. If this parameter is not set, any node found
+ *     will be returned.
+ *     todo allow css selectors to be used for traversal
+ * @param {Node} [options.constrainingNode] While traversing the DOM,
+ *     this method will check nodes' parents and parents' parents. By
+ *     passing a DOM node as this parameter, traversing up will stop at
+ *     this node and return null. This is useful when you want to permit
+ *     traversing outside the editor's root node.
+ * @param {boolean} [options.returnMe] This should not be passed by the
+ *     programmer, it is used internally for recursive function calls to
+ *     determine if the current node should be returned or not. If the
+ *     programmer passes a node and does *not* pass this argument, the
+ *     node passed will not be considered for returning. After that,
+ *     internally, this will be set to true and be passed on with the
+ *     next node in the DOM to a recursive call. The node then passed to
+ *     this method might be the node we are looking for, so having this
+ *     set to true will return that node (given that the filterFunction
+ *     also returns true for that node)
  * @constructor
  */
 function DomWalker(node, options) {
@@ -109,14 +135,14 @@ function DomWalker(node, options) {
 
   /**
    *
-   * @returns {Node|null}
+   * @returns {Node}
    */
   this.getNode = function () {
     return this._node;
   };
 
   /**
-   * 
+   *
    * @param filter
    * @returns {*}
    * @private
