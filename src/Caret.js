@@ -347,11 +347,22 @@ function Caret(options) {
    * Returns the offset of the caret in the text
    * To be specific, this returns the character offset relative to the
    * given constraining element.
-   * todo implement
+   *
    * @returns {number|null}
    */
   this.getOffset = function () {
+    return DomUtil.getTextOffset(this._constrainingNode, this.textNode, this.offset);
+  };
 
+  /**
+   * todo unify with moveTo API
+   * @param offset
+   * @returns {*}
+   */
+  this.setOffset = function (offset) {
+    var t = DomUtil.textNodeAt(this._constrainingNode, offset);
+    this.moveTo(t.node, t.offset);
+    return this;
   };
 
   /**

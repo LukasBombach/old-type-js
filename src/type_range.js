@@ -289,6 +289,50 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
+   *
+   * @returns {number|null}
+   */
+  this.getLength = function () {
+
+    var node = this.startContainer,
+      length = 0;
+
+    do {
+      if (node === this.endContainer) {
+        return length + this.endOffset;
+      }
+      length += node.nodeValue.length;
+    } while (node = DomUtil.nextTextNode(node));
+
+    return null;
+
+  };
+
+  /**
+   *
+   * @param {Node} [from]
+   * @returns {number|null}
+   */
+  this.getStartOffset = function (from) {
+    if (from) {
+      return DomUtil.getTextOffset(from, this.startContainer, this.startOffset);
+    }
+    return this.startOffset;
+  };
+
+  /**
+   *
+   * @param {Node} [from]
+   * @returns {number|null}
+   */
+  this.getEndOffset = function (from) {
+    if (from) {
+      return DomUtil.getTextOffset(from, this.endContainer, this.endOffset);
+    }
+    return this.endOffset;
+  };
+
+  /**
    * Todo cross-browser compatibility: http://stackoverflow.com/a/4812022/1183252
    *
    * @param {HTMLElement} containingNode

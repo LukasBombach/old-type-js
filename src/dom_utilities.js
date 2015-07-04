@@ -698,6 +698,31 @@ function DomUtilities() {
 
   /**
    *
+   * @param fromNode
+   * @param toNode
+   * @param toOffset
+   * @returns {*}
+   */
+  this.getTextOffset = function (fromNode, toNode, toOffset) {
+
+    var node = this.nextTextNode(fromNode, true),
+      offsetWalked = 0;
+
+    toOffset = toOffset || 0;
+
+    do {
+      if (node === toNode) {
+        return offsetWalked + toOffset;
+      }
+      offsetWalked += node.nodeValue.length;
+    } while (node = this.nextTextNode(node));
+
+    return null;
+
+  };
+
+  /**
+   *
    * @param obj
    * @returns {boolean}
    * @private
