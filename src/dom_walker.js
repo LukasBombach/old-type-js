@@ -21,16 +21,6 @@ var Util = require('./type_utilities');
  *     passing a DOM node as this parameter, traversing up will stop at
  *     this node and return null. This is useful when you want to permit
  *     traversing outside the editor's root node.
- * @param {boolean} [options.returnMe] This should not be passed by the
- *     programmer, it is used internally for recursive function calls to
- *     determine if the current node should be returned or not. If the
- *     programmer passes a node and does *not* pass this argument, the
- *     node passed will not be considered for returning. After that,
- *     internally, this will be set to true and be passed on with the
- *     next node in the DOM to a recursive call. The node then passed to
- *     this method might be the node we are looking for, so having this
- *     set to true will return that node (given that the filterFunction
- *     also returns true for that node)
  * @constructor
  */
 function DomWalker(node, options) {
@@ -54,13 +44,10 @@ function DomWalker(node, options) {
    * @returns {null|Node|Node|*}
    */
   this.next = function () {
-
     var node = this._nextNode(this._node, this.options);
-
     if (node === null) {
       return null;
     }
-
     this._node = node;
     return node;
 
@@ -71,13 +58,10 @@ function DomWalker(node, options) {
    * @returns {null|Node|Node|*}
    */
   this.prev = function () {
-
     var node = this._previousNode(this._node, this.options);
-
     if (node === null) {
       return null;
     }
-
     this._node = node;
     return node;
 
@@ -92,6 +76,14 @@ function DomWalker(node, options) {
     }
     this._node = node;
     return this;
+  };
+
+  /**
+   *
+   * @returns {Node}
+   */
+  this.getNode = function () {
+    return this._node;
   };
 
   /**
@@ -129,14 +121,6 @@ function DomWalker(node, options) {
 
   /**
    *
-   * @returns {Node}
-   */
-  this.getNode = function () {
-    return this._node;
-  };
-
-  /**
-   *
    * @param filter
    * @returns {*}
    * @private
@@ -167,8 +151,6 @@ function DomWalker(node, options) {
    * as first argument. Will traverse the children, siblings and parents'
    * siblings (in that order) to find the next node in the DOM tree as
    * displayed by the document flow.
-   *
-   * todo make returnMe 3rd parameter
    *
    * @param {Node} node - The node from which the search should start
    * @param {Object|Node} [options] - If an object is passed, it should
