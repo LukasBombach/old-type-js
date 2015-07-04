@@ -3,8 +3,9 @@
 var Util = require('./type_utilities');
 
 /**
- * todo whatToShow and filter in ie 9 not supported -> https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator
+ * whatToShow and filter in ie 9 not supported -> https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator
  * todo http://ejohn.org/blog/unimpressed-by-nodeiterator/
+ * todo http://stackoverflow.com/questions/7941288/when-to-use-nodeiterator
  * @param node
  * @param options
  * @constructor
