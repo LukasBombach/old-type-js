@@ -3,18 +3,13 @@
 var Util = require('./type_utilities');
 
 /**
- * whatToShow and filter in ie 9 not supported -> https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator
- * todo http://ejohn.org/blog/unimpressed-by-nodeiterator/
- * todo http://stackoverflow.com/questions/7941288/when-to-use-nodeiterator
  * @param node
  * @param options
  * @constructor
  */
 function DomWalker(node, options) {
-  this.setOptions(options, false);
-  this.setNode(node, false);
-  this.setFilter(this._options.filter, false);
-  this._updateTreeWalker();
+  this.setNode(node);
+  this.setOptions(options);
 }
 
 (function () {
@@ -36,11 +31,8 @@ function DomWalker(node, options) {
 
     var node;
 
-    if (null !== this._treeWalker) {
-      node = this._nextTreeWalkerNode();
-    } else {
-      node = this._nextNode(this._node, this._cloneOptions());
-    }
+    this.options.returnMe = false;
+    node = this._nextNode(this._node, this.options);
 
     if (node === null) {
       return null;
@@ -59,11 +51,8 @@ function DomWalker(node, options) {
 
     var node;
 
-    if (null !== this._treeWalker) {
-      node = this._previousTreeWalkerNode();
-    } else {
-      node = this._nextNode(this._node, this._cloneOptions());
-    }
+    this.options.returnMe = false;
+    node = this._previousNode(this._node, this.options);
 
     if (node === null) {
       return null;
@@ -75,41 +64,22 @@ function DomWalker(node, options) {
   };
 
   /**
-   * Setter for _node
    * @param {Node} node
-   * @param {boolean} [updateTreeWalker]
    */
-  this.setNode = function (node, updateTreeWalker) {
+  this.setNode = function (node) {
     if (!node.nodeType) {
       throw new Error('The given node is not a DOM node');
     }
     this._node = node;
-    if (updateTreeWalker !== false) {
-      this._updateTreeWalker();
-    }
-    return this;
-  };
-
-  /**
-   *
-   * @param filter
-   * @param {boolean} [updateTreeWalker]
-   */
-  this.setFilter = function (filter, updateTreeWalker) {
-    this._filter = typeof filter === 'string' ? this._filterFunctions[filter] : filter;
-    if (updateTreeWalker !== false) {
-      this._updateTreeWalker();
-    }
     return this;
   };
 
   /**
    *
    * @param options
-   * @param updateTreeWalker
    * @returns {*}
    */
-  this.setOptions = function (options, updateTreeWalker) {
+  this.setOptions = function (options) {
 
     // If no options parameter has been passed
     options = options || {};
@@ -120,17 +90,17 @@ function DomWalker(node, options) {
     }
 
     // If a function has been passed as ooptions parameter
-    if (Util.isFunction(options)) {
+    if (typeof options === 'string' || Util.isFunction(options)) {
       options = {filter: options};
+    }
+
+    // Load internal filter function if filter param is a string
+    if (options.filter) {
+      options.filter = this._loadFilter(options.filter);
     }
 
     // Save options and allow
     this._options = options;
-
-    // updating options should update the tree walker
-    if (updateTreeWalker !== false) {
-      this._updateTreeWalker();
-    }
 
     // Chaining
     return this;
@@ -146,6 +116,21 @@ function DomWalker(node, options) {
   };
 
   /**
+   * 
+   * @param filter
+   * @returns {*}
+   * @private
+   */
+  this._loadFilter = function (filter) {
+    var funcName;
+    if (typeof filter === 'string') {
+      funcName = this._filterFunctions[filter];
+      return this[funcName].bind(this);
+    }
+    return filter;
+  };
+
+  /**
    * Returns true if a give node is a text node and its content is not
    * entirely whitespace.
    *
@@ -158,90 +143,10 @@ function DomWalker(node, options) {
   };
 
   /**
-   *
-   * @returns {DomWalker|null}
-   * @private
-   */
-  this._updateTreeWalker = function () {
-    if (DomWalker.treeWalkerAvailable) {
-      this._treeWalker = document.createTreeWalker(this._node, this._treeWalkerShow(), this._treeWalkerFilter());
-    }
-  };
-
-  /**
-   *
-   * @returns {*}
-   * @private
-   */
-  this._treeWalkerShow = function () {
-    return this._filter === this._filterFunctions.text ? NodeFilter.SHOW_TEXT : NodeFilter.SHOW_ELEMENT;
-  };
-
-  /**
-   *
-   * @returns {{acceptNode: *}}
-   * @private
-   */
-  this._treeWalkerFilter = function () {
-    if (this._filter && this._filter !== this._filterFunctions.text) {
-      return {acceptNode: this._filter};
-    }
-  };
-
-  /**
-   *
-   * @returns {Object}
-   * @private
-   */
-  this._cloneOptions = function () {
-    return Util.extend({}, this._options);
-  };
-
-  /**
-   *
-   * @returns {*}
-   * @private
-   */
-  this._nextTreeWalkerNode = function () {
-    var node = this._treeWalker.nextNode();
-    if (!this._isContained(node)) {
-      this._treeWalker.previousNode();
-      return null;
-    }
-    return node;
-  };
-
-  /**
-   *
-   * @returns {*}
-   * @private
-   */
-  this._previousTreeWalkerNode = function () {
-    var node = this._treeWalker.previousNode();
-    if (!this._isContained(node)) {
-      this._treeWalker.previousNode();
-      return null;
-    }
-    return node;
-  };
-
-  /**
-   *
-   * @param node
-   * @returns {boolean|*}
-   * @private
-   */
-  this._isContained = function (node) {
-    return !this._options.constrainingNode || this._options.constrainingNode.contains(node);
-  };
-
-  /**
    * Traverses the DOM tree and finds the next node after the node passed
    * as first argument. Will traverse the children, siblings and parents'
    * siblings (in that order) to find the next node in the DOM tree as
    * displayed by the document flow.
-   *
-   * todo this should mimic TreeWalker nextNode so we can use it the same way in next()
    *
    * @param {Node} node - The node from which the search should start
    * @param {Object|Node} [options] - If an object is passed, it should
@@ -314,8 +219,6 @@ function DomWalker(node, options) {
    * as first argument. Will traverse the children, siblings and parents'
    * siblings (in that order) to find the next node in the DOM tree as
    * displayed by the document flow.
-   *
-   * todo this should mimic TreeWalker previousNode so we can use it the same way in prev()
    *
    * @param {Node} node - The node from which the search should start
    * @param {Object|Node} [options] - If an object is passed, it should
