@@ -205,7 +205,6 @@ function Caret(options) {
    */
   this.moveTo = function (node, offset) {
     if (node.nodeType !== Node.TEXT_NODE) {
-      //node = DomUtil.firstTextNode(node);
       node = DomWalker.first(node, 'text');
     }
     if (node === null) {

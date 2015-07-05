@@ -1,6 +1,7 @@
 'use strict';
 
 var DomUtil = require('./dom_utilities');
+var Walker = require('./dom_walker');
 
 /**
  * Crates a new TypeRange
@@ -302,7 +303,7 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
         return length + this.endOffset;
       }
       length += node.nodeValue.length;
-    } while (node = DomUtil.nextTextNode(node));
+    } while (node = Walker.next(node));
 
     return null;
 
@@ -343,7 +344,7 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
    */
   this._offsetFromNodeToNode = function (containingNode, searchNode, searchOffset) {
     var node = containingNode, offsetWalked = 0;
-    while (node = DomUtil.nextTextNode(node)) {
+    while (node = Walker.next(node, 'text')) {
       if (node === searchNode) return offsetWalked + searchOffset;
       offsetWalked += node.nodeValue.length;
     }
@@ -453,8 +454,8 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
   TypeRange.fromRange = function (range) {
     var endContainer = range.endContainer,
       endOffset = range.endOffset;
-    if (endOffset === 0 && endContainer === DomUtil.nextVisible(range.startContainer.parentNode.nextSibling)) {
-      endContainer = DomUtil.lastTextNode(range.startContainer.parentNode);
+    if (endOffset === 0 && endContainer === Walker.next(range.startContainer.parentNode.nextSibling, 'visible')) {
+      endContainer = Walker.last(range.startContainer.parentNode, 'text');
       endOffset = endContainer.length;
     }
     return new TypeRange(range.startContainer, range.startOffset, endContainer, endOffset);
@@ -485,8 +486,8 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
    *     given element.
    */
   TypeRange.fromElement = function (el) {
-    var startNode = DomUtil.firstTextNode(el),
-      endNode = DomUtil.lastTextNode(el);
+    var startNode = Walker.first(el, 'text'),
+      endNode = Walker.last(el, 'text');
     return new TypeRange(startNode, 0, endNode, endNode.nodeValue.length);
   };
 

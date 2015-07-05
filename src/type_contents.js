@@ -123,12 +123,10 @@ function TypeContents() {
 
     while (!startRemoved) {
 
-      //prev = DomUtil.prevTextNode(current);
       prev = Walker.prev(current, 'text');
 
       a = (current === endNode && range.endOffset === 0);
       b = (current !== startNode && current === Walker.first(current.parentNode, 'text'));
-      //b = (current !== startNode && current === DomUtil.firstTextNode(current.parentNode));
 
       if (a || b) {
         currentParent = current.parentNode;

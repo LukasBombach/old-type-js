@@ -3,6 +3,7 @@
 var Type = require('./core');
 var TypeRange = require('./type_range');
 var DomUtil = require('./dom_utilities');
+var Walker = require('./dom_walker');
 
 /**
  *
@@ -127,7 +128,7 @@ function Formatting(type) {
     // siblings, find the next node in the document flow and
     // apply this algorithm on it recursively
     if (currentNode === null) {
-      nextNode = DomUtil.nextNode(startNode.parentNode.lastChild, this._type.getRoot());
+      nextNode = Walker.next(startNode.parentNode.lastChild, this._type.getRoot());
       this.insertInline(tag, nextNode, endNode);
     }
 
