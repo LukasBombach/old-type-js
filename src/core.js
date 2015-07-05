@@ -10,10 +10,20 @@ var TypeSelection = require('./type_selection');
 var TypeInput = require('./type_input');
 
 /**
- * The main class and entry point to set up a Type instance in the browser.
+ * Creates a new Type editor and sets up the core
+ * modules used for WYSIWYG editing. The core
+ * class holds methods for setting and retrieving
+ * options as well as an environment to allow
+ * working with plugins.
  *
- * @class Type
- * @param options
+ * @param {Object|Element} options - Either pass
+ *     an associative array with options for this
+ *     editor or the root element that should be
+ *     used to modify its contents for WYSIWYG
+ *     editing
+ * @param {Element} options.el The root element
+ *     that should be used to modify its contents
+ *     for WYSIWYG editing
  * @constructor
  */
 function Type(options) {
@@ -28,9 +38,9 @@ function Type(options) {
     throw new Error('You must provide an element as root node for the editor\'s TypeContents.');
   }
 
-  // Save settings for this editor
+  // Set settings for this editor
   this._root = null;
-  this._options(options);
+  this.options(options);
 
   // Set up core editor modules
   this._plugins = {};
@@ -45,13 +55,6 @@ function Type(options) {
 
 }
 
-/**
- * Holds information on the current browser and os
- *
- * @type {TypeEnvironment}
- */
-Type.env = TypeEnv;
-
 (function () {
 
   /**
@@ -59,10 +62,10 @@ Type.env = TypeEnv;
    * will be extended by the options passed to each instance
    * on instantiation.
    *
-   * @type {{el: null}}
+   * @type {{el: null, undoSteps: number}}
    * @private
    */
-  this._defaultoOptions = {
+  this._defaultOptions = {
     el        : null,
     undoSteps : 20
   };
@@ -93,12 +96,12 @@ Type.env = TypeEnv;
    * @returns {Type|*} Returns the type instance if you set an
    *     option or the according value if you get an option
    */
-  this._options = function (options, value) {
+  this.options = function (options, value) {
 
-    this._options = this._options || Util.extend({}, this._defaultoOptions);
+    this.options = this.options || Util.extend({}, this._defaultOptions);
 
     if (typeof options === "string" && arguments.length === 1) {
-      return this._options[options];
+      return this.options[options];
     }
 
     if (typeof options === "string" && arguments.length === 2) {
@@ -106,7 +109,7 @@ Type.env = TypeEnv;
     }
 
     if (typeof options === "object") {
-      Util.extend(this._options, options);
+      Util.extend(this.options, options);
     }
 
     if (options.el) {
@@ -269,6 +272,13 @@ Type.env = TypeEnv;
  * @type {Object}
  */
 Type.fn = Type.prototype;
+
+/**
+ * Holds information on the current browser and os
+ *
+ * @type {TypeEnvironment}
+ */
+Type.env = TypeEnv;
 
 /**
  * Module Exports for CommonJs
