@@ -41,8 +41,12 @@ function CommandFilter(type, input) {
    */
   this.command = function (e) {
 
+    var sel;
+
     if (e.cmd) {
+      sel = this._selection.save();
       this._formating.format(this.tags[e.key], this._selection.getRange());
+      this._selection.restore(sel);
       e.cancel();
     }
 

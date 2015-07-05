@@ -5,10 +5,11 @@ var TypeSelectionOverlay = require('./type_selection_overlay');
 
 /**
  *
+ * @param {Type} type
  * @constructor
  */
-function TypeSelection() {
-  this._init();
+function TypeSelection(type) {
+  this._init(type);
 }
 
 (function () {
@@ -115,6 +116,28 @@ function TypeSelection() {
   };
 
   /**
+   * Returns an object that can be used to recreate the current
+   * selection using {@link TypeSelection#restore}
+   * @returns {{from: Element, start: number, end: number}}
+   */
+  this.save = function () {
+    return this.getRange().save(this._root);
+  };
+
+  /**
+   * Selects text from an object returned by {@link TypeSelection#save}
+   * or {@link TypeRange#save}
+   * @param bookmark
+   * @returns {TypeSelection} - This instance
+   */
+  this.restore = function (bookmark) {
+    this.unselect();
+    this._range = TypeRange.load(bookmark).getNativeRange();
+    this._imitateRangeAppending();
+    return this;
+  };
+
+  /**
    * Returns a {TypeRange} spanning over the currently selected text.
    * @returns {TypeRange}
    */
@@ -170,10 +193,12 @@ function TypeSelection() {
    * all variables should be set to their default values. This is what select
    * does for us.
    *
+   * @param {Type} type
    * @returns {TypeSelection} - This instance
    * @private
    */
-  this._init = function () {
+  this._init = function (type) {
+    this._root = type.getRoot();
     return this.unselect();
   };
 
