@@ -1,5 +1,6 @@
 'use strict';
 
+var Type = require('./core');
 var DomUtil = require('./dom_utilities');
 var DomWalker = require('./dom_walker');
 var TextWalker = require('./text_walker');
@@ -26,7 +27,7 @@ var TextWalker = require('./text_walker');
  *     endContainer where the range should stop.
  * @constructor
  */
-function TypeRange(startContainer, startOffset, endContainer, endOffset) {
+Type.TypeRange = function (startContainer, startOffset, endContainer, endOffset) {
 
   this.startContainer = startContainer;
   this.startOffset    = startOffset;
@@ -35,7 +36,7 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
 
   this.ensureStartNodePrecedesEndNode();
 
-}
+};
 
 (function () {
 
@@ -360,7 +361,7 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
     return this;
   };
 
-}).call(TypeRange.prototype);
+}).call(Type.TypeRange.prototype);
 
 
 (function () {
@@ -372,7 +373,7 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
    *
    * @type {null|boolean}
    */
-  TypeRange._getClientRectsIsBroken = null;
+  Type.TypeRange._getClientRectsIsBroken = null;
 
   /**
    * Will create a range spanning from the offset given as start to the
@@ -389,8 +390,8 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
    *     where the selection should end
    * @returns {TypeRange} - A {TypeRange} instance
    */
-  TypeRange.load = function (bookmark) {
-    return TypeRange.fromPositions(bookmark.from, bookmark.start, bookmark.end);
+  Type.TypeRange.load = function (bookmark) {
+    return Type.TypeRange.fromPositions(bookmark.from, bookmark.start, bookmark.end);
   };
 
   /**
@@ -406,10 +407,10 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
    *     selection should end
    * @returns {TypeRange} - A {TypeRange} instance
    */
-  TypeRange.fromPositions = function (el, startOffset, endOffset) {
+  Type.TypeRange.fromPositions = function (el, startOffset, endOffset) {
     var start = TextWalker.nodeAt(el, startOffset),
       end = TextWalker.nodeAt(el, endOffset);
-    return new TypeRange(start.node, start.offset, end.node, end.offset);
+    return new Type.TypeRange(start.node, start.offset, end.node, end.offset);
   };
 
   /**
@@ -421,9 +422,9 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
    *
    * @returns {TypeRange|null} - A {TypeRange} instance or null
    */
-  TypeRange.fromCurrentSelection = function () {
+  Type.TypeRange.fromCurrentSelection = function () {
     var sel = document.getSelection();
-    return sel.isCollapsed ? null : TypeRange.fromRange(sel.getRangeAt(0));
+    return sel.isCollapsed ? null : Type.TypeRange.fromRange(sel.getRangeAt(0));
   };
 
   /**
@@ -440,14 +441,14 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
    * @returns {TypeRange} - The {TypeRange} corresponding to the given
    *     {Range}
    */
-  TypeRange.fromRange = function (range) {
+  Type.TypeRange.fromRange = function (range) {
     var endContainer = range.endContainer,
       endOffset = range.endOffset;
     if (endOffset === 0 && endContainer === DomWalker.next(range.startContainer.parentNode.nextSibling, 'visible')) {
       endContainer = DomWalker.last(range.startContainer.parentNode, 'text');
       endOffset = endContainer.length;
     }
-    return new TypeRange(range.startContainer, range.startOffset, endContainer, endOffset);
+    return new Type.TypeRange(range.startContainer, range.startOffset, endContainer, endOffset);
   };
 
   /**
@@ -461,11 +462,11 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
    * @param {number} selectedChars
    * @returns {TypeRange}
    */
-  TypeRange.fromCaret = function (caret, selectedChars) {
+  Type.TypeRange.fromCaret = function (caret, selectedChars) {
     var startNode = caret.getNode(),
       startOffset = caret.getNodeOffset(),
       end = TextWalker.nodeAt(startNode, selectedChars, startOffset);
-    return new TypeRange(startNode, startOffset, end.node, end.offset);
+    return new Type.TypeRange(startNode, startOffset, end.node, end.offset);
   };
 
   /**
@@ -479,10 +480,10 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
    * @returns {TypeRange} - A {TypeRange} spanning over the contents of the
    *     given element.
    */
-  TypeRange.fromElement = function (el) {
+  Type.TypeRange.fromElement = function (el) {
     var startNode = DomWalker.first(el, 'text'),
       endNode = DomWalker.last(el, 'text');
-    return new TypeRange(startNode, 0, endNode, endNode.nodeValue.length);
+    return new Type.TypeRange(startNode, 0, endNode, endNode.nodeValue.length);
   };
 
   /**
@@ -499,7 +500,7 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
    * @returns {boolean}
    * @private
    */
-  TypeRange._testGetClientRectsNeedsFix = function () {
+  Type.TypeRange._testGetClientRectsNeedsFix = function () {
 
     var range = document.createRange(),
       p1 = DomUtil.addElement('p'),
@@ -528,11 +529,11 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
    * @returns {boolean}
    * @private
    */
-  TypeRange._getClientRectsNeedsFix = function () {
-    if (typeof TypeRange._getClientRectsIsBroken !== 'boolean') {
-      TypeRange._getClientRectsIsBroken = this._testGetClientRectsNeedsFix();
+  Type.TypeRange._getClientRectsNeedsFix = function () {
+    if (typeof Type.TypeRange._getClientRectsIsBroken !== 'boolean') {
+      Type.TypeRange._getClientRectsIsBroken = this._testGetClientRectsNeedsFix();
     }
-    return TypeRange._getClientRectsIsBroken;
+    return Type.TypeRange._getClientRectsIsBroken;
   };
 
   /**
@@ -550,9 +551,9 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
    * @return {ClientRect[]} ClientRectList or list of
    *     ClientRect objects describing range
    */
-  TypeRange.getClientRects = function (range) {
+  Type.TypeRange.getClientRects = function (range) {
 
-    if (!TypeRange._getClientRectsNeedsFix()) {
+    if (!Type.TypeRange._getClientRectsNeedsFix()) {
       return range.getClientRects();
     }
 
@@ -583,4 +584,4 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
 
 }).call();
 
-module.exports = TypeRange;
+module.exports = Type.TypeRange;
