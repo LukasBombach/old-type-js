@@ -21,6 +21,8 @@ function Formatting(type) {
    * for inline and block tags. We use this array as reference to determine
    * what kind of markup to generate.
    *
+   * todo move me to dom utils
+   *
    * @type {string[]}
    * @private
    */
@@ -30,6 +32,8 @@ function Formatting(type) {
    * A list of tags that are displayed as block elements. We generate different
    * markup for inline and block tags. We use this array as reference to determine
    * what kind of markup to generate.
+   *
+   * todo move me to dom utils
    *
    * @type {string[]}
    * @private
@@ -65,8 +69,6 @@ function Formatting(type) {
 
     var args, startNode, endNode, enclosingTag, selPositions;
 
-    //selPositions = typeRange.save(this._type.getRoot());
-
     // If the selection is enclosed the tag we want to format with
     // remove formatting from selected area
     if (enclosingTag = typeRange.elementEnclosingStartAndEnd(tag)) {
@@ -80,8 +82,6 @@ function Formatting(type) {
       args      = [tag, startNode, endNode].concat(params);
       this.insertInline.apply(this, args);
     }
-
-    //TypeRange.load(selPositions).select();
 
     return this;
   };
@@ -157,12 +157,14 @@ function Formatting(type) {
     DomUtil.unwrap(enclosingTag);
 
     leftRange = TypeRange.load(this._type.getRoot(), tagPositions.start, selPositions.start);
-    if (!leftRange.isCollapsed())
+    if (!leftRange.isCollapsed()) {
       this.inline(tagName, leftRange);
+    }
 
     rightRange = TypeRange.load(this._type.getRoot(), selPositions.end, tagPositions.end);
-    if (!rightRange.isCollapsed())
+    if (!rightRange.isCollapsed()) {
       this.inline(tagName, rightRange);
+    }
 
     return this;
 

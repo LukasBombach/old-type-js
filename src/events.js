@@ -2,6 +2,7 @@
 
 var Type = require('./core');
 
+// todo Write a method that takes an object (Type and Type.prototype) and attaches these event methods to it
 
 /**
  * Methods for Type.js instance events

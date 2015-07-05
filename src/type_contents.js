@@ -44,61 +44,8 @@ function TypeContents() {
   };
 
   /**
-   * Removes one character left from the current offset
-   * and moves the caret accordingly
-   *
-   * @param textNode
-   * @param offset
-   * @param {number} [numChars] - Home many characters should be removed
-   *     from the caret's position. A negative number will remove
-   *     characters left from the caret, a positive number from the right.
-   * @returns {Caret}
-   */
-  /*this.remove = function (textNode, offset, numChars) {
-
-    var parent, prev, str;
-
-    numChars = numChars || -1;
-
-    if (offset === 0 && numChars === textNode.nodeValue.length) {
-      DomUtil.removeVisible(textNode);
-      return this;
-    }
-
-    if (offset === 0 && numChars > textNode.nodeValue.length) {
-      numChars -= textNode.nodeValue.length;
-      parent = DomUtil.removeVisible(textNode);
-      this._remove(DomUtil.nextTextNode(parent), 0, numChars);
-      return this;
-    }
-
-    if (offset === textNode.nodeValue.length && numChars * -1 === textNode.nodeValue.length) {
-      DomUtil.removeVisible(textNode);
-      return this;
-    }
-
-    if (offset === textNode.nodeValue.length && numChars * -1 > textNode.nodeValue.length) {
-      numChars += textNode.nodeValue.length;
-      parent = DomUtil.removeVisible(textNode);
-      prev = DomUtil.prevTextNode(parent, this._type.root);
-      this._remove(prev, prev.nodeValue.length, numChars);
-      return this;
-    }
-
-    str = textNode.nodeValue;
-
-    if (numChars < 0) {
-      textNode.nodeValue = str.substring(0, offset + numChars) + str.substring(offset, str.length);
-    } else {
-      textNode.nodeValue = str.substring(0, offset) + str.substring(offset + numChars, str.length);
-    }
-
-    return this;
-
-  };*/
-
-  /**
    * todo refactor var names "a" and "b"
+   * todo distinguish block from inline tags
    *
    * remove(range)
    * remove(caret, -1)
