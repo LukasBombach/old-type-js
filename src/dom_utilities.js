@@ -65,7 +65,9 @@ function DomUtilities() {
   };
 
   /**
-   * Todo Vielleicht funktioniert das hier effektiver mit querySelectorAll anstatt die childNodes zu traversieren
+   * Recursively unwraps the given tag from the element passed an all its children
+   * Note to self and future developers, querySelectorAll can be used for this when
+   * we drop IE 8 support.
    *
    * @param el
    * @param tag
@@ -73,32 +75,24 @@ function DomUtilities() {
    * @returns {DomUtilities}
    */
   DomUtilities.removeTag = function (el, tag, deep) {
-
-    // Required vars, Crockford style
     var i;
-
-    // Recursively remove the given tag from the elements children
     if (deep && el.childNodes.length) {
       for (i = 0; i < el.childNodes.length; i += 1) {
         this.removeTag(el.childNodes[i], tag, deep);
       }
     }
-
-    // Unwrap this tag if it is the tag we want to remove
     if (el.nodeType === 1 && el.tagName.toLowerCase() === tag.toLowerCase()) {
       this.unwrap(el);
     }
-
-    // Chaining
     return this;
   };
 
   /**
-   * Todo Maybe remove inline comments as they are here for my personal understanding rather than anything else
    *
-   * (Modified) from
-   * http://stackoverflow.com/questions/3337587/wrapping-a-set-of-dom-elements-using-javascript/13169465#13169465
-   * https://gist.github.com/datchley/11383482
+   * By Dave Atchley, taken (and modified) from
+   * {@link https://gist.github.com/datchley/11383482}
+   * No license given. I asked for the license by mail.
+   * Still waiting.
    *
    * @param tag
    * @param elms
