@@ -8,7 +8,7 @@ var Util = require('./type_utilities');
  * @param {Object|Node} [options] - If an object is passed, it should
  *     contain settings determining what node to return, see specifics
  *     below. If a {Node} is passed, this acts as options.constrainingNode
- * @param {Function|string} [options.filterFunction] - nextNode traverses
+ * @param {Function|string} [options.filter] - nextNode traverses
  *     the DOM tree and passes each node to this function. This function
  *     should return true if the node passed is a node that we look for
  *     or false otherwise. E.g. if we want to find the next text node
@@ -196,7 +196,7 @@ function DomWalker(node, options) {
    * @param {Object|Node} [options] - If an object is passed, it should
    *     contain settings determining what node to return, see specifics
    *     below. If a {Node} is passed, this acts as options.constrainingNode
-   * @param {Function} [options.filterFunction] - nextNode traverses the
+   * @param {Function} [options.filter] - nextNode traverses the
    *     DOM tree and passes each node to this function. This function
    *     should return true if the node passed is a node that we look for
    *     or false otherwise. E.g. if we want to find the next text node
@@ -216,10 +216,10 @@ function DomWalker(node, options) {
    *     internally, this will be set to true and be passed on with the
    *     next node in the DOM to a recursive call. The node then passed to
    *     this method might be the node we are looking for, so having this
-   *     set to true will return that node (given that the filterFunction
+   *     set to true will return that node (given that the filter
    *     also returns true for that node)
    * @returns {null|Node} The next node in the DOM tree found or null
-   *     if none is found for the options.filterFunction criteria or
+   *     if none is found for the options.filter criteria or
    *     options.constrainingNode has been hit.
    */
   DomWalker._nextNode = function (node, options, returnMe) {
@@ -228,7 +228,7 @@ function DomWalker(node, options) {
     var parent = node.parentNode;
 
     // If a node is found in this call, return it, stop the recursion
-    if (returnMe === true && (!options.filterFunction || options.filterFunction(node))) {
+    if (returnMe === true && (!options.filter || options.filter(node))) {
       return node;
     }
 
@@ -265,7 +265,7 @@ function DomWalker(node, options) {
    * @param {Object|Node} [options] - If an object is passed, it should
    *     contain settings determining what node to return, see specifics
    *     below. If a {Node} is passed, this acts as options.constrainingNode
-   * @param {Function} [options.filterFunction] - nextNode traverses the
+   * @param {Function} [options.filter] - nextNode traverses the
    *     DOM tree and passes each node to this function. This function
    *     should return true if the node passed is a node that we look for
    *     or false otherwise. E.g. if we want to find the next text node
@@ -285,10 +285,10 @@ function DomWalker(node, options) {
    *     internally, this will be set to true and be passed on with the
    *     next node in the DOM to a recursive call. The node then passed to
    *     this method might be the node we are looking for, so having this
-   *     set to true will return that node (given that the filterFunction
+   *     set to true will return that node (given that the filter
    *     also returns true for that node)
    * @returns {null|Node} The next node in the DOM tree found or null
-   *     if none is found for the options.filterFunction criteria or
+   *     if none is found for the options.filter criteria or
    *     options.constrainingNode has been hit.
    */
   DomWalker._prevNode = function (node, options, returnMe) {
@@ -297,7 +297,7 @@ function DomWalker(node, options) {
     var parent = node.parentNode;
 
     // If a node is found in this call, return it, stop the recursion
-    if (returnMe === true && (!options.filterFunction || options.filterFunction(node))) {
+    if (returnMe === true && (!options.filter || options.filter(node))) {
       return node;
     }
 
