@@ -239,7 +239,7 @@ function TypeInput(type) {
     var div = document.createElement('div');
     div.setAttribute('contenteditable', 'true');
     div.className = Settings.prefix + 'input';
-    DomUtil.elementsContainer().appendChild(div);
+    DomUtil.getElementsContainer().appendChild(div);
     return div;
   };
 

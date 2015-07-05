@@ -23,22 +23,26 @@ function DomUtilities() {
   this._containerId = Settings.prefix + 'container';
 
   /**
-   *
-   * @param {Node} container
-   * @param {Node} node
-   * @returns {boolean}
+   * Todo Use me wherever you find document.createElement or this.elementsContainer
+   * @param {string} tagName
+   * @param {string} [className]
+   * @returns {Element}
    */
-  this.containsButIsnt = function (container, node) {
-    return container !== node && container.contains(node);
+  this.addElement = function (tagName, className) {
+    var el = document.createElement(tagName);
+    if (className) el.className = Settings.prefix + className;
+    this.getElementsContainer().appendChild(el);
+    return el;
   };
 
   /**
    *
-   * @param obj
-   * @returns {boolean}
+   * @param {Element} el
+   * @returns {*}
    */
-  this.isNode = function (obj) {
-    return !!(obj && obj.nodeType);
+  this.removeElement = function (el) {
+    el.parentNode.removeChild(el);
+    return this;
   };
 
   /**
@@ -60,6 +64,35 @@ function DomUtilities() {
     if (!this.isVisible(parent))
       return this.removeVisible(parent, constrainingNode);
     return parent;
+  };
+
+  /**
+   * Todo Vielleicht funktioniert das hier effektiver mit querySelectorAll anstatt die childNodes zu traversieren
+   *
+   * @param el
+   * @param tag
+   * @param deep
+   * @returns {DomUtilities}
+   */
+  this.removeTag = function (el, tag, deep) {
+
+    // Required vars, Crockford style
+    var i;
+
+    // Recursively remove the given tag from the elements children
+    if (deep && el.childNodes.length) {
+      for (i = 0; i < el.childNodes.length; i += 1) {
+        this.removeTag(el.childNodes[i], tag, deep);
+      }
+    }
+
+    // Unwrap this tag if it is the tag we want to remove
+    if (el.nodeType === 1 && el.tagName.toLowerCase() === tag.toLowerCase()) {
+      this.unwrap(el);
+    }
+
+    // Chaining
+    return this;
   };
 
   /**
@@ -168,35 +201,6 @@ function DomUtilities() {
   };
 
   /**
-   * Todo Vielleicht funktioniert das hier effektiver mit querySelectorAll anstatt die childNodes zu traversieren
-   *
-   * @param el
-   * @param tag
-   * @param deep
-   * @returns {DomUtilities}
-   */
-  this.removeTag = function (el, tag, deep) {
-
-    // Required vars, Crockford style
-    var i;
-
-    // Recursively remove the given tag from the elements children
-    if (deep && el.childNodes.length) {
-      for (i = 0; i < el.childNodes.length; i += 1) {
-        this.removeTag(el.childNodes[i], tag, deep);
-      }
-    }
-
-    // Unwrap this tag if it is the tag we want to remove
-    if (el.nodeType === 1 && el.tagName.toLowerCase() === tag.toLowerCase()) {
-      this.unwrap(el);
-    }
-
-    // Chaining
-    return this;
-  };
-
-  /**
    * Todo move to dom walker??
    *
    * @param {Node} el
@@ -240,33 +244,10 @@ function DomUtilities() {
   };
 
   /**
-   * Todo Use me wherever you find document.createElement or this.elementsContainer
-   * @param {string} tagName
-   * @param {string} [className]
-   * @returns {Element}
-   */
-  this.addElement = function (tagName, className) {
-    var el = document.createElement(tagName);
-    if (className) el.className = Settings.prefix + className;
-    this.elementsContainer().appendChild(el);
-    return el;
-  };
-
-  /**
-   *
-   * @param {Element} el
-   * @returns {*}
-   */
-  this.removeElement = function (el) {
-    el.parentNode.removeChild(el);
-    return this;
-  };
-
-  /**
    *
    * @returns {Element}
    */
-  this.elementsContainer = function () {
+  this.getElementsContainer = function () {
     var container = window.document.getElementById(this._containerId);
     if (container === null) {
       container = window.document.createElement('div');
@@ -343,6 +324,25 @@ function DomUtilities() {
 
     return null;
 
+  };
+
+  /**
+   *
+   * @param {Node} container
+   * @param {Node} node
+   * @returns {boolean}
+   */
+  this.containsButIsnt = function (container, node) {
+    return container !== node && container.contains(node);
+  };
+
+  /**
+   *
+   * @param obj
+   * @returns {boolean}
+   */
+  this.isNode = function (obj) {
+    return !!(obj && obj.nodeType);
   };
 
 }).call(DomUtilities.prototype);
