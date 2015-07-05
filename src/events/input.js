@@ -3,22 +3,60 @@
 var Type = require('../core');
 var TypeEnv = require('../type_environment');
 
-function TypeInputEvent(key, shift, alt, ctrl, meta, mac) {
-  this.key   = key;
-  this.shift = shift;
-  this.alt   = alt;
-  this.ctrl  = ctrl;
-  this.meta  = meta;
-  this.cmd   = (!mac && ctrl) || (mac && meta);
+/**
+ * Creates a new Type input event.
+ * This is an abstraction for browser events that lead to an input in
+ * the editor.
+ *
+ * todo TypeEnv.mac should be Type.env.mac
+ *
+ * @param {Object} options - Object holding parameters for the event
+ * @param {string} [options.key] - A descriptive name for the key
+ *     pressed as set in {@link TypeInputEvent.keyDownNames}.
+ * @param {number} [options.keyCode] - The key code of the key pressed
+ * @param {boolean} [options.shift] - Whether or not the shift key has
+ *     been pressed together with the given key.
+ * @param {boolean} [options.alt] - Whether or not the alt key has
+ *     been pressed together with the given key.
+ * @param {boolean} [options.ctrl] - Whether or not the control key has
+ *     been pressed together with the given key.
+ * @param {boolean} [options.meta] - Whether or not the command key has
+ *     been pressed together with the given key (for os x users).
+ * @constructor
+ */
+function TypeInputEvent(options) {
+
+  options = options || {};
+
+  this.key     = options.key     || null;
+  this.keyCode = options.keyCode || null;
+  this.shift   = options.shift   || false;
+  this.alt     = options.alt     || false;
+  this.ctrl    = options.ctrl    || false;
+  this.meta    = options.meta    || false;
+  this.cmd     = (!TypeEnv.mac && options.ctrl) || (TypeEnv.mac && options.meta);
+
   this.canceled = false;
 }
 
+(function () {
+
+  /**
+   * Sets this event instance to be cancelled
+   * @returns {TypeInputEvent}
+   */
+  this.cancel = function () {
+    this.canceled = true;
+    return this;
+  };
+
+}).call(TypeInputEvent.prototype);
+
 /**
- * Maps character codes to readable names
- *
+ * Maps character codes from key down events to readable names
  * @type {Object}
  */
-TypeInputEvent.keyNames = {
+TypeInputEvent.keyDownNames = {
   8  : 'backspace',
   37 : 'left',
   38 : 'up',
@@ -28,26 +66,25 @@ TypeInputEvent.keyNames = {
 };
 
 /**
- * Todo keyCode : https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
- * Todo keyCode : http://stackoverflow.com/questions/1444477/keycode-and-charcode
- *
- * Todo TypeEnv.mac should be Type.env.mac
+ * Factory to create a {TypeInputEvent} from a {KeyboardEvent}
  *
  * @param {KeyboardEvent} e
  * @returns {TypeInputEvent}
  */
 TypeInputEvent.fromKeyDown = function (e) {
-  var key = TypeInputEvent.keyNames[e.keyCode] || e.keyCode;
-  return new TypeInputEvent(key, e.shiftKey, e.altKey, e.ctrlKey, e.metaKey, TypeEnv.mac);
+
+  var charCode = (typeof e.which === "number") ? e.which : e.keyCode,
+    options = {
+      key     : TypeInputEvent.keyDownNames[charCode],
+      keyCode : charCode,
+      shift   : e.shiftKey,
+      alt     : e.altKey,
+      ctrl    : e.ctrlKey,
+      meta    : e.metaKey
+    };
+
+  return new TypeInputEvent(options);
+
 };
-
-(function () {
-
-  this.cancel = function () {
-    this.canceled = true;
-  };
-
-}).call(TypeInputEvent.prototype);
-
 
 module.exports = TypeInputEvent;
