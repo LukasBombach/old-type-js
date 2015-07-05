@@ -352,7 +352,7 @@ function Caret(options) {
    * @returns {number|null}
    */
   this.getOffset = function () {
-    return DomUtil.getTextOffset(this._constrainingNode, this.textNode, this.offset);
+    return DomUtil.getTextOffset(this._constrainingNode, this.textNode, 0, this.offset);
   };
 
   /**

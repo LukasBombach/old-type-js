@@ -39,6 +39,200 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
 (function () {
 
   /**
+   * If the startContainer and the endContainer are enclosed by
+   * the same element matching the selector, that element will
+   * be returned. Otherwise null will be returned.
+   * todo call this commonAncestor and make the selector optional
+   *
+   * @param {String} selector - This method will only return a
+   *     common ancestor matched by this selector.
+   * @param {HTMLElement} [constrainingNode] - If given, this
+   *     method will stop traversing the DOM tree when it hits
+   *     this element.
+   * @returns {HTMLElement|null} - Will either return the common
+   *     ancestor matching the selector or null otherwise.
+   */
+  this.elementEnclosingStartAndEnd = function (selector, constrainingNode) {
+
+    var tagEnclosingStartNode = DomUtil.parent(this.startContainer, selector, constrainingNode),
+      tagEnclosingEndNode;
+
+    if (tagEnclosingStartNode === null) {
+      return null;
+    }
+
+    tagEnclosingEndNode = DomUtil.parent(this.endContainer, selector, constrainingNode);
+
+    if (tagEnclosingStartNode === tagEnclosingEndNode) {
+      return tagEnclosingStartNode;
+    }
+
+    return null;
+  };
+
+  /**
+   * Will return whether or not the whole range (the
+   * startContainer and the endContainer are both children
+   * of the given element.
+   *
+   * @param {Node} node - The node to check if it
+   *     is a parent to the start and endContainer.
+   * @returns {boolean}
+   */
+  this.isInside = function (node) {
+    return node.contains(this.startContainer) && node.contains(this.endContainer);
+  };
+
+  /**
+   * Will throw an error if the start and endContainer are
+   * not children to the given element. Returns true if
+   * they are.
+   *
+   * @param {HTMLElement} el - The element to check if it
+   *     is a parent to the start and endContainer.
+   * @returns {boolean}
+   */
+  this.ensureIsInside = function (el) {
+    if (this.isInside(el)) {
+      return true;
+    }
+    throw new Error('Range is not contained by given node.');
+  };
+
+  /**
+   * Will swap start and end containers as well as offsets if
+   * either the containers or the offsets are in the wrong
+   * order (the start container / offset should precede the end)
+   *
+   * @returns {TypeRange} - This instance
+   */
+  this.ensureStartNodePrecedesEndNode = function () {
+
+    var startIsEnd, startPrecedesEnd;
+    startIsEnd = this.startContainer === this.endContainer;
+
+    if (startIsEnd && this.startOffset <= this.endOffset) {
+      return this;
+    }
+
+    if (startIsEnd && this.startOffset > this.endOffset) {
+      return this._swapOffsets();
+    }
+
+    startPrecedesEnd = this.startContainer.compareDocumentPosition(this.endContainer);
+    startPrecedesEnd = startPrecedesEnd & Node.DOCUMENT_POSITION_FOLLOWING;
+
+    if (!startPrecedesEnd) {
+      this._swapStartAndEnd();
+    }
+
+    return this;
+  };
+
+  /**
+   * Will split the startContainer text node at the startOffset and set
+   * this' startContainer to the right node the resulting nodes of the
+   * split and the startOffset to 0. Will return the new startContainer.
+   *
+   * @returns {Node} - The new startContainer
+   */
+  this.splitStartContainer = function () {
+
+    var startsAndEndsInSameNode;
+
+    if (this.startOffset === 0) {
+      return this.startContainer;
+    }
+
+    startsAndEndsInSameNode = this.startsAndEndsInSameNode();
+    this.startContainer = this.startContainer.splitText(this.startOffset);
+
+    if (startsAndEndsInSameNode) {
+      this.endContainer = this.startContainer;
+      this.endOffset -= this.startOffset;
+    }
+
+    this.startOffset = 0;
+
+    return this.startContainer;
+  };
+
+  /**
+   * Will split the endContainer text node at the endOffset and set
+   * this' endContainer to the left node the resulting nodes of the
+   * split and the endOffset to the end of the endContainer.
+   * Will return the new endContainer.
+   *
+   * @returns {Node} - The new endContainer
+   */
+  this.splitEndContainer = function () {
+    if (this.endOffset !== this.endContainer.length) {
+      this.endContainer = this.endContainer.splitText(this.endOffset).previousSibling;
+      this.endOffset = this.endContainer.length;
+    }
+    return this.endContainer;
+  };
+
+  /**
+   * Creates a native {Range} object and returns it.
+   * @returns {Range}
+   */
+  this.getNativeRange = function () {
+    var range = document.createRange();
+    range.setEnd(this.endContainer, this.endOffset);
+    range.setStart(this.startContainer, this.startOffset);
+    return range;
+  };
+
+  /**
+   * Looks up the number of characters (offsets) where this range starts
+   * and ends relative to a given {Element}. Returns an {Object} containing
+   * the element itself and the offsets. This object can be used to restore
+   * the range by using the {@link TypeRange.load} factory.
+   *
+   * @param {Element} fromNode
+   * @returns {{from: Element, start: number, end: number}}
+   */
+  this.save = function (fromNode) {
+    var start, end;
+    start = this.getStartOffset(fromNode);
+    end = this.startsAndEndsInSameNode() ? start - this.startOffset + this.endOffset : this.getEndOffset(fromNode);
+    return { from: fromNode, start: start, end: end };
+  };
+
+  /**
+   * Returns the length of this range as numbers of characters.
+   * @returns {number}
+   */
+  this.getLength = function () {
+    return DomUtil.getTextOffset(this.startContainer, this.endContainer, this.startOffset, this.endOffset);
+  };
+
+  /**
+   *
+   * @param from
+   * @returns {number|null}
+   */
+  this.getStartOffset = function (from) {
+    if (from) {
+      return DomUtil.getTextOffset(from, this.startContainer, 0, this.startOffset);
+    }
+    return parseInt(this.startOffset, 10);
+  };
+
+  /**
+   *
+   * @param {Node} [from]
+   * @returns {number|null}
+   */
+  this.getEndOffset = function (from) {
+    if (from) {
+      return DomUtil.getTextOffset(from, this.endContainer, 0, this.endOffset);
+    }
+    return parseInt(this.endOffset, 10);
+  };
+
+  /**
    * Returns the element containing the startContainer.
    *
    * @returns {Node}
@@ -116,221 +310,6 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
    */
   this.isCollapsed = function () {
     return this.startOffset === this.endOffset && this.startsAndEndsInSameNode();
-  };
-
-  /**
-   * If the startContainer and the endContainer are enclosed by
-   * the same element matching the selector, that element will
-   * be returned. Otherwise null will be returned.
-   * todo call this commonAncestor and make the selector optional
-   *
-   * @param {String} selector - This method will only return a
-   *     common ancestor matched by this selector.
-   * @param {HTMLElement} [constrainingNode] - If given, this
-   *     method will stop traversing the DOM tree when it hits
-   *     this element.
-   * @returns {HTMLElement|null} - Will either return the common
-   *     ancestor matching the selector or null otherwise.
-   */
-  this.elementEnclosingStartAndEnd = function (selector, constrainingNode) {
-
-    var tagEnclosingStartNode = DomUtil.parent(this.startContainer, selector, constrainingNode),
-      tagEnclosingEndNode;
-
-    if (tagEnclosingStartNode === null) {
-      return null;
-    }
-
-    tagEnclosingEndNode = DomUtil.parent(this.endContainer, selector, constrainingNode);
-
-    if (tagEnclosingStartNode === tagEnclosingEndNode) {
-      return tagEnclosingStartNode;
-    }
-
-    return null;
-  };
-
-  /**
-   * Will return whether or not the whole range (the
-   * startContainer and the endContainer are both children
-   * of the given element.
-   *
-   * @param {HTMLElement} el - The element to check if it
-   *     is a parent to the start and endContainer.
-   * @returns {boolean}
-   */
-  this.isInside = function (el) {
-    return el.contains(this.startContainer) && el.contains(this.endContainer);
-  };
-
-  /**
-   * Will throw an error if the start and endContainer are
-   * not children to the given element. Returns true if
-   * they are.
-   *
-   * @param {HTMLElement} el - The element to check if it
-   *     is a parent to the start and endContainer.
-   * @returns {boolean}
-   */
-  this.ensureIsInside = function (el) {
-    if (this.isInside(el)) {
-      return true;
-    }
-    throw new Error('Range is not contained by given node.');
-  };
-
-  /**
-   * Will swap start and end containers as well as offsets if
-   * either the containers or the offsets are in the wrong
-   * order (the start container / offset should precede the end)
-   *
-   * @returns {TypeRange} - This instance
-   */
-  this.ensureStartNodePrecedesEndNode = function () {
-
-    var startIsEnd, startPrecedesEnd;
-    startIsEnd = this.startContainer === this.endContainer;
-
-    if (startIsEnd && this.startOffset <= this.endOffset) {
-      return this;
-    }
-
-    if (startIsEnd && this.startOffset > this.endOffset) {
-      return this._swapOffsets();
-    }
-
-    startPrecedesEnd = this.startContainer.compareDocumentPosition(this.endContainer);
-    startPrecedesEnd = startPrecedesEnd & Node.DOCUMENT_POSITION_FOLLOWING;
-
-    if (!startPrecedesEnd) {
-      this._swapStartAndEnd();
-    }
-
-    return this;
-  };
-
-  /**
-   *
-   * @returns {Node}
-   */
-  this.splitStartContainer = function () {
-    if (this.startOffset !== 0) {
-      var startsAndEndsInSameNode = this.startsAndEndsInSameNode();
-      this.startContainer = this.startContainer.splitText(this.startOffset);
-      if (startsAndEndsInSameNode) {
-        this.endContainer = this.startContainer;
-        this.endOffset -= this.startOffset;
-      }
-      this.startOffset = 0;
-    }
-    return this.startContainer;
-  };
-
-  /**
-   *
-   * @returns {*|Node}
-   */
-  this.splitEndContainer = function () {
-    if (this.endOffset !== this.endContainer.length) {
-      this.endContainer = this.endContainer.splitText(this.endOffset).previousSibling;
-      this.endOffset = this.endContainer.length;
-    }
-    return this.endContainer;
-  };
-
-  /**
-   *
-   * @returns {TypeRange}
-   */
-  this.select = function () {
-    var selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(this.getRange());
-    return this;
-  };
-
-  /**
-   *
-   * @returns {TextRange|Range}
-   */
-  this.getRange = function () {
-    var range = document.createRange();
-    range.setEnd(this.endContainer, this.endOffset);
-    range.setStart(this.startContainer, this.startOffset);
-    return range;
-  };
-
-  /**
-   * todo use this wherever I use range methods for this, namely selection and selection overlay
-   * todo caching
-   */
-  this.getPositions = function () {
-    //this.getRange().getClientRects()
-  };
-
-
-  this.getRects = function () {
-    TypeRange.getClientRects(this.getNativeRange);
-  };
-
-  /**
-   *
-   * @param {HTMLElement} fromNode
-   * @returns {{from: HTMLElement, start: number, end: number}}
-   */
-  this.save = function (fromNode) {
-    var start, end;
-    start = this._offsetFromNodeToNode(fromNode, this.startContainer, this.startOffset);
-    if (this.startsAndEndsInSameNode()) {
-      end = start - this.startOffset + this.endOffset;
-    } else {
-      end = this._offsetFromNodeToNode(fromNode, this.endContainer, this.endOffset);
-    }
-    return { from: fromNode, start: start, end: end }
-  };
-
-  /**
-   *
-   * @returns {number|null}
-   */
-  this.getLength = function () {
-
-    var node = this.startContainer,
-      length = 0;
-
-    do {
-      if (node === this.endContainer) {
-        return length + this.endOffset;
-      }
-      length += node.nodeValue.length;
-    } while (node = Walker.next(node));
-
-    return null;
-
-  };
-
-  /**
-   *
-   * @param {Node} [from]
-   * @returns {number|null}
-   */
-  this.getStartOffset = function (from) {
-    if (from) {
-      return DomUtil.getTextOffset(from, this.startContainer, this.startOffset);
-    }
-    return this.startOffset;
-  };
-
-  /**
-   *
-   * @param {Node} [from]
-   * @returns {number|null}
-   */
-  this.getEndOffset = function (from) {
-    if (from) {
-      return DomUtil.getTextOffset(from, this.endContainer, this.endOffset);
-    }
-    return this.endOffset;
   };
 
   /**

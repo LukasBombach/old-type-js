@@ -33,7 +33,7 @@ function CommandFilter(type, input) {
     var range;
 
     if (e.cmd) {
-      range = TypeRange.fromRange(this._selection.getRange());
+      range = TypeRange.fromRange(this._selection.getNativeRange());
       this._formating.format(this.tags[e.key], range);
       e.cancel();
     }

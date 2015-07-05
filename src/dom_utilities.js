@@ -309,20 +309,22 @@ function DomUtilities() {
    *
    * @param fromNode
    * @param toNode
+   * @param fromOffset
    * @param toOffset
    * @returns {*}
    */
-  this.getTextOffset = function (fromNode, toNode, toOffset) {
+  this.getTextOffset = function (fromNode, toNode, fromOffset, toOffset) {
 
     var walker = new Walker(fromNode, 'text'),
       node = walker.next(true),
       offsetWalked = 0;
 
+    fromOffset = fromOffset || 0;
     toOffset = toOffset || 0;
 
     do {
       if (node === toNode) {
-        return offsetWalked + toOffset;
+        return offsetWalked + toOffset - fromOffset;
       }
       offsetWalked += node.nodeValue.length;
     } while (node = walker.next());

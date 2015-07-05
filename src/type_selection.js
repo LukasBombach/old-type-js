@@ -119,7 +119,7 @@ function TypeSelection() {
    * selected yet.
    * @returns {Range|null}
    */
-  this.getRange = function () {
+  this.getNativeRange = function () {
     return this._range;
   };
 

@@ -37,7 +37,7 @@ function RemoveFilter(type, input) {
       range = TypeRange.fromCaret(this._caret, removeChars);
       offset = this._caret.getOffset() + moveChars;
     } else {
-      range = TypeRange.fromRange(this._selection.getRange()); // todo TypeRange.fromSelection
+      range = TypeRange.fromRange(this._selection.getNativeRange()); // todo TypeRange.fromSelection
       offset = range.getStartOffset(this._root);
       this._selection.unselect();
       this._caret._blink();
