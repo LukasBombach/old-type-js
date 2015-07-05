@@ -37,6 +37,7 @@ function TypeInputEvent(options) {
   this.cmd     = (!TypeEnv.mac && options.ctrl) || (TypeEnv.mac && options.meta);
 
   this.canceled = false;
+
 }
 
 (function () {
@@ -58,6 +59,9 @@ function TypeInputEvent(options) {
  */
 TypeInputEvent.keyDownNames = {
   8  : 'backspace',
+  9  : 'tab',
+  13 : 'enter',
+  32 : 'space',
   37 : 'left',
   38 : 'up',
   39 : 'right',
