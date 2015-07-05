@@ -68,7 +68,7 @@ function DomWalker(node, options) {
   };
 
   /**
-   * 
+   *
    * @param options
    * @returns {*}
    */
@@ -119,6 +119,26 @@ function DomWalker(node, options) {
    */
   DomWalker.prev = function (node, options) {
     return DomWalker._prevNode(node, DomWalker.loadOptions(options));
+  };
+
+  /**
+   *
+   * @param node
+   * @param filter
+   * @returns {null|Node}
+   */
+  DomWalker.first = function (node, filter) {
+    return DomWalker._nextNode(node, DomWalker.loadOptions(filter), true);
+  };
+
+  /**
+   *
+   * @param node
+   * @param filter
+   * @returns {null|Node}
+   */
+  DomWalker.last = function (node, filter) {
+    return DomWalker._prevNode(node, DomWalker.loadOptions(filter), true);
   };
 
   /**
@@ -304,10 +324,6 @@ function DomWalker(node, options) {
 
   };
 
-  DomWalker.first = function (node, filter) {
-
-  };
-
   /**
    * Returns true if a give node is a text node and its content is not
    * entirely whitespace.
@@ -317,7 +333,7 @@ function DomWalker(node, options) {
    * @private
    */
   DomWalker._isTextNodeWithContents = function (node) {
-    return node.nodeType === this._TEXT_NODE && /[^\t\n\r ]/.test(node.textContent);
+    return node.nodeType === Node.TEXT_NODE && /[^\t\n\r ]/.test(node.textContent);
   };
 
   /**

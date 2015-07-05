@@ -2,6 +2,7 @@
 
 var Settings = require('./settings');
 var DomUtil = require('./dom_utilities');
+var DomWalker = require('./dom_walker');
 
 /**
  * An editor's caret. We cannot use the browser's native caret since we do not utilize
@@ -204,7 +205,8 @@ function Caret(options) {
    */
   this.moveTo = function (node, offset) {
     if (node.nodeType !== Node.TEXT_NODE) {
-      node = DomUtil.firstTextNode(node);
+      //node = DomUtil.firstTextNode(node);
+      node = DomWalker.first(node, 'text');
     }
     if (node === null) {
       throw new Error('Node parameter must be or contain a text node');
