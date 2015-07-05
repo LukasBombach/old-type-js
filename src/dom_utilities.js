@@ -1,9 +1,6 @@
 'use strict';
 
 var Settings = require('./settings');
-var Walker = require('./dom_walker');
-
-var singleton;
 
 /**
  * todo use static methods instead of singleton
@@ -290,7 +287,6 @@ function DomUtilities() {
   };
 
 
-}).call(DomUtilities.prototype);
+}).call(DomUtilities);
 
-singleton = new DomUtilities();
-module.exports = singleton;
+module.exports = DomUtilities;
