@@ -5,10 +5,12 @@ var DomUtil = require('./dom_utilities');
 var DomWalker = require('./dom_walker');
 var TextWalker = require('./text_walker');
 
+console.log(Type);
+
 /**
- * Crates a new TypeRange
+ * Crates a new Type.Range
  *
- * TypeRange is a shim for the browsers' native {Range} objects and
+ * Type.Range is a shim for the browsers' native {Range} objects and
  * is being used in Type for anything related to text ranges.
  *
  * Native ranges are often buggy, lack essential features and should
@@ -16,8 +18,8 @@ var TextWalker = require('./text_walker');
  * and / or fixes common issues with ranges and adds many methods
  * useful for text editing.
  *
- * Among many other factory methods, you can use the {TypeRange.fromRange}
- * method to create a {TypeRange} from a native {Range}.
+ * Among many other factory methods, you can use the {Type.Range.fromRange}
+ * method to create a {Type.Range} from a native {Range}.
  *
  * @param {Node} startContainer - A text node that the range should start in.
  * @param {number} startOffset - The offset (of characters) inside the
@@ -27,7 +29,7 @@ var TextWalker = require('./text_walker');
  *     endContainer where the range should stop.
  * @constructor
  */
-Type.TypeRange = function (startContainer, startOffset, endContainer, endOffset) {
+Type.Range = function (startContainer, startOffset, endContainer, endOffset) {
 
   this.startContainer = startContainer;
   this.startOffset    = startOffset;
@@ -107,7 +109,7 @@ Type.TypeRange = function (startContainer, startOffset, endContainer, endOffset)
    * either the containers or the offsets are in the wrong
    * order (the start container / offset should precede the end)
    *
-   * @returns {TypeRange} - This instance
+   * @returns {Type.Range} - This instance
    */
   this.ensureStartNodePrecedesEndNode = function () {
 
@@ -191,7 +193,7 @@ Type.TypeRange = function (startContainer, startOffset, endContainer, endOffset)
    * Looks up the number of characters (offsets) where this range starts
    * and ends relative to a given {Element}. Returns an {Object} containing
    * the element itself and the offsets. This object can be used to restore
-   * the range by using the {@link TypeRange.load} factory.
+   * the range by using the {@link Type.Range.load} factory.
    *
    * @param {Element} fromNode
    * @returns {{from: Element, start: number, end: number}}
@@ -326,7 +328,7 @@ Type.TypeRange = function (startContainer, startOffset, endContainer, endOffset)
    * as their offsets when it is initialized with the endContainer
    * preceding the startContainer.
    *
-   * @returns {TypeRange} - This instance
+   * @returns {Type.Range} - This instance
    * @private
    */
   this._swapStartAndEnd = function () {
@@ -338,7 +340,7 @@ Type.TypeRange = function (startContainer, startOffset, endContainer, endOffset)
   /**
    * Will swap the startContainer with the endContainer
    *
-   * @returns {TypeRange} - This instance
+   * @returns {Type.Range} - This instance
    * @private
    */
   this._swapContainers = function () {
@@ -351,7 +353,7 @@ Type.TypeRange = function (startContainer, startOffset, endContainer, endOffset)
   /**
    * Will swap the startOffset with the endOffset
    *
-   * @returns {TypeRange} - This instance
+   * @returns {Type.Range} - This instance
    * @private
    */
   this._swapOffsets = function () {
@@ -361,37 +363,37 @@ Type.TypeRange = function (startContainer, startOffset, endContainer, endOffset)
     return this;
   };
 
-}).call(Type.TypeRange.prototype);
+}).call(Type.Range.prototype);
 
 
 (function () {
 
   /**
    * The implementation of {Range#getClientRects} is broken in WebKit
-   * browsers. {@link TypeRange._getClientRectsNeedsFix} tests for
+   * browsers. {@link Type.Range._getClientRectsNeedsFix} tests for
    * wrong behaviour and stores if it is broken in this variable.
    *
    * @type {null|boolean}
    */
-  Type.TypeRange._getClientRectsIsBroken = null;
+  Type.Range._getClientRectsIsBroken = null;
 
   /**
    * Will create a range spanning from the offset given as start to the
    * offset given as end, counting the characters contained by the given
-   * el. This function should be used with the save method of {TypeRange}.
+   * el. This function should be used with the save method of {Type.Range}.
    *
    * @param {{from: HTMLElement, start: number, end: number}} bookmark -
-   *     An object as returned by {TypeRange.save}
+   *     An object as returned by {Type.Range#save}
    * @param {HTMLElement} bookmark.from - The root element from which the
    *     start and end offsets should be counted
    * @param {number} bookmark.start - The offsets (number of characters)
    *     where the selection should start
    * @param {number} bookmark.end - The offsets (number of characters)
    *     where the selection should end
-   * @returns {TypeRange} - A {TypeRange} instance
+   * @returns {Type.Range} - A {Type.Range} instance
    */
-  Type.TypeRange.load = function (bookmark) {
-    return Type.TypeRange.fromPositions(bookmark.from, bookmark.start, bookmark.end);
+  Type.Range.load = function (bookmark) {
+    return Type.Range.fromPositions(bookmark.from, bookmark.start, bookmark.end);
   };
 
   /**
@@ -405,30 +407,30 @@ Type.TypeRange = function (startContainer, startOffset, endContainer, endOffset)
    *     selection should start
    * @param {number} endOffset - The offsets (number of characters) where the
    *     selection should end
-   * @returns {TypeRange} - A {TypeRange} instance
+   * @returns {Type.Range} - A {Type.Range} instance
    */
-  Type.TypeRange.fromPositions = function (el, startOffset, endOffset) {
+  Type.Range.fromPositions = function (el, startOffset, endOffset) {
     var start = TextWalker.nodeAt(el, startOffset),
       end = TextWalker.nodeAt(el, endOffset);
-    return new Type.TypeRange(start.node, start.offset, end.node, end.offset);
+    return new Type.Range(start.node, start.offset, end.node, end.offset);
   };
 
   /**
-   * Will read the current {Selection} on the document and create a {TypeRange}
+   * Will read the current {Selection} on the document and create a {Type.Range}
    * spanning over the {Range}(s) contained by the selection. Will return
    * null if there is no selection on the document.
    *
    * todo Check if selection is actually inside editor and return null if not
    *
-   * @returns {TypeRange|null} - A {TypeRange} instance or null
+   * @returns {Type.Range|null} - A {Type.Range} instance or null
    */
-  Type.TypeRange.fromCurrentSelection = function () {
+  Type.Range.fromCurrentSelection = function () {
     var sel = document.getSelection();
-    return sel.isCollapsed ? null : Type.TypeRange.fromRange(sel.getRangeAt(0));
+    return sel.isCollapsed ? null : Type.Range.fromRange(sel.getRangeAt(0));
   };
 
   /**
-   * Will create a {TypeRange} based on the start and end containers and
+   * Will create a {Type.Range} based on the start and end containers and
    * offsets of the given {Range}. This will also take care of browser
    * issues (especially WebKit) when the range is fetched from a selection
    * that ends at the end of an element.
@@ -437,22 +439,22 @@ Type.TypeRange = function (startContainer, startOffset, endContainer, endOffset)
    * todo find the pattern of this and process all cases
    *
    * @param {Range} range - The {Range} that should be <em>migrated</em>
-   *     to a {TypeRange}
-   * @returns {TypeRange} - The {TypeRange} corresponding to the given
+   *     to a {Type.Range}
+   * @returns {Type.Range} - The {Type.Range} corresponding to the given
    *     {Range}
    */
-  Type.TypeRange.fromRange = function (range) {
+  Type.Range.fromRange = function (range) {
     var endContainer = range.endContainer,
       endOffset = range.endOffset;
     if (endOffset === 0 && endContainer === DomWalker.next(range.startContainer.parentNode.nextSibling, 'visible')) {
       endContainer = DomWalker.last(range.startContainer.parentNode, 'text');
       endOffset = endContainer.length;
     }
-    return new Type.TypeRange(range.startContainer, range.startOffset, endContainer, endOffset);
+    return new Type.Range(range.startContainer, range.startOffset, endContainer, endOffset);
   };
 
   /**
-   * Will create a {TypeRange} spanning from the offset of the given {Caret}
+   * Will create a {Type.Range} spanning from the offset of the given {Caret}
    * over a number of characters passed as selectedChars. If selectedChars is
    * a positive number, the range's start will be set to the cursor position
    * and the end spanning to the characters to its right. If selectedChars is
@@ -460,30 +462,30 @@ Type.TypeRange = function (startContainer, startOffset, endContainer, endOffset)
    *
    * @param {Caret} caret
    * @param {number} selectedChars
-   * @returns {TypeRange}
+   * @returns {Type.Range}
    */
-  Type.TypeRange.fromCaret = function (caret, selectedChars) {
+  Type.Range.fromCaret = function (caret, selectedChars) {
     var startNode = caret.getNode(),
       startOffset = caret.getNodeOffset(),
       end = TextWalker.nodeAt(startNode, selectedChars, startOffset);
-    return new Type.TypeRange(startNode, startOffset, end.node, end.offset);
+    return new Type.Range(startNode, startOffset, end.node, end.offset);
   };
 
   /**
-   * Will create a {TypeRange} containing the given element's text by
+   * Will create a {Type.Range} containing the given element's text by
    * finding the first and last text nodes inside the element and spanning
    * a range beginning at the start of the first text node and at the end
    * of the last text node.
    *
    * @param {HTMLElement} el - The element that should be <em>covered</em>
-   *     by the returned {TypeRange}.
-   * @returns {TypeRange} - A {TypeRange} spanning over the contents of the
+   *     by the returned {Type.Range}.
+   * @returns {Type.Range} - A {Type.Range} spanning over the contents of the
    *     given element.
    */
-  Type.TypeRange.fromElement = function (el) {
+  Type.Range.fromElement = function (el) {
     var startNode = DomWalker.first(el, 'text'),
       endNode = DomWalker.last(el, 'text');
-    return new Type.TypeRange(startNode, 0, endNode, endNode.nodeValue.length);
+    return new Type.Range(startNode, 0, endNode, endNode.nodeValue.length);
   };
 
   /**
@@ -500,7 +502,7 @@ Type.TypeRange = function (startContainer, startOffset, endContainer, endOffset)
    * @returns {boolean}
    * @private
    */
-  Type.TypeRange._testGetClientRectsNeedsFix = function () {
+  Type.Range._testGetClientRectsNeedsFix = function () {
 
     var range = document.createRange(),
       p1 = DomUtil.addElement('p'),
@@ -529,11 +531,11 @@ Type.TypeRange = function (startContainer, startOffset, endContainer, endOffset)
    * @returns {boolean}
    * @private
    */
-  Type.TypeRange._getClientRectsNeedsFix = function () {
-    if (typeof Type.TypeRange._getClientRectsIsBroken !== 'boolean') {
-      Type.TypeRange._getClientRectsIsBroken = this._testGetClientRectsNeedsFix();
+  Type.Range._getClientRectsNeedsFix = function () {
+    if (typeof Type.Range._getClientRectsIsBroken !== 'boolean') {
+      Type.Range._getClientRectsIsBroken = this._testGetClientRectsNeedsFix();
     }
-    return Type.TypeRange._getClientRectsIsBroken;
+    return Type.Range._getClientRectsIsBroken;
   };
 
   /**
@@ -551,9 +553,9 @@ Type.TypeRange = function (startContainer, startOffset, endContainer, endOffset)
    * @return {ClientRect[]} ClientRectList or list of
    *     ClientRect objects describing range
    */
-  Type.TypeRange.getClientRects = function (range) {
+  Type.Range.getClientRects = function (range) {
 
-    if (!Type.TypeRange._getClientRectsNeedsFix()) {
+    if (!Type.Range._getClientRectsNeedsFix()) {
       return range.getClientRects();
     }
 
@@ -584,4 +586,4 @@ Type.TypeRange = function (startContainer, startOffset, endContainer, endOffset)
 
 }).call();
 
-module.exports = Type.TypeRange;
+module.exports = Type.Range;

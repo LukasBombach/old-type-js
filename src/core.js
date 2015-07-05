@@ -1,13 +1,13 @@
 'use strict';
 
-var TypeEnv = require('./type_environment');
-var Util = require('./type_utilities');
-var DomUtil = require('./dom_utilities');
-var TypeContents = require('./type_contents');
-var Formatting = require('./formatting');
-var Caret = require('./caret');
-var TypeSelection = require('./type_selection');
-var TypeInput = require('./type_input');
+//var TypeEnv = require('./type_environment');
+//var Util = require('./type_utilities');
+//var DomUtil = require('./dom_utilities');
+//var TypeContents = require('./type_contents');
+//var Formatting = require('./formatting');
+//var Caret = require('./caret');
+//var TypeSelection = require('./type_selection');
+//var TypeInput = require('./type_input');
 
 /**
  * Creates a new Type editor and sets up the core
@@ -29,29 +29,31 @@ var TypeInput = require('./type_input');
 function Type(options) {
 
   // Allow passing an element as only parameter
-  if (DomUtil.isNode(options)) {
-    options = { el: options };
-  }
+  //if (DomUtil.isNode(options)) {
+  //  options = { el: options };
+  //}
 
   // If no element has been passed, interrupt
-  if (!options.el) {
-    throw new Error('You must provide an element as root node for the editor\'s TypeContents.');
-  }
+  //if (!options.el) {
+  //  throw new Error('You must provide an element as root node for the editor\'s TypeContents.');
+  //}
 
   // Set settings for this editor
-  this._root = null;
-  this.options(options);
+  //this._root = null;
+  //this.options(options);
 
   // Set up core editor modules
-  this._plugins = {};
-  this._contents = new TypeContents();
-  this._formatting = new Formatting(this);
-  this._caret = new Caret(this._root);
-  this._selection = new TypeSelection(this);
-  this._input = new TypeInput(this);
+  //this._plugins = {};
+  //this._contents = new TypeContents();
+  //this._formatting = new Formatting(this);
+  //this._caret = new Caret(this._root);
+  //this._selection = new TypeSelection(this);
+  //this._input = new TypeInput(this);
+
+  console.log(Type.Range);
 
   // Trigger events
-  Type.trigger('ready', this);
+  //Type.trigger('ready', this);
 
 }
 
@@ -278,7 +280,7 @@ Type.fn = Type.prototype;
  *
  * @type {TypeEnvironment}
  */
-Type.env = TypeEnv;
+//Type.env = TypeEnv;
 
 /**
  * Module Exports for CommonJs
