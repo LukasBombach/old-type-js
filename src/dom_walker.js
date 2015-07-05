@@ -35,12 +35,7 @@ function DomWalker(node, options) {
    * @returns {null|Node}
    */
   this.next = function () {
-    var node = DomWalker._nextNode(this._node, this._options);
-    if (node === null) {
-      return null;
-    }
-    this._node = node;
-    return node;
+    return this._setNodeIfNotNull(DomWalker._nextNode(this._node, this._options));
   };
 
   /**
@@ -48,12 +43,25 @@ function DomWalker(node, options) {
    * @returns {null|Node}
    */
   this.prev = function () {
-    var node = DomWalker._prevNode(this._node, this._options);
-    if (node === null) {
-      return null;
-    }
-    this._node = node;
-    return node;
+    return this._setNodeIfNotNull(DomWalker._prevNode(this._node, this._options));
+  };
+
+  /**
+   *
+   * @returns {null|Node}
+   */
+  this.first = function () {
+    var node = DomWalker._nextNode(this._node, this._options.filter, true);
+    return this._setNodeIfNotNull(node);
+  };
+
+  /**
+   *
+   * @returns {null|Node}
+   */
+  this.last = function () {
+    var node = DomWalker._prevNode(this._node, this._options.filter, true);
+    return this._setNodeIfNotNull(node);
   };
 
   /**
@@ -85,6 +93,23 @@ function DomWalker(node, options) {
     return this._node;
   };
 
+  /**
+   * Will set this _node to the given node unless null is passed.
+   * Will also return either null or the node, depending on what
+   * has been passed. This method is used to process the return
+   * values by the DomWalker traversal methods.
+   *
+   * @param {Node|null} node
+   * @returns {Node|null}
+   * @private
+   */
+  this._setNodeIfNotNull = function (node) {
+    if (node === null) {
+      return null;
+    }
+    this._node = node;
+    return node;
+  };
 
 }).call(DomWalker.prototype);
 
