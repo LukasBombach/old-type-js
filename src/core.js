@@ -29,7 +29,7 @@ function Type(options) {
 
   // Save settings for this editor
   this._root = null;
-  this.options(options);
+  this._options(options);
 
   // Set up core editor modules
   this._plugins = {};
@@ -92,7 +92,7 @@ Type.env = TypeEnv;
    * @returns {Type|*} Returns the type instance if you set an
    *     option or the according value if you get an option
    */
-  this.options = function (options, value) {
+  this._options = function (options, value) {
 
     this._options = this._options || this._extend({}, this._defaultoOptions);
 

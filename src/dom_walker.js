@@ -32,40 +32,28 @@ function DomWalker(node, options) {
 
   /**
    *
-   * @type {Object}
-   * @private
-   */
-  this._filterFunctions = {
-    text    : '_isTextNodeWithContents',
-    visible : '_isVisible'
-  };
-
-  /**
-   *
-   * @returns {null|Node|Node|*}
+   * @returns {null|Node}
    */
   this.next = function () {
-    var node = this._nextNode(this._node, this.options);
+    var node = DomWalker._nextNode(this._node, this._options);
     if (node === null) {
       return null;
     }
     this._node = node;
     return node;
-
   };
 
   /**
    *
-   * @returns {null|Node|Node|*}
+   * @returns {null|Node}
    */
   this.prev = function () {
-    var node = this._previousNode(this._node, this.options);
+    var node = DomWalker._prevNode(this._node, this._options);
     if (node === null) {
       return null;
     }
     this._node = node;
     return node;
-
   };
 
   /**
@@ -80,6 +68,16 @@ function DomWalker(node, options) {
   };
 
   /**
+   * 
+   * @param options
+   * @returns {*}
+   */
+  this.setOptions = function (options) {
+    this._options = DomWalker.loadOptions(options);
+    return this;
+  };
+
+  /**
    *
    * @returns {Node}
    */
@@ -87,12 +85,48 @@ function DomWalker(node, options) {
     return this._node;
   };
 
+
+}).call(DomWalker.prototype);
+
+
+(function () {
+
+  /**
+   *
+   * @type {Object}
+   * @private
+   */
+  DomWalker._filterFunctions = {
+    text    : '_isTextNodeWithContents',
+    visible : '_isVisible'
+  };
+
+  /**
+   *
+   * @param node
+   * @param options
+   * @returns {null|Node}
+   */
+  DomWalker.next = function (node, options) {
+    return DomWalker._nextNode(node, DomWalker.loadOptions(options));
+  };
+
+  /**
+   *
+   * @param node
+   * @param options
+   * @returns {null|Node}
+   */
+  DomWalker.prev = function (node, options) {
+    return DomWalker._prevNode(node, DomWalker.loadOptions(options));
+  };
+
   /**
    *
    * @param options
    * @returns {*}
    */
-  this.setOptions = function (options) {
+  DomWalker.loadOptions = function (options) {
 
     // If no options parameter has been passed
     options = options || {};
@@ -109,14 +143,11 @@ function DomWalker(node, options) {
 
     // Load internal filter function if filter param is a string
     if (options.filter) {
-      options.filter = this._loadFilter(options.filter);
+      options.filter = DomWalker._loadFilter(options.filter);
     }
 
-    // Save options and allow
-    this._options = options;
-
-    // Chaining
-    return this;
+    // Return processed options
+    return options;
 
   };
 
@@ -126,35 +157,13 @@ function DomWalker(node, options) {
    * @returns {*}
    * @private
    */
-  this._loadFilter = function (filter) {
+  DomWalker._loadFilter = function (filter) {
     var funcName;
     if (typeof filter === 'string') {
-      funcName = this._filterFunctions[filter];
-      return this[funcName].bind(this);
+      funcName = DomWalker._filterFunctions[filter];
+      return DomWalker[funcName];
     }
     return filter;
-  };
-
-  /**
-   * Returns true if a give node is a text node and its content is not
-   * entirely whitespace.
-   *
-   * @param {Node} node The node to be checked.
-   * @returns {boolean}
-   * @private
-   */
-  this._isTextNodeWithContents = function (node) {
-    return node.nodeType === this._TEXT_NODE && /[^\t\n\r ]/.test(node.textContent);
-  };
-
-  /**
-   *
-   * @param node
-   * @returns {boolean}
-   * @private
-   */
-  this._isVisible = function (node) {
-    return !!node.offsetHeight;
   };
 
   /**
@@ -193,7 +202,7 @@ function DomWalker(node, options) {
    *     if none is found for the options.filterFunction criteria or
    *     options.constrainingNode has been hit.
    */
-  this._nextNode = function (node, options, returnMe) {
+  DomWalker._nextNode = function (node, options, returnMe) {
 
     // For later use
     var parent = node.parentNode;
@@ -205,18 +214,18 @@ function DomWalker(node, options) {
 
     // 1. If this node has children, go down the tree
     if (node.childNodes.length) {
-      return this._nextNode(node.childNodes[0], options, true);
+      return DomWalker._nextNode(node.childNodes[0], options, true);
     }
 
     // 2. If this node has siblings, move right in the tree
     if (node.nextSibling !== null) {
-      return this._nextNode(node.nextSibling, options, true);
+      return DomWalker._nextNode(node.nextSibling, options, true);
     }
 
     // 3. Move up in the node's parents until a parent has a sibling or the constrainingNode is hit
     while (parent !== options.constrainingNode) {
       if (parent.nextSibling !== null) {
-        return this._nextNode(parent.nextSibling, options, true);
+        return DomWalker._nextNode(parent.nextSibling, options, true);
       }
       parent = parent.parentNode;
     }
@@ -262,7 +271,7 @@ function DomWalker(node, options) {
    *     if none is found for the options.filterFunction criteria or
    *     options.constrainingNode has been hit.
    */
-  this._previousNode = function (node, options, returnMe) {
+  DomWalker._prevNode = function (node, options, returnMe) {
 
     // For later use
     var parent = node.parentNode;
@@ -274,18 +283,18 @@ function DomWalker(node, options) {
 
     // 1. If this node has children, go down the tree
     if (node.childNodes.length) {
-      return this._previousNode(node.lastChild, options, true);
+      return DomWalker._prevNode(node.lastChild, options, true);
     }
 
     // 2. If this node has siblings, move right in the tree
     if (node.previousSibling !== null) {
-      return this._previousNode(node.previousSibling, options, true);
+      return DomWalker._prevNode(node.previousSibling, options, true);
     }
 
     // 3. Move up in the node's parents until a parent has a sibling or the constrainingNode is hit
     while (parent !== options.constrainingNode) {
       if (parent.previousSibling !== null) {
-        return this._previousNode(parent.previousSibling, options, true);
+        return DomWalker._prevNode(parent.previousSibling, options, true);
       }
       parent = parent.parentNode;
     }
@@ -295,6 +304,33 @@ function DomWalker(node, options) {
 
   };
 
-}).call(DomWalker.prototype);
+  DomWalker.first = function (node, filter) {
+
+  };
+
+  /**
+   * Returns true if a give node is a text node and its content is not
+   * entirely whitespace.
+   *
+   * @param {Node} node The node to be checked.
+   * @returns {boolean}
+   * @private
+   */
+  DomWalker._isTextNodeWithContents = function (node) {
+    return node.nodeType === this._TEXT_NODE && /[^\t\n\r ]/.test(node.textContent);
+  };
+
+  /**
+   *
+   * @param node
+   * @returns {boolean}
+   * @private
+   */
+  DomWalker._isVisible = function (node) {
+    return !!node.offsetHeight;
+  };
+
+}).call(DomWalker);
+
 
 module.exports = DomWalker;

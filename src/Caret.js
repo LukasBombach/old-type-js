@@ -203,7 +203,7 @@ function Caret(options) {
    * @returns {Caret}
    */
   this.moveTo = function (node, offset) {
-    if (/*!(node instanceof Node) || */node.nodeType !== Node.TEXT_NODE) {
+    if (node.nodeType !== Node.TEXT_NODE) {
       node = DomUtil.firstTextNode(node);
     }
     if (node === null) {
