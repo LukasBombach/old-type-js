@@ -3,7 +3,6 @@
 var Settings = require('./settings');
 
 /**
- * todo use static methods instead of singleton
  * @constructor
  */
 function DomUtilities() {

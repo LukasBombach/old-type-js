@@ -43,6 +43,7 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
    * If the startContainer and the endContainer are enclosed by
    * the same element matching the selector, that element will
    * be returned. Otherwise null will be returned.
+   *
    * todo call this commonAncestor and make the selector optional
    *
    * @param {String} selector - This method will only return a
@@ -210,8 +211,11 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
+   * Returns the offset (number of visible characters) from the given node
+   * to the startContainer and its startOffset. If no node has been passed
+   * this will return the startOffset
    *
-   * @param from
+   * @param {Node} [from] - The node to start counting characters from
    * @returns {number|null}
    */
   this.getStartOffset = function (from) {
@@ -222,8 +226,11 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
+   * Returns the offset (number of visible characters) from the given node
+   * to the endContainer and its endOffset. If no node has been passed
+   * this will return the endOffset
    *
-   * @param {Node} [from]
+   * @param {Node} [from] - The node to start counting characters from
    * @returns {number|null}
    */
   this.getEndOffset = function (from) {
@@ -314,29 +321,25 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
-   * Todo cross-browser compatibility: http://stackoverflow.com/a/4812022/1183252
+   * Internal method to swap the start and end containers as well
+   * as their offsets when it is initialized with the endContainer
+   * preceding the startContainer.
    *
-   * @param {HTMLElement} containingNode
-   * @param {Node} searchNode
-   * @param {number} searchOffset
-   * @returns {number}
+   * @returns {TypeRange} - This instance
    * @private
    */
-  this._offsetFromNodeToNode = function (containingNode, searchNode, searchOffset) {
-    var node = containingNode, offsetWalked = 0;
-    while (node = DomWalker.next(node, 'text')) {
-      if (node === searchNode) return offsetWalked + searchOffset;
-      offsetWalked += node.nodeValue.length;
-    }
-    return null;
-  };
-
   this._swapStartAndEnd = function () {
     this._swapContainers();
     this._swapOffsets();
     return this;
   };
 
+  /**
+   * Will swap the startContainer with the endContainer
+   *
+   * @returns {TypeRange} - This instance
+   * @private
+   */
   this._swapContainers = function () {
     var swapContainer = this.startContainer;
     this.startContainer = this.endContainer;
@@ -345,8 +348,9 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
+   * Will swap the startOffset with the endOffset
    *
-   * @returns {*}
+   * @returns {TypeRange} - This instance
    * @private
    */
   this._swapOffsets = function () {
@@ -362,6 +366,9 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
 (function () {
 
   /**
+   * The implementation of {Range#getClientRects} is broken in WebKit
+   * browsers. {@link TypeRange._getClientRectsNeedsFix} tests for
+   * wrong behaviour and stores if it is broken in this variable.
    *
    * @type {null|boolean}
    */
@@ -409,6 +416,7 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
    * Will read the current {Selection} on the document and create a {TypeRange}
    * spanning over the {Range}(s) contained by the selection. Will return
    * null if there is no selection on the document.
+   *
    * todo Check if selection is actually inside editor and return null if not
    *
    * @returns {TypeRange|null} - A {TypeRange} instance or null
@@ -423,6 +431,7 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
    * offsets of the given {Range}. This will also take care of browser
    * issues (especially WebKit) when the range is fetched from a selection
    * that ends at the end of an element.
+   *
    * todo The "fix" is a solution for a single case
    * todo find the pattern of this and process all cases
    *
@@ -442,6 +451,11 @@ function TypeRange(startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
+   * Will create a {TypeRange} spanning from the offset of the given {Caret}
+   * over a number of characters passed as selectedChars. If selectedChars is
+   * a positive number, the range's start will be set to the cursor position
+   * and the end spanning to the characters to its right. If selectedChars is
+   * negative it will span to the characters to its left.
    *
    * @param {Caret} caret
    * @param {number} selectedChars
