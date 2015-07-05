@@ -1,6 +1,7 @@
 'use strict';
 
 var TypeEnv = require('./type_environment');
+var Util = require('./type_utilities');
 var DomUtil = require('./dom_utilities');
 var TypeContents = require('./type_contents');
 var Formatting = require('./formatting');
@@ -94,7 +95,7 @@ Type.env = TypeEnv;
    */
   this._options = function (options, value) {
 
-    this._options = this._options || this._extend({}, this._defaultoOptions);
+    this._options = this._options || Util.extend({}, this._defaultoOptions);
 
     if (typeof options === "string" && arguments.length === 1) {
       return this._options[options];
@@ -105,7 +106,7 @@ Type.env = TypeEnv;
     }
 
     if (typeof options === "object") {
-      this._extend(this._options, options);
+      Util.extend(this._options, options);
     }
 
     if (options.el) {
@@ -258,28 +259,6 @@ Type.env = TypeEnv;
    */
   this.getInput = function () {
     return this._input;
-  };
-
-  /**
-   * This behaves similar to jQuery's extend method. Writes all properties
-   * from the objects passed as copyFrom to the object passed  as copyTo.
-   * Copying starts from left to right and will overwrite each setting
-   * subsequently.
-   *
-   * Todo use utilities.extend
-   *
-   * @param {*} copyTo
-   * @param {...{}} copyFrom
-   * @returns {*}
-   * @private
-   */
-  this._extend = function (copyTo, copyFrom) {
-    var i, key;
-    for (i = 1; i < arguments.length; i += 1)
-      for (key in arguments[i])
-        if (arguments[i].hasOwnProperty(key))
-          arguments[0][key] = arguments[i][key];
-    return arguments[0];
   };
 
 }).call(Type.prototype);

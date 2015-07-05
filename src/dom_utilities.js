@@ -18,7 +18,7 @@ function DomUtilities() {
    * @type {string}
    * @private
    */
-  this._containerId = Settings.prefix + 'container';
+  DomUtilities._containerId = Settings.prefix + 'container';
 
   /**
    * Todo Use me wherever you find document.createElement or this.elementsContainer
@@ -26,7 +26,7 @@ function DomUtilities() {
    * @param {string} [className]
    * @returns {Element}
    */
-  this.addElement = function (tagName, className) {
+  DomUtilities.addElement = function (tagName, className) {
     var el = document.createElement(tagName);
     if (className) el.className = Settings.prefix + className;
     this.getElementsContainer().appendChild(el);
@@ -38,7 +38,7 @@ function DomUtilities() {
    * @param {Element} el
    * @returns {*}
    */
-  this.removeElement = function (el) {
+  DomUtilities.removeElement = function (el) {
     el.parentNode.removeChild(el);
     return this;
   };
@@ -53,7 +53,7 @@ function DomUtilities() {
    * @returns {Node|null} - Will return the parent node where this
    *     algorithm stopped (The node it did *not* delete)
    */
-  this.removeVisible = function (node, constrainingNode) {
+  DomUtilities.removeVisible = function (node, constrainingNode) {
     var parent = node.parentNode;
     if (node === constrainingNode) return node;
     if (node === document.body) return node;
@@ -72,7 +72,7 @@ function DomUtilities() {
    * @param deep
    * @returns {DomUtilities}
    */
-  this.removeTag = function (el, tag, deep) {
+  DomUtilities.removeTag = function (el, tag, deep) {
 
     // Required vars, Crockford style
     var i;
@@ -104,7 +104,7 @@ function DomUtilities() {
    * @param elms
    * @returns {DomUtilities}
    */
-  this.wrap = function (tag, elms) {
+  DomUtilities.wrap = function (tag, elms) {
 
     // Even out parameters
     elms  = elms.length ? elms : [elms];
@@ -148,7 +148,7 @@ function DomUtilities() {
    * @param {Node} el
    * @returns {DomUtilities}
    */
-  this.unwrap = function (el) {
+  DomUtilities.unwrap = function (el) {
 
     var next     = el.nextSibling,
       parent     = el.parentNode,
@@ -176,7 +176,7 @@ function DomUtilities() {
    * @param elems
    * @returns {*}
    */
-  this.moveAfter = function (reference, elems) {
+  DomUtilities.moveAfter = function (reference, elems) {
 
     var i;
 
@@ -206,7 +206,7 @@ function DomUtilities() {
    * @param {Node} [constrainingNode]
    * @returns {HTMLElement|null}
    */
-  this.parent = function(el, selector, constrainingNode) {
+  DomUtilities.parent = function(el, selector, constrainingNode) {
     while (el.parentNode && (!constrainingNode || el !== constrainingNode)) {
       if (this.matches(el, selector)) {
         return el;
@@ -226,7 +226,7 @@ function DomUtilities() {
    * @param selector
    * @returns {boolean}
    */
-  this.matches = function(el, selector) {
+  DomUtilities.matches = function(el, selector) {
     var _matches = (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector);
 
     if (_matches) {
@@ -245,7 +245,7 @@ function DomUtilities() {
    *
    * @returns {Element}
    */
-  this.getElementsContainer = function () {
+  DomUtilities.getElementsContainer = function () {
     var container = window.document.getElementById(this._containerId);
     if (container === null) {
       container = window.document.createElement('div');
@@ -261,7 +261,7 @@ function DomUtilities() {
    * @param {Node} node
    * @returns {boolean}
    */
-  this.containsButIsnt = function (container, node) {
+  DomUtilities.containsButIsnt = function (container, node) {
     return container !== node && container.contains(node);
   };
 
@@ -270,7 +270,7 @@ function DomUtilities() {
    * @param obj
    * @returns {boolean}
    */
-  this.isNode = function (obj) {
+  DomUtilities.isNode = function (obj) {
     return !!(obj && obj.nodeType);
   };
 
@@ -281,7 +281,7 @@ function DomUtilities() {
    * @returns {boolean}
    * @private
    */
-  this.isVisible = function (el) {
+  DomUtilities.isVisible = function (el) {
     return !!el.offsetHeight;
   };
 
