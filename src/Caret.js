@@ -3,6 +3,7 @@
 var Settings = require('./settings');
 var DomUtil = require('./dom_utilities');
 var DomWalker = require('./dom_walker');
+var TextWalker = require('./text_walker');
 
 /**
  * An editor's caret. We cannot use the browser's native caret since we do not utilize
@@ -352,7 +353,7 @@ function Caret(options) {
    * @returns {number|null}
    */
   this.getOffset = function () {
-    return DomUtil.getTextOffset(this._constrainingNode, this.textNode, 0, this.offset);
+    return TextWalker.offset(this._constrainingNode, this.textNode, 0, this.offset);
   };
 
   /**
@@ -361,7 +362,7 @@ function Caret(options) {
    * @returns {*}
    */
   this.setOffset = function (offset) {
-    var t = DomUtil.textNodeAt(this._constrainingNode, offset);
+    var t = TextWalker.nodeAt(this._constrainingNode, offset);
     this.moveTo(t.node, t.offset);
     return this;
   };

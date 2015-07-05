@@ -3,7 +3,7 @@
 var singleton;
 
 /**
- *
+ * todo use static methods instead of singleton
  * @constructor
  */
 function Utilities() {

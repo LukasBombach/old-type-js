@@ -6,6 +6,7 @@ var Walker = require('./dom_walker');
 var singleton;
 
 /**
+ * todo use static methods instead of singleton
  * @constructor
  */
 function DomUtilities() {
@@ -256,81 +257,6 @@ function DomUtilities() {
       window.document.body.appendChild(container);
     }
     return container;
-  };
-
-  /**
-   * todo constraining node
-   * @param {Node} fromNode
-   * @param {number} offset
-   * @param {number} [startOffset]
-   * @returns {{node:Node,offset:number}|null} - The node and the offset to its
-   *     start or null if no node could be found
-   */
-  this.textNodeAt = function (fromNode, offset, startOffset) {
-
-    var walker = new Walker(fromNode, 'text'),
-      node = fromNode,
-      offsetWalked = 0,
-      length;
-
-    startOffset = startOffset || 0;
-    offset += startOffset;
-
-    if (fromNode.nodeType === 3 && offset >= 0 && offset <= fromNode.nodeValue.length) {
-      return { node: fromNode, offset: offset };
-    }
-
-    if (offset < 0) {
-      //while (node = this.prevTextNode(node)) {
-      while (node = walker.prev()) {
-        length = node.nodeValue.length;
-        if (offsetWalked - length <= offset) {
-          return { node: node, offset: length+(offset-offsetWalked) };
-        }
-        offsetWalked -= length;
-      }
-
-    } else {
-      //while (node = this.nextTextNode(node)) {
-      while (node = walker.next()) {
-        length = node.nodeValue.length;
-        if (offsetWalked + length >= offset) {
-          return { node: node, offset: offset-offsetWalked };
-        }
-        offsetWalked += length;
-      }
-    }
-
-    return null;
-
-  };
-
-  /**
-   *
-   * @param fromNode
-   * @param toNode
-   * @param fromOffset
-   * @param toOffset
-   * @returns {*}
-   */
-  this.getTextOffset = function (fromNode, toNode, fromOffset, toOffset) {
-
-    var walker = new Walker(fromNode, 'text'),
-      node = walker.next(true),
-      offsetWalked = 0;
-
-    fromOffset = fromOffset || 0;
-    toOffset = toOffset || 0;
-
-    do {
-      if (node === toNode) {
-        return offsetWalked + toOffset - fromOffset;
-      }
-      offsetWalked += node.nodeValue.length;
-    } while (node = walker.next());
-
-    return null;
-
   };
 
   /**
