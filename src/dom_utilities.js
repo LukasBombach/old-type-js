@@ -1,6 +1,7 @@
 'use strict';
 
 var Settings = require('./settings');
+var Walker = require('./dom_walker');
 
 var singleton;
 
@@ -267,7 +268,8 @@ function DomUtilities() {
    */
   this.textNodeAt = function (fromNode, offset, startOffset) {
 
-    var node = fromNode,
+    var walker = new Walker(fromNode, 'text'),
+      node = fromNode,
       offsetWalked = 0,
       length;
 
@@ -279,7 +281,8 @@ function DomUtilities() {
     }
 
     if (offset < 0) {
-      while (node = this.prevTextNode(node)) {
+      //while (node = this.prevTextNode(node)) {
+      while (node = walker.prev()) {
         length = node.nodeValue.length;
         if (offsetWalked - length <= offset) {
           return { node: node, offset: length+(offset-offsetWalked) };
@@ -288,7 +291,8 @@ function DomUtilities() {
       }
 
     } else {
-      while (node = this.nextTextNode(node)) {
+      //while (node = this.nextTextNode(node)) {
+      while (node = walker.next()) {
         length = node.nodeValue.length;
         if (offsetWalked + length >= offset) {
           return { node: node, offset: offset-offsetWalked };
@@ -310,7 +314,8 @@ function DomUtilities() {
    */
   this.getTextOffset = function (fromNode, toNode, toOffset) {
 
-    var node = this.nextTextNode(fromNode, true),
+    var walker = new Walker(fromNode, 'text'),
+      node = walker.next(true),
       offsetWalked = 0;
 
     toOffset = toOffset || 0;
@@ -320,7 +325,7 @@ function DomUtilities() {
         return offsetWalked + toOffset;
       }
       offsetWalked += node.nodeValue.length;
-    } while (node = this.nextTextNode(node));
+    } while (node = walker.next());
 
     return null;
 
@@ -344,6 +349,18 @@ function DomUtilities() {
   this.isNode = function (obj) {
     return !!(obj && obj.nodeType);
   };
+
+  /**
+   * Returns true if the given node is visible to the user.
+   *
+   * @param {Element} el - The element to be checked
+   * @returns {boolean}
+   * @private
+   */
+  this.isVisible = function (el) {
+    return !!el.offsetHeight;
+  };
+
 
 }).call(DomUtilities.prototype);
 

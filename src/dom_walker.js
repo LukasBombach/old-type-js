@@ -34,16 +34,16 @@ function DomWalker(node, options) {
    *
    * @returns {null|Node}
    */
-  this.next = function () {
-    return this._setNodeIfNotNull(DomWalker._nextNode(this._node, this._options));
+  this.next = function (returnMe) {
+    return this._setNodeIfNotNull(DomWalker._nextNode(this._node, this._options, returnMe));
   };
 
   /**
    *
    * @returns {null|Node}
    */
-  this.prev = function () {
-    return this._setNodeIfNotNull(DomWalker._prevNode(this._node, this._options));
+  this.prev = function (returnMe) {
+    return this._setNodeIfNotNull(DomWalker._prevNode(this._node, this._options, returnMe));
   };
 
   /**
@@ -350,7 +350,7 @@ function DomWalker(node, options) {
   };
 
   /**
-   * Returns true if a give node is a text node and its content is not
+   * Returns true if a given node is a text node and its contents are not
    * entirely whitespace.
    *
    * @param {Node} node The node to be checked.
@@ -362,8 +362,9 @@ function DomWalker(node, options) {
   };
 
   /**
+   * Returns true if the given node is visible to the user.
    *
-   * @param node
+   * @param {Element} node - The node to be checked
    * @returns {boolean}
    * @private
    */
