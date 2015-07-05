@@ -3,6 +3,8 @@
 var Type = require('../core');
 
 /**
+ * Creates a caret filter. Will catch arrow key inputs,
+ * move the editor's caret and cancel the event.
  *
  * @param {Type} type
  * @constructor

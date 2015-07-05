@@ -2,18 +2,19 @@
 
 var TypeRange = require('../type_range');
 
-
 /**
+ * Creates a remove filter. Will catch backspace and del key
+ * inputs and remove either the currently selected text or
+ * the character next to the caret.
  *
  * @param {Type} type
- * @param {TypeInput} input
  * @constructor
  */
-function RemoveFilter(type, input) {
+function RemoveFilter(type) {
+  this._root = type.getRoot();
   this._contents = type.getContents();
   this._caret = type.getCaret();
   this._selection = type.getSelection();
-  this._root = type.getRoot();
 }
 
 (function () {
@@ -29,21 +30,21 @@ function RemoveFilter(type, input) {
    */
   this.remove = function (e) {
 
-    var range, offset, removeChars, moveChars;
+    var range, newOffset, removeChars, moveChars;
 
     if (this._selection.collapsed()) {
       removeChars = e.key === 'backspace' ? -1 : 1;
       moveChars = e.key === 'backspace' ? -1 : 0;
       range = TypeRange.fromCaret(this._caret, removeChars);
-      offset = this._caret.getOffset() + moveChars;
+      newOffset = this._caret.getOffset() + moveChars;
     } else {
-      range = TypeRange.fromRange(this._selection.getNativeRange()); // todo TypeRange.fromSelection
-      offset = range.getStartOffset(this._root);
+      range = this._selection.getRange();
+      newOffset = range.getStartOffset(this._root);
       this._selection.unselect();
       this._caret._blink();
     }
 
-    this._caret.setOffset(offset);
+    this._caret.setOffset(newOffset);
     this._contents.remove(range);
 
     e.cancel();

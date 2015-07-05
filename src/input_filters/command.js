@@ -3,6 +3,17 @@
 var Type = require('../core');
 var TypeRange = require('../type_range');
 
+/**
+ * Creates a command filter. Will fetch common
+ * text formatting keyboard shortcuts and call
+ * the according formatting methods.
+ *
+ * todo should listen for key codes and not keys
+ *
+ * @param type
+ * @param input
+ * @constructor
+ */
 function CommandFilter(type, input) {
   this._selection = type.getSelection();
   this._formating = type.getFormatting();
@@ -25,16 +36,13 @@ function CommandFilter(type, input) {
   };
 
   /**
-   *
+   * todo format stuff when nothing is selected
    * @param {TypeInputEvent} e
    */
   this.command = function (e) {
 
-    var range;
-
     if (e.cmd) {
-      range = TypeRange.fromRange(this._selection.getNativeRange());
-      this._formating.format(this.tags[e.key], range);
+      this._formating.format(this.tags[e.key], this._selection.getRange());
       e.cancel();
     }
 

@@ -79,7 +79,7 @@ TypeInputEvent.fromKeyDown = function (e) {
 
   var charCode = (typeof e.which === "number") ? e.which : e.keyCode,
     options = {
-      key     : TypeInputEvent.keyDownNames[charCode],
+      key     : TypeInputEvent.keyDownNames[charCode] || charCode,
       keyCode : charCode,
       shift   : e.shiftKey,
       alt     : e.altKey,

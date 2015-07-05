@@ -115,6 +115,14 @@ function TypeSelection() {
   };
 
   /**
+   * Returns a {TypeRange} spanning over the currently selected text.
+   * @returns {TypeRange}
+   */
+  this.getRange = function () {
+    return TypeRange.fromRange(this._range);
+  };
+
+  /**
    * Returns the {Range} this selection spans over or null if nothing has been
    * selected yet.
    * @returns {Range|null}
