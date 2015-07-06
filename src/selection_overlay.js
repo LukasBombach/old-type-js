@@ -1,10 +1,10 @@
 'use strict';
 
-var DomUtil = require('./dom_utilities');
+var Type = require('./core');
 
 /**
  *
- * todo internal differenciation of x and y *and scroll positions* for easier redrawing
+ * todo internal differenciation / abstraction of x and y *and scroll positions* for easier redrawing
  *
  * @param {number} [x1] - Horizontal position of the overlay
  * @param {number} [y1] - Vertical position of the overlay
@@ -14,13 +14,13 @@ var DomUtil = require('./dom_utilities');
  *     for the element to be shown. Defaults to true
  * @constructor
  */
-function TypeSelectionOverlay(x1, y1, x2, y2, show) {
+Type.SelectionOverlay = function (x1, y1, x2, y2, show) {
   if (show !== false) {
     this.show(x1, y1, x2, y2);
   }
   this._setValues(x1, y1, x2, y2);
   this._anchor = {x: x1, y: y1};
-}
+};
 
 (function () {
 
@@ -35,7 +35,7 @@ function TypeSelectionOverlay(x1, y1, x2, y2, show) {
    * @param {number} [y1] - Vertical position of the overlay
    * @param {number} [x2] - x2 of the overlay
    * @param {number} [y2] - y2 of the overlay
-   * @returns {TypeSelectionOverlay} - This instance
+   * @returns {Type.SelectionOverlay} - This instance
    */
   this.set  = function (x1, y1, x2, y2) {
 
@@ -71,7 +71,7 @@ function TypeSelectionOverlay(x1, y1, x2, y2, show) {
    * @param y1
    * @param x2
    * @param y2
-   * @returns {TypeSelectionOverlay} - This instance
+   * @returns {Type.SelectionOverlay} - This instance
    */
   this.show = function (x1, y1, x2, y2) {
     this._el = this._createElement();
@@ -81,10 +81,10 @@ function TypeSelectionOverlay(x1, y1, x2, y2, show) {
 
   /**
    *
-   * @returns {TypeSelectionOverlay} - This instance
+   * @returns {Type.SelectionOverlay} - This instance
    */
   this.hide = function () {
-    DomUtil.removeElement(this._el);
+    Type.DomUtilities.removeElement(this._el);
     this._el = null;
     return this;
   };
@@ -93,7 +93,7 @@ function TypeSelectionOverlay(x1, y1, x2, y2, show) {
    *
    * @param {number|string} x
    * @param {number} [y]
-   * @returns {TypeSelectionOverlay} - This instance
+   * @returns {Type.SelectionOverlay} - This instance
    */
   /*this.anchor = function (x, y) {
 
@@ -125,7 +125,7 @@ function TypeSelectionOverlay(x1, y1, x2, y2, show) {
    * Will also set the other end to the anchor's position.
    *
    * @param {number} x - The horizontal position
-   * @returns {TypeSelectionOverlay} - This instance
+   * @returns {Type.SelectionOverlay} - This instance
    */
   /*this.setXFromAnchor = function (x) {
     if (x === null || x === undefined) {
@@ -150,11 +150,11 @@ function TypeSelectionOverlay(x1, y1, x2, y2, show) {
    * Removes the overlay div and resets all position and
    * dimension values
    *
-   * @returns {TypeSelectionOverlay} - This instance
+   * @returns {Type.SelectionOverlay} - This instance
    */
   this.remove = function () {
     if (this._el) {
-      DomUtil.removeElement(this._el);
+      Type.DomUtilities.removeElement(this._el);
     }
     this._el = null;
     this.x1 = null;
@@ -173,7 +173,7 @@ function TypeSelectionOverlay(x1, y1, x2, y2, show) {
    * @param {number} [y1] - Vertical position of the overlay
    * @param {number} [x2] - x2 of the overlay
    * @param {number} [y2] - y2 of the overlay
-   * @returns {TypeSelectionOverlay} - This instance
+   * @returns {Type.SelectionOverlay} - This instance
    * @private
    */
   this._setValues = function (x1, y1, x2, y2) {
@@ -192,7 +192,7 @@ function TypeSelectionOverlay(x1, y1, x2, y2, show) {
    * @param {number} [y1] - Vertical position of the overlay
    * @param {number} [x2] - x2 of the overlay
    * @param {number} [y2] - y2 of the overlay
-   * @returns {TypeSelectionOverlay} - This instance
+   * @returns {Type.SelectionOverlay} - This instance
    * @private
    */
   this._draw = function (x1, y1, x2, y2) {
@@ -235,30 +235,30 @@ function TypeSelectionOverlay(x1, y1, x2, y2, show) {
    * @private
    */
   this._createElement = function () {
-    return DomUtil.addElement('div', 'selection');
+    return Type.DomUtilities.addElement('div', 'selection');
   };
 
-}).call(TypeSelectionOverlay.prototype);
+}).call(Type.SelectionOverlay.prototype);
 
 /**
  *
  * @param {Range} range
- * @returns {TypeSelectionOverlay}
+ * @returns {Type.SelectionOverlay}
  */
-TypeSelectionOverlay.fromRange = function (range) {
-  var rect = TypeSelectionOverlay._getPositionsFromRange(range);
-  return new TypeSelectionOverlay(rect.left, rect.top, rect.right, rect.bottom, true, range.startContainer);
+Type.SelectionOverlay.fromRange = function (range) {
+  var rect = Type.SelectionOverlay._getPositionsFromRange(range);
+  return new Type.SelectionOverlay(rect.left, rect.top, rect.right, rect.bottom, true, range.startContainer);
 };
 
 /**
  *
  * @param x
  * @param y
- * @returns {TypeSelectionOverlay}
+ * @returns {Type.SelectionOverlay}
  */
-TypeSelectionOverlay.fromPosition = function (x, y) {
+Type.SelectionOverlay.fromPosition = function (x, y) {
   var range = document.caretRangeFromPoint(x, y);
-  return TypeSelectionOverlay.fromRange(range)
+  return Type.SelectionOverlay.fromRange(range)
 };
 
 /**
@@ -269,7 +269,7 @@ TypeSelectionOverlay.fromPosition = function (x, y) {
  * @returns {{top: (number), left: (number)}}
  * @private
  */
-TypeSelectionOverlay._getScrollPosition = function () {
+Type.SelectionOverlay._getScrollPosition = function () {
   return {
     top  : window.pageYOffset || document.documentElement.scrollTop,
     left : window.pageXOffset || document.documentElement.scrollLeft
@@ -287,8 +287,8 @@ TypeSelectionOverlay._getScrollPosition = function () {
  * @private
  */
 
-TypeSelectionOverlay._getPositionsFromRange = function (range) {
-  var scroll = TypeSelectionOverlay._getScrollPosition();
+Type.SelectionOverlay._getPositionsFromRange = function (range) {
+  var scroll = Type.SelectionOverlay._getScrollPosition();
   var rect = range.getClientRects()[0];
   if(!rect) {
     return null;
@@ -301,4 +301,4 @@ TypeSelectionOverlay._getPositionsFromRange = function (range) {
   };
 };
 
-module.exports = TypeSelectionOverlay;
+module.exports = Type.SelectionOverlay;

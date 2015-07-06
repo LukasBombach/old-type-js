@@ -16,6 +16,8 @@ require('./range');
 require('./contents');
 require('./formatting');
 require('./caret');
+require('./selection_overlay');
+require('./selection');
 
 // Expose Type
 window.Type = Type;

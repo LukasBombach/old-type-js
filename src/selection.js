@@ -1,16 +1,15 @@
 'use strict';
 
-var TypeRange = require('./type_range');
-var TypeSelectionOverlay = require('./type_selection_overlay');
+var Type = require('./core');
 
 /**
  *
  * @param {Type} type
  * @constructor
  */
-function TypeSelection(type) {
+Type.Selection = function (type) {
   this._init(type);
-}
+};
 
 (function () {
 
@@ -21,7 +20,7 @@ function TypeSelection(type) {
    *
    * @param {number} x - Absolute horizontal position on the document
    * @param {number} y - Absolute vertical position on the document
-   * @returns {TypeSelection} - This instance
+   * @returns {Type.Selection} - This instance
    */
   this.beginAt = function (x, y) {
     this.unselect();
@@ -37,7 +36,7 @@ function TypeSelection(type) {
    *
    * @param {number} x - Absolute horizontal position on the document
    * @param {number} y - Absolute vertical position on the document
-   * @returns {TypeSelection} - This instance
+   * @returns {Type.Selection} - This instance
    */
   this.moveTo = function (x, y) {
     var range = document.caretRangeFromPoint(x, y);
@@ -105,7 +104,7 @@ function TypeSelection(type) {
 
   /**
    * Removes all selection overlays and resets internal variables.
-   * @returns {TypeSelection} - This instance
+   * @returns {Type.Selection} - This instance
    */
   this.unselect = function () {
     this._removeOverlays();
@@ -117,7 +116,7 @@ function TypeSelection(type) {
 
   /**
    * Returns an object that can be used to recreate the current
-   * selection using {@link TypeSelection#restore}
+   * selection using {@link Type.Selection#restore}
    * @returns {{from: Element, start: number, end: number}}
    */
   this.save = function () {
@@ -125,24 +124,24 @@ function TypeSelection(type) {
   };
 
   /**
-   * Selects text from an object returned by {@link TypeSelection#save}
-   * or {@link TypeRange#save}
+   * Selects text from an object returned by {@link Type.Selection#save}
+   * or {@link Type.Range#save}
    * @param bookmark
-   * @returns {TypeSelection} - This instance
+   * @returns {Type.Selection} - This instance
    */
   this.restore = function (bookmark) {
     this.unselect();
-    this._range = TypeRange.load(bookmark).getNativeRange();
+    this._range = Type.Range.load(bookmark).getNativeRange();
     this._imitateRangeAppending();
     return this;
   };
 
   /**
-   * Returns a {TypeRange} spanning over the currently selected text.
-   * @returns {TypeRange}
+   * Returns a {Type.Range} spanning over the currently selected text.
+   * @returns {Type.Range}
    */
   this.getRange = function () {
-    return TypeRange.fromRange(this._range);
+    return Type.Range.fromRange(this._range);
   };
 
   /**
@@ -194,7 +193,7 @@ function TypeSelection(type) {
    * does for us.
    *
    * @param {Type} type
-   * @returns {TypeSelection} - This instance
+   * @returns {Type.Selection} - This instance
    * @private
    */
   this._init = function (type) {
@@ -204,11 +203,11 @@ function TypeSelection(type) {
 
   /**
    * Creates a new {Range}, which will be the basis for drawing and this selection.
-   * todo Use {TypeRange}? Should be cool if we don't use getRects or we make TypeRange more performant
+   * todo Use {Type.Range}? Should be cool if we don't use getRects or we make Type.Range more performant
    *
    * @param {Node} node - The text node that the selection should start in
    * @param {number} offset - The offset in the text node that the selection should start in
-   * @returns {TypeSelection} - This instance
+   * @returns {Type.Selection} - This instance
    */
   this._startRangeAt = function (node, offset) {
     this._range = window.document.createRange();
@@ -221,7 +220,7 @@ function TypeSelection(type) {
    *
    * @param {Node} node - The text node that the selection should end in
    * @param {number} offset - The offset in the text node that the selection should end in
-   * @returns {TypeSelection} - This instance
+   * @returns {Type.Selection} - This instance
    */
   this._moveStartTo = function (node, offset) {
     this._range.setStart(node, offset);
@@ -234,7 +233,7 @@ function TypeSelection(type) {
    *
    * @param {Node} node - The text node that the selection should end in
    * @param {number} offset - The offset in the text node that the selection should end in
-   * @returns {TypeSelection} - This instance
+   * @returns {Type.Selection} - This instance
    */
   this._moveEndTo = function (node, offset) {
     this._range.setStart(this._anchor.node, this._anchor.offset);
@@ -252,7 +251,7 @@ function TypeSelection(type) {
    *
    * @param {number} x - Absolute horizontal position on the document
    * @param {number} y - Absolute vertical position on the document
-   * @returns {TypeSelection} - This instance
+   * @returns {Type.Selection} - This instance
    * @private
    */
   this._setAnchor = function (x, y) {
@@ -263,16 +262,16 @@ function TypeSelection(type) {
   };
 
   /**
-   * Creates {TypeSelectionOverlay}s that mimic the appearance of
+   * Creates {Type.SelectionOverlay}s that mimic the appearance of
    * the selection as drawn by {this._range}
    *
-   * @returns {TypeSelection} - This instance
+   * @returns {Type.Selection} - This instance
    * @private
    */
   this._imitateRangePrepending = function () {
 
     // Required variables
-    var rects = TypeRange.getClientRects(this._range),//this._range.getClientRects(),
+    var rects = Type.Range.getClientRects(this._range),//this._range.getClientRects(),
       draw,
       overlay,
       i;
@@ -283,7 +282,7 @@ function TypeSelection(type) {
         this._overlays[i].set(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom);
       } else {
         draw = !this._matchesElementDimensions(rects[i]);
-        overlay = new TypeSelectionOverlay(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom, draw);
+        overlay = new Type.SelectionOverlay(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom, draw);
         this._overlays.unshift(overlay);
       }
     }
@@ -299,10 +298,10 @@ function TypeSelection(type) {
   };
 
   /**
-   * Creates {TypeSelectionOverlay}s that mimic the appearance of
+   * Creates {Type.SelectionOverlay}s that mimic the appearance of
    * the selection as drawn by {this._range}
    *
-   * @returns {TypeSelection} - This instance
+   * @returns {Type.Selection} - This instance
    * @private
    */
   this._imitateRangeAppending = function () {
@@ -319,7 +318,7 @@ function TypeSelection(type) {
         this._overlays[i].set(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom);
       } else {
         draw = !this._matchesElementDimensions(rects[i]);
-        overlay = new TypeSelectionOverlay(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom, draw);
+        overlay = new Type.SelectionOverlay(rects[i].left, rects[i].top, rects[i].right, rects[i].bottom, draw);
         this._overlays.push(overlay);
       }
     }
@@ -338,7 +337,7 @@ function TypeSelection(type) {
    * Todo scrolling
    *
    * @param {Node|Element} el - An element or a text node
-   * @returns {TypeSelection} - This instance
+   * @returns {Type.Selection} - This instance
    * @private
    */
   this._addElement = function (el) {
@@ -363,7 +362,7 @@ function TypeSelection(type) {
   /**
    * Removes all selection overlays
    *
-   * @returns {TypeSelection} - This instance
+   * @returns {Type.Selection} - This instance
    * @private
    */
   this._removeOverlays = function () {
@@ -390,6 +389,6 @@ function TypeSelection(type) {
     return top + left + bottom + right;
   };
 
-}).call(TypeSelection.prototype);
+}).call(Type.Selection.prototype);
 
-module.exports = TypeSelection;
+module.exports = Type.Selection;

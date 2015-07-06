@@ -1,7 +1,7 @@
 'use strict';
 
 var Type = require('../core');
-var TypeEnv = require('../type_environment');
+var TypeEnv = require('../environment');
 
 /**
  * Creates a new Type input event.
