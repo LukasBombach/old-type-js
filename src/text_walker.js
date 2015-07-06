@@ -1,9 +1,10 @@
 'use strict';
 
+var Type = require('./core');
 var DomWalker = require('./dom_walker');
 
-function TextWalker(node, options) {
-}
+Type.TextWalker = function () {
+};
 
 (function () {
 
@@ -15,7 +16,7 @@ function TextWalker(node, options) {
    * @param toOffset
    * @returns {*}
    */
-  TextWalker.offset = function (fromNode, toNode, fromOffset, toOffset) {
+  Type.TextWalker.offset = function (fromNode, toNode, fromOffset, toOffset) {
 
     var dom = new DomWalker(fromNode, 'text'),
       node = dom.next(true),
@@ -43,7 +44,7 @@ function TextWalker(node, options) {
    * @returns {{node:Node,offset:number}|null} - The node and the offset to its
    *     start or null if no node could be found
    */
-  TextWalker.nodeAt = function (fromNode, offset, startOffset) {
+  Type.TextWalker.nodeAt = function (fromNode, offset, startOffset) {
 
     var walker = new DomWalker(fromNode, 'text'),
       node = fromNode,
@@ -80,7 +81,7 @@ function TextWalker(node, options) {
 
   };
 
-}).call(TextWalker);
+}).call(Type.TextWalker);
 
 
-module.exports = TextWalker;
+module.exports = Type.TextWalker;

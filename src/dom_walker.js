@@ -1,6 +1,6 @@
 'use strict';
 
-var Util = require('./type_utilities');
+var Type = require('./core');
 
 /**
  * @param {Node} node - The node to be used as the starting point for the
@@ -23,10 +23,10 @@ var Util = require('./type_utilities');
  *     traversing outside the editor's root node.
  * @constructor
  */
-function DomWalker(node, options) {
+Type.DomWalker = function (node, options) {
   this.setNode(node);
   this.setOptions(options);
-}
+};
 
 (function () {
 
@@ -35,7 +35,7 @@ function DomWalker(node, options) {
    * @returns {null|Node}
    */
   this.next = function (returnMe) {
-    return this._setNodeIfNotNull(DomWalker._nextNode(this._node, this._options, returnMe));
+    return this._setNodeIfNotNull(Type.DomWalker._nextNode(this._node, this._options, returnMe));
   };
 
   /**
@@ -43,7 +43,7 @@ function DomWalker(node, options) {
    * @returns {null|Node}
    */
   this.prev = function (returnMe) {
-    return this._setNodeIfNotNull(DomWalker._prevNode(this._node, this._options, returnMe));
+    return this._setNodeIfNotNull(Type.DomWalker._prevNode(this._node, this._options, returnMe));
   };
 
   /**
@@ -51,7 +51,7 @@ function DomWalker(node, options) {
    * @returns {null|Node}
    */
   this.first = function () {
-    var node = DomWalker._nextNode(this._node, this._options.filter, true);
+    var node = Type.DomWalker._nextNode(this._node, this._options.filter, true);
     return this._setNodeIfNotNull(node);
   };
 
@@ -60,7 +60,7 @@ function DomWalker(node, options) {
    * @returns {null|Node}
    */
   this.last = function () {
-    var node = DomWalker._prevNode(this._node, this._options.filter, true);
+    var node = Type.DomWalker._prevNode(this._node, this._options.filter, true);
     return this._setNodeIfNotNull(node);
   };
 
@@ -81,7 +81,7 @@ function DomWalker(node, options) {
    * @returns {*}
    */
   this.setOptions = function (options) {
-    this._options = DomWalker.loadOptions(options);
+    this._options = Type.DomWalker.loadOptions(options);
     return this;
   };
 
@@ -111,9 +111,11 @@ function DomWalker(node, options) {
     return node;
   };
 
-}).call(DomWalker.prototype);
+}).call(Type.DomWalker.prototype);
 
-
+/**
+ * todo replace Type.DomWalker with "this" where possible
+ */
 (function () {
 
   /**
@@ -121,7 +123,7 @@ function DomWalker(node, options) {
    * @type {Object}
    * @private
    */
-  DomWalker._filterFunctions = {
+  Type.DomWalker._filterFunctions = {
     text    : '_isTextNodeWithContents',
     visible : '_isVisible'
   };
@@ -132,8 +134,8 @@ function DomWalker(node, options) {
    * @param options
    * @returns {null|Node}
    */
-  DomWalker.next = function (node, options) {
-    return DomWalker._nextNode(node, DomWalker.loadOptions(options));
+  Type.DomWalker.next = function (node, options) {
+    return Type.DomWalker._nextNode(node, Type.DomWalker.loadOptions(options));
   };
 
   /**
@@ -142,8 +144,8 @@ function DomWalker(node, options) {
    * @param options
    * @returns {null|Node}
    */
-  DomWalker.prev = function (node, options) {
-    return DomWalker._prevNode(node, DomWalker.loadOptions(options));
+  Type.DomWalker.prev = function (node, options) {
+    return Type.DomWalker._prevNode(node, Type.DomWalker.loadOptions(options));
   };
 
   /**
@@ -152,8 +154,8 @@ function DomWalker(node, options) {
    * @param filter
    * @returns {null|Node}
    */
-  DomWalker.first = function (node, filter) {
-    return DomWalker._nextNode(node, DomWalker.loadOptions(filter), true);
+  Type.DomWalker.first = function (node, filter) {
+    return Type.DomWalker._nextNode(node, Type.DomWalker.loadOptions(filter), true);
   };
 
   /**
@@ -162,8 +164,8 @@ function DomWalker(node, options) {
    * @param filter
    * @returns {null|Node}
    */
-  DomWalker.last = function (node, filter) {
-    return DomWalker._prevNode(node, DomWalker.loadOptions(filter), true);
+  Type.DomWalker.last = function (node, filter) {
+    return Type.DomWalker._prevNode(node, Type.DomWalker.loadOptions(filter), true);
   };
 
   /**
@@ -171,7 +173,7 @@ function DomWalker(node, options) {
    * @param options
    * @returns {*}
    */
-  DomWalker.loadOptions = function (options) {
+  Type.DomWalker.loadOptions = function (options) {
 
     // If no options parameter has been passed
     options = options || {};
@@ -182,13 +184,13 @@ function DomWalker(node, options) {
     }
 
     // If a function has been passed as ooptions parameter
-    if (typeof options === 'string' || Util.isFunction(options)) {
+    if (typeof options === 'string' || Type.Utilities.isFunction(options)) {
       options = {filter: options};
     }
 
     // Load internal filter function if filter param is a string
     if (options.filter) {
-      options.filter = DomWalker._loadFilter(options.filter);
+      options.filter = Type.DomWalker._loadFilter(options.filter);
     }
 
     // Return processed options
@@ -202,11 +204,11 @@ function DomWalker(node, options) {
    * @returns {*}
    * @private
    */
-  DomWalker._loadFilter = function (filter) {
+  Type.DomWalker._loadFilter = function (filter) {
     var funcName;
     if (typeof filter === 'string') {
-      funcName = DomWalker._filterFunctions[filter];
-      return DomWalker[funcName];
+      funcName = Type.DomWalker._filterFunctions[filter];
+      return Type.DomWalker[funcName];
     }
     return filter;
   };
@@ -247,7 +249,7 @@ function DomWalker(node, options) {
    *     if none is found for the options.filter criteria or
    *     options.constrainingNode has been hit.
    */
-  DomWalker._nextNode = function (node, options, returnMe) {
+  Type.DomWalker._nextNode = function (node, options, returnMe) {
 
     // For later use
     var parent = node.parentNode;
@@ -259,18 +261,18 @@ function DomWalker(node, options) {
 
     // 1. If this node has children, go down the tree
     if (node.childNodes.length) {
-      return DomWalker._nextNode(node.childNodes[0], options, true);
+      return Type.DomWalker._nextNode(node.childNodes[0], options, true);
     }
 
     // 2. If this node has siblings, move right in the tree
     if (node.nextSibling !== null) {
-      return DomWalker._nextNode(node.nextSibling, options, true);
+      return Type.DomWalker._nextNode(node.nextSibling, options, true);
     }
 
     // 3. Move up in the node's parents until a parent has a sibling or the constrainingNode is hit
     while (parent !== options.constrainingNode) {
       if (parent.nextSibling !== null) {
-        return DomWalker._nextNode(parent.nextSibling, options, true);
+        return Type.DomWalker._nextNode(parent.nextSibling, options, true);
       }
       parent = parent.parentNode;
     }
@@ -316,7 +318,7 @@ function DomWalker(node, options) {
    *     if none is found for the options.filter criteria or
    *     options.constrainingNode has been hit.
    */
-  DomWalker._prevNode = function (node, options, returnMe) {
+  Type.DomWalker._prevNode = function (node, options, returnMe) {
 
     // For later use
     var parent = node.parentNode;
@@ -328,18 +330,18 @@ function DomWalker(node, options) {
 
     // 1. If this node has children, go down the tree
     if (node.childNodes.length) {
-      return DomWalker._prevNode(node.lastChild, options, true);
+      return Type.DomWalker._prevNode(node.lastChild, options, true);
     }
 
     // 2. If this node has siblings, move right in the tree
     if (node.previousSibling !== null) {
-      return DomWalker._prevNode(node.previousSibling, options, true);
+      return Type.DomWalker._prevNode(node.previousSibling, options, true);
     }
 
     // 3. Move up in the node's parents until a parent has a sibling or the constrainingNode is hit
     while (parent !== options.constrainingNode) {
       if (parent.previousSibling !== null) {
-        return DomWalker._prevNode(parent.previousSibling, options, true);
+        return Type.DomWalker._prevNode(parent.previousSibling, options, true);
       }
       parent = parent.parentNode;
     }
@@ -357,7 +359,7 @@ function DomWalker(node, options) {
    * @returns {boolean}
    * @private
    */
-  DomWalker._isTextNodeWithContents = function (node) {
+  Type.DomWalker._isTextNodeWithContents = function (node) {
     return node.nodeType === Node.TEXT_NODE && /[^\t\n\r ]/.test(node.textContent);
   };
 
@@ -368,11 +370,11 @@ function DomWalker(node, options) {
    * @returns {boolean}
    * @private
    */
-  DomWalker._isVisible = function (node) {
+  Type.DomWalker._isVisible = function (node) {
     return !!node.offsetHeight;
   };
 
-}).call(DomWalker);
+}).call(Type.DomWalker);
 
 
-module.exports = DomWalker;
+module.exports = Type.DomWalker;

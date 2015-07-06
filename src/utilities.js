@@ -1,10 +1,12 @@
 'use strict';
 
+var Type = require('./core');
+
 /**
  * @constructor
  */
-function Utilities() {
-}
+Type.Utilities = function () {
+};
 
 (function () {
 
@@ -18,7 +20,7 @@ function Utilities() {
    * @param {...Object} copyFrom
    * @returns {Object}
    */
-  Utilities.extend = function (copyTo, copyFrom) {
+  Type.Utilities.extend = function (copyTo, copyFrom) {
     var i, key;
     for (i = 1; i < arguments.length; i += 1) {
       for (key in arguments[i]) {
@@ -37,10 +39,10 @@ function Utilities() {
    * @param obj
    * @returns {boolean}
    */
-  Utilities.isFunction = function(obj) {
+  Type.Utilities.isFunction = function(obj) {
     return !!(obj && obj.constructor && obj.call && obj.apply);
   };
 
-}).call(Utilities);
+}).call(Type.Utilities);
 
-module.exports = Utilities;
+module.exports = Type.Utilities;

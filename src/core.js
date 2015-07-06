@@ -49,7 +49,13 @@ function Type(options) {
   //this._selection = new TypeSelection(this);
   //this._input = new TypeInput(this);
 
+  console.log(Type.Environment);
+  console.log(Type.Utilities);
+  console.log(Type.DomUtilities);
+  console.log(Type.DomWalker);
+  console.log(Type.TextWalker);
   console.log(Type.Range);
+  console.log(Type.Contents);
 
   // Trigger events
   //Type.trigger('ready', this);

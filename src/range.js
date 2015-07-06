@@ -1,11 +1,6 @@
 'use strict';
 
 var Type = require('./core');
-var DomUtil = require('./dom_utilities');
-var DomWalker = require('./dom_walker');
-var TextWalker = require('./text_walker');
-
-console.log(Type);
 
 /**
  * Crates a new Type.Range
@@ -59,14 +54,14 @@ Type.Range = function (startContainer, startOffset, endContainer, endOffset) {
    */
   this.elementEnclosingStartAndEnd = function (selector, constrainingNode) {
 
-    var tagEnclosingStartNode = DomUtil.parent(this.startContainer, selector, constrainingNode),
+    var tagEnclosingStartNode = Type.DomUtilities.parent(this.startContainer, selector, constrainingNode),
       tagEnclosingEndNode;
 
     if (tagEnclosingStartNode === null) {
       return null;
     }
 
-    tagEnclosingEndNode = DomUtil.parent(this.endContainer, selector, constrainingNode);
+    tagEnclosingEndNode = Type.DomUtilities.parent(this.endContainer, selector, constrainingNode);
 
     if (tagEnclosingStartNode === tagEnclosingEndNode) {
       return tagEnclosingStartNode;
@@ -210,7 +205,7 @@ Type.Range = function (startContainer, startOffset, endContainer, endOffset) {
    * @returns {number}
    */
   this.getLength = function () {
-    return TextWalker.offset(this.startContainer, this.endContainer, this.startOffset, this.endOffset);
+    return Type.TextWalker.offset(this.startContainer, this.endContainer, this.startOffset, this.endOffset);
   };
 
   /**
@@ -223,7 +218,7 @@ Type.Range = function (startContainer, startOffset, endContainer, endOffset) {
    */
   this.getStartOffset = function (from) {
     if (from) {
-      return TextWalker.offset(from, this.startContainer, 0, this.startOffset);
+      return Type.TextWalker.offset(from, this.startContainer, 0, this.startOffset);
     }
     return parseInt(this.startOffset, 10);
   };
@@ -238,7 +233,7 @@ Type.Range = function (startContainer, startOffset, endContainer, endOffset) {
    */
   this.getEndOffset = function (from) {
     if (from) {
-      return TextWalker.offset(from, this.endContainer, 0, this.endOffset);
+      return Type.TextWalker.offset(from, this.endContainer, 0, this.endOffset);
     }
     return parseInt(this.endOffset, 10);
   };
@@ -410,8 +405,8 @@ Type.Range = function (startContainer, startOffset, endContainer, endOffset) {
    * @returns {Type.Range} - A {Type.Range} instance
    */
   Type.Range.fromPositions = function (el, startOffset, endOffset) {
-    var start = TextWalker.nodeAt(el, startOffset),
-      end = TextWalker.nodeAt(el, endOffset);
+    var start = Type.TextWalker.nodeAt(el, startOffset),
+      end = Type.TextWalker.nodeAt(el, endOffset);
     return new Type.Range(start.node, start.offset, end.node, end.offset);
   };
 
@@ -446,8 +441,8 @@ Type.Range = function (startContainer, startOffset, endContainer, endOffset) {
   Type.Range.fromRange = function (range) {
     var endContainer = range.endContainer,
       endOffset = range.endOffset;
-    if (endOffset === 0 && endContainer === DomWalker.next(range.startContainer.parentNode.nextSibling, 'visible')) {
-      endContainer = DomWalker.last(range.startContainer.parentNode, 'text');
+    if (endOffset === 0 && endContainer === Type.DomWalker.next(range.startContainer.parentNode.nextSibling, 'visible')) {
+      endContainer = Type.DomWalker.last(range.startContainer.parentNode, 'text');
       endOffset = endContainer.length;
     }
     return new Type.Range(range.startContainer, range.startOffset, endContainer, endOffset);
@@ -467,7 +462,7 @@ Type.Range = function (startContainer, startOffset, endContainer, endOffset) {
   Type.Range.fromCaret = function (caret, selectedChars) {
     var startNode = caret.getNode(),
       startOffset = caret.getNodeOffset(),
-      end = TextWalker.nodeAt(startNode, selectedChars, startOffset);
+      end = Type.TextWalker.nodeAt(startNode, selectedChars, startOffset);
     return new Type.Range(startNode, startOffset, end.node, end.offset);
   };
 
@@ -483,8 +478,8 @@ Type.Range = function (startContainer, startOffset, endContainer, endOffset) {
    *     given element.
    */
   Type.Range.fromElement = function (el) {
-    var startNode = DomWalker.first(el, 'text'),
-      endNode = DomWalker.last(el, 'text');
+    var startNode = Type.DomWalker.first(el, 'text'),
+      endNode = Type.DomWalker.last(el, 'text');
     return new Type.Range(startNode, 0, endNode, endNode.nodeValue.length);
   };
 
@@ -505,8 +500,8 @@ Type.Range = function (startContainer, startOffset, endContainer, endOffset) {
   Type.Range._testGetClientRectsNeedsFix = function () {
 
     var range = document.createRange(),
-      p1 = DomUtil.addElement('p'),
-      p2 = DomUtil.addElement('p'),
+      p1 = Type.DomUtilities.addElement('p'),
+      p2 = Type.DomUtilities.addElement('p'),
       needsFix;
 
     p1.appendChild(document.createTextNode('aa'));
@@ -517,8 +512,8 @@ Type.Range = function (startContainer, startOffset, endContainer, endOffset) {
 
     needsFix = range.getClientRects().length > 2;
 
-    DomUtil.removeElement(p1);
-    DomUtil.removeElement(p2);
+    Type.DomUtilities.removeElement(p1);
+    Type.DomUtilities.removeElement(p2);
 
     return needsFix;
 

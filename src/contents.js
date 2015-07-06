@@ -1,12 +1,9 @@
 'use strict';
 
-var DomUtil = require('./dom_utilities');
-var Walker = require('./dom_walker');
-var TypeRange = require('./type_range');
+var Type = require('./core');
 
-function TypeContents() {
-}
-
+Type.Contents = function () {
+};
 
 (function () {
 
@@ -15,7 +12,7 @@ function TypeContents() {
    * @param textNode
    * @param offset
    * @param str
-   * @returns {TypeContents}
+   * @returns {Type.Contents}
    */
   this.insertText = function (textNode, offset, str) {
 
@@ -50,7 +47,7 @@ function TypeContents() {
    * remove(range)
    * remove(caret, -1)
    *
-   * @param {TypeRange|Caret} range
+   * @param {Type.Range|Caret} range
    * @param {number} [numChars]
    */
   this.remove = function (range, numChars) {
@@ -58,7 +55,7 @@ function TypeContents() {
     var startNode, endNode, startParent, current, prev, startRemoved, currentParent, a, b;
 
     if (arguments.length === 2) {
-      range = TypeRange.fromCaret(range, numChars);
+      range = Type.Range.fromCaret(range, numChars);
     }
 
     startNode = range.splitStartContainer();
@@ -70,19 +67,19 @@ function TypeContents() {
 
     while (!startRemoved) {
 
-      prev = Walker.prev(current, 'text');
+      prev = Type.DomWalker.prev(current, 'text');
 
       a = (current === endNode && range.endOffset === 0);
-      b = (current !== startNode && current === Walker.first(current.parentNode, 'text'));
+      b = (current !== startNode && current === Type.DomWalker.first(current.parentNode, 'text'));
 
       if (a || b) {
         currentParent = current.parentNode;
-        DomUtil.moveAfter(prev, current.parentNode.childNodes);
-        DomUtil.removeVisible(currentParent);
+        Type.DomUtilities.moveAfter(prev, current.parentNode.childNodes);
+        Type.DomUtilities.removeVisible(currentParent);
       }
 
       startRemoved = current === startNode;
-      DomUtil.removeVisible(current);
+      Type.DomUtilities.removeVisible(current);
       current = prev;
 
     }
@@ -96,7 +93,7 @@ function TypeContents() {
   /**
    *
    * @param {number} steps
-   * @returns {TypeContents}
+   * @returns {Type.Contents}
    */
   this.undo = function (steps) {
     steps = steps === null ? 1 : steps;
@@ -106,7 +103,7 @@ function TypeContents() {
   /**
    *
    * @param {number} steps
-   * @returns {TypeContents}
+   * @returns {Type.Contents}
    */
   this.redo = function (steps) {
     steps = steps === null ? 1 : steps;
@@ -116,7 +113,7 @@ function TypeContents() {
   /**
    *
    * @param {string} changeset
-   * @returns {TypeContents}
+   * @returns {Type.Contents}
    */
   this.applyChangeset = function (changeset) {
     return this;
@@ -125,7 +122,7 @@ function TypeContents() {
   /**
    *
    * @param {string} changeset
-   * @returns {TypeContents}
+   * @returns {Type.Contents}
    */
   this.removeChangeset = function (changeset) {
     this.applyChangeset(this._invertChangeset(changeset));
@@ -135,13 +132,13 @@ function TypeContents() {
   /**
    *
    * @param {string} changeset
-   * @returns {TypeContents}
+   * @returns {Type.Contents}
    * @private
    */
   this._invertChangeset = function (changeset) {
 
   };
 
-}).call(TypeContents.prototype);
+}).call(Type.Contents.prototype);
 
-module.exports = TypeContents;
+module.exports = Type.Contents;
