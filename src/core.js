@@ -29,18 +29,18 @@
 function Type(options) {
 
   // Allow passing an element as only parameter
-  //if (DomUtil.isNode(options)) {
-  //  options = { el: options };
-  //}
+  if (Type.DomUtilities.isNode(options)) {
+    options = { el: options };
+  }
 
   // If no element has been passed, interrupt
-  //if (!options.el) {
-  //  throw new Error('You must provide an element as root node for the editor\'s TypeContents.');
-  //}
+  if (!options.el) {
+    throw new Error('You must provide an element as root node for the editor\'s TypeContents.');
+  }
 
   // Set settings for this editor
-  //this._root = null;
-  //this.options(options);
+  this._root = null;
+  this.options(options);
 
   // Set up core editor modules
   //this._contents = new TypeContents();
@@ -56,6 +56,10 @@ function Type(options) {
   console.log(Type.TextWalker);
   console.log(Type.Range);
   console.log(Type.Contents);
+  console.log(Type.Formatting);
+  console.log(Type.Caret);
+
+  this._caret = new Type.Caret(this._root);
 
   // Trigger events
   //Type.trigger('ready', this);
@@ -105,7 +109,7 @@ function Type(options) {
    */
   this.options = function (options, value) {
 
-    this.options = this.options || Util.extend({}, this._defaultOptions);
+    this.options = this.options || Type.Utilities.extend({}, this._defaultOptions);
 
     if (typeof options === "string" && arguments.length === 1) {
       return this.options[options];
@@ -116,7 +120,7 @@ function Type(options) {
     }
 
     if (typeof options === "object") {
-      Util.extend(this.options, options);
+      Type.Utilities.extend(this.options, options);
     }
 
     if (options.el) {
@@ -196,7 +200,7 @@ Type.fn = Type.prototype;
 
 /**
  * Holds information on the current browser and os
- * @type {TypeEnvironment}
+ * @type {Type.Environment}
  */
 //Type.env = TypeEnv;
 

@@ -1,9 +1,6 @@
 'use strict';
 
-var Settings = require('./settings');
-var DomUtil = require('./dom_utilities');
-var DomWalker = require('./dom_walker');
-var TextWalker = require('./text_walker');
+var Type = require('./core');
 
 /**
  * An editor's caret. We cannot use the browser's native caret since we do not utilize
@@ -18,11 +15,11 @@ var TextWalker = require('./text_walker');
  * @class Caret
  * @constructor
  */
-function Caret(options) {
+Type.Caret = function (options) {
 
   options = options || {constrainingNode: null, color: null};
 
-  if (DomUtil.isNode(options)) {
+  if (Type.DomUtilities.isNode(options)) {
     options = { constrainingNode: options, color: null };
   }
 
@@ -33,7 +30,7 @@ function Caret(options) {
   this.moveTo(this._constrainingNode);
   this._hide();
 
-}
+};
 
 (function () {
 
@@ -44,12 +41,12 @@ function Caret(options) {
    * @type {string}
    * @private
    */
-  this._containerId = Settings.prefix + 'caret-container';
+  this._containerId = Type.Settings.prefix + 'caret-container';
 
   /**
    * Moves the caret left by one character
    *
-   * @returns {Caret}
+   * @returns {Type.Caret}
    */
   this.moveLeft = function () {
     if (this.offset <= this._visibleTextOffsets(this.textNode).start) {
@@ -64,7 +61,7 @@ function Caret(options) {
   /**
    * Moves the caret right by one character
    *
-   * @returns {Caret}
+   * @returns {Type.Caret}
    */
   this.moveRight = function () {
     if (this.offset >= this._visibleTextOffsets(this.textNode).end) {
@@ -87,7 +84,7 @@ function Caret(options) {
    * it left, character by character, and stop in the line above the caret when it's
    * horizontally aligned with it. The caret will then be moved to that position.
    *
-   * @returns {Caret}
+   * @returns {Type.Caret}
    */
   this.moveUp = function () {
 
@@ -139,7 +136,7 @@ function Caret(options) {
    * Todo nextNode handling not nice
    * Todo should only walk 1 line
    *
-   * @returns {Caret}
+   * @returns {Type.Caret}
    */
   this.moveDown = function () {
 
@@ -202,11 +199,11 @@ function Caret(options) {
    *
    * @param {Node} node - The (text) {Node} in which the caret should be placed
    * @param {number} [offset=0] - The character offset where the caret should be moved to
-   * @returns {Caret}
+   * @returns {Type.Caret}
    */
   this.moveTo = function (node, offset) {
     if (node.nodeType !== Node.TEXT_NODE) {
-      node = DomWalker.first(node, 'text');
+      node = Type.DomWalker.first(node, 'text');
     }
     if (node === null) {
       throw new Error('Node parameter must be or contain a text node');
@@ -226,7 +223,7 @@ function Caret(options) {
    * Todo this method needs to go somewhere else
    *
    * @param {string} str - The {string} that will be be inserted
-   * @returns {Caret}
+   * @returns {Type.Caret}
    */
   this.insertText = function (str) {
 
@@ -293,7 +290,7 @@ function Caret(options) {
    * @param {number} [numChars] - Home many characters should be removed
    *     from the caret's position. A negative number will remove
    *     characters left from the caret, a positive number from the right.
-   * @returns {Caret}
+   * @returns {Type.Caret}
    */
   this.removeCharacter = function (numChars) {
     numChars = numChars || -1;
@@ -318,7 +315,7 @@ function Caret(options) {
    *
    * @param functionName
    * @param callback
-   * @returns {Caret}
+   * @returns {Type.Caret}
    */
   this.registerCallback = function(functionName, callback) {
     this.callbacks[functionName] = this.callbacks[functionName] || [];
@@ -330,7 +327,7 @@ function Caret(options) {
    * Removes the caret div from the DOM. Also removes the caret
    * container if there are no more carets in it
    *
-   * @returns {Caret}
+   * @returns {Type.Caret}
    */
   this.destroy = function () {
     if (typeof this.caretEl !== "object") {
@@ -353,7 +350,7 @@ function Caret(options) {
    * @returns {number|null}
    */
   this.getOffset = function () {
-    return TextWalker.offset(this._constrainingNode, this.textNode, 0, this.offset);
+    return Type.TextWalker.offset(this._constrainingNode, this.textNode, 0, this.offset);
   };
 
   /**
@@ -362,7 +359,7 @@ function Caret(options) {
    * @returns {*}
    */
   this.setOffset = function (offset) {
-    var t = TextWalker.nodeAt(this._constrainingNode, offset);
+    var t = Type.TextWalker.nodeAt(this._constrainingNode, offset);
     this.moveTo(t.node, t.offset);
     return this;
   };
@@ -392,7 +389,7 @@ function Caret(options) {
    * position
    *
    * @param {number} offset - The offset that should be set
-   * @returns {Caret}
+   * @returns {Type.Caret}
    */
   this._setOffset = function (offset) {
     this.offset = offset;
@@ -406,7 +403,7 @@ function Caret(options) {
   /**
    * Moves the caret div to the position of the current offset
    *
-   * @returns {Caret}
+   * @returns {Type.Caret}
    * @private
    */
   this._moveElToOffset = function () {
@@ -421,7 +418,7 @@ function Caret(options) {
    *
    * @param {number} x Horizontal position the caret should be moved to
    * @param {number} y Vertical position the caret should be moved to
-   * @returns {Caret}
+   * @returns {Type.Caret}
    * @private
    */
   this._moveElTo = function (x, y) {
@@ -445,7 +442,7 @@ function Caret(options) {
   /**
    * Scrolls page to show caret
    *
-   * @returns {Caret}
+   * @returns {Type.Caret}
    * @private
    */
   this._scrollIntoView = function () {
@@ -456,7 +453,7 @@ function Caret(options) {
   /**
    * Makes the caret blink
    *
-   * @returns {Caret}
+   * @returns {Type.Caret}
    */
   this._blink = function () {
     this._removeClass(this.caretEl, 'hide');
@@ -467,7 +464,7 @@ function Caret(options) {
   /**
    * Hides the caret
    *
-   * @returns {Caret}
+   * @returns {Type.Caret}
    */
   this._hide = function () {
     this._removeClass(this.caretEl, 'blink');
@@ -479,7 +476,7 @@ function Caret(options) {
    * Resets the blink animation by recreating the caret div element
    * Todo Maybe find a better way to reset the blink animation, DOM = slow
    *
-   * @returns {Caret}
+   * @returns {Type.Caret}
    * @private
    */
   this._resetBlink = function () {
@@ -611,7 +608,7 @@ function Caret(options) {
    *
    * @param {Element} el - The {Element} that the class should be added to
    * @param {string} className - The class to be removed
-   * @returns {Caret}
+   * @returns {Type.Caret}
    * @private
    */
   this._addClass = function (el, className) {
@@ -629,7 +626,7 @@ function Caret(options) {
    *
    * @param {Element} el - The {Element} that the class should be removed from
    * @param {string} className - The class to be removed
-   * @returns {Caret}
+   * @returns {Type.Caret}
    * @private
    */
   this._removeClass = function (el, className) {
@@ -744,7 +741,7 @@ function Caret(options) {
   this._createElement = function (color) {
     var container = this._getElementContainer(),
         el = window.document.createElement('div');
-    el.className = Settings.prefix + 'caret ' + color;
+    el.className = Type.Settings.prefix + 'caret ' + color;
     container.appendChild(el);
     return el;
   };
@@ -769,6 +766,6 @@ function Caret(options) {
     return container;
   }
 
-}).call(Caret.prototype);
+}).call(Type.Caret.prototype);
 
-module.exports = Caret;
+module.exports = Type.Caret;

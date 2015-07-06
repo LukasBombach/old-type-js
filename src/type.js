@@ -14,6 +14,8 @@ require('./dom_walker');
 require('./text_walker');
 require('./range');
 require('./contents');
+require('./formatting');
+require('./caret');
 
 // Expose Type
 window.Type = Type;
