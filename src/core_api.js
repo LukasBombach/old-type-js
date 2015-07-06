@@ -1,7 +1,7 @@
 'use strict';
 
 var Type = require('./core');
-var TypeRange = require('./type_range');
+//var TypeRange = require('./type_range');
 
 (function () {
 
