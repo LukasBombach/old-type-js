@@ -1,18 +1,15 @@
 'use strict';
 
 var Type = require('../core');
-var TypeEnv = require('../environment');
 
 /**
  * Creates a new Type input event.
  * This is an abstraction for browser events that lead to an input in
  * the editor.
  *
- * todo TypeEnv.mac should be Type.env.mac
- *
  * @param {Object} options - Object holding parameters for the event
  * @param {string} [options.key] - A descriptive name for the key
- *     pressed as set in {@link TypeInputEvent.keyDownNames}.
+ *     pressed as set in {@link Type.Events.Input.keyDownNames}.
  * @param {number} [options.keyCode] - The key code of the key pressed
  * @param {boolean} [options.shift] - Whether or not the shift key has
  *     been pressed together with the given key.
@@ -24,7 +21,7 @@ var TypeEnv = require('../environment');
  *     been pressed together with the given key (for os x users).
  * @constructor
  */
-function TypeInputEvent(options) {
+Type.Events.Input = function (options) {
 
   options = options || {};
 
@@ -34,30 +31,30 @@ function TypeInputEvent(options) {
   this.alt     = options.alt     || false;
   this.ctrl    = options.ctrl    || false;
   this.meta    = options.meta    || false;
-  this.cmd     = (!TypeEnv.mac && options.ctrl) || (TypeEnv.mac && options.meta);
+  this.cmd     = (!Type.Environment.mac && options.ctrl) || (Type.Environment.mac && options.meta);
 
   this.canceled = false;
 
-}
+};
 
 (function () {
 
   /**
    * Sets this event instance to be cancelled
-   * @returns {TypeInputEvent}
+   * @returns {Type.Events.Input}
    */
   this.cancel = function () {
     this.canceled = true;
     return this;
   };
 
-}).call(TypeInputEvent.prototype);
+}).call(Type.Events.Input.prototype);
 
 /**
  * Maps character codes from key down events to readable names
  * @type {Object}
  */
-TypeInputEvent.keyDownNames = {
+Type.Events.Input.keyDownNames = {
   8  : 'backspace',
   9  : 'tab',
   13 : 'enter',
@@ -70,16 +67,16 @@ TypeInputEvent.keyDownNames = {
 };
 
 /**
- * Factory to create a {TypeInputEvent} from a {KeyboardEvent}
+ * Factory to create a {Type.Events.Input} from a {KeyboardEvent}
  *
  * @param {KeyboardEvent} e
- * @returns {TypeInputEvent}
+ * @returns {Type.Events.Input}
  */
-TypeInputEvent.fromKeyDown = function (e) {
+Type.Events.Input.fromKeyDown = function (e) {
 
   var charCode = (typeof e.which === "number") ? e.which : e.keyCode,
     options = {
-      key     : TypeInputEvent.keyDownNames[charCode] || charCode,
+      key     : Type.Events.Input.keyDownNames[charCode] || charCode,
       keyCode : charCode,
       shift   : e.shiftKey,
       alt     : e.altKey,
@@ -87,8 +84,8 @@ TypeInputEvent.fromKeyDown = function (e) {
       meta    : e.metaKey
     };
 
-  return new TypeInputEvent(options);
+  return new Type.Events.Input(options);
 
 };
 
-module.exports = TypeInputEvent;
+module.exports = Type.Events.Input;

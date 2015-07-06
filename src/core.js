@@ -199,10 +199,10 @@ function Type(options) {
 Type.fn = Type.prototype;
 
 /**
- * Holds information on the current browser and os
- * @type {Type.Environment}
+ *
+ * @type {{}}
  */
-//Type.env = TypeEnv;
+Type.Events = {};
 
 /**
  * Module Exports for CommonJs

@@ -1,14 +1,6 @@
 'use strict';
 
 var Type = require('./core');
-var Settings = require('./settings');
-var DomUtil = require('./dom_utilities');
-
-var TypeInputEvent = require('./events/input');
-
-var CaretFilter = require('./input_filters/caret');
-var RemoveFilter = require('./input_filters/remove');
-var CommandFilter = require('./input_filters/command');
 
 /**
  * todo pasting
@@ -17,7 +9,7 @@ var CommandFilter = require('./input_filters/command');
  * @param {Type} type
  * @constructor
  */
-function TypeInput(type) {
+Type.Input = function (type) {
 
   this._type = type;
   this._contents = type.getContents();
@@ -32,20 +24,20 @@ function TypeInput(type) {
   this._loadFilters();
   this._bindEvents();
 
-}
+};
 
 (function () {
 
   /**
    *
-   * @returns {TypeInput}
+   * @returns {Type.Input}
    * @private
    */
   this._loadFilters = function () {
     this._filters = this._filters || {};
-    this._filters.cmd = new CommandFilter(this._type, this);
-    this._filters.caret = new CaretFilter(this._type, this);
-    this._filters.remove = new RemoveFilter(this._type, this);
+    this._filters.cmd = new Type.Input.Filter.Command(this._type, this);
+    this._filters.caret = new Type.Input.Filter.Caret(this._type, this);
+    this._filters.remove = new Type.Input.Filter.Remove(this._type, this);
     return this;
   };
 
@@ -53,7 +45,7 @@ function TypeInput(type) {
    * Binds events on type's root element to catch keyboard
    * and mouse input.
    *
-   * @returns {TypeInput}
+   * @returns {Type.Input}
    * @private
    */
   this._bindEvents = function () {
@@ -67,7 +59,7 @@ function TypeInput(type) {
    * Some inputs needs to be interrupted and caught before it gets inserted
    * to the input element. This includes return keys for example
    *
-   * @returns {TypeInput}
+   * @returns {Type.Input}
    * @private
    */
   this._bindKeyDownEvents = function () {
@@ -83,7 +75,7 @@ function TypeInput(type) {
    * Todo x-browser http://stackoverflow.com/a/8694125/1183252
    * Todo x-browser http://jsfiddle.net/MBags/ (?)
    *
-   * @returns {TypeInput}
+   * @returns {Type.Input}
    * @private
    */
   this._bindInputEvents = function () {
@@ -96,7 +88,7 @@ function TypeInput(type) {
   /**
    * Todo Legacy Internet Explorer and attachEvent https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener
    *
-   * @returns {TypeInput}
+   * @returns {Type.Input}
    * @private
    */
   this._bindMouseEvents = function () {
@@ -141,19 +133,19 @@ function TypeInput(type) {
   };
 
   /**
-   * Takes a {KeyboardEvent} and creates a {TypeInputEvent}. Then
+   * Takes a {KeyboardEvent} and creates a {Type.InputEvent}. Then
    * iterates over all registered input filters in the pipeline and
    * has them process it in order. Will stop processing the event
    * when any handler of an input filter cancels the event. Returns
-   * the resulting {TypeInputEvent}
+   * the resulting {Type.InputEvent}
    *
    * @param {KeyboardEvent} e
-   * @returns {TypeInputEvent}
+   * @returns {Type.InputEvent}
    * @private
    */
   this._processFilterPipeline = function (e) {
 
-    var inputEvent = TypeInputEvent.fromKeyDown(e),
+    var inputEvent = Type.InputEvent.fromKeyDown(e),
       name;
 
     for (name in this._filters) {
@@ -173,7 +165,7 @@ function TypeInput(type) {
   /**
    *
    * @param filter
-   * @param {TypeInputEvent} e
+   * @param {Type.InputEvent} e
    * @private
    */
   this._processFilter = function (filter, e) {
@@ -189,7 +181,7 @@ function TypeInput(type) {
 
   /**
    *
-   * @returns {TypeInput}
+   * @returns {Type.Input}
    * @private
    */
   this._onInput = function () {
@@ -238,11 +230,13 @@ function TypeInput(type) {
   this._createElement = function () {
     var div = document.createElement('div');
     div.setAttribute('contenteditable', 'true');
-    div.className = Settings.prefix + 'input';
-    DomUtil.getElementsContainer().appendChild(div);
+    div.className = Type.Settings.prefix + 'input';
+    Type.DomUtilities.getElementsContainer().appendChild(div);
     return div;
   };
 
-}).call(TypeInput.prototype);
+}).call(Type.Input.prototype);
 
-module.exports = TypeInput;
+Type.Input.Filter = {};
+
+module.exports = Type.Input;

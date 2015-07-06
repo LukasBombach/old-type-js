@@ -1,6 +1,6 @@
 'use strict';
 
-var Type = require('../core');
+var Input = require('../input');
 
 /**
  * Creates a caret filter. Will catch arrow key inputs,
@@ -9,9 +9,9 @@ var Type = require('../core');
  * @param {Type} type
  * @constructor
  */
-function CaretFilter(type) {
+Input.Filter.Caret = function (type) {
   this._caret = type.getCaret();
-}
+};
 
 (function () {
 
@@ -25,7 +25,7 @@ function CaretFilter(type) {
   /**
    * Moves the caret left
    *
-   * @param {TypeInputEvent} e
+   * @param {Type.Events.Input} e
    */
   this.moveLeft = function (e) {
     this._caret.moveLeft();
@@ -35,7 +35,7 @@ function CaretFilter(type) {
   /**
    * Moves the caret up
    *
-   * @param {TypeInputEvent} e
+   * @param {Type.Events.Input} e
    */
   this.moveUp = function (e) {
     this._caret.moveUp();
@@ -45,7 +45,7 @@ function CaretFilter(type) {
   /**
    * Moves the caret right
    *
-   * @param {TypeInputEvent} e
+   * @param {Type.Events.Input} e
    */
   this.moveRight = function (e) {
     this._caret.moveRight();
@@ -55,13 +55,13 @@ function CaretFilter(type) {
   /**
    * Moves the caret down
    *
-   * @param {TypeInputEvent} e
+   * @param {Type.Events.Input} e
    */
   this.moveDown = function (e) {
     this._caret.moveDown();
     e.cancel();
   };
 
-}).call(CaretFilter.prototype);
+}).call(Input.Filter.Caret.prototype);
 
-module.exports = CaretFilter;
+module.exports = Input.Filter.Caret;
