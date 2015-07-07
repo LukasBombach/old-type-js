@@ -483,12 +483,56 @@ Type.Range = function (startContainer, startOffset, endContainer, endOffset) {
     return new Type.Range(startNode, 0, endNode, endNode.nodeValue.length);
   };
 
+  /**
+   *
+   * @param e
+   * @returns {*}
+   */
   Type.Range.fromPointerEvent = function (e) {
-    // todo
+    return Type.Range.fromPoint(e.clientX, e.clientY);
   };
 
+  /**
+   * Will create a {Type.Range} at the offset and inside the text node
+   * found at the x and y positions relative to the document. The range
+   * will be collapsed. Will return null
+   *
+   * @param {number} x - The horizontal position relative to the document
+   * @param {number} y - The vertical position relative to the document
+   * @returns {Type.Range|null}
+   */
   Type.Range.fromPoint = function (x, y) {
-    // todo
+
+    var range, node, offset;
+
+    if (document.caretPositionFromPoint) {
+      range = document.caretPositionFromPoint(x, y);
+      node = range.offsetNode;
+      offset = range.offset;
+
+    } else if (document.caretRangeFromPoint) {
+      range = document.caretRangeFromPoint(x, y);
+      node = range.startContainer;
+      offset = range.startOffset;
+
+    } else {
+      if (console.debug) {
+        console.debug('This browser does not support caretPositionFromPoint or caretRangeFromPoint.');
+      }
+      return null;
+    }
+
+    // only split TEXT_NODEs
+    if (node.nodeType === Node.TEXT_NODE) {
+      return new Type.Range(node, offset, node, offset);
+    }
+
+    if (console.debug) {
+      console.debug('User clicked in a non-text node, cannot create range');
+    }
+
+    return null;
+
   };
 
   /**
