@@ -255,11 +255,12 @@ Type.SelectionOverlay.fromRange = function (range) {
  * @param x
  * @param y
  * @returns {Type.SelectionOverlay}
+ * @deprecated
  */
-Type.SelectionOverlay.fromPosition = function (x, y) {
-  var range = document.caretRangeFromPoint(x, y);
-  return Type.SelectionOverlay.fromRange(range)
-};
+//Type.SelectionOverlay.fromPosition = function (x, y) {
+//  var range = document.caretRangeFromPoint(x, y);
+//  return Type.SelectionOverlay.fromRange(range)
+//};
 
 /**
  * Return's the window's horizontal an vertical scroll positions

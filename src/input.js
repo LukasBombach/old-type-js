@@ -199,7 +199,7 @@ Type.Input = function (type) {
    * @private
    */
   this._moveCaretToMousePosition = function(x, y) {
-    var range = document.caretRangeFromPoint(x, y);
+    var range = Type.Range.fromPoint(x, y);
     if (range.startContainer.nodeType === 3) {
       this._caret.moveTo(range.startContainer, range.startOffset);
       this._caret._blink();

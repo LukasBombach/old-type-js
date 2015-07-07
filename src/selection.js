@@ -39,7 +39,7 @@ Type.Selection = function (type) {
    * @returns {Type.Selection} - This instance
    */
   this.moveTo = function (x, y) {
-    var range = document.caretRangeFromPoint(x, y);
+    var range = Type.Range.fromPoint(x, y);
     this._addElement(range.endContainer);
     if (x < this._anchor.x || y < this._anchor.y) {
       this._moveStartTo(range.endContainer, range.endOffset);
@@ -255,7 +255,7 @@ Type.Selection = function (type) {
    * @private
    */
   this._setAnchor = function (x, y) {
-    var range = document.caretRangeFromPoint(x, y);
+    var range = Type.Range.fromPoint(x, y);
     this._anchor = {x: x, y: y, node: range.startContainer, offset: range.startOffset};
     this._addElement(this._anchor.node);
     return this;
