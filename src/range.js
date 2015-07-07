@@ -484,11 +484,15 @@ Type.Range = function (startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
+   * Will return a new {Type.Range} at the position read from a given
+   * {MouseEvent}. Will return null if the event was not triggerd from
+   * within a text node.
    *
-   * @param e
-   * @returns {*}
+   * @param {MouseEvent} e - The mouse event to read positions from
+   * @returns {Type.Range|null} - Returns a new Type.Range or null if the
+   *     event has not been triggered from inside a text node
    */
-  Type.Range.fromPointerEvent = function (e) {
+  Type.Range.fromMouseEvent = function (e) {
     return Type.Range.fromPoint(e.clientX, e.clientY);
   };
 
@@ -499,7 +503,8 @@ Type.Range = function (startContainer, startOffset, endContainer, endOffset) {
    *
    * @param {number} x - The horizontal position relative to the document
    * @param {number} y - The vertical position relative to the document
-   * @returns {Type.Range|null}
+   * @returns {Type.Range|null} - Returns a new Type.Range or null if the
+   *     position is not inside a text node
    */
   Type.Range.fromPoint = function (x, y) {
 
