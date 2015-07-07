@@ -133,19 +133,19 @@ Type.Input = function (type) {
   };
 
   /**
-   * Takes a {KeyboardEvent} and creates a {Type.InputEvent}. Then
+   * Takes a {KeyboardEvent} and creates a {Type.Events.Input}. Then
    * iterates over all registered input filters in the pipeline and
    * has them process it in order. Will stop processing the event
    * when any handler of an input filter cancels the event. Returns
-   * the resulting {Type.InputEvent}
+   * the resulting {Type.Events.Input}
    *
    * @param {KeyboardEvent} e
-   * @returns {Type.InputEvent}
+   * @returns {Type.Events.Input}
    * @private
    */
   this._processFilterPipeline = function (e) {
 
-    var inputEvent = Type.InputEvent.fromKeyDown(e),
+    var inputEvent = Type.Events.Input.fromKeyDown(e),
       name;
 
     for (name in this._filters) {
@@ -165,7 +165,7 @@ Type.Input = function (type) {
   /**
    *
    * @param filter
-   * @param {Type.InputEvent} e
+   * @param {Type.Events.Input} e
    * @private
    */
   this._processFilter = function (filter, e) {

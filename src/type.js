@@ -18,11 +18,11 @@ require('./formatting');
 require('./caret');
 require('./selection_overlay');
 require('./selection');
+require('./input');
 require('./events/input');
 require('./input_filters/caret');
 require('./input_filters/command');
 require('./input_filters/remove');
-require('./input');
 
 // Expose Type
 window.Type = Type;

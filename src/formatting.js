@@ -50,7 +50,7 @@ Type.Formatting = function (type) {
    * @returns {Type.Formatting}
    */
   this.format = function (tag, typeRange, params) {
-    Type.Range.ensureIsInside(this._type.getRoot());
+    typeRange.ensureIsInside(this._type.getRoot());
     this._handlerFor(tag).apply(this, arguments);
     return this;
   };
@@ -68,7 +68,7 @@ Type.Formatting = function (type) {
 
     // If the selection is enclosed the tag we want to format with
     // remove formatting from selected area
-    if (enclosingTag = Type.Range.elementEnclosingStartAndEnd(tag)) {
+    if (enclosingTag = typeRange.elementEnclosingStartAndEnd(tag)) {
       this.removeInline(enclosingTag, typeRange);
 
       // Otherwise add formatting to selected area
@@ -147,7 +147,7 @@ Type.Formatting = function (type) {
 
     var tagName = enclosingTag.tagName,
       tagPositions = Type.Range.fromElement(enclosingTag).save(this._type.getRoot()),
-      selPositions = Type.Range.save(this._type.getRoot()),
+      selPositions = typeRange.save(this._type.getRoot()),
       leftRange,
       rightRange;
 

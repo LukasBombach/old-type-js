@@ -483,6 +483,14 @@ Type.Range = function (startContainer, startOffset, endContainer, endOffset) {
     return new Type.Range(startNode, 0, endNode, endNode.nodeValue.length);
   };
 
+  Type.Range.fromPointerEvent = function (e) {
+    // todo
+  };
+
+  Type.Range.fromPoint = function (x, y) {
+    // todo
+  };
+
   /**
    * WebKit browsers sometimes create unnecessary and overlapping {ClientRect}s in
    * {Range.prototype.getClientRects}. This method creates 2 elements, creates a
