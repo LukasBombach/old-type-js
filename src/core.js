@@ -33,7 +33,7 @@ function Type(options) {
   this._root = null;
   this.options(options);
 
-  // Set up core editor modules
+  // Set up core modules
   this._contents   = new Type.Contents();
   this._formatting = new Type.Formatting(this);
   this._caret      = new Type.Caret(this._root);
