@@ -44,6 +44,8 @@ Type.Contents = function () {
    * todo refactor var names "a" and "b"
    * todo distinguish block from inline tags
    *
+   * TODO CONSTRAIN TO TYPE ROOT !!! !  !   !!!
+   *
    * remove(range)
    * remove(caret, -1)
    *
