@@ -29,7 +29,7 @@ Type.TextWalker = function () {
       if (node === toNode) {
         return offsetWalked + toOffset - fromOffset;
       }
-      offsetWalked += node.nodeValue.length;
+      offsetWalked += node.nodeValue.trim().length;
     } while (node = dom.next());
 
     return null;
@@ -54,13 +54,13 @@ Type.TextWalker = function () {
     startOffset = startOffset || 0;
     offset += startOffset;
 
-    if (fromNode.nodeType === 3 && offset >= 0 && offset <= fromNode.nodeValue.length) {
+    if (fromNode.nodeType === 3 && offset >= 0 && offset <= fromNode.nodeValue.trim().length) {
       return { node: fromNode, offset: offset };
     }
 
     if (offset < 0) {
       while (node = walker.prev()) {
-        length = node.nodeValue.length;
+        length = node.nodeValue.trim().length;
         if (offsetWalked - length <= offset) {
           return { node: node, offset: length+(offset-offsetWalked) };
         }
@@ -69,7 +69,7 @@ Type.TextWalker = function () {
 
     } else {
       while (node = walker.next()) {
-        length = node.nodeValue.length;
+        length = node.nodeValue.trim().length;
         if (offsetWalked + length >= offset) {
           return { node: node, offset: offset-offsetWalked };
         }

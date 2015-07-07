@@ -155,7 +155,9 @@ Type.DomWalker = function (node, options) {
    * @returns {null|Node}
    */
   Type.DomWalker.first = function (node, filter) {
-    return Type.DomWalker._nextNode(node, Type.DomWalker.loadOptions(filter), true);
+    var options = Type.DomWalker.loadOptions(filter);
+    options.constrainingNode = node;
+    return Type.DomWalker._nextNode(node, options, true);
   };
 
   /**
@@ -165,7 +167,9 @@ Type.DomWalker = function (node, options) {
    * @returns {null|Node}
    */
   Type.DomWalker.last = function (node, filter) {
-    return Type.DomWalker._prevNode(node, Type.DomWalker.loadOptions(filter), true);
+    var options = Type.DomWalker.loadOptions(filter);
+    options.constrainingNode = node;
+    return Type.DomWalker._prevNode(node, options, true);
   };
 
   /**
