@@ -1,14 +1,5 @@
 'use strict';
 
-//var TypeEnv = require('./type_environment');
-//var Util = require('./type_utilities');
-//var DomUtil = require('./dom_utilities');
-//var TypeContents = require('./type_contents');
-//var Formatting = require('./formatting');
-//var Caret = require('./caret');
-//var TypeSelection = require('./type_selection');
-//var TypeInput = require('./type_input');
-
 /**
  * Creates a new Type editor and sets up the core
  * modules used for WYSIWYG editing. The core
@@ -43,26 +34,26 @@ function Type(options) {
   this.options(options);
 
   // Set up core editor modules
-  //this._contents = new TypeContents();
-  //this._formatting = new Formatting(this);
-  //this._caret = new Caret(this._root);
-  //this._selection = new TypeSelection(this);
-  //this._input = new TypeInput(this);
+  this._contents = new Type.Contents();
+  this._formatting = new Type.Formatting(this);
+  this._caret = new Type.Caret(this._root);
+  this._selection = new Type.Selection(this);
+  this._input = new Type.Input(this);
 
-  console.log(Type.Environment);
-  console.log(Type.Utilities);
-  console.log(Type.DomUtilities);
-  console.log(Type.DomWalker);
-  console.log(Type.TextWalker);
-  console.log(Type.Range);
-  console.log(Type.Contents);
-  console.log(Type.Formatting);
-  console.log(Type.Caret);
+  //console.log(Type.Environment);
+  //console.log(Type.Utilities);
+  //console.log(Type.DomUtilities);
+  //console.log(Type.DomWalker);
+  //console.log(Type.TextWalker);
+  //console.log(Type.Range);
+  //console.log(Type.Contents);
+  //console.log(Type.Formatting);
+  //console.log(Type.Caret);
 
   this._caret = new Type.Caret(this._root);
 
   // Trigger events
-  //Type.trigger('ready', this);
+  Type.trigger('ready', this);
 
 }
 
