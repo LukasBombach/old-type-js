@@ -1,7 +1,6 @@
 'use strict';
 
-var Type = require('../core');
-var TypeRange = require('../type_range');
+var Input = require('../input');
 
 /**
  * Creates a command filter. Will fetch common
@@ -11,13 +10,12 @@ var TypeRange = require('../type_range');
  * todo should listen for key codes and not keys
  *
  * @param type
- * @param input
  * @constructor
  */
-function CommandFilter(type, input) {
+Input.Filter.Command = function (type) {
   this._selection = type.getSelection();
   this._formating = type.getFormatting();
-}
+};
 
 (function () {
 
@@ -37,7 +35,7 @@ function CommandFilter(type, input) {
 
   /**
    * todo format stuff when nothing is selected
-   * @param {TypeInputEvent} e
+   * @param {Type.Events.Input} e
    */
   this.command = function (e) {
 
@@ -52,6 +50,6 @@ function CommandFilter(type, input) {
 
   };
 
-}).call(CommandFilter.prototype);
+}).call(Input.Filter.Command.prototype);
 
-module.exports = CommandFilter;
+module.exports = Input.Filter.Command;

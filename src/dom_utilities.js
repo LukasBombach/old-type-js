@@ -1,12 +1,12 @@
 'use strict';
 
-var Settings = require('./settings');
+var Type = require('./core');
 
 /**
  * @constructor
  */
-function DomUtilities() {
-}
+Type.DomUtilities = function () {
+};
 
 (function () {
 
@@ -18,7 +18,7 @@ function DomUtilities() {
    * @type {string}
    * @private
    */
-  DomUtilities._containerId = Settings.prefix + 'container';
+  Type.DomUtilities._containerId = Type.Settings.prefix + 'container';
 
   /**
    * Todo Use me wherever you find document.createElement or this.elementsContainer
@@ -26,9 +26,9 @@ function DomUtilities() {
    * @param {string} [className]
    * @returns {Element}
    */
-  DomUtilities.addElement = function (tagName, className) {
+  Type.DomUtilities.addElement = function (tagName, className) {
     var el = document.createElement(tagName);
-    if (className) el.className = Settings.prefix + className;
+    if (className) el.className = Type.Settings.prefix + className;
     this.getElementsContainer().appendChild(el);
     return el;
   };
@@ -38,7 +38,7 @@ function DomUtilities() {
    * @param {Element} el
    * @returns {*}
    */
-  DomUtilities.removeElement = function (el) {
+  Type.DomUtilities.removeElement = function (el) {
     el.parentNode.removeChild(el);
     return this;
   };
@@ -53,7 +53,7 @@ function DomUtilities() {
    * @returns {Node|null} - Will return the parent node where this
    *     algorithm stopped (The node it did *not* delete)
    */
-  DomUtilities.removeVisible = function (node, constrainingNode) {
+  Type.DomUtilities.removeVisible = function (node, constrainingNode) {
     var parent = node.parentNode;
     if (node === constrainingNode) return node;
     if (node === document.body) return node;
@@ -72,9 +72,9 @@ function DomUtilities() {
    * @param el
    * @param tag
    * @param deep
-   * @returns {DomUtilities}
+   * @returns {Type.DomUtilities}
    */
-  DomUtilities.removeTag = function (el, tag, deep) {
+  Type.DomUtilities.removeTag = function (el, tag, deep) {
     var i;
     if (deep && el.childNodes.length) {
       for (i = 0; i < el.childNodes.length; i += 1) {
@@ -96,9 +96,9 @@ function DomUtilities() {
    *
    * @param tag
    * @param elms
-   * @returns {DomUtilities}
+   * @returns {Type.DomUtilities}
    */
-  DomUtilities.wrap = function (tag, elms) {
+  Type.DomUtilities.wrap = function (tag, elms) {
 
     // Even out parameters
     elms  = elms.length ? elms : [elms];
@@ -140,9 +140,9 @@ function DomUtilities() {
   /**
    * Todo use this.moveAfter()
    * @param {Node} el
-   * @returns {DomUtilities}
+   * @returns {Type.DomUtilities}
    */
-  DomUtilities.unwrap = function (el) {
+  Type.DomUtilities.unwrap = function (el) {
 
     var next     = el.nextSibling,
       parent     = el.parentNode,
@@ -170,7 +170,7 @@ function DomUtilities() {
    * @param elems
    * @returns {*}
    */
-  DomUtilities.moveAfter = function (reference, elems) {
+  Type.DomUtilities.moveAfter = function (reference, elems) {
 
     var i;
 
@@ -200,7 +200,7 @@ function DomUtilities() {
    * @param {Node} [constrainingNode]
    * @returns {HTMLElement|null}
    */
-  DomUtilities.parent = function(el, selector, constrainingNode) {
+  Type.DomUtilities.parent = function(el, selector, constrainingNode) {
     while (el.parentNode && (!constrainingNode || el !== constrainingNode)) {
       if (this.matches(el, selector)) {
         return el;
@@ -220,7 +220,7 @@ function DomUtilities() {
    * @param selector
    * @returns {boolean}
    */
-  DomUtilities.matches = function(el, selector) {
+  Type.DomUtilities.matches = function(el, selector) {
     var _matches = (el.matches || el.matchesSelector || el.msMatchesSelector || el.mozMatchesSelector || el.webkitMatchesSelector || el.oMatchesSelector);
 
     if (_matches) {
@@ -239,7 +239,7 @@ function DomUtilities() {
    *
    * @returns {Element}
    */
-  DomUtilities.getElementsContainer = function () {
+  Type.DomUtilities.getElementsContainer = function () {
     var container = window.document.getElementById(this._containerId);
     if (container === null) {
       container = window.document.createElement('div');
@@ -255,7 +255,7 @@ function DomUtilities() {
    * @param {Node} node
    * @returns {boolean}
    */
-  DomUtilities.containsButIsnt = function (container, node) {
+  Type.DomUtilities.containsButIsnt = function (container, node) {
     return container !== node && container.contains(node);
   };
 
@@ -264,7 +264,7 @@ function DomUtilities() {
    * @param obj
    * @returns {boolean}
    */
-  DomUtilities.isNode = function (obj) {
+  Type.DomUtilities.isNode = function (obj) {
     return !!(obj && obj.nodeType);
   };
 
@@ -275,11 +275,11 @@ function DomUtilities() {
    * @returns {boolean}
    * @private
    */
-  DomUtilities.isVisible = function (el) {
+  Type.DomUtilities.isVisible = function (el) {
     return !!el.offsetHeight;
   };
 
 
-}).call(DomUtilities);
+}).call(Type.DomUtilities);
 
-module.exports = DomUtilities;
+module.exports = Type.DomUtilities;

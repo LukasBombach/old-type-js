@@ -3,8 +3,26 @@
 // Load core editor class
 var Type = require('./core');
 
-// Load plugins
-require('./events'); // todo rewrite events as commented and get rid of this
+// Load core modules
+require('./settings');
+require('./event_api');
+require('./plugin_api');
+require('./environment');
+require('./utilities');
+require('./dom_utilities');
+require('./dom_walker');
+require('./text_walker');
+require('./range');
+require('./contents');
+require('./formatting');
+require('./caret');
+require('./selection_overlay');
+require('./selection');
+require('./input');
+require('./events/input');
+require('./input_filters/caret');
+require('./input_filters/command');
+require('./input_filters/remove');
 
 // Expose Type
 window.Type = Type;

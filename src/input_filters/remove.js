@@ -1,6 +1,6 @@
 'use strict';
 
-var TypeRange = require('../type_range');
+var Input = require('../input');
 
 /**
  * Creates a remove filter. Will catch backspace and del key
@@ -8,14 +8,15 @@ var TypeRange = require('../type_range');
  * the character next to the caret.
  *
  * @param {Type} type
+ * @param {Type.Input} [input]
  * @constructor
  */
-function RemoveFilter(type) {
+Input.Filter.Remove = function (type, input) {
   this._root = type.getRoot();
   this._contents = type.getContents();
   this._caret = type.getCaret();
   this._selection = type.getSelection();
-}
+};
 
 (function () {
 
@@ -26,7 +27,7 @@ function RemoveFilter(type) {
 
   /**
    *
-   * @param {TypeInputEvent} e
+   * @param {Type.Events.Input} e
    */
   this.remove = function (e) {
 
@@ -35,7 +36,7 @@ function RemoveFilter(type) {
     if (this._selection.collapsed()) {
       removeChars = e.key === 'backspace' ? -1 : 1;
       moveChars = e.key === 'backspace' ? -1 : 0;
-      range = TypeRange.fromCaret(this._caret, removeChars);
+      range = Type.Range.fromCaret(this._caret, removeChars);
       newOffset = this._caret.getOffset() + moveChars;
     } else {
       range = this._selection.getRange();
@@ -52,6 +53,6 @@ function RemoveFilter(type) {
   };
 
 
-}).call(RemoveFilter.prototype);
+}).call(Input.Filter.Remove.prototype);
 
-module.exports = RemoveFilter;
+module.exports = Input.Filter.Remove;

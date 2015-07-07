@@ -1,5 +1,9 @@
-var Settings = {
+'use strict';
+
+var Type = require('./core');
+
+Type.Settings = {
   prefix : 'typejs-'
 };
 
-module.exports = Settings;
+module.exports = Type.Settings;

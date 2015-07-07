@@ -1,18 +1,15 @@
 'use strict';
 
 var Type = require('./core');
-var TypeRange = require('./type_range');
-var DomUtil = require('./dom_utilities');
-var Walker = require('./dom_walker');
 
 /**
  *
  * @param {Type} type
  * @constructor
  */
-function Formatting(type) {
+Type.Formatting = function (type) {
   this._type = type;
-}
+};
 
 (function () {
 
@@ -46,11 +43,11 @@ function Formatting(type) {
    * this tag yet (the latter would call _noop which would utter no action).
    *
    * @param {String} tag - The tag that we want to format the text with
-   * @param {TypeRange} typeRange - An object containing data on which part
+   * @param {Type.Range} typeRange - An object containing data on which part
    *     of the text to format
    * @param {...*} params - Any number of arguments that specify attributes
    *     for the tag
-   * @returns {Formatting}
+   * @returns {Type.Formatting}
    */
   this.format = function (tag, typeRange, params) {
     typeRange.ensureIsInside(this._type.getRoot());
@@ -63,7 +60,7 @@ function Formatting(type) {
    * @param tag
    * @param typeRange
    * @param params
-   * @returns {Formatting}
+   * @returns {Type.Formatting}
    */
   this.inline = function (tag, typeRange, params) {
 
@@ -96,7 +93,7 @@ function Formatting(type) {
    * @param {Node} startNode
    * @param {Node} endNode
    * @param {...*} [params]
-   * @returns {Formatting}
+   * @returns {Type.Formatting}
    */
   this.insertInline = function (tag, startNode, endNode, params) {
 
@@ -120,7 +117,7 @@ function Formatting(type) {
 
     // If the node where we stopped contains the endNode,
     // apply this algorithm on it recursively
-    if (currentNode && DomUtil.containsButIsnt(currentNode, endNode)) {
+    if (currentNode && Type.DomUtilities.containsButIsnt(currentNode, endNode)) {
       this.insertInline(tag, currentNode.firstChild, endNode);
     }
 
@@ -128,12 +125,12 @@ function Formatting(type) {
     // siblings, find the next node in the document flow and
     // apply this algorithm on it recursively
     if (currentNode === null) {
-      nextNode = Walker.next(startNode.parentNode.lastChild, this._type.getRoot());
+      nextNode = Type.DomWalker.next(startNode.parentNode.lastChild, this._type.getRoot());
       this.insertInline(tag, nextNode, endNode);
     }
 
     // Wrap the nodes we got so far in the provided tag
-    DomUtil.wrap(tag, nodesToWrap);
+    Type.DomUtilities.wrap(tag, nodesToWrap);
 
     // Chaining
     return this;
@@ -143,25 +140,25 @@ function Formatting(type) {
   /**
    *
    * @param {Node} enclosingTag
-   * @param {TypeRange} typeRange
-   * @returns {Formatting}
+   * @param {Type.Range} typeRange
+   * @returns {Type.Formatting}
    */
   this.removeInline = function (enclosingTag, typeRange) {
 
     var tagName = enclosingTag.tagName,
-      tagPositions = TypeRange.fromElement(enclosingTag).save(this._type.getRoot()),
+      tagPositions = Type.Range.fromElement(enclosingTag).save(this._type.getRoot()),
       selPositions = typeRange.save(this._type.getRoot()),
       leftRange,
       rightRange;
 
-    DomUtil.unwrap(enclosingTag);
+    Type.DomUtilities.unwrap(enclosingTag);
 
-    leftRange = TypeRange.load(this._type.getRoot(), tagPositions.start, selPositions.start);
+    leftRange = Type.Range.load(this._type.getRoot(), tagPositions.start, selPositions.start);
     if (!leftRange.isCollapsed()) {
       this.inline(tagName, leftRange);
     }
 
-    rightRange = TypeRange.load(this._type.getRoot(), selPositions.end, tagPositions.end);
+    rightRange = Type.Range.load(this._type.getRoot(), selPositions.end, tagPositions.end);
     if (!rightRange.isCollapsed()) {
       this.inline(tagName, rightRange);
     }
@@ -175,7 +172,7 @@ function Formatting(type) {
    * @param cmd
    * @param typeRange
    * @param params
-   * @returns {Formatting}
+   * @returns {Type.Formatting}
    * @private
    */
   this.block = function (cmd, typeRange, params) {
@@ -227,13 +224,13 @@ function Formatting(type) {
   /**
    * Multi-purpose no-op handler
    *
-   * @returns {Formatting}
+   * @returns {Type.Formatting}
    * @private
    */
   this._noop = function () {
     return this;
   };
 
-}).call(Formatting.prototype);
+}).call(Type.Formatting.prototype);
 
-module.exports = Formatting;
+module.exports = Type.Formatting;
