@@ -34,23 +34,12 @@ function Type(options) {
   this.options(options);
 
   // Set up core editor modules
-  this._contents = new Type.Contents();
+  this._contents  = new Type.Contents();
   this._formatting = new Type.Formatting(this);
-  this._caret = new Type.Caret(this._root);
-  this._selection = new Type.Selection(this);
-  this._input = new Type.Input(this);
-
-  //console.log(Type.Environment);
-  //console.log(Type.Utilities);
-  //console.log(Type.DomUtilities);
-  //console.log(Type.DomWalker);
-  //console.log(Type.TextWalker);
-  //console.log(Type.Range);
-  //console.log(Type.Contents);
-  //console.log(Type.Formatting);
-  //console.log(Type.Caret);
-
-  this._caret = new Type.Caret(this._root);
+  this._caret      = new Type.Caret(this._root);
+  this._selection  = new Type.Selection(this);
+  this._input      = new Type.Input(this);
+  this._caret      = new Type.Caret(this._root);
 
   // Trigger events
   Type.trigger('ready', this);
@@ -100,10 +89,10 @@ function Type(options) {
    */
   this.options = function (options, value) {
 
-    this.options = this.options || Type.Utilities.extend({}, this._defaultOptions);
+    this._options = this._options || Type.Utilities.extend({}, this._defaultOptions);
 
     if (typeof options === "string" && arguments.length === 1) {
-      return this.options[options];
+      return this._options[options];
     }
 
     if (typeof options === "string" && arguments.length === 2) {
@@ -111,7 +100,7 @@ function Type(options) {
     }
 
     if (typeof options === "object") {
-      Type.Utilities.extend(this.options, options);
+      Type.Utilities.extend(this._options, options);
     }
 
     if (options.el) {
@@ -151,7 +140,7 @@ function Type(options) {
 
   /**
    * Getter for this instance's selection.
-   * @returns {TypeSelection}
+   * @returns {Type.Selection}
    */
   this.getSelection = function () {
     return this._selection;
@@ -159,7 +148,7 @@ function Type(options) {
 
   /**
    * Getter for this instance's text.
-   * @returns {TypeContents}
+   * @returns {Type.Contents}
    */
   this.getContents = function () {
     return this._contents;
@@ -175,7 +164,7 @@ function Type(options) {
 
   /**
    * Getter for this instance's input.
-   * @returns {TypeInput}
+   * @returns {Type.Input}
    */
   this.getInput = function () {
     return this._input;
