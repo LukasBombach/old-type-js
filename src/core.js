@@ -34,7 +34,7 @@ function Type(options) {
   this.options(options);
 
   // Set up core editor modules
-  this._contents  = new Type.Contents();
+  this._contents   = new Type.Contents();
   this._formatting = new Type.Formatting(this);
   this._caret      = new Type.Caret(this._root);
   this._selection  = new Type.Selection(this);
@@ -63,18 +63,19 @@ function Type(options) {
 
   /**
    * Sets or gets the options to be used by this Type instance.
+   * Parameters can be passed as you know it from jQuery:
    *
    * Pass a single string to get an option:
    * this.options('el')
-   * -> returns your editor's TypeContents baseelement
+   * returns your editor's TypeContents baseelement
    *
    * Pass a name value combination to set a specific option
    * this.options('el', myElement)
-   * -> sets the base element
+   * sets the base element
    *
    * Pass an object to set multiple options
    * this.options({el: myElement, foo:bar})
-   * -> sets both parameters
+   * sets both parameters
    *
    * @param {(string|Object)} options - Either a plain object
    *     with keys and values to be set or a string that will
@@ -89,24 +90,30 @@ function Type(options) {
    */
   this.options = function (options, value) {
 
+    // Load default options if there are no instance options yet
     this._options = this._options || Type.Utilities.extend({}, this._defaultOptions);
 
+    // Pass a single option name to fetch it
     if (typeof options === "string" && arguments.length === 1) {
       return this._options[options];
     }
 
+    // Pass an option name and a value to set it
     if (typeof options === "string" && arguments.length === 2) {
       options = {options: value};
     }
 
+    // Pass an object of key-values to set them
     if (typeof options === "object") {
       Type.Utilities.extend(this._options, options);
     }
 
+    // If the el option has been passed copy it for quick access
     if (options.el) {
       this._root = options.el;
     }
 
+    // Chaining
     return this;
 
   };
