@@ -217,7 +217,7 @@ Type.Formatting = function (type) {
     tag = tag.toLowerCase();
     if (this._inlineTags.indexOf(tag) > -1) return this.inline;
     if (this._blockTags.indexOf(tag) > -1) return this.block;
-    console.debug('Tag "' + tag + '" not implemented');
+    Type.Development.debug('Tag "' + tag + '" not implemented');
     return this._noop;
   };
 

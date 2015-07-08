@@ -521,9 +521,7 @@ Type.Range = function (startContainer, startOffset, endContainer, endOffset) {
       offset = range.startOffset;
 
     } else {
-      if (console.debug) {
-        console.debug('This browser does not support caretPositionFromPoint or caretRangeFromPoint.');
-      }
+      Type.Development.debug('This browser does not support caretPositionFromPoint or caretRangeFromPoint.');
       return null;
     }
 
@@ -532,9 +530,7 @@ Type.Range = function (startContainer, startOffset, endContainer, endOffset) {
       return new Type.Range(node, offset, node, offset);
     }
 
-    if (console.debug) {
-      console.debug('User clicked in a non-text node, cannot create range');
-    }
+    Type.Development.debug('User clicked in a non-text node, cannot create range');
 
     return null;
 

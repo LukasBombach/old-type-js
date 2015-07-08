@@ -2,7 +2,14 @@
 
 var Type = require('./core');
 
-Type.Contents = function () {
+/**
+ *
+ * @param {Type} type
+ * @constructor
+ */
+Type.Contents = function (type) {
+  this._type = type;
+  this._root = type.getRoot();
 };
 
 (function () {
@@ -54,20 +61,49 @@ Type.Contents = function () {
    */
   this.remove = function (range, numChars) {
 
-    var startNode, endNode, startParent, current, prev, startRemoved, currentParent, a, b;
+    //var startNode, endNode, startParent, walker, current, prev, startRemoved, currentParent, a, b;
+    var startNode, endNode, walker, current, startParent, startRemoved, currentParent, a, b;
 
     if (arguments.length === 2) {
       range = Type.Range.fromCaret(range, numChars);
     }
 
-    startNode = range.splitStartContainer();
-    endNode = range.splitEndContainer();
-    startParent = startNode.parentNode;
-    current = endNode;
-    prev = endNode;
+    startNode    = range.splitStartContainer();
+    endNode      = range.splitEndContainer();
+    startParent  = startNode.parentNode;
+    walker       = this._type.createDomWalker(endNode, 'textNode');
+    //current      = endNode;
     startRemoved = false;
 
+    //prev = endNode;
+
+    if (!this._root.contains(startNode) || !this._root.contains(endNode)) {
+      Type.Development.debug('The give startNode and endNode are not contained by the editor.');
+      return this;
+    }
+
     while (!startRemoved) {
+
+      current = walker.getNode();
+      walker.prev();
+
+      a = (current === endNode && range.endOffset === 0);
+      b = (current !== startNode && current === Type.DomWalker.first(current.parentNode, 'textNode'));
+
+      if (a || b) {
+        currentParent = current.parentNode;
+        Type.DomUtilities.moveAfter(walker.getNode(), current.parentNode.childNodes);
+        Type.DomUtilities.removeVisible(currentParent);
+      }
+
+      startRemoved = current === startNode;
+      Type.DomUtilities.removeVisible(current);
+      //current = walker.getNode();
+
+    }
+
+
+    /*while (!startRemoved) {
 
       prev = Type.DomWalker.prev(current, 'text');
 
@@ -84,9 +120,10 @@ Type.Contents = function () {
       Type.DomUtilities.removeVisible(current);
       current = prev;
 
-    }
+    }*/
 
     startParent.normalize();
+    //startNode.parentNode.normalize();
 
     return this;
 

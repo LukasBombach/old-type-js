@@ -1,7 +1,6 @@
 'use strict';
 
 var Type = require('./core');
-var DomWalker = require('./dom_walker');
 
 Type.TextWalker = function () {
 };
@@ -18,7 +17,7 @@ Type.TextWalker = function () {
    */
   Type.TextWalker.offset = function (fromNode, toNode, fromOffset, toOffset) {
 
-    var dom = new DomWalker(fromNode, 'text'),
+    var dom = new Type.DomWalker(fromNode, 'text'),
       node = dom.next(true),
       offsetWalked = 0;
 
@@ -46,16 +45,20 @@ Type.TextWalker = function () {
    */
   Type.TextWalker.nodeAt = function (fromNode, offset, startOffset) {
 
-    var walker = new DomWalker(fromNode, 'text'),
-      node = fromNode,
+    var walker = new Type.DomWalker(fromNode, 'text'),
+      node = walker.first(),//Type.DomWalker.first(fromNode, 'text'),
       offsetWalked = 0,
       length;
 
     startOffset = startOffset || 0;
     offset += startOffset;
 
-    if (fromNode.nodeType === 3 && offset >= 0 && offset <= fromNode.nodeValue.trim().length) {
-      return { node: fromNode, offset: offset };
+    //if (fromNode.nodeType === 3 && offset >= 0 && offset <= fromNode.nodeValue.trim().length) {
+    //  return { node: fromNode, offset: offset };
+    //}
+
+    if (offset >= 0 && offset <= node.nodeValue.trim().length) {
+      return { node: node, offset: offset };
     }
 
     if (offset < 0) {
@@ -68,13 +71,13 @@ Type.TextWalker = function () {
       }
 
     } else {
-      while (node = walker.next()) {
+      do {
         length = node.nodeValue.trim().length;
         if (offsetWalked + length >= offset) {
           return { node: node, offset: offset-offsetWalked };
         }
         offsetWalked += length;
-      }
+      } while (node = walker.next());
     }
 
     return null;

@@ -31,7 +31,8 @@ Type.DomWalker = function (node, options) {
 (function () {
 
   /**
-   *
+   * Returns the next node in the document flow and sets the internal reference
+   * to the current node to that node.
    * @returns {null|Node}
    */
   this.next = function (returnMe) {
@@ -39,7 +40,17 @@ Type.DomWalker = function (node, options) {
   };
 
   /**
-   *
+   * Returns the next node in the document flow but does not set the internal
+   * reference to the current node to that node.
+   * @returns {null|Node}
+   */
+  this.prefetchNext = function (returnMe) {
+    return Type.DomWalker._nextNode(this._node, this._options, returnMe);
+  };
+
+  /**
+   * Returns the previous node in the document flow and sets the internal reference
+   * to the current node to that node.
    * @returns {null|Node}
    */
   this.prev = function (returnMe) {
@@ -47,24 +58,38 @@ Type.DomWalker = function (node, options) {
   };
 
   /**
-   *
+   * Returns the previous node in the document flow but does not set the internal
+   * reference to the current node to that node.
+   * @returns {null|Node}
+   */
+  this.prefetchPrev = function (returnMe) {
+    return Type.DomWalker._prevNode(this._node, this._options, returnMe);
+  };
+
+  /**
+   * Returns the first child node matching the given filter or the node passed itself
+   * if it matches the filter too. Sets the internal reference for the current node to
+   * the node found.
    * @returns {null|Node}
    */
   this.first = function () {
-    var node = Type.DomWalker._nextNode(this._node, this._options.filter, true);
+    var node = Type.DomWalker.first(this._node, this._options.filter);
     return this._setNodeIfNotNull(node);
   };
 
   /**
-   *
+   * Returns the last child node matching the given filter or the node passed itself
+   * if it matches the filter too. Sets the internal reference for the current node to
+   * the node found.
    * @returns {null|Node}
    */
   this.last = function () {
-    var node = Type.DomWalker._prevNode(this._node, this._options.filter, true);
+    var node = Type.DomWalker.last(this._node, this._options.filter);
     return this._setNodeIfNotNull(node);
   };
 
   /**
+   * Sets the internal node from which traversal is made to the given node.
    * @param {Node} node
    */
   this.setNode = function (node) {
@@ -76,7 +101,7 @@ Type.DomWalker = function (node, options) {
   };
 
   /**
-   *
+   * Sets the options used for traversal by this walker
    * @param options
    * @returns {*}
    */
@@ -86,7 +111,7 @@ Type.DomWalker = function (node, options) {
   };
 
   /**
-   *
+   * Returns the current node the walker is on.
    * @returns {Node}
    */
   this.getNode = function () {
@@ -124,8 +149,9 @@ Type.DomWalker = function (node, options) {
    * @private
    */
   Type.DomWalker._filterFunctions = {
-    text    : '_isTextNodeWithContents',
-    visible : '_isVisible'
+    text     : '_isTextNodeWithContents',
+    textNode : '_isTextNode',
+    visible  : '_isVisible'
   };
 
   /**
@@ -353,6 +379,17 @@ Type.DomWalker = function (node, options) {
     // We have not found a node we were looking for
     return null;
 
+  };
+
+  /**
+   * Returns true if a given node is a text node
+   *
+   * @param {Node} node The node to be checked.
+   * @returns {boolean}
+   * @private
+   */
+  Type.DomWalker._isTextNode = function (node) {
+    return node.nodeType === Node.TEXT_NODE;
   };
 
   /**

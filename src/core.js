@@ -34,7 +34,7 @@ function Type(options) {
   this.options(options);
 
   // Set up core modules
-  this._contents   = new Type.Contents();
+  this._contents   = new Type.Contents(this);
   this._formatting = new Type.Formatting(this);
   this._caret      = new Type.Caret(this._root);
   this._selection  = new Type.Selection(this);
@@ -119,13 +119,21 @@ function Type(options) {
   };
 
   /**
-   * Creates a {DomWalker} that ist constrained to this
-   * instance's root element unless you explicitly pass
-   * a constrainingNode as argument. All other DomWalker
-   * options can also be passed to this.
+   * Creates a {Type.DomWalker} that ist constrained to this
+   * instance's root element unless you explicitly pass a
+   * constrainingNode as argument. All other DomWalker options
+   * can also be passed to this as usual.
+   *
+   * @param {Node} node - Any DOM {Node} to be set as starting
+   *     node for the DomWalker
+   * @param {Node|string|Function|{constrainingNode: Node, filter: string|Function}} options
+   *     See {Type.DomWalker} for a description of possible arguments
+   * @returns {Type.DomWalker}
    */
-  this.createDomWalker = function () {
-    // todo implement me
+  this.createDomWalker = function (node, options) {
+    options = Type.DomWalker.loadOptions(options || {});
+    options.constrainingNode = options.constrainingNode || this._root;
+    return new Type.DomWalker(node, options);
   };
 
   /**

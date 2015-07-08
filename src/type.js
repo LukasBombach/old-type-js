@@ -4,6 +4,7 @@
 var Type = require('./core');
 
 // Load core modules
+require('./development');
 require('./settings');
 require('./event_api');
 require('./plugin_api');
