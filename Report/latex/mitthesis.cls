@@ -518,8 +518,8 @@ requirements for the \@degreeword\ of \\
 % The \kern0pt pushes any depth into the height.  Thanks to Richard Stone.
 \def\endtitlepage{\par\kern 0pt\egroup\vss\egroup\newpage}
 
-\def\MIT{HOCHSCHULE FÜR TECHNIK UND WIRTSCHAFT BERLIN}
-\def\Mit{Hochschule für Technik und Wirtschaft Berlin}
+\def\MIT{HOCHSCHULE F{\"U}R TECHNIK UND WIRTSCHAFT BERLIN}
+\def\Mit{Hochschule f{\"u}r Technik und Wirtschaft Berlin}
 
 \def\permission{\par\noindent{\centering
    The author hereby grants to MIT permission to reproduce and to
