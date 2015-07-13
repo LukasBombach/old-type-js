@@ -5,10 +5,16 @@ Rich-text editors are commonly used by many on a daily basis. Often, this happen
 
 While there are APIs for creating rich-text input controls in many desktop programming environments, web-browsers do not offer native rich-text inputs. However, third-party JavaScript libraries fill the gap and enable developers to include rich-text editors in web-based projects.
 
-Still, these libraries come with critical downsides
+The libraries available still have downsides. Most importantly, only a few of them work. As a web-developer, the best choices are either CKEditor or TinyMCE. From there on, most editors do not really work. Piotrek Koszuliński, core developer of CKEditor comments this on StackOverflow as follows:
 
+\begin{quote}
+\textit{Don't write wysiwyg editor[sic] - use one that exists. It's going to consume all your time and still your editor will be buggy. We and guys from other... two main editors (guess why only three exist) are working on this for years and we still have full bugs lists ;).}\footnote{\url{http://stackoverflow.com/questions/11240602/paste-as-plain-text-contenteditable-div-textarea-word-excel/11290082#11290082}, last checked on 07/13/2015}
+\end{quote}
 
-\section{Disclaimer}
+A lot of the bugs CKEditor and other editors are facing are due to the fact that they rely on so-called ''HTML Editing APIs'' that have been implemented in browsers for years, but only been standardized with HTML5. Still, to this present day, the implementations are prone to noumerous bugs and behave inconsitently across different browsers. And even though these APIs are the de-facto standard for implementing rich-text editing, with their introduction in Internet Explorer 5.5, it has never been stated they have been created to be used as such.
 
+It's a fact, that especially on older browsers, rich-text editors have to cope with bugs and inconsistencies, that can only be worked around, but not fixed, as they are native to the browser. On the upside, these APIs offer a high-level API to call so-called ''commands'' to format the current text-selection. 
+
+However, calling commands will only manipulate the document's DOM tree, in order to format the text. This can also be achieved without the editing APIs, effectively avoiding unfixable bugs and enabling a consistend behaviour across all browsers.
 
 \section{Structure}
