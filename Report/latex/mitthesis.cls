@@ -465,17 +465,17 @@ by\par
 at the
 \par\MIT\par
 \@degreemonth\ \@degreeyear
-\par
-\@copyrightnotice
+% \par
+% \@copyrightnotice
 \par
 \vskip 3\baselineskip
-\signature{Author}{\@department \\ \@thesisdate}
+\signature{Author}{\@author \\ \@thesisdate}
 \par
 \vfill
 \unvbox\@titlesupervisor
-\par
-\vfill
-\signature{Accepted by}{\@chairmanname \\ \@chairmantitle}
+%\par
+%\vfill
+%\signature{Accepted by}{\@chairmanname \\ \@chairmantitle}
 \vfill
 \end{titlepage}}
 
