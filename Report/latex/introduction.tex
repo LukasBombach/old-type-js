@@ -15,6 +15,10 @@ A lot of the bugs CKEditor and other editors are facing are due to the fact that
 
 It's a fact, that especially on older browsers, rich-text editors have to cope with bugs and inconsistencies, that can only be worked around, but not fixed, as they are native to the browser. On the upside, these APIs offer a high-level API to call so-called ''commands'' to format the current text-selection. 
 
-However, calling commands will only manipulate the document's DOM tree, in order to format the text. This can also be achieved without the editing APIs, effectively avoiding unfixable bugs and enabling a consistend behaviour across all browsers.
+However, calling commands will only manipulate the document's DOM tree, in order to format the text. This can also be achieved without using editing APIs, effectively avoiding unfixable bugs and enabling a consistend behaviour across all browsers.
+
+Furthermore CKEditor, TinyMCE and most other libraries are shipped as user interface components. While being customizable, they tend to be invasive to web-projects.
+
+This thesis demonstrates a way to enable rich-text editing in the browser without requiring HTML Editing APIs, provided as a GUI-less software library. This enables web-developers to implement rich-text editors specific to the requirements of their web-projects.
 
 \section{Structure}
