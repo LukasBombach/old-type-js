@@ -14,8 +14,8 @@
 
 \section{Plain-text inputs}
 
-Browsers have native 
-However not an editor.
+Browsers have native plain-text inputs
+However there are no components for rich text editing.
 Confining the W3C specifications, there are 2 elements made for text input
  * input fields and
  * textareas
@@ -28,9 +28,15 @@ Confining the W3C specifications, there are 2 elements made for text input
 
 % Since the browser is a rich-text viewer, we can utilize this and just modify the dom.
 
+\subsection{Third-party JavaScript libraries}
+
+The W3C's HTML5 and HTML5.1 specifications as well as the WHATWG HTML specification do not recommend native components for rich text editing. 
+
+Rich-text editing in browsers is only possible though JavaScript. Essentially, libraries enabling rich-text editing display a nested webpage through an iFrame and let the user modify its contents to emulate a rich-text input. Commonly, the editing is realized though the browser's so-called editing APIs, which will be explained in Section XXX (HTML Editing APIs).
+
 \subsection{HTML Editing APIs}
 
-In July 2000, with the release of Internet Explorer 5.5, Microsoft introduced the contentEditable and designMode IDL attributes along with the contenteditable content attribute\footnote{\url{https://msdn.microsoft.com/en-us/library/ms533720(v=vs.85).aspx}, last checked on 07/10/2015}\footnote{\url{https://msdn.microsoft.com/en-us/library/ms537837(VS.85).aspx}, last checked on 07/10/2015}. These attributes were not standardized and not part of the W3C DOM specifications. 
+In July 2000, with the release of Internet Explorer 5.5, Microsoft introduced the IDL attributes \texttt{contentEditable} and \texttt{designMode} along with the content attribute \texttt{contenteditable}\footnote{\url{https://msdn.microsoft.com/en-us/library/ms533720(v=vs.85).aspx}, last checked on 07/10/2015}\footnote{\url{https://msdn.microsoft.com/en-us/library/ms537837(VS.85).aspx}, last checked on 07/10/2015}. These attributes were not standardized and not part of the W3C DOM specifications. 
 
 % Please add the following required packages to your document preamble:
 % \usepackage{graphicx}
@@ -72,6 +78,17 @@ In March 2008, Apple released Safari 3.1\footnote{\url{https://www.apple.com/pr/
 Around the year 2003[\textit{MeineTabelle}] the first JavaScript libraries emerged that made use of Microsoft's and Mozilla's editing mode to offer rich-text editing in the browser. Usually these libraries were released as user interface components (text fields) with inherent rich-text functionality and were only partly customizable.
 
 In May 2003 and March 2004 versions 1.0 of ''FCKEditor'' and ''TinyMCE'' have been released as open source projects. These projects are still being maintained and remain among the most popular choices for incorporating rich-text editing in web-based projects. \textit{// Technik, wie diese Editoren funktionieren erklären.}
+
+Seeing the history of editing APIs, it is understandable how this has become the standard for rich-text editing. However, with its introduction in Internet Explorer 5.5, it has not been stated that the designMode end contentEditable attributes have been intended to enable rich-text editing. Sections X and Y will discuss the advantages and disadvantages of these APIs.
+
+\subsection{Advantages of HTML Editing APIs}
+
+
+\subsection{Disadvantages of HTML Editing APIs}
+
+bugs
+limitations
+No specifications on what markup to generate (mozilla != ie, mdn has links for that)
 
 \subsection{DOM manipulation without Editing APIs}
 
