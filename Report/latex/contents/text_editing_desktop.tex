@@ -1,0 +1,58 @@
+%% This is an example first chapter.  You should put chapter/appendix that you
+%% write into a separate file, and add a line \include{yourfilename} to
+%% main.tex, where `yourfilename.tex' is the name of the chapter/appendix file.
+%% You can process specific files by typing their names in at the 
+%% \files=
+%% prompt when you run the file main.tex through LaTeX.
+
+\chapter{Text editing in desktop environments}
+%\chapter{Word processing on desktop PCs}
+
+\section{Basics of plain-text editing} % word-processing
+
+caret
+selection
+input
+
+\section{Basics Rich-text editing} % word-processing
+
+document tree
+formatting algorithms
+
+% we will see that contenteditable handles all this, but in my solution this all needs to be coded again
+% I need to discuss that the benefits are bigger than having to do this
+
+\section{Libraries for desktop environments}
+
+Rich-text editing has become a standard and most modern Frameworks, system APIs or GUI libraries come with basic built-in rich-text capabilites.
+
+\begin{table}[]
+\centering
+\begin{tabular}{ll}
+\hline
+Environment & Component \\ \hline
+Java (Swing) & JTextPane / JEditorPane \\
+MFC & CRichEditCtrl \\
+.NET & RichTextBox \\
+Cocoa & NSTextView \\
+Python & Tkinter Text \\
+Qt & QTextDocument \\ \hline
+\end{tabular}
+\caption{Rich-text components in desktop environments}
+\label{rich-text-components-desktop}
+\end{table}
+
+% \paragraph{MFC}
+% https://msdn.microsoft.com/en-us/library/68730ktd.aspx
+
+% \paragraph{.NET}
+% https://msdn.microsoft.com/en-us/library/system.windows.forms.richtextbox(v=vs.110).aspx
+
+% \paragraph{Cocoa}
+% https://developer.apple.com/library/mac/documentation/Cocoa/Reference/ApplicationKit/Classes/NSTextView\_Class/index.html
+
+% \paragraph{Python}
+% http://infohost.nmt.edu/tcc/help/pubs/tkinter/web/text.html
+
+% \paragraph{Qt}
+% http://doc.qt.io/qt-5.5/richtext.html
