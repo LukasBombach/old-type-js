@@ -66,3 +66,5 @@ Ich habe mich für Klassen entschieden. Das hat folgende Vorteile:
 Es gibt ein Basisobjekt, das ist die Type "Klasse".
 Darin werden dann die anderen Klassen geschrieben "Type.Caret", "Type.Selection", "Type.Range", ...
 Das hat den Vorteil dass das ganze ge-name-spaced ist, so dass ich keine Konflikte mit Systemnamen habe (Range) (und auch nicht mit anderen Bibliotheken)
+Effektiv gibt es eine (flache) Baumstruktur und so mit Ordnung. Für bestimmte Klassen, "Type.Event.Input", "Type.Input.Filter.X" geht es tiefer.
+Der zweite Grund ist, dass ich somit alle Klassen die ich geschrieben habe für Entwickler sichtbar bereit stelle und nicht implizit und versteckt über irgend nen Quatsch.
