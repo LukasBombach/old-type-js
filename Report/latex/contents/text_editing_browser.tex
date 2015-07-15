@@ -49,14 +49,13 @@ By setting \texttt{contenteditable} or \texttt{contentEditable} to ''true'' or \
 
 In editing mode, setting the caret by clicking on elements, accepting keyboard input and modifying text nodes is handled entirely by the browser. No further scripting is necessary.
 
-The API enabled can be called globally on the \texttt{document} object, but will only execute when the user's selection or caret is focussed inside an element in editing mode. Table \ref{table:editing-mode-api} lists the full API. 
-
-To format text the method \texttt{document.execCommand} can be used. Calling
+The API enabled can be called globally on the \texttt{document} object, but will only execute when the user's selection or caret is focussed inside an element in editing mode. Table \ref{table:editing-mode-api} lists the full API. To format text the method \texttt{document.execCommand} can be used. Calling
 
 \begin{lstlisting}[language=JavaScript, caption=Emphasizing text using the HTML editing API, label=lst:execcommand-italics]
 document.execCommand('italic', false, null);
 \end{lstlisting}
 
+\noindent will wrap the currently selected text inside an element in editing mode with \texttt{<i>} tags.
 
 The method \texttt{document.execCommand} will format the currently selected text. Calling \texttt{document.execCommand('bold', false, null)} will wrap the currently selected text in \texttt{<b>} tags. \texttt{document.execCommand('createLink', false, 'http://google.com/')} will wrap the selected text in a link to google.com. However, this command will be ignored, if the current selection is not contained by an element in editing mode.
 
