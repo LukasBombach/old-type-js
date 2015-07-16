@@ -110,13 +110,13 @@ It makes sense to use HTML editing APIs for rich-text editing. Microsoft's demos
 The WHATWG discussed various ways to specify rich-text editing for the upcoming HTML5 standard, including dedicated input fields. The issues that have been faced with that idea are 
 
 \begin{enumerate} 
-\item Finding a way to tell the browser which language the rich-text input should generate. E.g. should the output be the then popular bb-code, (x)html, textile or something else?
+\item Finding a way to tell the browser which language the rich-text input should generate. E.g. should the output be (the then popular ''bb'' code), (X)HTML, Textile or something else?
 \item How can browser support for a rich-text input be achieved?
 \end{enumerate}
 
 %% Den browser support teil kann ich später gut aufgreifen, damit dass meine library immer 100% browser support hat
 
-Ian Hickson, editor of WHATWG and author of the HTML 5 specification adresses these main issues in a message from November 2004\footnote{\url{https://lists.w3.org/Archives/Public/public-whatwg-archive/2004Nov/0014.html}, last checked on 07/16/2015}. He states
+Ian Hickson, editor of WHATWG and author of the HTML5 specification adresses these main issues in a message from November 2004\footnote{\url{https://lists.w3.org/Archives/Public/public-whatwg-archive/2004Nov/0014.html}, last checked on 07/16/2015}. He states
 
 \begin{quotation}
 \textit{Realistically, I just can't see something of this scoped[sic] [the ability to specify a input 'language' for a text-area and possibly to specify a subset of language elements allowed] getting implemented and shipped in the default install of browsers.}
@@ -135,6 +135,8 @@ Ian Hickson finally concludes
 as being realistic would be to do something similar to (and ideally 
 compatible with) IE's "contentEditable" and "designMode" attributes.}
 \end{quotation}
+
+Mark Pilgrim lists this as milestone of the integration of Microsoft's HTML editing APIs in the HTML5 standard.\footnote{\url{https://blog.whatwg.org/the-road-to-html-5-contenteditable}, last checked on 07/16/2015}.
 
 From its history it's clear to see that the HTML editing APIs just came to be by adoption of browser manufacturer's and ultimately have been standardized for the main reason because they have already been there.
 
