@@ -95,7 +95,8 @@ Starting in November 2004, WHATWG members have started actively discussing to in
 
 Around the year 2003\footnote{compare \textit{Meine Tabelle aller Editoren}} the first JavaScript libraries emerged that made use of Microsoft's and Mozilla's editing mode to offer rich-text editing in the browser. Usually these libraries were released as user interface components (text fields) with inherent rich-text functionality and were only partly customizable.
 
-In May 2003 and March 2004 versions 1.0 of ''FCKEditor''\footnote{Now distributed as ''CKEditor''} and ''TinyMCE'' have been released as open source projects. These projects are still being maintained and remain among the most popular choices for incorporating rich-text editing in web-based projects.
+In May 2003 and March 2004 versions 1.0 of ''FCKEditor''\footnote{Now distributed as ''CKEditor''} and ''TinyMCE'' have been released as open source projects. These projects are still being maintained and remain among the most used editors for incorporating rich-text editing in web-based projects. TinyMCE is the default editor for Wordpress and CKEditor is listed as the most popular rich-text editor for Drupal\footnote{\url{https://www.drupal.org/project/project\_module}, last checked on 07/16/2015}.
+
 
 \subsection{Usage of HTML Editing APIs}
 \label{sec:useage-of-html-editing-apis}
@@ -103,6 +104,8 @@ In May 2003 and March 2004 versions 1.0 of ''FCKEditor''\footnote{Now distribute
 How Js Libraries work. Maybe how only a few work. StackOverlfow quote, buglists, Medium post, other stuff to find.
 
 Seeing how editing APIs have come to existance, as an undocumented API by microsoft, taken over by mozilla, bossted by JS libraries and then adopted by other browsers, it can be understood how editing APIs came to be. However, by its introduction by microsoft, it has not been stated that this has been its original purpose. And even if Mozilla picked up on it, it is not clear that this API is in fact the best way to implement rich-text editing. WHATWG has discussed this API, arguing if it is the best way to provide rich-text functionality.
+
+** WICHTIG DEN BOGEN ZU SPANNEN WARUM ICH ÜBER DIE GESCHICHTE SCHREIBE** ERKLÄREN, DASS ALLE DIE API VON MICROSOFT ÜBERNOMMEN HABEN; ANSTATT RICH-TEXT ELEMENTE EINZUFÜHREN. HTML5 HAT KOMPONENTEN FÜR TIME UND DATE; WARUM NICHT RICH TEXT- WHATWG HAT DAS DISCUSSED. WAS WAREN DIE GRÜNDE?. BEI DER BESCHREIBUNG DARAUF ACHTEN DASS ICH DEN GRUND GEBE; WARUM ICH DIE ENTWICKLUNG SO LANGE ERKLÄRE. VIELLEICHT AUCH SAGEN, DASS TROTZ DASS HTML5 ERST SEIT X RELEASED WURDE, ANHAND DER GESCHICHTE GESEHEN WERDEN KANN; DASS ES SCHON LANGE BROWSER SUPPORT GIBT.
 
 Seeing the history of editing APIs, it is understandable how this has become the standard for rich-text editing. However, with its introduction in Internet Explorer 5.5, it has not been stated that the \texttt{designMode} end \texttt{contentEditable} attributes have been intended to enable rich-text editing. Sections X and Y will discuss the advantages and disadvantages of these APIs.
 
