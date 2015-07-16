@@ -106,8 +106,35 @@ Since the introduction of Microsoft's HTML editing APIs, a large number of rich-
 Most rich-text editors use HTLM editing APIs as their basis. CKEditor and TinyMCE dynamically create an \texttt{iframe} on instantiation and set its \texttt{body} to editing mode using \texttt{contenteditable}. Doing so, users can type inside the \texttt{iframe} so it effectively acts as text input field. Both libraries wrap the \texttt{iframe} in a user interface with buttons to format the \texttt{iframe}'s contents. When a user clicks on a button in the interface \texttt{document.execCommand} will be called on the \texttt{iframe}'s \texttt{document} and the selected text will be formatted. While using an \texttt{iframe} is still in practice, many newer editors use a  \texttt{div} instead. The advantages and disadvatanges of this technique will be discussed in Sections XY.
 
 It makes sense to use HTML editing APIs for rich-text editing. Microsoft's demos published with the first implementation of these APIs suggest to do so. Mozilla picked up on it and called their implementation ''rich-text editing API''. Other browsers followed with APIs based on Microsoft's idea of editable elements. However, it would have been imaginable to implement an actual user interface component, a dedicated rich-text input field. The HTML editing APIs have only been standardized with HTML5, which itself introduces 13 new types of input fields\footnote{\url{https://developer.mozilla.org/en/docs/Web/HTML/Element/Input}, last checked on 07/16/2015}, but none with rich-text capabilites.
-As described in
-Ian Hickson, editor of the WHATWG and author of the HTML 5 specification
+
+The WHATWG discussed various ways to specify rich-text editing for the upcoming HTML5 standard, including dedicated input fields. The issues that have been faced with that idea are 
+
+\begin{enumerate} 
+\item Finding a way to tell the browser which language the rich-text input should generate. E.g. should the output be the then popular bb-code, (x)html, textile or something else?
+\item How can browser support for a rich-text input be achieved?
+\end{enumerate}
+
+%% Den browser support teil kann ich später gut aufgreifen, damit dass meine library immer 100% browser support hat
+
+Ian Hickson, editor of WHATWG and author of the HTML 5 specification adresses these main issues in a message from November 2004\footnote{\url{https://lists.w3.org/Archives/Public/public-whatwg-archive/2004Nov/0014.html}, last checked on 07/16/2015}. He states
+
+\begin{quotation}
+\textit{Realistically, I just can't see something of this scoped[sic] [the ability to specify a input 'language' for a text-area and possibly to specify a subset of language elements allowed] getting implemented and shipped in the default install of browsers.}
+\end{quotation}
+
+and agrees with Ryan Johnson, who states
+
+\begin{quotation}
+\textit{Anyway, I think that it might be quite a jump for manufacturers. I also see that a standard language would need to be decided upon just to describe the structure of the programming languages. Is it worth the time to come up with suggestions and examples of a programming language definition markup, or is my head in the clouds?}
+\end{quotation}
+
+Ian Hickson finally concludes
+
+\begin{quotation}
+\textit{Having considered all the suggestions, the only thing I could really see 
+as being realistic would be to do something similar to (and ideally 
+compatible with) IE's "contentEditable" and "designMode" attributes.}
+\end{quotation}
 
 From its history it's clear to see that the HTML editing APIs just came to be by adoption of browser manufacturer's and ultimately have been standardized for the main reason because they have already been there.
 
@@ -118,13 +145,13 @@ From its history it's clear to see that the HTML editing APIs just came to be by
 
 % Even today many editors still use this technique, but it has severe downsides and the pro arguments are obsolete. This will be discussed in Sections XY.
 
-How Js Libraries work. Maybe how only a few work. StackOverlfow quote, buglists, Medium post, other stuff to find.
+%% How Js Libraries work. Maybe how only a few work. StackOverlfow quote, buglists, Medium post, other stuff to find.
 
-Seeing how editing APIs have come to existance, as an undocumented API by microsoft, taken over by mozilla, bossted by JS libraries and then adopted by other browsers, it can be understood how editing APIs came to be. However, by its introduction by microsoft, it has not been stated that this has been its original purpose. And even if Mozilla picked up on it, it is not clear that this API is in fact the best way to implement rich-text editing. WHATWG has discussed this API, arguing if it is the best way to provide rich-text functionality.
+%% Seeing how editing APIs have come to existance, as an undocumented API by microsoft, taken over by mozilla, bossted by JS libraries and then adopted by other browsers, it can be understood how editing APIs came to be. However, by its introduction by microsoft, it has not been stated that this has been its original purpose. And even if Mozilla picked up on it, it is not clear that this API is in fact the best way to implement rich-text editing. WHATWG has discussed this API, arguing if it is the best way to provide rich-text functionality.
 
-** WICHTIG DEN BOGEN ZU SPANNEN WARUM ICH ÜBER DIE GESCHICHTE SCHREIBE** ERKLÄREN, DASS ALLE DIE API VON MICROSOFT ÜBERNOMMEN HABEN; ANSTATT RICH-TEXT ELEMENTE EINZUFÜHREN. HTML5 HAT KOMPONENTEN FÜR TIME UND DATE; WARUM NICHT RICH TEXT- WHATWG HAT DAS DISCUSSED. WAS WAREN DIE GRÜNDE?. BEI DER BESCHREIBUNG DARAUF ACHTEN DASS ICH DEN GRUND GEBE; WARUM ICH DIE ENTWICKLUNG SO LANGE ERKLÄRE. VIELLEICHT AUCH SAGEN, DASS TROTZ DASS HTML5 ERST SEIT X RELEASED WURDE, ANHAND DER GESCHICHTE GESEHEN WERDEN KANN; DASS ES SCHON LANGE BROWSER SUPPORT GIBT.
+%% ** WICHTIG DEN BOGEN ZU SPANNEN WARUM ICH ÜBER DIE GESCHICHTE SCHREIBE** ERKLÄREN, DASS ALLE DIE API VON MICROSOFT ÜBERNOMMEN HABEN; ANSTATT RICH-TEXT ELEMENTE EINZUFÜHREN. HTML5 HAT KOMPONENTEN FÜR TIME UND DATE; WARUM NICHT RICH TEXT- WHATWG HAT DAS DISCUSSED. WAS WAREN DIE GRÜNDE?. BEI DER BESCHREIBUNG DARAUF ACHTEN DASS ICH DEN GRUND GEBE; WARUM ICH DIE ENTWICKLUNG SO LANGE ERKLÄRE. VIELLEICHT AUCH SAGEN, DASS TROTZ DASS HTML5 ERST SEIT X RELEASED WURDE, ANHAND DER GESCHICHTE GESEHEN WERDEN KANN; DASS ES SCHON LANGE BROWSER SUPPORT GIBT.
 
-Seeing the history of editing APIs, it is understandable how this has become the standard for rich-text editing. However, with its introduction in Internet Explorer 5.5, it has not been stated that the \texttt{designMode} end \texttt{contentEditable} attributes have been intended to enable rich-text editing. Sections X and Y will discuss the advantages and disadvantages of these APIs.
+%% Seeing the history of editing APIs, it is understandable how this has become the standard for rich-text editing. However, with its introduction in Internet Explorer 5.5, it has not been stated that the \texttt{designMode} end \texttt{contentEditable} attributes have been intended to enable rich-text editing. Sections X and Y will discuss the advantages and disadvantages of these APIs.
 
 % Rich-text editing in browsers is only possible though JavaScript. Essentially, libraries enabling rich-text editing display a nested webpage through an iFrame and let the user modify its contents to emulate a rich-text input. Commonly, modification is realized though the browser's so-called ''HTML Editing APIs'', which will be discussed in Section XXX (HTML Editing APIs).
 
