@@ -93,11 +93,9 @@ Starting in November 2004, WHATWG members have started actively discussing to in
 
 \subsection{Emergence of HTML editing JavaScript libraries}
 
-Around the year 2003[\textit{MeineTabelle}] the first JavaScript libraries emerged that made use of Microsoft's and Mozilla's editing mode to offer rich-text editing in the browser. Usually these libraries were released as user interface components (text fields) with inherent rich-text functionality and were only partly customizable.
+Around the year 2003\footnote{compare \textit{Meine Tabelle aller Editoren}} the first JavaScript libraries emerged that made use of Microsoft's and Mozilla's editing mode to offer rich-text editing in the browser. Usually these libraries were released as user interface components (text fields) with inherent rich-text functionality and were only partly customizable.
 
-In May 2003 and March 2004 versions 1.0 of ''FCKEditor'' and ''TinyMCE'' have been released as open source projects. These projects are still being maintained and remain among the most popular choices for incorporating rich-text editing in web-based projects. \textit{// Technik, wie diese Editoren funktionieren erklären.}
-
-Seeing the history of editing APIs, it is understandable how this has become the standard for rich-text editing. However, with its introduction in Internet Explorer 5.5, it has not been stated that the \texttt{designMode} end \texttt{contentEditable} attributes have been intended to enable rich-text editing. Sections X and Y will discuss the advantages and disadvantages of these APIs.
+In May 2003 and March 2004 versions 1.0 of ''FCKEditor''\footnote{Now distributed as ''CKEditor''} and ''TinyMCE'' have been released as open source projects. These projects are still being maintained and remain among the most popular choices for incorporating rich-text editing in web-based projects.
 
 \subsection{Usage of HTML Editing APIs}
 \label{sec:useage-of-html-editing-apis}
@@ -106,7 +104,7 @@ How Js Libraries work. Maybe how only a few work. StackOverlfow quote, buglists,
 
 Seeing how editing APIs have come to existance, as an undocumented API by microsoft, taken over by mozilla, bossted by JS libraries and then adopted by other browsers, it can be understood how editing APIs came to be. However, by its introduction by microsoft, it has not been stated that this has been its original purpose. And even if Mozilla picked up on it, it is not clear that this API is in fact the best way to implement rich-text editing. WHATWG has discussed this API, arguing if it is the best way to provide rich-text functionality.
 
-original puprose has not been
+Seeing the history of editing APIs, it is understandable how this has become the standard for rich-text editing. However, with its introduction in Internet Explorer 5.5, it has not been stated that the \texttt{designMode} end \texttt{contentEditable} attributes have been intended to enable rich-text editing. Sections X and Y will discuss the advantages and disadvantages of these APIs.
 
 % Rich-text editing in browsers is only possible though JavaScript. Essentially, libraries enabling rich-text editing display a nested webpage through an iFrame and let the user modify its contents to emulate a rich-text input. Commonly, modification is realized though the browser's so-called ''HTML Editing APIs'', which will be discussed in Section XXX (HTML Editing APIs).
 
@@ -119,8 +117,11 @@ discussion of WHATWG
 \subsection{Disadvantages of HTML Editing APIs}
 
 bugs
+it seems to me the api as provided is a bad idea. Programmers can handle control, and why not make this control specific instead of executing bulkish commands.
 very limited api. limited wo a few commands and a few paramters
 No specifications on what markup to generate (mozilla != ie, mdn has links for that)
+\paragraph{pasting}
+is a problem: shitty markup can be pasted, paste event not implemented in all browser, some offer a modal, some clean up after change. I can solve this problem.
 
 \subsection{DOM manipulation without Editing APIs}
 
@@ -131,3 +132,14 @@ In October 1998 the World Wide Web Consortium (W3C) published the ''Document Obj
 Only this can guarantee the same behaviour and the same output across all browsers.
 It puts the contenteditable implementation in the hand of JavaScript developers. We no longer have to wait for browsers to fix issues *and conform each other* and thus can be faster, at least possibly, than browsers are.
 Also we can deploy updates immediately to all users and do not have to worry they use old browsers even if updates exist.
+
+\subsection{Disadvantages of rich-text editing without Editing APIs}
+
+Apparently implementing editing is prone to a lot of bugs issues **and edge-casese**. It can be assumed that it is difficult to do so. / Discuss the issues discussed by WHATWG here. It's difficult to do this.
+
+Also this can be seen as ''yet another'' implementation of contenteditable, equal to browser implementations. Just one more editor for developers to take care of. However, this isn't quite correct, cos developers usually can choose a single editor that is used for the entire project, so they only have to take care of a single editor.
+
+\subsection{Disadvantages of offering user interface components}
+
+Warum es besser ist eine library zu shippen und nicht einen editor als ui component
+
