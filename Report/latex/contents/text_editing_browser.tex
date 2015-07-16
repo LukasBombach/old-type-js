@@ -105,12 +105,14 @@ Since the introduction of Microsoft's HTML editing APIs, a large number of rich-
 
 Most rich-text editors use HTLM editing APIs as their basis. CKEditor and TinyMCE dynamically create an \texttt{iframe} on instantiation and set its \texttt{body} to editing mode using \texttt{contenteditable}. Doing so, users can type inside the \texttt{iframe} so it effectively acts as text input field. Both libraries wrap the \texttt{iframe} in a user interface with buttons to format the \texttt{iframe}'s contents. When a user clicks on a button in the interface \texttt{document.execCommand} will be called on the \texttt{iframe}'s \texttt{document} and the selected text will be formatted. While using an \texttt{iframe} is still in practice, many newer editors use a  \texttt{div} instead. The advantages and disadvatanges of this technique will be discussed in Sections XY.
 
-It makes sense to use HTML editing APIs for rich-text editing. Microsoft's demos published with the first implementation of these APIs suggest to do so. Mozilla picked up on it and called their implementation ''rich-text editing API''. Other browsers followed with APIs based on Microsoft's idea of editable elements. However, it would have been imaginable to implement an actual user interface component, a dedicated rich-text input field. The HTML editing APIs have only been standardized with HTML5, which itself introduces 13 new types of input fields\footnote{\url{https://developer.mozilla.org/en/docs/Web/HTML/Element/Input}, last checked on 07/16/2015}, but none with rich-text capabilites.
+\subsection{Alternatives to HTML Editing APIs}
 
-The WHATWG discussed various ways to specify rich-text editing for the upcoming HTML5 standard, including dedicated input fields. The issues that have been faced with that idea are 
+It makes sense to use HTML editing APIs for rich-text editing. Microsoft's demos published with the release of these API suggest to do so. Mozilla picked up on it and called their implementation ''rich-text editing API''. Other browsers followed with APIs based on Microsoft's idea of editable elements. However, it would have been imaginable for browsers to offer a native user interface component, a dedicated rich-text input field.
+
+The HTML editing APIs have only been standardized with HTML5, which itself introduces 13 new types of input fields\footnote{\url{https://developer.mozilla.org/en/docs/Web/HTML/Element/Input}, last checked on 07/16/2015}, but none with rich-text capabilites. The WHATWG discussed various ways to specify rich-text editing for the upcoming HTML5 standard, including dedicated input fields. The issues that have been faced with that idea are 
 
 \begin{enumerate} 
-\item Finding a way to tell the browser which language the rich-text input should generate. E.g. should the output be (the then popular ''bb'' code), (X)HTML, Textile or something else?
+\item Finding a way to tell the browser which language the rich-text input should generate. E.g. should it output (the then popular) ''bb'' code, (X)HTML, Textile or something else?
 \item How can browser support for a rich-text input be achieved?
 \end{enumerate}
 
@@ -136,9 +138,15 @@ as being realistic would be to do something similar to (and ideally
 compatible with) IE's "contentEditable" and "designMode" attributes.}
 \end{quotation}
 
-Mark Pilgrim lists this as milestone of the integration of Microsoft's HTML editing APIs in the HTML5 standard.\footnote{\url{https://blog.whatwg.org/the-road-to-html-5-contenteditable}, last checked on 07/16/2015}.
+Mark Pilgrim lists this as milestone of the decision to integrate Microsoft's HTML editing APIs in the HTML5 standard.\footnote{\url{https://blog.whatwg.org/the-road-to-html-5-contenteditable}, last checked on 07/16/2015}.
 
-From its history it's clear to see that the HTML editing APIs just came to be by adoption of browser manufacturer's and ultimately have been standardized for the main reason because they have already been there.
+% By understanding the origins, the development and the process of standardization, it can be seen that the incorporation of the HTML editing APIs as designed by Microsoft has not been decided because they are a \textit{good idea}, but to be compatible with other systems and ultimately Internet Explorer 5.5.
+
+By understanding the origins, the development and the process of standardization, it can be seen that the incorporation of the HTML editing APIs has not been decided because they are a \textit{good idea}, but to be compatible with other systems and ultimately Internet Explorer 5.5.
+
+% but because they were \textit{already there} and could used on most PCs.% by the majority of users.
+
+%% From its history it's clear to see that the HTML editing APIs just came to be by adoption of browser manufacturer's and ultimately have been standardized for the main reason because they have already been there.
 
 
 % Using an iFrame as input field has been popular for years and many other rich-text editors have worked this way. The reasons for this have been described by Tim Down, author of the popular Rangy library and Piotrek Koszuliński, core developer of CKEditor\footnote{\url{http://stackoverflow.com/a/4430583/1183252}, last checked on 07/16/2015}\footnote{\url{http://stackoverflow.com/a/11222149/1183252}, last checked on 07/16/2015}:
