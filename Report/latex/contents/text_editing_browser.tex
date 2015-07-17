@@ -199,13 +199,45 @@ While HTML editing APIs can be used to generate HTML only, third-party libraries
 
 \subsection{Disadvantages of HTML Editing APIs}
 
-lack of control
-bugs
+\paragraph{Unspecific API}
+
+\paragraph{Lack of control}
+
+of output
+
+\paragraph{No specification on output}
+
+The specifications on the HTML editing APIs do not state what markup to generate with specific commands. There are vast differences in the implememtations of all major browsers. Calling the \texttt{italic} command, this is the output of Internet Explorer, Firefox and Chrome:
+
+\begin{lstlisting}[language=html, caption=Markup of italic command in Internet Explorer, label=lst:italic-ie]
+<i>Lorem ipsum</i>
+\end{lstlisting}
+
+\begin{lstlisting}[language=html, caption=Markup of italic command in Firefox, label=lst:italic-firefox]
+<span style="font-style: italic;">Lorem ipsum</span>
+\end{lstlisting}
+
+\begin{lstlisting}[language=html, caption=Markup of italic command in Chrome, label=lst:italic-chrome]
+<em>Lorem ipsum</em>
+\end{lstlisting}
+
+\noindent This is a major problem for web development, because it makes processing input very difficult. Also Firefox's output is considered a bad style while Internet Explorer's output is semantically incorrect\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/HTML/Element/i#Notes}, last checked on 07/15/2015} for most use cases.
+
+\paragraph{Differences in browser behaviour}
+
+
+\paragraph{Clipboard}
+pasting is a problem: shitty markup can be pasted, paste event not implemented in all browser, some offer a modal, some clean up after change. I can solve this problem.
+
+
+\paragraph{Bugs} 
+
+The HTML editing API is prone to noumerous bugs across all browsers. Most editors do not really work. This renders an ''easy and quick'' implementation of this seemingly high-level (quick) API unusable.
+
 it seems to me the api as provided is a bad idea. Programmers can handle control, and why not make this control specific instead of executing bulkish commands.
 very limited api. limited wo a few commands and a few paramters
 No specifications on what markup to generate (mozilla != ie, mdn has links for that)
-\paragraph{pasting}
-is a problem: shitty markup can be pasted, paste event not implemented in all browser, some offer a modal, some clean up after change. I can solve this problem.
+
 
 \subsection{DOM manipulation without Editing APIs}
 
