@@ -263,11 +263,24 @@ libraries, not editors targeting inconstiencies
 they all can never know what's gonna happen
 medium
 
-\subsection{DOM manipulation without Editing APIs}
+\subsection{Rich-text editing without editing APIs}
+%% \subsection{DOM manipulation without Editing APIs}
 
-Google 
+Manipulating the DOM, e.g. changing the contents of a website or particular parts of a website has been possible since the first implementations of JavaScript and JScript and has been standardised in 1998 with the W3C's ''Document Object Model (DOM) Level 1 Specification'' specification\footnote{\url{http://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html}, last checked on 07/10/2015}. Any DOM manipulation that can be achieved with HTML editing APIs can also be achieved using this API.
 
-In October 1998 the World Wide Web Consortium (W3C) published the ''Document Object Model (DOM) Level 1 Specification''. This specification includes an API on how to alter DOM nodes and the document's tree\footnote{\url{http://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html}, last checked on 07/10/2015}. It provided a standardized way for changing a website's contents. With the implementations of Netscape's JavaScript and Microsoft's JScript this API has been made accessible to web developers.
+To implement formatting commands, the currently selected text can be wrapped in newly created tags, according to the desired format. For instance, to implement the \texttt{bold} commmand of \texttt{execCommand}, the selected text can be read with the browser's selection API\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/Selection}, last checked on 07/18/2015}\footnote{Internet Explorer prior version 9 uses a non-standard API \url{https://msdn.microsoft.com/en-us/library/ms535869(v=VS.85).aspx}, last checked on 07/18/2015} and wrapped in \texttt{strong} tags using basic DOM Level 1 methods. A specific cross-browser implementation will be discussed in section XY.
+
+Google demonstrates it is possible to implement a rich-text editor in the browser entirely written in JavaScript without requiring the HTML editing API with their implementation of the Google document editor\footnote{\url{http://googledrive.blogspot.fr/2010/05/whats-different-about-new-google-docs.html}, last checked on 07/18/2015}. Apart from actually modifying the DOM, there are many things to consider to make a particular element in a website \textit{seem} like it is a text input. 
+
+The most obvious part is probably the text caret. Even if a user types on his or her keyboard, a caret must be seen on the screen to know where the input will be inserted. The caret also need to be responsive to the user's interaction. In particular, the user must be able to click anywhere in the editable text and use the arrow keys to move it.
+
+Many of the techniques to mimick a native text input while the text will actually be read and inserted by JavaScript can be found on web-based code editors like ACE or CodeMirror.
+
+
+%% Text formatting can be mimicked by finding the selected text using the browser's selection API and wrapping it in the desired 
+
+
+%% In October 1998 the World Wide Web Consortium (W3C) published the ''Document Object Model (DOM) Level 1 Specification''. This specification includes an API on how to alter DOM nodes and the document's tree\footnote{\url{http://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html}, last checked on 07/10/2015}. It provided a standardized way for changing a website's contents. With the implementations of Netscape's JavaScript and Microsoft's JScript this API has been made accessible to web developers.
 
 \subsection{Advantages of rich-text editing without Editing APIs}
 
