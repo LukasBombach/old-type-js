@@ -220,10 +220,16 @@ The specifications on the HTML editing APIs do not state what markup should be g
 The difference in the generated markup affects many commands but also the browser's native behaviour. When a user enters a line break, Firefox will insert a \texttt{<br>} tag, Chrome and Safari will insert a \texttt{<div>} tag and Internet Explorer will insert a \texttt{<p>} tag.
 
 
-\paragraph{Flawed API} The original and mostly unaltered API is limited and not very effective. MDN lists 44 commands available for their \texttt{execCommand} implementation\footnote{\url{hthttps://developer.mozilla.org/en-US/docs/Web/API/document/execCommand\#Commands}, last checked on 07/17/2015}. While other browsers do not match these commands exactly, their command lists are mostly similar. 17 of those commands format the text (for instance to italicize or make text bold) by wrapping the current selection with tags like \texttt{<em>} or \texttt{strong}. The only difference between all commands is which tag will be used. At the same time there is no command to wrap the selected text in an arbitrary tag, for instance to apply a custom class to it (\texttt{<span class="highlight">Lorem ipsum</span>}). All 17 commands could be summarized by a single command that allows to pass custom tags or markup and wraps the selected text with it. This would not only simplify the API, but would also give it enormously more possibilities. The same goes for inserting elements. 7 commands insert different kinds of HTML elements, this could be simplified and extended by allowing to insert any kind of (valid) markup or elements with a single command. 
+\paragraph{Flawed API} 
+
+The original and mostly unaltered API is limited and not very effective. MDN lists 44 commands available for their \texttt{execCommand} implementation\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/document/execCommand\#Commands}, last checked on 07/17/2015}. While other browsers do not match these commands exactly, their command lists are mostly similar. 17 of those commands format the text (for instance to italicize or make text bold) by wrapping the current selection with tags like \texttt{<em>} or \texttt{strong}. The only difference between all commands is which tag will be used. At the same time there is no command to wrap the selected text in an arbitrary tag, for instance to apply a custom class to it (\texttt{<span class="highlight">Lorem ipsum</span>}). All 17 commands could be summarized by a single command that allows to pass custom tags or markup and wraps the selected text with it. This would not only simplify the API, but would also give it enormously more possibilities. The same goes for inserting elements. 7 commands insert different kinds of HTML elements, this could be simplified and extended by allowing to insert any kind of (valid) markup or elements with a single command. 
 
 Both alternatives would also give developers more control of what to insert. As previously described, browsers handle formatting differently. Allowing to format with specific HTML would generate consistent markup (in the scope of a website) and allow developers generate the markup fitting their needs.
 
+
+\paragraph{Not extendable}
+
+Google points out that implementing and editor using HTML editing APIs comes with the restriction that such an editor can only offer the least common denominator of functions implemented by all (supported) browsers. They argue, if one browser does not support a specific feature or its implementation is buggy, it cannot be supported by the editor\footnote{\url{http://googledrive.blogspot.fr/2010/05/whats-different-about-new-google-docs.html}, last checked on 07/18/2015}. This is mostly true, although it is to be noted, that editors like CKEditor show, that some bugs can be worked around as well as some functionality be added through JavaScript. These workaround still have limitations and not everything can be fixed. In particular, the editing mode might not be able to handle content inserted or altered by workarounds.
 
 \paragraph{Clipboard}
 
@@ -246,14 +252,18 @@ HTML editing APIs are prone to numerous bugs. Especially older browser versions 
 
 Given the argument that editing APIs provide easy to use and high-level methods to format text, in practice, the number of bugs and work-arounds required, renders a ''easy and quick'' implementation impossible.
 
+\subsection{Treating HTML editing API related issues}
 
-\subsection{Evening out varying browser behaviour}
+The issues arising with HTML editing APIs cannot be fixed. Many libraries find workarounds to treat them. CKEditor, TinyMCE, that framework. Google Docs finds another way and does not use HTML editing APIs.
 
 huge editor libraries, developed for 10 years trying to fix stuff
 libraries, not editors targeting inconstiencies
 they all can never know what's gonna happen
+medium
 
 \subsection{DOM manipulation without Editing APIs}
+
+Google 
 
 In October 1998 the World Wide Web Consortium (W3C) published the ''Document Object Model (DOM) Level 1 Specification''. This specification includes an API on how to alter DOM nodes and the document's tree\footnote{\url{http://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html}, last checked on 07/10/2015}. It provided a standardized way for changing a website's contents. With the implementations of Netscape's JavaScript and Microsoft's JScript this API has been made accessible to web developers.
 
