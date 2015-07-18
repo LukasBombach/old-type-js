@@ -239,6 +239,8 @@ Implementing a rich-text editor with HTML editing APIs, unwanted formatting can 
 
 Recent browser versions allow listening to paste events. Chrome, Safari, Firefox and Opera grant full read access to the clipboard contents from paste events, which can then be stopped and the contents processed as desired. Internet Explorer allows access to plain-text and URL contents only. Android Browser, Chrome for Android and IOS Safari allow reading the clipboard contents on paste events as well. Other browsers and some older versions of desktop and mobile browsers do not support clipboard access or listening to paste events. 82.78\% of internet users support listening to and reading clipboard events\footnote{\url{http://caniuse.com/\#feat=clipboard}, last checked on 07/18/2015}.
 
+When dealing with the clipboard, especially older browsers show an unexpected behaviour. Older WebKit-based browsers insert so-called ''Apple style spans''\footnote{\url{https://www.webkit.org/blog/1737/apple-style-span-is-gone/}, last checked on 07/18/2015} on copy and paste commands. ''Apple style spans'' are pieces of markup that have no visible effect, but clutter up the underlying contents of an editor. When pasting formatted text from Microsoft Word, Internet Explorer inserts underlying XML, that Word uses to control its document flow, into the editor.
+
 
 \paragraph{Bugs} 
 
