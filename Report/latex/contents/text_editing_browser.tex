@@ -252,7 +252,7 @@ HTML editing APIs are prone to numerous bugs. Especially older browser versions 
 
 \noindent Mozilla lists 1060 active issues related to its ''Editor'' component\footnote{\url{https://bugzilla.mozilla.org/buglist.cgi?bug\_status=\_\_open\_\_\&component=Editor\&product=Core\&query\_format=advanced\&order=bug\_status\%2Cpriority\%2Cassigned\_to\%2Cbug\_id\&limit=0}, last checked on 07/18/2015}. Google lists 420 active issues related to ''Cr-Blink-Editing''\footnote{\url{https://code.google.com/p/chromium/issues/list?q=label:Cr-Blink-Editing}, last checked on 07/18/2015}. The WebKit project lists 641 active issues related to ''HTML Editing''\footnote{\url{https://bugs.webkit.org/buglist.cgi?query\_format=advanced\&bug\_status=UNCONFIRMED\&bug\_status=NEW\&bug\_status=ASSIGNED\&bug\_status=REOPENED\&component=HTML\%20Editing}, last checked on 07/18/2015}. Microsoft and Opera Software allow public access to their bug trackers. Some rich-text editors like CKEditor have been developed for over 10 years and still need to fix bugs related to the editing API\footnote{\url{http://dev.ckeditor.com/report/2}, last checked on 07/18/2015}\footnote{\url{http://stackoverflow.com/questions/11240602/paste-as-plain-text-contenteditable-div-textarea-word-excel/11290082#11290082}, last checked on 07/18/2015}. Some bugs have caused big websites to block particular browsers entirely\footnote{\url{https://medium.com/medium-eng/the-bug-that-blocked-the-browser-e28b64a3c0cc}, last checked on 07/18/2015. Medium however has contacted Microsoft and lead them to fix this bug.}.
 
-Given the argument that editing APIs provide easy to use and high-level methods to format text, in practice, the number of bugs and work-arounds required, renders a ''easy and quick'' implementation impossible.
+Given the argument that editing APIs provide easy to use and high-level methods to format text, in practice, the number of bugs and work-arounds required, renders a ''easy and quick'' implementation impossible. Also, browser bugs cannot be fixed by web developers. At best they can be worked around, enforcing particular software design on developers and possibly spawning more bugs.
 
 \subsection{Treating HTML editing API related issues}
 
@@ -266,13 +266,37 @@ medium
 \subsection{Rich-text editing without editing APIs}
 %% \subsection{DOM manipulation without Editing APIs}
 
-Manipulating the DOM, e.g. changing the contents of a website or particular parts of a website has been possible since the first implementations of JavaScript and JScript and has been standardised in 1998 with the W3C's ''Document Object Model (DOM) Level 1 Specification'' specification\footnote{\url{http://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html}, last checked on 07/10/2015}. Any DOM manipulation that can be achieved with HTML editing APIs can also be achieved using this API.
+Manipulating the DOM, e.g. changing the contents of a website---or particular parts of a website---has been possible since the first implementations of JavaScript and JScript and has been standardised in 1998 with the W3C's ''Document Object Model (DOM) Level 1 Specification'' specification\footnote{\url{http://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html}, last checked on 07/10/2015}. Any DOM manipulation that can be achieved with HTML editing APIs can also be achieved using this API.
 
-To implement formatting commands, the currently selected text can be wrapped in newly created tags, according to the desired format. For instance, to implement the \texttt{bold} commmand of \texttt{execCommand}, the selected text can be read with the browser's selection API\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/Selection}, last checked on 07/18/2015}\footnote{Internet Explorer prior version 9 uses a non-standard API \url{https://msdn.microsoft.com/en-us/library/ms535869(v=VS.85).aspx}, last checked on 07/18/2015} and wrapped in \texttt{strong} tags using basic DOM Level 1 methods. A specific cross-browser implementation will be discussed in section XY.
+To implement formatting commands, the currently selected text can be wrapped in newly created tags, according to the command that has been executed. For instance, to implement the \texttt{bold} commmand of \texttt{execCommand}, the selected text can be read with the browser's selection API\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/Selection}, last checked on 07/18/2015}\footnote{Internet Explorer prior version 9 uses a non-standard API \url{https://msdn.microsoft.com/en-us/library/ms535869(v=VS.85).aspx}, last checked on 07/18/2015} and wrapped in \texttt{strong} tags using basic DOM Level 1 methods. A specific cross-browser implementation will be discussed in section XY.
 
-Google demonstrates it is possible to implement a rich-text editor in the browser entirely written in JavaScript without requiring the HTML editing API with their implementation of the Google document editor\footnote{\url{http://googledrive.blogspot.fr/2010/05/whats-different-about-new-google-docs.html}, last checked on 07/18/2015}. Apart from actually modifying the DOM, there are many things to consider to make a particular element in a website \textit{seem} like it is a text input. 
+Google completely rewrote its document editor in 2010 abandoning HTML editing APIs entirely. In a blog post\footnote{\url{http://googledrive.blogspot.fr/2010/05/whats-different-about-new-google-docs.html}, last checked on 07/18/2015}, they stated some of the reasons discussed in section XYZ. Using the editing mode, if a browser has a bug in a particular function, Google won't be able to fix. In the end, they could only implement ''least common denominator of features''. Furthermore, abanding HTML editing APIs, enables features not possible before like tab stops for layouting. 
+
+With this implementation, Google demonstrates it is possible to implement a fully featured rich-text editor using only JavaScript and not using HTML editing APIs. However, fetching input and modifying text will not suffice to implement a text editor. There is many more things, that need to be considered. 
 
 The most obvious part is probably the text caret. Even if a user types on his or her keyboard, a caret must be seen on the screen to know where the input will be inserted. The caret also need to be responsive to the user's interaction. In particular, the user must be able to click anywhere in the editable text and use the arrow keys to move it.
+
+
+
+All of these parts that make up for a text editor are natively implemented by browsers. Switching an element to editing mode enables these components automatically. The user can click in a text and move the caret with the keyboard's arrow keys. He or she can copy and paste text with no further scripting.
+When not using editing APIs, all of this must be implemented with JavaScript, to \textit{fake} an input field. To make it \textit{seem} there is an input field where there is none. And to do it in a way, that the user does not notice.
+
+---
+
+for an implmentation of a text editor. There is many things that need to be considered to make it seem like an element actually is a ''native'' text input
+
+The switching an element to editing mode, makes this element somewhat of a native text input element. Users can click on it and a text caret appear
+
+ There is many more things that need to be considered to make it 
+
+The basic requirement for this is fetching the user's keyboard input and actually modifying text on the website.
+Apart from actually modifying the DOM, there are many things to consider, when not using HTML editing APIs. 
+
+ This alone
+
+Switching to editing mode does more than that though. 
+ to make a particular element in a website \textit{seem} like it is a text input. 
+
 
 Many of the techniques to mimick a native text input while the text will actually be read and inserted by JavaScript can be found on web-based code editors like ACE or CodeMirror.
 
