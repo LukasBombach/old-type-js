@@ -227,25 +227,25 @@ Both alternatives would also give developers more control of what to insert. As 
 
 \paragraph{Clipboard}
 
-When dealing with user input, usually some sort of filtering is required. It is possibly harmful to accept any kind of input. This must be checked on the server side since attackers can send any data, regardless of what web front end a system offers. However, in a cleanly designed system, the designated front end should not accept and send bad data to the back end. This applies to harmful content as well as to content that is simply ''unwanted''. For example, for asthetical reasons, a comment form can be designed to allow bold and italic font formatting, but not headlines or colored text.
+When dealing with user input, usually some sort of filtering is required. It is possibly harmful to accept any kind of input. This must be checked on the server side since attackers can send any data, regardless of the front end a system offers. However, in a cleanly designed system, the designated front end should not accept and send bad data to the back end. This applies to harmful content as well as to content that is simply ''unwanted''. For example, for asthetical reasons, a comment form can be designed to allow bold and italic font formatting, but not headlines or colored text.
 
-Implementing a rich-text editor with HTML editing APIs, unwanted formatting can be prevented by simply not offering input controls for these formattings (assuming no malicious behavior by the user). However any content from the clipboard can be pasted into elements in editing mode. There is no option to define any kind of filtering.
+Implementing a rich-text editor with HTML editing APIs, unwanted formatting can be prevented by simply not offering input controls for these formattings (assuming no malicious behavior by the user). However any content, containing any formatting, can be pasted into elements in editing mode from the clipboard. There is no option to define filtering of some sort.
 
-Recent browser versions allow listening to paste events. Reading data from the event is still limited. Chrome, Safari, Firefox and Opera grant full read access to the clipboard contents from paste events, which can then be stopped and the contents processed as desired. Internet Explorer allows access to plain-text and URL contents only. Android Browser, IOS Safari
-
-Chrome and Safari allow reading the contents to be pasted straight from the event. After reading it can be stopped and its contentents can be processed and inserted into the editable element as desired. Other browsers
-
-There is limited support to listen to clipboard events. caniuse.com lists the only current versions of Chrome and Opera provide full support for it, enabling 38,9\% of internet users to use it\footnote{\url{http://caniuse.com/\#feat=clipboard}, last checked on 07/17/2015}.
-
+Recent browser versions allow listening to paste events. Chrome, Safari, Firefox and Opera grant full read access to the clipboard contents from paste events, which can then be stopped and the contents processed as desired. Internet Explorer allows access to plain-text and URL contents only. Android Browser, Chrome for Android and IOS Safari allow reading the clipboard contents on paste events as well. Other browsers and some older versions of desktop and mobile browsers do not support clipboard access or listening to paste events. 82.78\% of internet users support listening to and reading clipboard events\footnote{\url{http://caniuse.com/\#feat=clipboard}, last checked on 07/18/2015}.
 
 
 \paragraph{Bugs} 
 
-The HTML editing API is prone to noumerous bugs across all browsers. Most editors do not really work. This renders an ''easy and quick'' implementation of this seemingly high-level (quick) API unusable.
+HTML editing APIs are prone to numerous bugs. Especially older browser versions are problematic. Writing a rich-text editor based on these APIs still requires to account for these browser to ensure compatibility with many users using them.<wtf. Piotrek Koszuli\'{n}ski states:
 
-it seems to me the api as provided is a bad idea. Programmers can handle control, and why not make this control specific instead of executing bulkish commands.
-very limited api. limited wo a few commands and a few paramters
-No specifications on what markup to generate (mozilla != ie, mdn has links for that)
+\begin{quotation}
+\textit{''First of all... Don't try to make your own WYSIWYG editor if you're thinking about commercial use. [...] I've seen recently some really cool looking new editors, but they really doesn't[sic] work. Really. And that's not because their developers suck - it's because browsers suck.''}\footnote{\url{http://stackoverflow.com/questions/10162540/contenteditable-div-vs-iframe-in-making-a-rich-text-wysiwyg-editor/11479435\#11479435}, last checked on 07/18/2015}
+\end{quotation}
+
+\noindent Mozilla lists 1060 active issues related to its ''Editor'' component\footnote{\url{https://bugzilla.mozilla.org/buglist.cgi?bug\_status=\_\_open\_\_\&component=Editor\&product=Core\&query\_format=advanced\&order=bug\_status\%2Cpriority\%2Cassigned\_to\%2Cbug\_id\&limit=0}, last checked on 07/18/2015}. Google lists 420 active issues related to ''Cr-Blink-Editing''\footnote{\url{https://code.google.com/p/chromium/issues/list?q=label:Cr-Blink-Editing}, last checked on 07/18/2015}. The WebKit project lists 641 active issues related to ''HTML Editing''\footnote{\url{https://bugs.webkit.org/buglist.cgi?query\_format=advanced\&bug\_status=UNCONFIRMED\&bug\_status=NEW\&bug\_status=ASSIGNED\&bug\_status=REOPENED\&component=HTML\%20Editing}, last checked on 07/18/2015}. Microsoft and Opera Software allow public access to their bug trackers. The bugs related to editing APIs have caused big websites to block particular browsers entirely\footnote{\url{https://medium.com/medium-eng/the-bug-that-blocked-the-browser-e28b64a3c0cc}, last checked on 07/18/2015. Medium however has contacted Microsoft and lead them to fix this bug.}.
+
+Given the argument that editing APIs provide easy to use and high-level methods to format text, in practice, the number of bugs and work-arounds required, renders a ''easy and quick'' implementation impossible.
+
 
 \subsection{Evening out varying browser behaviour}
 
@@ -264,6 +264,8 @@ It puts the contenteditable implementation in the hand of JavaScript developers.
 Also we can deploy updates immediately to all users and do not have to worry they use old browsers even if updates exist.
 
 The API is flawed but as Ian something of whatwg pointed out, it's hard to ensure browser support so changing the API is difficult (but not impossible). Rolling out a JS lib using non-editing APIs would work instantly, everywhere.
+
+\paragraph{Bugs} An implementation without editing APIs cannot guarantee to be bug free, but not using these APIS, using only well-proven APIs and minimizing interaction with browser APIs will put the development and the fixing of bugs into the hands of JavaScript delopers. In other words, we \textit{can} actually \textit{fix} bugs and do not have to work around them and wait for browsers and browser usage to change (both takes long time).
 
 \subsection{Disadvantages of rich-text editing without Editing APIs}
 
