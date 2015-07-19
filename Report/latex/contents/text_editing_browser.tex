@@ -361,6 +361,10 @@ A rich-text editor must be able to edit any of these representations (and more).
 
 % Also this can be seen as ''yet another'' implementation of contenteditable, equal to browser implementations. Just one more editor for developers to take care of. However, this isn't quite correct, cos developers usually can choose a single editor that is used for the entire project, so they only have to take care of a single editor.
 
+\paragraph{Mimicking native functionality} As described in section XY, rich-text editing consists of many components like the caret or the ability to paste text via a context menu. These basic components require complex implementations. HTML editing APIs offer these components natively without further scripting.
+
+\paragraph{Possible performance disadvantages and file-size}
+
 \subsection{Disadvantages of offering user interface components}
 
 Warum es besser ist eine library zu shippen und nicht einen editor als ui component
