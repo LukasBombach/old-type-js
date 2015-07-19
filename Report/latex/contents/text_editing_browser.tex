@@ -363,10 +363,17 @@ A rich-text editor must be able to edit any of these representations (and more).
 
 \paragraph{Mimicking native functionality} As described in section XY, rich-text editing consists of many components like the caret or the ability to paste text via a context menu. These basic components require complex implementations. HTML editing APIs offer these components natively without further scripting.
 
-\paragraph{Possible performance disadvantages and file-size}
+\paragraph{Possible performance disadvantages} Modifying the text on a website means manipulating the DOM. DOM operations can be costly in terms of performance as they can trigger a browser reflow\footnote{\url{https://developers.google.com/speed/articles/reflow}, last checked on 07/19/2015}. The same goes for mimicking some elements like the caret. To display a caret a DOM element like a \texttt{div} is needed and it needs to be moved by changing its style attribute. While it should be a goal to keep browser interactions to a minimum, there is no way to avoid DOM interaction with any visual text change.
+
+\paragraph{File size} While bandwidth capacities have vastly improved, there may still be situations where a JavaScript libraries' file sizes matter. This may be for mobile applications or for parts of the world with less developed connections. When not using HTML editing APIs a lot of code must be written and transmitted just to enable basic text editing, which would not be needed otherwise.
 
 \subsection{Disadvantages of offering user interface components}
 
-Warum es besser ist eine library zu shippen und nicht einen editor als ui component
-iFrame hat vor und nachteile. mit meiner library kann es jeder so machen, wie er/sie es will
+Most rich-text editors are implemented and distributed as user interface components. That means instead of only providing a library that offers methods to format the selected text and leaving the implementation of the user interface to the respective developer, most libraries are shipped as input fields with a default editor interface that is, at best, customizable.
+
+This can be unfitting for many situations. The user interface of an editor highly depends on the software it will be integrated in. Within the software the interface may even vary depending on the specific purpose within it. For instance, a content management system may require an edtitor with a menubar offering many controls while a comment form on a blog requires only very little controls. Medium.com uses an interface that only shows controls when the user selects text and has no menubar at all. Assuming there are many implementations of editors, it seems, choosing between editors is often just a choice of the desired ui. Customizing a ui can be just as complex as writing a ui from scratch. The latter affords to add HTML elememts and call JavaScript methods. In a worst case styling the elements can be just as much effort.
+
+It can be much more fitting for developers to include a library that handles all text-input and -formatting operations while only providing a powerful API, leaving the ui to the developer. The API must be \textit{well-designed}. That means it must be simple, effective and fit the developers' needs. The methods it offers should be simple in the sense that they conceal possibly complex tasks with understandable high-level concepts. They should be effective and fit the developers' needs in the sense that the API should be designed so that any requirements should be matched with as little effort as possible. jQuery demonstrates such an API.
+
+%iFrame hat vor und nachteile. mit meiner library kann es jeder so machen, wie er/sie es will
 
