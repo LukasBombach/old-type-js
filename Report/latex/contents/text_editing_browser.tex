@@ -333,9 +333,33 @@ As described in section AB, many components native to text editing have to be im
 
 \subsection{Disadvantages of rich-text editing without Editing APIs}
 
-Apparently implementing editing is prone to a lot of bugs issues **and edge-casese**. It can be assumed that it is difficult to do so. / Discuss the issues discussed by WHATWG here. It's difficult to do this.
+\paragraph{Formatting} Editing APIs' formatting methods take away a crucial part of rich-text editing. Especially on the web, where a text may have many sources, formatting must account for many edge cases. Nick Santos, author of Medium's rich-text editor states in regeards of their editor implementation:
 
-Also this can be seen as ''yet another'' implementation of contenteditable, equal to browser implementations. Just one more editor for developers to take care of. However, this isn't quite correct, cos developers usually can choose a single editor that is used for the entire project, so they only have to take care of a single editor.
+\begin{quotation}
+\textit{''Our editor should be a good citizen in [the ecosystem of rich-text editors]. That means we ought to produce HTML that's easy to read and understand. And on the flip side, we need to be aware that our editor has to deal with pasted content that can't possibly be created in our editor.''}\footnote{\url{http://stackoverflow.com/questions/11240602/paste-as-plain-text-contenteditable-div-textarea-word-excel/11290082#11290082}, last checked on 07/13/2015}
+\end{quotation}
+
+An editor implemented \textit{without} HTML editing APIs does not only need to account for content (HTML) that will be pasted into the editor\footnote{Medium uses HTML editing APIs} (in fact, content should be sanitized before it gets insterted in the editor, see sections A and b, paragraphs ''clipboard''), but also for content that will be loaded on instantiation. It cannot be assumed that the content that the editor will be loaded with (for example integrated in a CMS), is \textit{well-formatted} markup or even valid markup. ''Well-formatted'' means, the markup of a text is \textit{simple} in the sense that it expresses semantics with as few tags as possible (and it conforms the standards  of the W3C). The same visual representation of a text, can have many different---and valid---underlying DOM forms. Nick Santos gives the exaple of the following text\footnote{\url{http://stackoverflow.com/questions/11240602/paste-as-plain-text-contenteditable-div-textarea-word-excel/11290082#11290082}, last checked on 07/13/2015}:
+
+\begin{quotation}
+The \underline{hobbit} was a very well-to-do hobbit, and his name was \textbf{\textit{Baggins}}.
+\end{quotation}
+
+\noindent The word ''Baggins'' can be written in any of the following forms:
+
+\begin{lstlisting}[language=html, caption=Different DOM representations of an equally formatted text, label=lst:different-dom-representations]
+<strong><em>Baggins</em></strong>
+<em><strong>Baggins</strong></em>
+<em><strong>Bagg</strong><strong>ins</strong></em>
+<em><strong>Bagg</strong></em><strong><em>ins</em></strong>
+\end{lstlisting}
+
+A rich-text editor must be able to edit any of these representations (and more). Furthermore, the same edit operation, performed on any of these representations must provide the same \textit{expected} behavior, i.e. generate the same visual representation and produce predictive markup. Above that, being a ''good citizen'' it should produce simple and semantically appropriate HTML even in cases when the given markup is not. It may even improve the markup it affects.
+
+
+% Apparently implementing editing is prone to a lot of bugs issues **and edge-casese**. It can be assumed that it is difficult to do so. / Discuss the issues discussed by WHATWG here. It's difficult to do this.
+
+% Also this can be seen as ''yet another'' implementation of contenteditable, equal to browser implementations. Just one more editor for developers to take care of. However, this isn't quite correct, cos developers usually can choose a single editor that is used for the entire project, so they only have to take care of a single editor.
 
 \subsection{Disadvantages of offering user interface components}
 
