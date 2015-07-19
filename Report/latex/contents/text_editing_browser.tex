@@ -304,6 +304,29 @@ Using tricks and \textit{faking} elements or behavior is common in web front end
 
 \subsection{Advantages of rich-text editing without Editing APIs}
 
+With a pure JavaScript implementation, many of the problems that editing APIs have, can be solved.
+
+\paragraph{Generated output and flawed API} The generated markup can be chosen with the implementation of the editor. Furthermore, an editor can be implemented to allow developers using the editor to \textit{choose} the output. Section AX describes the inconsistent output across various browsers as well as the problems of the API design of \texttt{execCommand}. Both issues can be adressed by offering a method to wrap the current selection in arbitrary markup. jQuery's \texttt{htmlString} implementation\footnote{\url{http://api.jquery.com/Types/\#htmlString}, last checked on 07/19/2015} demonstrates a simple and stable way to define markup in a string and pass it as an argument to JavaScript methods. A sample call could read as
+
+\begin{lstlisting}[language=JavaScript, caption=Example calls to format text, label=lst:format-examples]
+// Mimicking document.execCommand('italic', false, null);
+editor.format('<em />');
+
+// Added functionality
+editor.format('<span class="highlight" />');
+\end{lstlisting}
+
+With an implementation like this, developers using the editor can choose which markup should be generated for italicising text. The markup will be consistent in the scope of their project unless chosen otherwise. Since the DOM manipulation is implemented in JavaScript and not by native browser methods, this will also ensure the same output on all systems and solve cross-browser issues. The second example function call in listing \ref{lst:format-examples} demonstrates that custom formatting, fitting the needs of a specific project, can be achieved with the same API.
+
+\paragraph{Not extendable}
+
+
+\paragraph{Clipboard}
+
+
+\paragraph{Bugs} 
+
+
 Only this can guarantee the same behaviour and the same output across all browsers.
 It puts the contenteditable implementation in the hand of JavaScript developers. We no longer have to wait for browsers to fix issues *and conform each other* and thus can be faster, at least possibly, than browsers are.
 Also we can deploy updates immediately to all users and do not have to worry they use old browsers even if updates exist.
