@@ -235,7 +235,7 @@ Both alternatives would also give developers more control of what to insert. As 
 
 \paragraph{Not extendable}
 
-Google points out that implementing an editor using HTML editing APIs comes with the restriction that such an editor can only offer the least common denominator of functions supported by all browsers. They argue, if one browser does not support a specific feature or its implementation is buggy, it cannot be supported by the editor\footnote{\url{http://googledrive.blogspot.fr/2010/05/whats-different-about-new-google-docs.html}, last checked on 07/18/2015}. This is mostly true, although it is to be noted, that editors like CKEditor show, that some bugs can be worked around as well as some functionality be added through JavaScript. These workaround still have limitations and not everything can be fixed. In particular there can be casese when the editing mode is not able to handle content inserted or altered by workarounds.
+Google points out that implementing an editor using HTML editing APIs comes with the restriction that such an editor can only offer the least common denominator of functions supported by all browsers. They argue, if one browser does not support a specific feature or its implementation is buggy, it cannot be supported by the editor\footnote{\url{http://googledrive.blogspot.fr/2010/05/whats-different-about-new-google-docs.html}, last checked on 07/18/2015}. This is mostly true, although it is to be noted, that editors like CKEditor show, that some bugs can be worked around as well as some functionality be added through JavaScript. These workaround still have limitations and not everything can be fixed. In particular there can be cases where the editing mode is not able to handle content inserted or altered by workarounds.
 
 \paragraph{Clipboard}
 
@@ -269,7 +269,7 @@ libraries, not editors targeting inconstiencies
 they all can never know what's gonna happen
 medium
 
-CKEditor ''fixes'' paste problems by implementing a custom fake context menu and opening a modal with some instruction that the user should press ctrl+v. This is a UX nightmare. Other editors like retractor (oder so) sanitize any change to the editors contents for the case of input by paste events.
+\paragraph{Clipboard} CKEditor ''fixes'' paste problems by implementing a custom fake context menu and opening a modal with some instruction that the user should press ctrl+v. This is a UX nightmare. Other editors like retractor (oder so) sanitize any change to the editors contents for the case of input by paste events.
 
 \subsection{Rich-text editing without editing APIs}
 %% \subsection{DOM manipulation without Editing APIs}
@@ -316,15 +316,15 @@ editor.format('<em />');
 editor.format('<span class="highlight" />');
 \end{lstlisting}
 
-With an implementation like this, developers using the editor can choose which markup should be generated for italicising text. The markup will be consistent in the scope of their project unless chosen otherwise. Since the DOM manipulation is implemented in JavaScript and not by native browser methods, this will also ensure the same output on all systems and solve cross-browser issues. The second example function call in listing \ref{lst:format-examples} demonstrates that custom formatting, fitting the needs of a specific project, can be achieved with the same API.
+With an implementation like this, developers using the editor can choose which markup should be generated for italicising text. The markup will be consistent in the scope of their project unless chosen otherwise. Since the DOM manipulation is implemented in JavaScript and not by high-level browser methods, this will also ensure the same output on all systems and solve cross-browser issues. The second example function call in listing \ref{lst:format-examples} demonstrates that custom formatting, fitting the needs of a specific project, can be achieved with the same API.
 
-\paragraph{Not extendable}
+\paragraph{Not extendable} When implementing and editor in pure JavaScripts, the limitations aufgedrück by the editing mode, do not apply. Anything that can be implemented in a browser environment can also be implemented as part of a (rich-)text editor. The Google docuement editor demonstrates rich functionality incliding layouting tools or floating images. Both of which are features that are hardly possible in an editing mode enabled environment\footnote{\url{http://googledrive.blogspot.fr/2010/05/whats-different-about-new-google-docs.html}, last checked on 07/19/2015}.
 
+\paragraph{Clipboard} In a pure JavaScript environment, clipboard functionality seems to be harder to implement than with the use of editing mode. Apart from filtering the input, pasting is natively available---via keyboard shortcuts as well as the context menu. However, as demonstrated in section IMPLEMENTATION, it is possible to enable native pasting---via keyboard and context menu---even without editing mode. Furthermore, it is possible to filter the pasted contents before inserting them in the editor.
 
-\paragraph{Clipboard}
+\paragraph{Bugs} No software can be guaranteed to be bug free. However, refraining from using HTML editing APIs will render developing an editor independent from these APIs' bugs. Going a step further, the implementation can be aimed at minimizing interaction with browser APIs, especially unstable ones. DOM manipulation APIs have been standardized for more than 15 years and tend to be stable. This will make the implementation independent of ''unfixable'' bugs and ultimately of browser development, update cycles and user adoption. This means that, other than with HTML editing APIs, bugs that occur can be fixed and not only worked around. Furthermore, with minimizing browser interaction, bugs probably occur indeopendently of the browser used, which makes finding and fixing bugs easier.
 
-
-\paragraph{Bugs} 
+%% Cannot guarantee bug free. interaction with dom api minimal. dom api very old very stable. the ''unfixable'' bugs minimal. all other bugs, bugs in the library, can be fixed not depending on others. 
 
 
 Only this can guarantee the same behaviour and the same output across all browsers.
@@ -333,7 +333,7 @@ Also we can deploy updates immediately to all users and do not have to worry the
 
 The API is flawed but as Ian something of whatwg pointed out, it's hard to ensure browser support so changing the API is difficult (but not impossible). Rolling out a JS lib using non-editing APIs would work instantly, everywhere.
 
-\paragraph{Bugs} An implementation without editing APIs cannot guarantee to be bug free, but not using these APIS, using only well-proven APIs and minimizing interaction with browser APIs will put the development and the fixing of bugs into the hands of JavaScript delopers. In other words, we \textit{can} actually \textit{fix} bugs and do not have to work around them and wait for browsers and browser usage to change (both takes long time).
+An implementation without editing APIs cannot guarantee to be bug free, but not using these APIS, using only well-proven APIs and minimizing interaction with browser APIs will put the development and the fixing of bugs into the hands of JavaScript delopers. In other words, we \textit{can} actually \textit{fix} bugs and do not have to work around them and wait for browsers and browser usage to change (both takes long time).
 
 \subsection{Disadvantages of rich-text editing without Editing APIs}
 
