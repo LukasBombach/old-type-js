@@ -34,6 +34,10 @@
 \pagestyle{plain}
 
 \usepackage{graphicx}
+\usepackage{listings}
+
+\usepackage{color}      % for proper color handling
+\input{code_highlighting}
 
 %% This bit allows you to either specify only the files which you wish to
 %% process, or `all' to process all files which you \include.
@@ -54,12 +58,13 @@
 % \include{signature}
 \pagestyle{plain}
 \include{contents}
-\include{introduction}
-\include{word_processing_desktop}
-\include{browser_environments}
-\include{rich_text_browser}
-\include{dom_manipulation}
-\include{implementation}
+\include{contents/introduction}
+\include{contents/text_editing_desktop}
+\include{contents/text_editing_browser}
+\include{contents/concept}
+\include{contents/implementation}
+%\include{rich_text_browser}
+%\include{dom_manipulation}
 \appendix
 \include{appa}
 \include{appb}

@@ -6,7 +6,7 @@
 %% prompt when you run the file main.tex through LaTeX.
 \chapter{Implementation}
 
-\section{On writing a JavaScript Library}
+\section{JavaScript library development}
 
 No IDEs, tools, not even conventions.
 
@@ -69,6 +69,8 @@ Das hat den Vorteil dass das ganze ge-name-spaced ist, so dass ich keine Konflik
 Effektiv gibt es eine (flache) Baumstruktur und so mit Ordnung. Für bestimmte Klassen, "Type.Event.Input", "Type.Input.Filter.X" geht es tiefer.
 Der zweite Grund ist, dass ich somit alle Klassen die ich geschrieben habe für Entwickler sichtbar bereit stelle und nicht implizit und versteckt über irgend nen Quatsch.
 
+Ursprünglich ein MVC konzept geplant mit einem Document Model und verschiedenen Renderern, aber über den haufen geworfen.
+
 Ich werde jetzt die einzelnen Module erlären
 
 
@@ -86,6 +88,7 @@ selection
 overlay
 \section{Input}
 input
+82.78\% of internet users support listening to and reading clipboard events. I can support 100\% PROBLEMS
 \section{Formatting}
 formatting
 \section{Change Listener}
@@ -97,7 +100,7 @@ developmnent
 \section{Dom Utilities}
 dom util
 \section{Dom Walker}
-dom walker
+dom walker. Used SO OFTEN in the project. Goal is to have a really simple api new DomWalker('text') by having lots of pre-defined magick in it.
 \section{Environment}
 env
 \section{Core Api}
@@ -110,7 +113,8 @@ ev api
 input event only event required so far
 
 \section{Input Pipeline}
-pipeline ideas
+pipeline idea
+rules for behaviours (lists, headlines, enter, spaces...)
 \paragraph{Caret}
 caret
 \paragraph{Command}
@@ -135,5 +139,6 @@ text walker
 \section{Utilities}
 util
 
+\section{Extensions}
 
-PUSH TEST
+Collaboration with etherpad, Markdown wohl eher als Ausblick.

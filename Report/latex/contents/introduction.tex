@@ -8,7 +8,7 @@ While there are APIs for creating rich-text input controls in many desktop progr
 The libraries available still have downsides. Most importantly, only a few of them work. As a web-developer, the best choices are either to use CKEditor or TinyMCE. Most other editors are prone to bugs and unwanted behaviour. Piotrek Koszuli\'{n}ski, core developer of CKEditor comments this on StackOverflow as follows:
 
 \begin{quotation}
-\textit{Don't write wysiwyg editor[sic] - use one that exists. It's going to consume all your time and still your editor will be buggy. We and guys from other... two main editors (guess why only three exist) are working on this for years and we still have full bugs lists ;).}\footnote{\url{http://stackoverflow.com/questions/11240602/paste-as-plain-text-contenteditable-div-textarea-word-excel/11290082#11290082}, last checked on 07/13/2015}
+\textit{''Don't write wysiwyg editor[sic] - use one that exists. It's going to consume all your time and still your editor will be buggy. We and guys from other... two main editors (guess why only three exist) are working on this for years and we still have full bugs lists ;).''}\footnote{\url{http://stackoverflow.com/questions/11240602/paste-as-plain-text-contenteditable-div-textarea-word-excel/11290082#11290082}, last checked on 07/13/2015}
 \end{quotation}
 
 A lot of the bugs CKEditor and other editors are facing are due to the fact that they rely on so-called ''HTML Editing APIs'' that have been implemented in browsers for years, but only been standardized with HTML5. Still, to this present day, the implementations are prone to noumerous bugs and behave inconsitently across different browsers. And even though these APIs are the de-facto standard for implementing rich-text editing, with their introduction in Internet Explorer 5.5, it has never been stated they have been created to be used as such.
@@ -20,6 +20,12 @@ However, calling commands will only manipulate the document's DOM tree, in order
 Furthermore CKEditor, TinyMCE and most other libraries are shipped as user interface components. While being customizable, they tend to be invasive to web-projects.
 
 This thesis demonstrates a way to enable rich-text editing in the browser without requiring HTML Editing APIs, provided as a GUI-less software library. This enables web-developers to implement rich-text editors specific to the requirements of their web-projects.
+
+\textit{Rich-text editing on the web is a particularly overlooked topic. Most libraries use contenteditable without questioning its benefits. The literature on this topic is thin. It is rarely written about in books and papers and noone really examines alternative ways for implementation. ACE and CodeMirror show techniques how to do it. However looking at its history, it seems very questionable. People who implement editors using it often rant about its disadvantages. <- der letzte Satz sollte einer der kernpunkte der introduction sein. Überahupt, das questioning sollte im kern stehen.}
+
+\section{Terminilogy}
+
+rich-text, WYSIWYG, word-processing, WYSIWYM
 
 \section{Structure}
 
