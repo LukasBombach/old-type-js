@@ -95,14 +95,21 @@ There are many devices (hardware and virtual) a user can interact with native in
 \item Keyboard (as hardware and as virtual keyboard)
 \item Mouse
 \item Touch
-\item Remote control (on SmartTv einvironments)
+\item Game controller (on browsers imlpemented in game consoles)
+\item Remote control (on Smart TV einvironments)
 \end{enumerate}
 
 When simulating a native input, in a best-case scenario, all these input methods should be accounted for. Fetching input needs to account for two scenarios: The user clicks / touches / or selects the input in any way and does so at any position inside the input. If the user touches / clicks / etc in the middle of the text, the caret should move to that position and typing must be enabled. In environments without hardware keyboards, the libarary must ensure that a virutal keyboards, possible native to the system, show up. Once the input is selected, text input must be fetched and written to the editor. There are various options to fetch user input, which will be discussed in the following paragraphs:
 
-\paragraph{Events} One way to fetch user input is by listening to events. Text input can be read through keyboard events. Keyboard events will be triggered for virtual keyboards just as for hardware keyboards. When the user presses a key, the event can be stopped and the according characters can be inserted at the position of the caret. As a downside, listeners for keyboard events cannot be bound to a specific element that is not a native text input, that means keyboard events must be listened to on the \texttt{document} level. This not only has (minor) performance downsides but als requires more logic to decide whether a keyboard input should be processed and ultimatively stopped or ignored and allowed to bubble to other event listeners of a website. Furthermore, there can be edge cases, where even though a keyboard event should write contents to the editor, the event itself is supposed to trigger other methods that are not part of the editor.
+\paragraph{Events} One way to fetch user input is by listening to events. Text input can be read through \texttt{KeyboardEvent}s. Keyboard events will be triggered for virtual keyboards just as for hardware keyboards. When the user presses a key, the event can be stopped and the according characters can be inserted at the position of the caret. As a downside, listeners for keyboard events cannot be bound to a specific element that is not a native text input, that means keyboard events must be listened to on the \texttt{document} level. This not only has (minor) performance downsides but als requires more logic to decide whether a keyboard input should be processed and ultimatively stopped or ignored and allowed to bubble to other event listeners of a website. Furthermore, there can be edge cases, where even though a keyboard event should write contents to the editor, the event itself is supposed to trigger other methods that are not part of the editor. Keyboard events are supported by all major browsers across all devices.
+
+To support clicking or touching inside the editor's contents \texttt{MouseEvent}s and \texttt{TouchEvent}s can be used. Mouse events are supported on all major desktop browsers and all mobile browsers support touch events. Both event types support reading the coordinates indicating where the click or touch has been performed.
+
+Although some smart TVs offer keyboards, mice, pointers similar to Nintendo's Wii remote or input via smartphone apps, button-based remote controls are offered with almost any smart TV and remain a edge case for interacting with a text editor. In such an enviroment, users commonly switch between elements by selecting focusable elements with a directional pad. Using only events would not account for this case since there would be no focusable element representing the editor. Recent browsers on Samsung's and LG's smart TVs are based on WebKit\footnote{\url{http://www.samsungdforum.com/Devtools/Sdkdownload}, last checked on 07/22/2015} while Sony's TVs use Opera. Before 2012 Samsung's browser was based on Gecko. All of these browsers and browser engines supprt keyboard events to fetch input.
 
 \paragraph{Clipboard} 
+
+\paragraph{Hidden native input fields} 
 
 \section{Selection}
 
