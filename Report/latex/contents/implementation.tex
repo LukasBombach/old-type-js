@@ -82,13 +82,34 @@ Die Type
 caret
 \section{Range}
 range
+
+
+
+\section{Input}
+
+%82.78\% of internet users support listening to and reading clipboard events. I can support 100\% PROBLEMS
+
+There are many devices (hardware and virtual) a user can interact with native inputs:
+
+\begin{enumerate} 
+\item Keyboard (as hardware and as virtual keyboard)
+\item Mouse
+\item Touch
+\item Remote control (on SmartTv einvironments)
+\end{enumerate}
+
+When simulating a native input, in a best-case scenario, all these input methods should be accounted for. Fetching input needs to account for two scenarios: The user clicks / touches / or selects the input in any way and does so at any position inside the input. If the user touches / clicks / etc in the middle of the text, the caret should move to that position and typing must be enabled. In environments without hardware keyboards, the libarary must ensure that a virutal keyboards, possible native to the system, show up. Once the input is selected, text input must be fetched and written to the editor. There are various options to fetch user input, which will be discussed in the following paragraphs:
+
+\paragraph{Events} One way to fetch user input is by listening to events. Text input can be read through keyboard events. Keyboard events will be triggered for virtual keyboards just as for hardware keyboards. When the user presses a key, the event can be stopped and the according characters can be inserted at the position of the caret. As a downside, listeners for keyboard events cannot be bound to a specific element that is not a native text input, that means keyboard events must be listened to on the \texttt{document} level. This not only has (minor) performance downsides but als requires more logic to decide whether a keyboard input should be processed and ultimatively stopped or ignored and allowed to bubble to other event listeners of a website. Furthermore, there can be edge cases, where even though a keyboard event should write contents to the editor, the event itself is supposed to trigger other methods that are not part of the editor.
+
+\paragraph{Clipboard} 
+
 \section{Selection}
-selection
+
+
 \section{Selection Overlay}
 overlay
-\section{Input}
-input
-82.78\% of internet users support listening to and reading clipboard events. I can support 100\% PROBLEMS
+
 \section{Formatting}
 formatting
 \section{Change Listener}
