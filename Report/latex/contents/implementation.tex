@@ -109,8 +109,9 @@ Although some smart TVs offer keyboards, mice, pointers similar to Nintendo's Wi
 
 \paragraph{Clipboard} Another problem with relying entirely on events is the lack of native clipboard capabilities. Unless a native text input (including elememts with enabled editing mode) is focused, shortcut keys for pasting will not trigger a paste event and the mouse's context menu will not offer an option for pasting. Recent versions of Chrome, Opera and Android Browser\footnote{\url{http://caniuse.com/\#feat=clipboard}, last checked on 07/22/2015} allow triggering arbitrary paste events thereby read the cliboard contents. With this, shortcuts could be enabled with JavaScript and instead of the native context menu, a customly build context menu using HTML could be shown that allows the user to paste, but this only works on elements in editing mode and only in these three browsers.
 
-\paragraph{Hidden native input fields} 
+\paragraph{Hidden native input fields} Apart from rich-text editors there are also third-party JavaScript libraries that allow embedding code editors with syntax highlighting in a website. The ''Ajax.org Cloud9 Editor (Ace)'' and ''CodeMirror'' editor are amongst the most well-known choices. Both editors keep an internal representation of the plain-text (i.e. non-highlighted) contents of the editor, parse it and display a highlighted version using HTML in a designated \texttt{div}. Both editors use a hidden \texttt{textarea} in which the user enters his or her input. The input will be read from the \texttt{textarea} and
 
+% which is presented to the user as the input field.
 
 
 \section{Selection}
