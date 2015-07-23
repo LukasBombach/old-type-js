@@ -311,7 +311,7 @@ Algorithm~\ref{alg:format_pseudocode} demonstrates a simplified procedure to wra
 \State Split text nodes at beginning and end of selection
 \State Loop over all nodes inside selection
 \State Remove each node
-\State Collapse selection
+\State Collapse selection\}
 \State Insert new tag at beginning of selection
 \end{algorithmic}
 \end{algorithm}
@@ -322,9 +322,9 @@ Algorithm~\ref{alg:insert_pseudocode} demostrates a simplified procedure to inse
 
 The DOM and its API is the recommended\footnote{recommended by the W3C and WHATWG} way to change a website's contents and---apart from HTML editing APIs---the only possibility implemented in any major browser. Popular libraries like jQuery, React or AngularJS are based on it. The API has been developed for 17 years and proven to be stable across browsers.
 
-\paragraph{Third-party alternatives} The only alternative way to display and edit rich-text inside a browser is through third-party plugins like Adobe Flash or Microsoft Silverlight. Flash and Silverlight lack mobile adoptions have have been subject to critique since the introduction of smartphones and HTML5. Other third-party plugins are even less well adopted. This makes Flash, Silverlight and other third-party browser-plugins a worse choice as compared to displaying and manipulating rich-text though the DOM.
+\paragraph{Third-party alternatives} The only alternative way to display and edit rich-text inside a browser is through third-party plugins like Adobe Flash or Microsoft Silverlight. Flash and Silverlight lack mobile adoptions and have been subject to critique since the introduction of smartphones and HTML5. Other third-party plugins are even less well adopted. This makes Flash, Silverlight and other third-party browser-plugins a worse choice as compared to displaying and manipulating rich-text though the DOM.
 
-\paragraph{Rich-text with DOM APIs in practice} Google completely rewrote their document editor in 2010 abandoning HTML editing APIs entirely. In a blog post\footnote{\url{http://googledrive.blogspot.fr/2010/05/whats-different-about-new-google-docs.html}, last checked on 07/18/2015}, they stated some of the reasons discussed in section XYZ. They state, using the editing mode, if a browser has a bug in a particular function, Google won't be able to fix it. In the end, they could only implement ''least common denominator of features''. Furthermore, abanding HTML editing APIs, enables features not possible before, for example tab stops for layouting. 
+\section{Rich-text with DOM APIs in practice} Google completely rewrote their document editor in 2010 abandoning HTML editing APIs entirely. In a blog post\footnote{\url{http://googledrive.blogspot.fr/2010/05/whats-different-about-new-google-docs.html}, last checked on 07/18/2015}, they stated some of the reasons discussed in section XYZ. They state, using the editing mode, if a browser has a bug in a particular function, Google won't be able to fix it. In the end, they could only implement ''least common denominator of features''. Furthermore, abanding HTML editing APIs, enables features not possible before, for example tab stops for layouting. 
 
 With their implementation, Google demonstrates it is possible to implement a fully featured rich-text editor using only JavaScript and not HTML editing APIs. However, fetching input and modifying text will not suffice to implement a text editor or even a simple text field. There is many more things, that need to be considered which will be discussed in chapter-\ref{ch:concept}. 
 
