@@ -16,9 +16,14 @@ This section will discuss the options to implement rich-text editing without rel
 
 \paragraph{Enabling editing mode without using its API} One way to enable editing but avoiding many bugs and browser inonstistencies, is to enable the editing mode on an element, but avoid using \texttt{execCommand} to format the text. The latter could be implemented using the DOM core APIs. All text editing functions, i.e. the caret, text input, mouse interaction and clipboard capabilites would be taken care of by the browser.
 
-This would solve the problem of buggy and inconsistent \texttt{execCommand} implementations but not the problems that arise with different browser behavior on the user's text input---for instance when entering a line break. If the markup is customly generated with JavaScript, the input may not function with it and / or break customly generated elements. It could be the source to many bugs, have the development of the library be dependent on browser development and ultimatively restrict the editors capabilites.
+This would solve the problem of buggy and inconsistent \texttt{execCommand} implementations but not the problems that arise with different browser behavior on the user's text input---for instance when entering a line break. If the markup is customly generated with JavaScript, the input may break elements or simply get stuck. It could be the source to many bugs, have the development of the library be dependent on browser development and ultimatively restrict the editors capabilites.
 
-\paragraph{Native text input imitation} ''ACE'' and ''CodeMirror'' demonstrate an effective way to imitate a text input. 
+\paragraph{Native text input imitation} Without switching an element to editing mode, many components native to text inputs must be implemented with JavaScript. These components will be discussed hereinafter.
+
+%, major browsers offer no way to place a caret
+
+% Only native text input components and elements in editing mode
+% ''ACE'' and ''CodeMirror'' demonstrate an effective way to imitate a text input. 
 
  %''ACE'' and ''CodeMirror'' demonstrate it is possible to imitate a text input by composing various DOM ele
 \paragraph{Caret} The most obvious part is probably the text caret. Even if a user types on his or her keyboard, a caret must be seen on the screen to know where the input will be inserted. The caret also needs to be responsive to the user's interaction. In particular, the user must be able to click anywhere in the editable text and use the arrow keys to move it (possibly using modifier keys, which's behaviour even depends on the operating system used).
