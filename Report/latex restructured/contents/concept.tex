@@ -12,6 +12,8 @@
 
 %\paragraph{Overlaying an element in editing mode} One way to 
 
+This section will discuss the options to implement rich-text editing without relying (entirely) on HTML editing APIs and discuss the advantages and disadvantages of each chapter. % Diese Art zu schreiben sollte der Style der Arbeit sein.
+
 \paragraph{Enabling editing mode without using its API} One way to enable editing but avoiding many bugs and browser inonstistencies, is to enable the editing mode on an element, but avoid using \texttt{execCommand} to format the text. The latter could be implemented using the DOM core APIs. All text editing functions, i.e. the caret, text input, mouse interaction and clipboard capabilites would be taken care of by the browser.
 
 This would solve the problem of buggy and inconsistent \texttt{execCommand} implementations but not the problems that arise with different browser behavior on the user's text input---for instance when entering a line break. If the markup is customly generated with JavaScript, the input may not function with it and / or break customly generated elements. It could be the source to many bugs, have the development of the library be dependent on browser development and ultimatively restrict the editors capabilites.
