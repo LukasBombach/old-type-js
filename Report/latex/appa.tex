@@ -22,3 +22,41 @@ queryCommandValue     & Returns the value for the given command. \\ \hline
 
 \clearpage
 \newpage
+
+
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llll}
+\hline
+Attribute       & Type              & Can be set to         & Possible values                     \\ \hline
+designMode      & IDL attribute     & Document              & "on", "off"                         \\
+contentEditable & IDL attribute     & Specific HTMLElements & boolean, "true", "false", "inherit" \\
+contenteditable & content attribute & Specific HTMLElements & empty string, "true", "false"       \\ \hline
+\end{tabular}
+}
+\caption{Rich-text editors using HTML editing APIs}
+\label{table:editors-editing-mode}
+\end{table}
+
+
+
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llll}
+\hline
+Attribute       & Type              & Can be set to         & Possible values                     \\ \hline
+designMode      & IDL attribute     & Document              & "on", "off"                         \\
+contentEditable & IDL attribute     & Specific HTMLElements & boolean, "true", "false", "inherit" \\
+contenteditable & content attribute & Specific HTMLElements & empty string, "true", "false"       \\ \hline
+\end{tabular}
+}
+\caption{Rich-text editors not using HTML editing APIs}
+\label{table:editors-non-editing-mode}
+\end{table}
+
