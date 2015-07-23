@@ -5,6 +5,7 @@
 %% \files=
 %% prompt when you run the file main.tex through LaTeX.
 \chapter{Concept}
+\label{ch:concept}
 
 \section{Approaches for enabling rich-text editing}
 %When not using HTML editing APIs, the components and the bahavior of native text inputs must be imitated. There are various approaches to this.
@@ -18,7 +19,25 @@ This would solve the problem of buggy and inconsistent \texttt{execCommand} impl
 \paragraph{Native text input imitation} ''ACE'' and ''CodeMirror'' demonstrate an effective way to imitate a text input. 
 
  %''ACE'' and ''CodeMirror'' demonstrate it is possible to imitate a text input by composing various DOM ele
+\paragraph{Caret} The most obvious part is probably the text caret. Even if a user types on his or her keyboard, a caret must be seen on the screen to know where the input will be inserted. The caret also needs to be responsive to the user's interaction. In particular, the user must be able to click anywhere in the editable text and use the arrow keys to move it (possibly using modifier keys, which's behaviour even depends on the operating system used).
 
+\paragraph{Selection} Just like the caret, the user must be able to draw a text selection using his or her mouse and change the selection using shift and the arrow keys. Most systems allow double clicks to select words and sometimes tripple clicks to select entire paragraphs. Other systems, for example OS X, allow holding the option key to draw are rectengular text selection, independent of line breaks.
+
+\paragraph{Context menu} The context menu is different in text inputs from other elements on a website. Most importantly, it offers an option to paste text, that is only available in native text inputs.
+
+\paragraph{Keyboard shortcuts} Text inputs usually allow keyboard shortcuts to format the text and to perform clipboard operations. Formatting the text is possible through DOM manipulation, pasting text however is a challenge, since browsers do not offer arbitrary access to the clipboard for security reasons.
+
+\paragraph{Undo / Redo} Undo and redo are common functions of text processing and it may be frustrating to users if they were missing.
+
+\paragraph{Behaviour} Rich-text editors (usually) share a certain behaviour on user input. When writing a bulleted list, pressing the enter key usually creates another bulleting point instead of inserting a new line. Hitting enter in  a heading will insert a new line. However pressing enter when the caret is at the end of a heading commonly creates a new text paragraph just after that heading. Other rules that need to be considered will be discussed in section [implementation].
+
+\paragraph{Imitating native components} Switching an element to editing mode enables these components natively. The user can click in a text and move a caret with the keyboard's arrow keys. He or she can copy and paste text with no further scripting. The browser offers the same native context menu as for text inputs. All major browsers implement the common behaviour that is common for rich-text editing as described.
+
+When not using editing APIs, all of this must be implemented with JavaScript. This requires a lot of trickery and many components must be imitated to make it \textit{seem} there is an input field, where there is none. The user must be convinced he or she is using a native input and must not notice he or she isn't. This has already been done with web-based code editors. ''Ace'' and ''CodeMirror'' display syntax-highlighted text editable by the user. The user seemingly writes inside the highlighted code and is also presented with a caret and all of the above mentioned components. In reality, the user's input will be read with JavaScript and the code he or she sees is HTML generated based on this input to display syntax-highlighted text. Other components, like the caret and even the selection \texttt{div} elements, styled and positioned to mimick their native counterparts. All this creates the illusion of a native text input.
+
+%Many of the techniques to mimick a native text input like this can be found in web-based code editors like ''ACE'' or ''CodeMirror''.
+
+Using tricks and \textit{faking} elements or behavior is common in web front end development. This applies to JavaScript as well as to CSS. For instance, long before CSS3 has been developed, techniques (often called ''hacks'') have been discussed on how to implement rounded corners without actual browser support. Only years later, this has become a standard. This not only enables features long before the creators of browsers implement them, this \textit{feedback} by the community of web developers also influences future standards. Encorporating feedback is a core philisophy of the WHATWG, the creators of HTML5.
 
 
 \section{Conformity with HTML Editing APIs}

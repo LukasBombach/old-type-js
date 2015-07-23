@@ -1,0 +1,77 @@
+\chapter{Tables}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llll}
+\hline
+Method                & Description \\ \hline
+execCommand           & Executes a command. \\
+queryCommandEnabled   & Returns whether or not a given command can currently be executed. \\
+queryCommandIndeterm  & Returns whether or not a given command is in the indeterminate state. \\
+queryCommandState     & Returns the current state of a given command. \\
+queryCommandSupported & Returns whether or not a given command is supported by the current document's range. \\
+queryCommandValue     & Returns the value for the given command. \\ \hline
+\end{tabular}
+}
+\caption{HTML Editing API}
+\label{table:editing-mode-api}
+\end{table}
+
+\clearpage
+\newpage
+
+
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llll}
+\hline
+Command Identifier & Document Object Model (Core) Level 1 equivalent \\ \hline
+bold               & a                                               \\
+italic             & b                                               \\ \hline
+\end{tabular}
+}
+\caption{\texttt{execCommand} command implementations with DOM methods}
+\label{tab:execCommand_equivalents}
+\end{table}
+
+
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llll}
+\hline
+Attribute       & Type              & Can be set to         & Possible values                     \\ \hline
+designMode      & IDL attribute     & Document              & "on", "off"                         \\
+contenteditable & content attribute & Specific HTMLElements & empty string, "true", "false"       \\ \hline
+\end{tabular}
+}
+\caption{Rich-text editors using HTML editing APIs}
+\label{table:editors-editing-mode}
+\end{table}
+
+
+
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llll}
+\hline
+Attribute       & Type              & Can be set to         & Possible values                     \\ \hline
+designMode      & IDL attribute     & Document              & "on", "off"                         \\
+contenteditable & content attribute & Specific HTMLElements & empty string, "true", "false"       \\ \hline
+\end{tabular}
+}
+\caption{Rich-text editors not using HTML editing APIs}
+\label{table:editors-non-editing-mode}
+\end{table}
+

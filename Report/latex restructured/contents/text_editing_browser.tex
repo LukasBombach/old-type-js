@@ -1,0 +1,411 @@
+%% This is an example first chapter.  You should put chapter/appendix that you
+%% write into a separate file, and add a line \include{yourfilename} to
+%% main.tex, where `yourfilename.tex' is the name of the chapter/appendix file.
+%% You can process specific files by typing their names in at the 
+%% \files=
+%% prompt when you run the file main.tex through LaTeX.
+\chapter{Text editing in browser environments}
+
+% \section{Differing technical requirements in browser environments}
+% Browser environment differs from desktop environments. 
+% Memory management, garbage collection, none of that is necessary
+% The basis for web projects is the DOM and the data and procedures written in JavaScript
+% Hacks are normal
+
+\section{Plain-text inputs}
+
+Text input components for browsers have been introduced with the specification of HTML 2.0\footnote{\url{https://tools.ietf.org/html/rfc1866}, last checked on 07/15/2015}. The components proposed include inputs for single line (written as \texttt{<input type=''text'' />}) and multiline texts (written as \texttt{<textarea></textarea>}). These inputs allow writing plain-text only.
+
+
+\section{Rich-text editing}
+
+Major browsers, i.e. any browser with a market share above 0.5\%\footnote{\url{http://gs.statcounter.com/#all-browser-ww-monthly-201406-201506-bar}, last checked on 07/15/2015}, do not offer native input fields that allow rich-text editing. Neither the W3C's HTML5 and HTML5.1 specifications nor the WHATWG HTML specification recommend such elements. However, by being able to display HTML, browsers effectively are rich-text viewers. By the early 2000s, the first JavaScript libraries emerged, that allowed users to interactively change (parts of) the HTML of a website, to enable rich-text editing in the browser. The techniques used will be discussed in section~\ref{sec:html-editing-apis} through section~\ref{sec:useage-of-html-editing-apis}.
+
+\section{HTML Editing APIs}
+\label{sec:html-editing-apis}
+
+In July 2000, with the release of Internet Explorer 5.5, Microsoft introduced the IDL attributes \texttt{contentEditable} and \texttt{designMode} along with the content attribute \texttt{contenteditable}\footnote{\url{https://msdn.microsoft.com/en-us/library/ms533720(v=vs.85).aspx}, last checked on 07/10/2015}\footnote{\url{https://msdn.microsoft.com/en-us/library/ms537837(VS.85).aspx}, last checked on 07/10/2015}. These attributes were not part of the W3C's HTML 4.01 specifications\footnote{\url{http://www.w3.org/TR/html401/}, last checked on 07/14/2015} or the ISO/IEC 15445:2000\footnote{\url{http://www.iso.org/iso/iso\_catalogue/catalogue\_tc/catalogue\_detail.htm?csnumber=27688}, last checked on 07/14/2015}, the defining standards of that time. Table \ref{table:editing-api-attributes} lists these attributes and possible values.
+
+% Please add the following required packages to your document preamble:
+% \usepackage{graphicx}
+\begin{table}[]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llll}
+\hline
+Attribute       & Type              & Can be set to         & Possible values                     \\ \hline
+designMode      & IDL attribute     & Document              & "on", "off"                         \\
+contentEditable & IDL attribute     & Specific HTMLElements & boolean, "true", "false", "inherit" \\
+contenteditable & content attribute & Specific HTMLElements & empty string, "true", "false"       \\ \hline
+\end{tabular}
+}
+\caption{Editing API attributes}
+\label{table:editing-api-attributes}
+\end{table}
+
+\begin{lstlisting}[language=html, caption=An element set to editing mode, label=lst:div-contenteditable]
+<div contenteditable="true">
+  This text can be edited by the user.
+</div>
+\end{lstlisting}
+
+By setting \texttt{contenteditable} or \texttt{contentEditable} to ''true'' or \texttt{designMode} to ''on'', Internet Explorer 5.5 switches the affected elements and their children to an editing mode. The \texttt{designMode} can only be applied to the entire document and the \texttt{contentEditable} and \texttt{contenteditable} attributes can be applied to specific HTML elements as described on Microsoft's Developer Network (MSDN) online documentation\footnote{\url{https://msdn.microsoft.com/en-us/library/ms537837(VS.85).aspx}, last checked on 07/10/2015}. These elements include ''divs'', ''paragraphs'' and the docuement's ''body'' element amongst others. In editing mode
+
+\begin{enumerate} \item Users can interactively click on and type inside texts \item An API is enabled that can be accessed via JScript and JavaScript\end{enumerate}
+
+Setting the caret by clicking on elements, accepting keyboard input and modifying text nodes is handled entirely by the browser. No further scripting is necessary.
+
+The API enabled can be called globally on the \texttt{document} object, but will only execute when the user's selection or caret is focussed inside an element in editing mode. Table \ref{table:editing-mode-api} lists the full HTML editing API. To format text, the method \texttt{document.execCommand} can be used. Calling
+
+\begin{lstlisting}[language=JavaScript, caption=Emphasizing text using the HTML editing API, label=lst:execcommand-italics]
+document.execCommand('italic', false, null);
+\end{lstlisting}
+
+\noindent will wrap the currently selected text inside an element in editing mode with \texttt{<i>} tags. The method accepts three parameters. The first paramter is the ''Command Identifier'', that determines which command to execute. For instance, this can be \texttt{italic} to italicize the current selection or \texttt{createLink} to create a link with the currently selected text as label.
+
+\begin{lstlisting}[language=JavaScript, caption=Creating a link using the HTML editing API, label=lst:execcommand-link]
+document.execCommand('createLink', false, 'http://google.de/');
+\end{lstlisting}
+
+The \textit{third} parameter will be passed on to the internal command given as first parameter. In the case of a \texttt{createLink} command, the third parameter is the URL to be used for the link to create. The \textit{second} paramter determines if executing a command should display a user interface specific to the command. For instance, using the \texttt{createLink} command with the second parameter set to \texttt{true} and not passing a third parameter, the user will be prompted with a system dialog to enter a URL. A full list of possible command identifiers can be found on MSDN\footnote{\url{https://msdn.microsoft.com/en-us/library/ms533049(v=vs.85).aspx}, last checked on 07/10/2015}.
+
+\section{Discussion of HTML Editing APIs}
+% \section{History and origins of HTML Editing APIs}
+
+HTML editing APIs have been poorly designed. Sections V to W discuss the origins and the reasons why HTML editing APIs have been standardized and are supported by all major browser. It can be seen, that they did not came to be cos of their good design. In sections X and Y will discuss the design of these APIs.
+
+\section{Browser support}
+%% \section{Development of HTML Editing APIs}
+
+With the release of Internet Explorer 5.5 and the introduction of editing capabilities, Microsoft released a short documentation\footnote{\url{https://msdn.microsoft.com/en-us/library/ms537837(VS.85).aspx}, last checked on 07/10/2015}, containing the attributes' possible values and element restrictions along with two code examples. Although a clear purpose has not been stated, the code examples demonstrated how to implement rich-text input fields with it. Mark Pilgrim, author of the ''Dive into'' book series and contributor to the the Web Hypertext Application Technology Working Group (WHATWG), also states that the API's first use case has been for rich-text editing\footnote{\url{https://blog.whatwg.org/the-road-to-html-5-contenteditable}, last checked on 07/10/2015}. 
+
+%% With the release of Internet Explorer 5.5 and the introduction of editing capabilities, Microsoft released a sparse documentation\footnote{\url{https://msdn.microsoft.com/en-us/library/ms537837(VS.85).aspx}, last checked on 07/10/2015} describing only the availability and the before-mentioned element restrictions of these attributes. 
+
+%% According to Mark Pilgrim, author of the ''Dive into'' book series and contributor to the the Web Hypertext Application Technology Working Group (WHATWG),, but its first use case has been for rich-text editing\footnote{\url{https://blog.whatwg.org/the-road-to-html-5-contenteditable}, last checked on 07/10/2015}. 
+
+% It is notable, that the available command identifiers mostly include text-editing (or related) commands, but not exclusively. Other commands include navigating to other URLs or controlling the browser's cache.
+
+In March 2003, the Mozilla Foundation introduced an implementation of Microsoft's designMode, named Midas, for their release of Mozilla 1.3. Mozilla already named this ''rich-text editing support'' on the Mozilla Developer Network (MDN)\footnote{\url{https://developer.mozilla.org/en/docs/Rich-Text\_Editing\_in\_Mozilla}, last checked on 07/10/2015}. In June 2008, Mozilla added support for contentEditable IDL and contenteditable content attributes with Firefox 3. 
+
+Mozilla's editing API mostly resembles the API implemented for Internet Explorer, however, to this present day, there are still differences (compare\footnote{\url{https://msdn.microsoft.com/en-us/library/hh772123(v=vs.85).aspx}, last checked on 07/10/2015}\footnote{\url{https://developer.mozilla.org/en-US/docs/Midas}, last checked on 07/10/2015}). This includes the available command identifiers \footnote{\url{https://developer.mozilla.org/en-US/docs/Midas}, last checked on 07/10/2015}\footnote{\url{https://msdn.microsoft.com/en-us/library/ms533049(v=vs.85).aspx}, last checked on 07/10/2015} as well as the markup generated by invoking commands\footnote{\url{https://developer.mozilla.org/en/docs/Rich-Text\_Editing\_in\_Mozilla#Internet\_Explorer\_Differences}, last checked on 07/10/2015}. 
+
+%% Mozilla's command identifiers are restricted to text-editing command, showing the clear purpose of this API.
+
+%% This may show, that even though rich-text editing was its first use case and Mozilla implemented it naming it that, this editing API was not originally intended to be used as such.
+
+In June 2006, Opera Software releases Opera 9\footnote{\url{http://www.opera.com/docs/changelogs/windows/}, last checked on 07/10/2015}, providing full support for contentEditable and designMode\footnote{\url{http://www.opera.com/docs/changelogs/windows/900/}, last checked on 07/10/2015}, followed by Apple in March 2008\footnote{\url{https://www.apple.com/pr/library/2008/03/18Apple-Releases-Safari-3-1.html}, last checked on 07/10/2015} providing full support Safari 3.1\footnote{\url{http://caniuse.com/#feat=contenteditable}, last checked on 07/10/2015}. MDN lists full support in Google Chrome since version 4\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Content\_Editable}, last checked on 07/10/2015}, released in January 2010\footnote{\url{http://googlechromereleases.blogspot.de/2010/01/stable-channel-update\_25.html}, last checked on 07/10/2015}.
+
+%In March 2008, Apple released Safari 3.1\footnote{\url{https://www.apple.com/pr/library/2008/03/18Apple-Releases-Safari-3-1.html}, last checked on 07/10/2015} including full support for contentEditable and designMode\footnote{\url{http://caniuse.com/#feat=contenteditable}, last checked on 07/10/2015}, followed by Opera Software in June 2006\footnote{\url{http://www.opera.com/docs/changelogs/windows/}, last checked on 07/10/2015} providing full support in Opera 9\footnote{\url{http://www.opera.com/docs/changelogs/windows/900/}, last checked on 07/10/2015}. MDN lists full support in Google Chrome since version 4\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/Content\_Editable}, last checked on 07/10/2015}, released in January 2010\footnote{\url{http://googlechromereleases.blogspot.de/2010/01/stable-channel-update\_25.html}, last checked on 07/10/2015}.
+
+Starting in November 2004, WHATWG members have started actively discussing to incorporate these editing APIs in the HTML5 standard. Through reverse engineering, the WHATWG developed a specification based on Microsoft's implementation\footnote{\url{https://blog.whatwg.org/the-road-to-html-5-contenteditable}, last checked on 07/15/2015} and finally decided to include it in HTML5. With W3C's coorporation and the split in 2011, similar editing APIs based on this work are now included in W3C's HTML5 Standard\footnote{\url{http://www.w3.org/TR/html5/editing.html}, last checked on 07/15/2015} and WHATWG's HTML Standard\footnote{\url{https://html.spec.whatwg.org/multipage/interaction.html#editing-2}, last checked on 07/15/2015}.
+
+\section{Emergence of HTML editing JavaScript libraries}
+
+Around the year 2003\footnote{compare \textit{Meine Tabelle aller Editoren}} the first JavaScript libraries emerged that made use of Microsoft's and Mozilla's editing mode to offer rich-text editing in the browser. Usually these libraries were released as user interface components (text fields) with inherent rich-text functionality and were only partly customizable.
+
+In May 2003 and March 2004 versions 1.0 of ''FCKEditor''\footnote{Now distributed as ''CKEditor''} and ''TinyMCE'' have been released as open source projects. These projects are still being maintained and remain among the most used rich-text editors. TinyMCE is the default editor for Wordpress and CKEditor is listed as the most popular rich-text editor for Drupal\footnote{\url{https://www.drupal.org/project/project\_module}, last checked on 07/16/2015}. 
+
+Since the introduction of Microsoft's HTML editing APIs, a large number of rich-text editors have been implemented. While many have been abandoned, GitHub lists about 600 JavaScript projects related to rich-text editing\footnote{\url{https://github.com/search?o=desc\&q=wysiwyg\&s=stars\&type=Repositories\&utf8=\%E2\%9C\%93}, last checked on 07/16/2015}. However, it should be noted, that some projects only use other projects' editors and some projects are stubs. Popular choices on GitHub include ''MediumEditor'', ''wysihtml'', ''Summernote'' and others.
+
+\section{Standardization of HTML Editing APIs}
+\label{sec:standardization-of-html-editing-apis}
+
+It makes sense to use HTML editing APIs for rich-text editing. Microsoft's demos published with the release of these API suggest to do so. Mozilla picked up on it and called their implementation ''rich-text editing API''. Other browsers followed with APIs based on Microsoft's idea of editable elements. However, it would have been imaginable for browsers to offer a native user interface component, a dedicated rich-text input field.
+
+The HTML editing APIs have only been standardized with HTML5, which itself introduces 13 new types of input fields\footnote{\url{https://developer.mozilla.org/en/docs/Web/HTML/Element/Input}, last checked on 07/16/2015}, but none with rich-text capabilites. The WHATWG discussed various ways to specify rich-text editing for the upcoming HTML5 standard, including dedicated input fields. The issues that have been faced with that idea are 
+
+\begin{enumerate} 
+\item Finding a way to tell the browser which language the rich-text input should generate. E.g. should it output (the then popular) ''bb'' code, (X)HTML, Textile or something else?
+\item How can browser support for a rich-text input be achieved?
+\end{enumerate}
+
+%% Den browser support teil kann ich später gut aufgreifen, damit dass meine library immer 100% browser support hat
+
+Ian Hickson, editor of WHATWG and author of the HTML5 specification adresses these main issues in a message from November 2004\footnote{\url{https://lists.w3.org/Archives/Public/public-whatwg-archive/2004Nov/0014.html}, last checked on 07/16/2015}. He states
+
+\begin{quotation}
+\textit{Realistically, I just can't see something of this scoped[sic] [the ability to specify a input 'language' for a text-area and possibly to specify a subset of language elements allowed] getting implemented and shipped in the default install of browsers.}
+\end{quotation}
+
+and agrees with Ryan Johnson, who states
+
+\begin{quotation}
+\textit{Anyway, I think that it might be quite a jump for manufacturers. I also see that a standard language would need to be decided upon just to describe the structure of the programming languages. Is it worth the time to come up with suggestions and examples of a programming language definition markup, or is my head in the clouds?}
+\end{quotation}
+
+Ian Hickson finally concludes
+
+\begin{quotation}
+\textit{Having considered all the suggestions, the only thing I could really see 
+as being realistic would be to do something similar to (and ideally 
+compatible with) IE's "contentEditable" and "designMode" attributes.}
+\end{quotation}
+
+Mark Pilgrim lists this as milestone of the decision to integrate Microsoft's HTML editing APIs in the HTML5 standard.\footnote{\url{https://blog.whatwg.org/the-road-to-html-5-contenteditable}, last checked on 07/16/2015}.
+
+% By understanding the origins, the development and the process of standardization, it can be seen that the incorporation of the HTML editing APIs as designed by Microsoft has not been decided because they are a \textit{good idea}, but to be compatible with other systems and ultimately Internet Explorer 5.5.
+
+\section{Usage of HTML Editing APIs for rich-text editors}
+\label{sec:useage-of-html-editing-apis}
+
+Most rich-text editors use HTLM editing APIs as their basis. CKEditor and TinyMCE dynamically create an \texttt{iframe} on instantiation and set its \texttt{body} to editing mode using \texttt{contenteditable}. Doing so, users can type inside the \texttt{iframe} so it effectively acts as text input field. Both libraries wrap the \texttt{iframe} in a user interface with buttons to format the \texttt{iframe}'s contents. When a user clicks on a button in the interface \texttt{document.execCommand} will be called on the \texttt{iframe}'s \texttt{document} and the selected text will be formatted. While using an \texttt{iframe} is still in practice, many newer editors use a  \texttt{div} instead. The advantages and disadvatanges of this technique will be discussed in Sections XY.
+
+
+\section{HTML Editing APIs are questionable}
+
+Understanding the history of the HTML editing APIs, the reasons for their wide browser support and their final standardization are questionable. It can be doubted if they fit their purpose secifically well. In fact, all major browsers mimicked the API as implemented in Internet Explorer 5.5, even though there was no specification on it. It had to be reverse-engineered. The reasons for this have not been publically discussed. A reason may have been to be able to compete with the other browsers. Both, Microsoft's original implementation as well as Mozilla's adoption have been released in the main years of the so-called ''browser wars''. However Mozilla adopted Microsoft's API applying practically no change to it. It can be argued that this has been part of the browser wars. At this time, it was essential for any browser to be able to be compatible with as many websites as possible. Many websites were only optimized for a specific browser. To gain market share, it was essential to support methods that other browsers already offered and that have been used by the web developers. Being able to display websites just as good as their competitor may have been a key factor for Mozilla's decision to implement Microsoft's HTML editing APIs and not alter them in any way. Creating another standard would have been a disadvantage over the then stronger Internet Explorer. 
+
+As described in section ABC, other now popular browsers, i.e. Chrome, Safari and Opera, implemented these APIs only years later, when JavaScript libraries based on them have already been popular and widely used, which can be seen as a reason for these decisions. As described in section YZ, it has clearly been stated (see section \ref{sec:standardization-of-html-editing-apis}), that the reason for standardizing these APIs for rich-text editing has been to ensure browser support.
+
+The API itself stems from the time when the usage of the web was different from today, its future was still unknown and web applications like Google Docs have not even been thought of. It should be discussed if this API really is the answer to all problem and if it still fits (or ever fit) modern requirements for content management systems or web application. The advantantages, disadvantages and practical issues will be discussed in sections x y z.
+
+
+% but because they were \textit{already there} and could used on most PCs.% by the majority of users.
+
+%% From its history it's clear to see that the HTML editing APIs just came to be by adoption of browser manufacturer's and ultimately have been standardized for the main reason because they have already been there.
+
+
+% Using an iFrame as input field has been popular for years and many other rich-text editors have worked this way. The reasons for this have been described by Tim Down, author of the popular Rangy library and Piotrek Koszuliński, core developer of CKEditor\footnote{\url{http://stackoverflow.com/a/4430583/1183252}, last checked on 07/16/2015}\footnote{\url{http://stackoverflow.com/a/11222149/1183252}, last checked on 07/16/2015}:
+
+% \begin{enumerate} \item Styling is encapsulated in the \texttt{iframe} and does not affect the document outside the editor. \item Historically, browsers had buggy implementations of the \texttt{contenteditable}, so it was not possible to only make specific elements on a page editable and act as input field. \end{enumerate}
+
+% Even today many editors still use this technique, but it has severe downsides and the pro arguments are obsolete. This will be discussed in Sections XY.
+
+%% How Js Libraries work. Maybe how only a few work. StackOverlfow quote, buglists, Medium post, other stuff to find.
+
+%% Seeing how editing APIs have come to existance, as an undocumented API by microsoft, taken over by mozilla, bossted by JS libraries and then adopted by other browsers, it can be understood how editing APIs came to be. However, by its introduction by microsoft, it has not been stated that this has been its original purpose. And even if Mozilla picked up on it, it is not clear that this API is in fact the best way to implement rich-text editing. WHATWG has discussed this API, arguing if it is the best way to provide rich-text functionality.
+
+%% ** WICHTIG DEN BOGEN ZU SPANNEN WARUM ICH ÜBER DIE GESCHICHTE SCHREIBE** ERKLÄREN, DASS ALLE DIE API VON MICROSOFT ÜBERNOMMEN HABEN; ANSTATT RICH-TEXT ELEMENTE EINZUFÜHREN. HTML5 HAT KOMPONENTEN FÜR TIME UND DATE; WARUM NICHT RICH TEXT- WHATWG HAT DAS DISCUSSED. WAS WAREN DIE GRÜNDE?. BEI DER BESCHREIBUNG DARAUF ACHTEN DASS ICH DEN GRUND GEBE; WARUM ICH DIE ENTWICKLUNG SO LANGE ERKLÄRE. VIELLEICHT AUCH SAGEN, DASS TROTZ DASS HTML5 ERST SEIT X RELEASED WURDE, ANHAND DER GESCHICHTE GESEHEN WERDEN KANN; DASS ES SCHON LANGE BROWSER SUPPORT GIBT.
+
+%% Seeing the history of editing APIs, it is understandable how this has become the standard for rich-text editing. However, with its introduction in Internet Explorer 5.5, it has not been stated that the \texttt{designMode} end \texttt{contentEditable} attributes have been intended to enable rich-text editing. Sections X and Y will discuss the advantages and disadvantages of these APIs.
+
+% Rich-text editing in browsers is only possible though JavaScript. Essentially, libraries enabling rich-text editing display a nested webpage through an iFrame and let the user modify its contents to emulate a rich-text input. Commonly, modification is realized though the browser's so-called ''HTML Editing APIs'', which will be discussed in Section XXX (HTML Editing APIs).
+
+\section{Advantages of HTML Editing APIs}
+
+HTML Editing APIs have some notable advantages which will be discussed in this section.
+
+\paragraph{Browser support}
+
+A fair reason for using HTML editing APIs is its wide browser support. caniuse.com lists browser support for 92.78\% of all used web browsers\footnote{\url{http://caniuse.com/#search=contenteditable}, last checked on 07/17/2015}. I.e. 92.78\% of all people using the web use browsers that have full support for HTML editing APIs.
+
+\paragraph{High-level API}
+
+HTML editing APIs offer high-level commands for formatting text. It requires little setup to implement basic rich-text editing. The browser takes care of generating the required markup.
+
+\paragraph{HTML output}
+
+HTML editing APIs modify and generate HTML. In the context of web development, user input in this format is likely to be useful for further processing.
+
+\paragraph{No need for language definitions}
+
+The WHATWG discussed dedicated rich-text inputs, for instance as an extension of the \texttt{textarea} component. Offering a native input for general rich-text input brings up the question which use-cases this input conforms. For a forum software, it might be useful to generate ''BB'' code, while for other purposes other languages might be needed. Offering HTML editing APIs offers a semantically distinct solution, while still enabling a way to implement rich-text editing. %  Conforming the way HTML forms work, offering a native rich-text input, should send the native code that it generates to the server without further processing. That's why it would suck if it sent HTML for BB code editing.
+
+\paragraph{Possbile third-party solutions for other languages}
+
+While HTML editing APIs can be used to generate HTML only, third-party libraries can build on top of that by implementing editors that write ''BB'' code (for instance) and use HTML only for displaying it as rich-text.
+
+\section{Disadvantages of HTML Editing APIs}
+
+
+\paragraph{No specification on the generated output}
+
+The specifications on the HTML editing APIs do not state what markup should be generated by specific commands. There are vast differences in the implememtations of all major browsers. Calling the \texttt{italic} command, this is the output of Internet Explorer, Firefox and Chrome:
+
+\begin{lstlisting}[language=html, caption=Markup of italic command in Internet Explorer, label=lst:italic-ie]
+<i>Lorem ipsum</i>
+\end{lstlisting}
+
+\begin{lstlisting}[language=html, caption=Markup of italic command in Firefox, label=lst:italic-firefox]
+<span style="font-style: italic;">Lorem ipsum</span>
+\end{lstlisting}
+
+\begin{lstlisting}[language=html, caption=Markup of italic command in Chrome, label=lst:italic-chrome]
+<em>Lorem ipsum</em>
+\end{lstlisting}
+
+\noindent This is a \textit{major} problem for web development, because it makes processing input very difficult. Given the number of possible edge cases, it is very hard to normalize the input. Apart from that Internet Explorer's output is semantically incorrect for most use cases\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/HTML/Element/i\#Notes}, last checked on 07/17/2015} while Firefox's output is breaking sementics entirely and considered a bad style regarding the principle of the separation of concerns\footnote{\url{https://en.wikipedia.org/wiki/Separation\_of\_concerns\#HTML.2C\_CSS.2C\_JavaScript}, last checked on 07/17/2015}.
+Different browsers will not only generate differnent markup when executing commands. When a user enters a line break (by pressing enter), Firefox will insert a \texttt{<br>} tag, Chrome and Safari will insert a \texttt{<div>} tag and Internet Explorer will insert a \texttt{<p>} tag.
+
+
+\paragraph{Flawed API} 
+
+The original and mostly unaltered API is limited and not very effective. MDN lists 44 commands available for their \texttt{execCommand} implementation\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/document/execCommand\#Commands}, last checked on 07/17/2015}. While other browsers do not match these commands exactly, their command lists are mostly similar. 17 of those commands format the text (for instance to italicize or make text bold) by wrapping the current selection with tags like \texttt{<em>} or \texttt{<strong>}. The only difference between any of these commands is which tag will be used. At the same time there is no command to wrap the selected text in an arbitrary tag, for instance to apply a custom class to it (\texttt{<span class="highlight">Lorem ipsum</span>}). All 17 commands could be summarized by a single command that allows to pass custom tags or markup and wraps the selected text with it. This would not only simplify the API, but would also give it enormously more possibilities. The same goes for inserting elements. 7 commands insert different kinds of HTML elements, this could be simplified and extended by allowing to insert any kind of (valid) markup or elements with a single command. 
+
+Both alternatives would also give developers more control of what to insert. As previously described, browsers handle formatting differently. Allowing to format with specific HTML would generate consistent markup (in the scope of a website) and allow developers generate the markup fitting their needs.
+
+
+\paragraph{Not extendable}
+
+Google points out that implementing an editor using HTML editing APIs comes with the restriction that such an editor can only offer the least common denominator of functions supported by all browsers. They argue, if one browser does not support a specific feature or its implementation is buggy, it cannot be supported by the editor\footnote{\url{http://googledrive.blogspot.fr/2010/05/whats-different-about-new-google-docs.html}, last checked on 07/18/2015}. This is mostly true, although it is to be noted, that editors like CKEditor show, that some bugs can be worked around as well as some functionality be added through JavaScript. These workaround still have limitations and not everything can be fixed. In particular there can be cases where the editing mode is not able to handle content inserted or altered by workarounds.
+
+\paragraph{Clipboard}
+
+When dealing with user input, usually some sort of filtering is required. It is possibly harmful to accept any kind of input. This must be checked on the server side since attackers can send any data, regardless of the front end a system offers. However, in a cleanly designed system, the designated front end should not accept and send ''bad'' data to the back end. This applies to harmful content as well as to content that is simply \textit{unwanted}. For example, for asthetical reasons, a comment form can be designed to allow bold and italic font formatting, but not headlines or colored text.
+
+Implementing a rich-text editor with HTML editing APIs, unwanted formatting can be prevented by simply not offering input controls for these formattings (assuming no malicious behavior by the user). However any content, containing any formatting, can be pasted into elements in editing mode from the clipboard. There is no option to define filtering of some sort.
+
+Recent browser versions allow listening to paste events. Chrome, Safari, Firefox and Opera grant full read access to the clipboard contents from paste events, which can then be stopped and the contents processed as desired. Internet Explorer allows access to plain-text and URL contents only. Android Browser, Chrome for Android and IOS Safari allow reading the clipboard contents on paste events as well. Other browsers and some older versions of desktop and mobile browsers do not support clipboard access or listening to paste events. 82.78\% of internet users support listening to and reading from clipboard events\footnote{\url{http://caniuse.com/\#feat=clipboard}, last checked on 07/18/2015}.
+
+When dealing with the clipboard, especially older browsers show an unexpected behavior. Older WebKit-based browsers insert so-called ''Apple style spans''\footnote{\url{https://www.webkit.org/blog/1737/apple-style-span-is-gone/}, last checked on 07/18/2015} on copy and paste commands. ''Apple style spans'' are pieces of markup that have no visible effect, but clutter up the underlying contents of an editor. When pasting formatted text from Microsoft Word, Internet Explorer inserts underlying XML, that Word uses to control its document flow into the editor.
+
+
+\paragraph{Bugs} 
+
+HTML editing APIs are prone to numerous bugs. Especially older browser versions are problematic. Piotrek Koszuli\'{n}ski states:
+
+\begin{quotation}
+\textit{''First of all... Don't try to make your own WYSIWYG editor if you're thinking about commercial use. [...] I've seen recently some really cool looking new editors, but they really doesn't[sic] work. Really. And that's not because their developers suck - it's because browsers suck.''}\footnote{\url{http://stackoverflow.com/questions/10162540/contenteditable-div-vs-iframe-in-making-a-rich-text-wysiwyg-editor/11479435\#11479435}, last checked on 07/18/2015}
+\end{quotation}
+
+\noindent Mozilla lists 1060 active issues related to its ''Editor'' component\footnote{\url{https://bugzilla.mozilla.org/buglist.cgi?bug\_status=\_\_open\_\_\&component=Editor\&product=Core\&query\_format=advanced\&order=bug\_status\%2Cpriority\%2Cassigned\_to\%2Cbug\_id\&limit=0}, last checked on 07/18/2015}. Google lists 420 active issues related to ''Cr-Blink-Editing''\footnote{\url{https://code.google.com/p/chromium/issues/list?q=label:Cr-Blink-Editing}, last checked on 07/18/2015}. The WebKit project lists 641 active issues related to ''HTML Editing''\footnote{\url{https://bugs.webkit.org/buglist.cgi?query\_format=advanced\&bug\_status=UNCONFIRMED\&bug\_status=NEW\&bug\_status=ASSIGNED\&bug\_status=REOPENED\&component=HTML\%20Editing}, last checked on 07/18/2015}. Microsoft and Opera Software allow public access to their bug trackers. Some rich-text editors like CKEditor have been developed for over 10 years and still need to fix bugs related to the editing API\footnote{\url{http://dev.ckeditor.com/report/2}, last checked on 07/18/2015}\footnote{\url{http://stackoverflow.com/questions/11240602/paste-as-plain-text-contenteditable-div-textarea-word-excel/11290082#11290082}, last checked on 07/18/2015}. Some bugs have caused big websites to block particular browsers entirely\footnote{\url{https://medium.com/medium-eng/the-bug-that-blocked-the-browser-e28b64a3c0cc}, last checked on 07/18/2015. Medium however has contacted Microsoft and lead them to fix this bug.}.
+
+Given the argument that editing APIs provide easy to use and high-level methods to format text, in practice, the number of bugs and work-arounds required, renders a ''easy and quick'' implementation impossible. Also, browser bugs cannot be fixed by web developers. At best they can be worked around, enforcing particular software design on developers and possibly spawning more bugs.
+
+\section{Treating HTML editing API related issues}
+
+The issues arising with HTML editing APIs cannot be fixed. Many libraries find workarounds to treat them. CKEditor, TinyMCE, that framework. Google Docs finds another way and does not use HTML editing APIs.
+
+huge editor libraries, developed for 10 years trying to fix stuff
+libraries, not editors targeting inconstiencies
+they all can never know what's gonna happen
+medium
+
+\paragraph{Clipboard} CKEditor ''fixes'' paste problems by implementing a custom fake context menu and opening a modal with some instruction that the user should press ctrl+v. This is a UX nightmare. Other editors like retractor (oder so) sanitize any change to the editors contents for the case of input by paste events.
+
+\section{Rich-text editing without editing APIs}
+%% \section{DOM manipulation without Editing APIs}
+
+HTML editing APIs are the recommended way for implementing a web-based rich-text editor. There is no native text input that can display formatted text. The only way to natively display rich-text on a website is through the Document Object Model (DOM). Editors based on HTML editing APIs utilize the DOM to display their rich-text contents too. Only the editing (of the DOM), commonly phrased ''DOM manipulation'', is implemented with HTML editing APIs.
+
+\paragraph{Manipulation via the DOM APIs} Manipulating the DOM has been possible since the first implementations of JavaScript and JScript. It has been standardised in 1998 with the W3C's ''Document Object Model (DOM) Level 1 Specification'' as part of the ''Document Object Model (Core) Level 1''\footnote{\url{http://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html}, last checked on 07/10/2015}. Any DOM manipulation that can be achieved with HTML editing APIs can also be achieved using this API.
+
+%% %%%%%%%%%%%%
+%% contenteditable is also DOM API (but not core API?)
+%% %%%%%%%%%%%%
+
+\begin{algorithm}
+\caption{Simplified text formatting pseudocode}
+\label{alg:format_pseudocode}
+\begin{algorithmic}[1]
+\State Split text nodes at beginning and end of selection
+\State Create a new tag before beginning text node
+\State Loop over all nodes inside selection
+\State Move each node inside new tag
+\end{algorithmic}
+\end{algorithm}
+
+% \State Move beginning text node from selection inside new tag
+% \State Move all nodes until end text node inside new tag
+% \State Move end text node inside new tag
+
+Algorithm~\ref{alg:format_pseudocode} demonstrates a simplified procedure to wrap a text selection in a tag. To implement the \texttt{bold} commmand of \texttt{execCommand}, this procedure can be implemented using the \texttt{strong} tag. The text selection can be read with the browser's selection API\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/Selection}, last checked on 07/18/2015}\footnote{Internet Explorer prior version 9 uses a non-standard API \url{https://msdn.microsoft.com/en-us/library/ms535869(v=VS.85).aspx}, last checked on 07/18/2015}.
+
+% To implement formatting commands, the currently selected text can be wrapped in newly created tags, depending on what formatting shall be achieved. For instance, to implement the \texttt{bold} commmand of \texttt{execCommand}, the selected text can be read with the browser's selection API\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/Selection}, last checked on 07/18/2015}\footnote{Internet Explorer prior version 9 uses a non-standard API \url{https://msdn.microsoft.com/en-us/library/ms535869(v=VS.85).aspx}, last checked on 07/18/2015} and wrapped in \texttt{strong} tags using basic DOM Level 1 methods. 
+
+\begin{algorithm}
+\caption{Simplified element insertion pseudocode}
+\label{alg:insert_pseudocode}
+\begin{algorithmic}[1]
+\State If\{Selection is not collapsed\}\{
+\State Split text nodes at beginning and end of selection
+\State Loop over all nodes inside selection
+\State Remove each node
+\State Collapse selection
+\State Insert new tag at beginning of selection
+\end{algorithmic}
+\end{algorithm}
+
+Algorithm~\ref{alg:insert_pseudocode} demostrates a simplified procedure to insert a new tag and possibly overwriting the current text selection and thereby mimicking \texttt{execCommand}'s insertion command. With formatting text and inserting elements, we can find equivalents for all commands of \texttt{execCommand} related to rich-text editing. table-\ref{tab:execCommand_equivalents} lists commands that can be invoked with execCommand and possible equivilents with DOM Level 1 methods. However, these are just simplified examples, specific cross-browser implementations  will be discussed in section XY.
+
+%Insertion commands can be implemented with basic DOM Level 1 methods to create and append elements.
+
+The DOM and its API is the recommended\footnote{recommended by the W3C and WHATWG} way to change a website's contents and---apart from HTML editing APIs---the only possibility implemented in any major browser. Popular libraries like jQuery, React or AngularJS are based on it. The API has been developed for 17 years and proven to be stable across browsers.
+
+\paragraph{Third-party alternatives} The only alternative way to display and edit rich-text inside a browser is through third-party plugins like Adobe Flash or Microsoft Silverlight. Flash and Silverlight lack mobile adoptions have have been subject to critique since the introduction of smartphones and HTML5. Other third-party plugins are even less well adopted. This makes Flash, Silverlight and other third-party browser-plugins a worse choice as compared to displaying and manipulating rich-text though the DOM.
+
+\paragraph{Rich-text with DOM APIs in practice} Google completely rewrote their document editor in 2010 abandoning HTML editing APIs entirely. In a blog post\footnote{\url{http://googledrive.blogspot.fr/2010/05/whats-different-about-new-google-docs.html}, last checked on 07/18/2015}, they stated some of the reasons discussed in section XYZ. They state, using the editing mode, if a browser has a bug in a particular function, Google won't be able to fix it. In the end, they could only implement ''least common denominator of features''. Furthermore, abanding HTML editing APIs, enables features not possible before, for example tab stops for layouting. 
+
+With their implementation, Google demonstrates it is possible to implement a fully featured rich-text editor using only JavaScript and not HTML editing APIs. However, fetching input and modifying text will not suffice to implement a text editor or even a simple text field. There is many more things, that need to be considered which will be discussed in chapter-\ref{ch:concept}. 
+
+%% In October 1998 the World Wide Web Consortium (W3C) published the ''Document Object Model (DOM) Level 1 Specification''. This specification includes an API on how to alter DOM nodes and the document's tree\footnote{\url{http://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html}, last checked on 07/10/2015}. It provided a standardized way for changing a website's contents. With the implementations of Netscape's JavaScript and Microsoft's JScript this API has been made accessible to web developers.
+
+\section{Rich-text libraries implemented without editing APIs}
+
+''Ace'' and ''CodeMirror'' demonstrate it is possible to mimic text-inputs with JavaScript to implement code editors. Rich-text editing is usually being implemented using HTML editing APIs. There are a few exceptions. The editor ''Firepad''\footnote{\url{http://www.firepad.io/}, last checked 07/23/2015} is based on CodeMirror and extends it with rich-text formatting. As mentioned before, Google's document editor does not use HTML editing APIs either. The major disadvantage of Firepad, being based on CodeMirror, is that it generates ''messy'' markup with lots of control tags. It has a sparse API that is not designed for rich-text editing. It has no public methods to format the text. Google's document editor generates lots of control tags too and its source code is not available to the public. A full list of rich-text editors using and not using HTML editing APIs can be found in tables \ref{table:editors-editing-mode} and \ref{table:editors-non-editing-mode}.
+
+\section{Advantages of rich-text editing without editing APIs}
+
+With a pure JavaScript implementation, many of the problems that editing APIs have, can be solved.
+
+\paragraph{Generated output and flawed API} The generated markup can be chosen with the implementation of the editor. Furthermore, an editor can be implemented to allow developers using the editor to \textit{choose} the output. Section AX describes the inconsistent output across various browsers as well as the problems of the API design of \texttt{execCommand}. Both issues can be adressed by offering a method to wrap the current selection in arbitrary markup. jQuery's \texttt{htmlString} implementation\footnote{\url{http://api.jquery.com/Types/\#htmlString}, last checked on 07/19/2015} demonstrates a simple and stable way to define markup in a string and pass it as an argument to JavaScript methods. A sample call could read as
+
+\begin{lstlisting}[language=JavaScript, caption=Example calls to format text, label=lst:format-examples]
+// Mimicking document.execCommand('italic', false, null);
+editor.format('<em />');
+
+// Added functionality
+editor.format('<span class="highlight" />');
+\end{lstlisting}
+
+With an implementation like this, developers using the editor can choose which markup should be generated for italicising text. The markup will be consistent in the scope of their project unless chosen otherwise. Since the DOM manipulation is implemented in JavaScript and not by high-level browser methods, this will also ensure the same output on all systems and solve cross-browser issues. The second example function call in listing \ref{lst:format-examples} demonstrates that custom formatting, fitting the needs of a specific project, can be achieved with the same API.
+
+As described in section AB, many components native to text editing have to be implemented in JavaScript. This requires some effort but also enables full control and direct over it. Ultimately, these components can be exposed in an API to other developers, enabling options for developing editors, not offered by HTML editing APIs. An example API will be discussed in sectionXImplementationn.
+
+\paragraph{Not extendable} When implementing and editor in pure JavaScripts, the limitations aufgedrück by the editing mode, do not apply. Anything that can be implemented in a browser environment can also be implemented as part of a (rich-)text editor. The Google docuement editor demonstrates rich functionality incliding layouting tools or floating images. Both of which are features that are hardly possible in an editing mode enabled environment\footnote{\url{http://googledrive.blogspot.fr/2010/05/whats-different-about-new-google-docs.html}, last checked on 07/19/2015}. SectionABC discusses some use cases exploring the possibilites of rich-text editing implemented this way. % etherpad, markdown etc
+
+\paragraph{Clipboard} In a pure JavaScript environment, clipboard functionality seems to be harder to implement than with the use of editing mode. Apart from filtering the input, pasting is natively available---via keyboard shortcuts as well as the context menu. However, as demonstrated in section IMPLEMENTATION, it is possible to enable native pasting---via keyboard and context menu---even without editing mode. Furthermore, it is possible to filter the pasted contents before inserting them in the editor.
+
+\paragraph{Bugs} No software can be guaranteed to be bug free. However, refraining from using HTML editing APIs will render developing an editor independent from all of these APIs' bugs. Going a step further, the implementation can be aimed to minimize interaction with browser APIs, especially unstable ones. DOM manipulation APIs have been standardized for more than 15 years and tend to be well-proven and stable. This will minimize the number of ''unfixable'' bugs and ultimately free development from being dependent on browser development, update cycles and user adoption. Bugs can be fixed quicker and rolled out to websites. This means that, other than with HTML editing APIs, bugs that occur are part of the library can be fixed and not only worked around. Furthermore, with minimizing browser interaction, bugs probably occur indeopendently of the browser used, which makes finding and fixing bugs easier.
+
+
+% It puts the contenteditable implementation in the hand of JavaScript developers. We no longer have to wait for browsers to fix issues *and conform each other* and thus can be faster, at least possibly, than browsers are.
+
+% An implementation without editing APIs cannot guarantee to be bug free, but not using these APIS, using only well-proven APIs and minimizing interaction with browser APIs will put the development and the fixing of bugs into the hands of JavaScript delopers. In other words, we \textit{can} actually \textit{fix} bugs and do not have to work around them and wait for browsers and browser usage to change (both takes long time).
+
+\section{Disadvantages of rich-text editing without Editing APIs}
+
+\paragraph{Formatting} Editing APIs' formatting methods take away a crucial part of rich-text editing. Especially on the web, where a text may have many sources, formatting must account for many edge cases. Nick Santos, author of Medium's rich-text editor states in regeards of their editor implementation:
+
+\begin{quotation}
+\textit{''Our editor should be a good citizen in [the ecosystem of rich-text editors]. That means we ought to produce HTML that's easy to read and understand. And on the flip side, we need to be aware that our editor has to deal with pasted content that can't possibly be created in our editor.''}\footnote{\url{http://stackoverflow.com/questions/11240602/paste-as-plain-text-contenteditable-div-textarea-word-excel/11290082#11290082}, last checked on 07/13/2015}
+\end{quotation}
+
+An editor implemented \textit{without} HTML editing APIs does not only need to account for content (HTML) that will be pasted into the editor\footnote{Medium uses HTML editing APIs} (in fact, content should be sanitized before it gets insterted in the editor, see sections A and b, paragraphs ''clipboard''), but also for content that will be loaded on instantiation. It cannot be assumed that the content that the editor will be loaded with (for example integrated in a CMS), is \textit{well-formatted} markup or even valid markup. ''Well-formatted'' means, the markup of a text is \textit{simple} in the sense that it expresses semantics with as few tags as possible (and it conforms the standards  of the W3C). The same visual representation of a text, can have many different---and valid---underlying DOM forms. Nick Santos gives the exaple of the following text\footnote{\url{http://stackoverflow.com/questions/11240602/paste-as-plain-text-contenteditable-div-textarea-word-excel/11290082#11290082}, last checked on 07/13/2015}:
+
+\begin{quotation}
+The \underline{hobbit} was a very well-to-do hobbit, and his name was \textbf{\textit{Baggins}}.
+\end{quotation}
+
+\noindent The word ''Baggins'' can be written in any of the following forms:
+
+\begin{lstlisting}[language=html, caption=Different DOM representations of an equally formatted text, label=lst:different-dom-representations]
+<strong><em>Baggins</em></strong>
+<em><strong>Baggins</strong></em>
+<em><strong>Bagg</strong><strong>ins</strong></em>
+<em><strong>Bagg</strong></em><strong><em>ins</em></strong>
+\end{lstlisting}
+
+A rich-text editor must be able to edit any of these representations (and more). Furthermore, the same edit operation, performed on any of these representations must provide the same \textit{expected} behavior, i.e. generate the same visual representation and produce predictive markup. Above that, being a ''good citizen'' it should produce simple and semantically appropriate HTML even in cases when the given markup is not. It may even improve the markup it affects.
+
+
+% Apparently implementing editing is prone to a lot of bugs issues **and edge-casese**. It can be assumed that it is difficult to do so. / Discuss the issues discussed by WHATWG here. It's difficult to do this.
+
+% Also this can be seen as ''yet another'' implementation of contenteditable, equal to browser implementations. Just one more editor for developers to take care of. However, this isn't quite correct, cos developers usually can choose a single editor that is used for the entire project, so they only have to take care of a single editor.
+
+\paragraph{Mimicking native functionality} As described in section XY, rich-text editing consists of many components like the caret or the ability to paste text via a context menu. These basic components require complex implementations. HTML editing APIs offer these components natively without further scripting.
+
+\paragraph{Possible performance disadvantages} Modifying the text on a website means manipulating the DOM. DOM operations can be costly in terms of performance as they can trigger a browser reflow\footnote{\url{https://developers.google.com/speed/articles/reflow}, last checked on 07/19/2015}. The same goes for mimicking some elements like the caret. To display a caret a DOM element like a \texttt{div} is needed and it needs to be moved by changing its style attribute. While it should be a goal to keep browser interactions to a minimum, there is no way to avoid DOM interaction with any visual text change.
+
+\paragraph{File size} While bandwidth capacities have vastly improved, there may still be situations where a JavaScript libraries' file sizes matter. This may be for mobile applications or for parts of the world with less developed connections. When not using HTML editing APIs a lot of code must be written and transmitted just to enable basic text editing, which would not be needed otherwise.
+
+\section{Disadvantages of offering user interface components}
+
+Most rich-text editors are implemented and distributed as user interface components. That means instead of only providing a library that offers methods to format the selected text and leaving the implementation of the user interface to the respective developer, most libraries are shipped as input fields with a default editor interface that is, at best, customizable.
+
+This can be unfitting for many situations. The user interface of an editor highly depends on the software it will be integrated in. Within the software the interface may even vary depending on the specific purpose within it. For instance, a content management system may require an edtitor with a menubar offering many controls while a comment form on a blog requires only very little controls. Medium.com uses an interface that only shows controls when the user selects text and has no menubar at all. Assuming there are many implementations of editors, it seems, choosing between editors is often just a choice of the desired ui. Customizing a ui can be just as complex as writing a ui from scratch. The latter affords to add HTML elememts and call JavaScript methods. In a worst case styling the elements can be just as much effort.
+
+It can be much more fitting for developers to include a library that handles all text-input and -formatting operations while only providing a powerful API, leaving the ui to the developer. The API must be \textit{well-designed}. That means it must be simple, effective and fit the developers' needs. The methods it offers should be simple in the sense that they conceal possibly complex tasks with understandable high-level concepts. They should be effective and fit the developers' needs in the sense that the API should be designed so that any requirements should be matched with as little effort as possible. The API should create a workflow for developers that allows them to do what they want to do and is as easy to use as possible. jQuery is an example of encorporating an API conforming these principles.
+
+%iFrame hat vor und nachteile. mit meiner library kann es jeder so machen, wie er/sie es will
+
