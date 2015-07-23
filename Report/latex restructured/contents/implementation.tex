@@ -8,7 +8,9 @@
 
 \section{JavaScript library development}
 
-No IDEs, tools, not even conventions.
+% There are many popular frameworks and libraries that provide a structure, rules and conventions for implementing websites and web applications. 
+
+No IDEs, tools, not even conventions. Es gibt frameworks die eine architektur für webseiten und web-applikationen vorgeben, aber nichts dergleichen für bibliotheken.
 
 Not for building:
 Big JS libraries all do it differently.
@@ -23,6 +25,8 @@ Angular custom module system with own conventions
 d3 mit nested objects (assoc arrays) und funktionen
 jQuery mit .fn
 ACE mit Klassen, daraus habe ich gelernt
+
+ES5 oder ES6?
 
 
 \section{Ich habe verwendet}
@@ -51,7 +55,7 @@ Habe mich größtenteils an Crockfordstyle orientiert, aber die Klassen anders g
 https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Contributor\_s\_Guide/Private\_Properties
 Sie bewirkt keine echte accessibility restriction, aber es ist eine allgemein anerkannten convention und ist auch viel besser lesbar.
 
-\section{Coding Klassen}
+\section{Class pattern}
 
 Ich habe mich für Klassen entschieden. Das hat folgende Vorteile:
 
@@ -61,8 +65,12 @@ Ich habe mich für Klassen entschieden. Das hat folgende Vorteile:
 * Die instanzvariablem sind meistens nur Pointer auf Instanzen anderer Klassen
 * Das ganze ist dadurch sehr schlank
 
+Eine alternative wäre das Modul-pattern, das ist aber schlechter zu lesen und bietet die oben genannten vorteile nur teilweise.
+
 \section{Programmstruktur}
 
+Modulbasiert?
+Erweiterbarkeit
 Es gibt ein Basisobjekt, das ist die Type "Klasse".
 Darin werden dann die anderen Klassen geschrieben "Type.Caret", "Type.Selection", "Type.Range", ...
 Das hat den Vorteil dass das ganze ge-name-spaced ist, so dass ich keine Konflikte mit Systemnamen habe (Range) (und auch nicht mit anderen Bibliotheken)
@@ -78,8 +86,6 @@ Ich werde jetzt die einzelnen Module erlären
 
 Die Type
 
-\section{Caret}
-caret
 \section{Range}
 range
 
@@ -113,8 +119,18 @@ Although some smart TVs offer keyboards, mice, pointers similar to Nintendo's Wi
 
 % which is presented to the user as the input field.
 
+\section{Caret}
+caret
+\paragraph{BiDi support}
+\paragraph{IME} 
+http://marijnhaverbeke.nl/blog/browser-input-reading.html 
+https://en.wikipedia.org/wiki/Input\_method
+
 
 \section{Selection}
+Fake damit copy \& past nativ funktioniert
+Obwohl eine selection mehrere Ranges haben kann, wird das von keinem Browser unterstützt http://stackoverflow.com/questions/4777860/highlight-select-multiple-divs-with-ranges-w-contenteditable/4780571\#4780571
+Habe versucht mit die Darstellung über getClientRects zu emulierten, aber das ist buggy siehe https://github.com/edg2s/rangefix/blob/master/rangefix.js
 
 
 \section{Selection Overlay}
@@ -134,8 +150,11 @@ dom util
 dom walker. Used SO OFTEN in the project. Goal is to have a really simple api new DomWalker('text') by having lots of pre-defined magick in it.
 \section{Environment}
 env
+
 \section{Core Api}
-core api
+
+Api als eigenes Modul, separation of concerns, gute saubere code base und eigene saubere code base für die API. Laesst freiheiten in der Softwarearchitektur - lost coupling, API ein eigenes aenderbares gekapseltes modul:
+
 \section{Event Api}
 ev api
 
@@ -146,6 +165,12 @@ input event only event required so far
 \section{Input Pipeline}
 pipeline idea
 rules for behaviours (lists, headlines, enter, spaces...)
+Ursprünglich so gedacht: Was gehört zu einem editor X, Y und Behaviour. Für Behaviour aber das input pipeline system gefunden, welches das ganze schön abbildet/löst.
+Noch mal skimmen und sehen ob da was dabei ist, besonders "Detour": http://marijnhaverbeke.nl/blog/browser-input-reading.html
+
+\paragraph{Pasting} Kontrolle durch die Implementierung mit einem versteckten Eingabefeld. Erst mal gibt es ein reliable Paste event, was es in keinem Editor basierend auf contentEditable gibt. 2. Hat man volle Kontrolle über den Inhalt, was gepastet wird und was nicht. Und das ganze mit einer einfachen API. Pasting sollte internes event ausloesen.
+
+
 \paragraph{Caret}
 caret
 \paragraph{Command}
@@ -172,4 +197,28 @@ util
 
 \section{Extensions}
 
-Collaboration with etherpad, Markdown wohl eher als Ausblick.
+\paragraph{Plugin API} ...and plugin cache
+
+\paragraph{Many options for programmers}
+
+\begin{lstlisting}[language=JavaScript, caption=Example calls to format text, label=lst:format-examples]
+// Adding contructors
+Type.fromEtherpad = function() { /* Implementation */ };
+
+// Events to load plugins on instantiation
+Type.on('ready', function(type) { /* Implementation */ });
+
+// Lazy loading using plugin cache
+Type.fn.myPluginMethod = function (tag, params) {
+  var cmd = this.plugin('cmd', /* Plugin instantiation */ );
+  /* Execute myPluginMethod */
+};
+
+// Static function calls just like jQuery
+Type.fn.cmd = function (tag, params) { /* Implementation */ };
+\end{lstlisting}
+
+Erstellung von Erweiterungen und Plugins soll so einfach und frei wie möglich sein. Es ist die Verantwortung der Programmierer diese Freiheit so zu nutzen, dass sie trotzdem sauber arbeiten. jQuery zeigt, dass Freiheit funktioneren kann und nicht zu schlechtem nutzen führt. Schlechte Plugins sterben durch die Dynamik des ''Marktes'' aus. Die Vorteile ueberwiegen: Beim CKEditor ist es aufwändig (viel Code um sich in den Editor zu integrieren) und schwierig (Lernkurve) Erweiterungen zu schreiben. Der CKEditor ist aber auch ein Produkt und kein Framework. Ein Framework sollte Möglichkeiten geben und einfach (und painless) sein. jQuery hat für sich Konventionen erzeugt und Möglichkeiten gegen, die Programmierer effektiv arbeiten lassen können. Und jQuery zeigt: Es funktioniert.
+
+\paragraph{Etherpad} Collaboration with etherpad ist wirklich einfach zu machen mit meinem coolen editor. Mein Editor ist ganz ganz toll dass das so einfach geht, ja!
+Markdown wohl eher als Ausblick.

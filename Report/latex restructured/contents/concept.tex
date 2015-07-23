@@ -70,7 +70,11 @@ Also FirePad and Google generate unusable markup. we're gonna generate semantic 
 \section{MVC}
 
 Document model -> no
+Ursprünglich MVC mäßig mit document im kern geplant 
 
+\section{Events}
+
+Dazu entscheiden dass es ein Type-Internes Eventsystem gibt, dessen Events nur in Type existieren. Damit polluten die nicht den globalen (name)space mit events. Nur bestimmte events werden global (nativ) getriggert, und das sind genau die events, die nach aussenhin von Belang sind und abgegriffen werden koennen sollen (=API design)
 
 \section{Stability and performance}
 
@@ -82,3 +86,16 @@ Document model -> no
 
 \paragraph{Minimze interaction with unstable APIs} Some APIs like the \texttt{Range} or \texttt{Selection} are prone to numerous bugs. To maximize stability, these APIs should be avoided when possible unless doing so has any downsides (like lower performance).
 
+
+\section{API Design}
+
+Allgemeine Überlegungen wie man ein Framework gestaltet (siehe ''Freiheit für Programmierer'', gute Arbeitsweise)
+Ursprünglich API und Codestruktur an window.execCommand orientiert, das ist aber doof.
+Bessere (weil präzisere) API mit mehr Möglichkeiten als der contentEditable scheiss
+für Programmierer und für 2 anwendungsfälle:
+einen editor bauen
+type mit plugins erweitern
+für beides gibt es die passenden Funktionen, das eine einfach und schlau, das andere präzise
+Deswegen werden auch alle Module, alle Klassen exponiert aber es gibt eine eigene API nach jQuery konzept
+Type kommt mit bestimmten Kernmodulen die fuer Textbearbeitung essenziell sind. Aber an dieser Stelle laesst sich Type um weitere Module anhand einer KOnvention (erweitern des Type Objekts) erweitern.
+Ursprünglich API und Codestruktur an window.execCommand orientiert, das ist aber doof.
