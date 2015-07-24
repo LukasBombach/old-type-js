@@ -295,7 +295,7 @@ HTML editing APIs are the recommended way for implementing a web-based rich-text
 \label{alg:format_pseudocode}
 \begin{algorithmic}[1]
 \State Split text nodes at beginning and end of selection
-\State Create a new tag before beginning text node
+\State Create a new tag before the beginning text node of the selection
 \State Loop over all nodes inside selection
 \State Move each node inside new tag
 \end{algorithmic}
@@ -322,7 +322,22 @@ Algorithm~\ref{alg:format_pseudocode} demonstrates a simplified procedure to wra
 \end{algorithmic}
 \end{algorithm}
 
-Algorithm~\ref{alg:insert_pseudocode} demostrates a simplified procedure to insert a new tag and possibly overwriting the current text selection and thereby mimicking \texttt{execCommand}'s insertion command. With formatting text and inserting elements, we can find equivalents for all commands of \texttt{execCommand} related to rich-text editing. Table \ref{tab:execCommand_equivalents} lists commands that can be invoked with execCommand and possible equivilents with DOM Level 1 methods. However, these are just simplified examples, a specific implementation accounting for all edge-casese will be discussed in section XY.
+Algorithm~\ref{alg:insert_pseudocode} demostrates a simplified procedure to insert a new tag and possibly overwriting the current text selection and thereby mimicking \texttt{execCommand}'s command based on insertion.
+
+\begin{algorithm}
+\caption{Simplified text removal pseudocode}
+\label{alg:remove_pseudocode}
+\begin{algorithmic}[1]
+\State If\{Selection is not collapsed\}\{
+\State Loop over all nodes inside selection
+\State Remove each node
+\State Collapse selection\}
+\State Else\{
+\State Remove one character left of the beginning of the selection\}
+\end{algorithmic}
+\end{algorithm}
+
+Algorithm~\ref{alg:remove_pseudocode} demonstrates a procedure to mimick the \texttt{delete} command of \texttt{execCommand}. With formatting and removing text as well as inserting elements, we can find equivalents for all commands of the HTML editing APIs related to manipulating rich-text. Aside from text or DOM manipulation, editing APIs offer commands for undo/redo or clipboard capabilites. Table \ref{tab:execCommand_equivalents} lists all commands available for \texttt{execCommand} and possible equivilents with DOM Level 1 methods. However, these are just simplified examples. A specific implementation accounting for all commands and all edge-cases will be discussed in chapters {ch:concept} and {ch:implementation}.
 
 %Insertion commands can be implemented with basic DOM Level 1 methods to create and append elements.
 
@@ -410,6 +425,10 @@ A rich-text editor must be able to edit any of these representations (and more).
 \paragraph{Possible performance disadvantages} Modifying the text on a website means manipulating the DOM. DOM operations can be costly in terms of performance as they can trigger a browser reflow\footnote{\url{https://developers.google.com/speed/articles/reflow}, last checked on 07/19/2015}. The same goes for mimicking some elements like the caret. To display a caret a DOM element like a \texttt{div} is needed and it needs to be moved by changing its style attribute. While it should be a goal to keep browser interactions to a minimum, there is no way to avoid DOM interaction with any visual text change.
 
 \paragraph{File size} While bandwidth capacities have vastly improved, there may still be situations where a JavaScript libraries' file sizes matter. This may be for mobile applications or for parts of the world with less developed connections. When not using HTML editing APIs a lot of code must be written and transmitted just to enable basic text editing, which would not be needed otherwise.
+
+\section{Comparison of these approaches}
+
+HTML editing APIs vs other method, pros and cons, conclusion. Also HTML editing APIs will get better, still the API sucks, fewer features, also still dependent on browser development in terms of possible bugs in the future and further features. Edge casese can be tackled and solutions rolled out immediately. Cross browser inconsistencies are less of a problem and can also be tackled as required.
 
 \section{Disadvantages of offering user interface components}
 
