@@ -12,6 +12,12 @@
 % The basis for web projects is the DOM and the data and procedures written in JavaScript
 % Hacks are normal
 
+Developing a text editor in a browser environment differs from implementing a text editor in a desktop einvironment. Any implementation is based on the axioms of the browsers. Development is generally restricted to the components and APIs offered by the HTML5 standard and experimental features that are usually implemented in a subset of browsers. However, the boundaries of these restrictions can be pushed. It is common practice to combine native elements and APIs\footnote{Native to the browser, not the operating system} in ways they have not been designed for to enable features not natively offered by browsers. These techniques are often reffered to as ''hacks''.
+
+This chapter will describe the basics of text and rich-text editing in browsers and the APIs and techniques used. The origins and the history of rich-text editing pose the question if the paradigms rich-text editing is based on have been thoroughly reviewed and if alternative ways for an implementation could be considered.
+
+% When not using third-party plugins like Adobe Flash or Microsoft Silverlight, development is restricted to the components and APIs
+
 \section{Plain-text inputs}
 
 Text input components for browsers have been introduced with the specification of HTML 2.0\footnote{\url{https://tools.ietf.org/html/rfc1866}, last checked on 07/15/2015}. The components proposed include inputs for single line (written as \texttt{<input type=''text'' />}) and multiline texts (written as \texttt{<textarea></textarea>}). These inputs allow writing plain-text only.
