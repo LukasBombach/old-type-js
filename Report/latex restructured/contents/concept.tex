@@ -12,9 +12,9 @@
 
 %\paragraph{Overlaying an element in editing mode} One way to 
 
-This section will discuss the options to implement rich-text editing without relying (entirely) on HTML editing APIs and discuss the advantages and disadvantages of each chapter. % Diese Art zu schreiben sollte der Style der Arbeit sein.
+This section will discuss the options to implement rich-text editing without relying (entirely) on HTML editing APIs and discuss the advantages and disadvantages of each method. % Diese Art zu schreiben sollte der Style der Arbeit sein.
 
-\paragraph{Native input elements} Native text inputs are hard-wired to plain-text editing. No major browser offers an API for formatting. There is also no option to write HTML to an input and have it display it as rich-text. \texttt{input} fields and \texttt{textarea} elements will simply display the HTML source code. Rich-text can only be implemented as an editable part of the website.
+\paragraph{Native input elements} Native text inputs are hard-wired to plain-text editing. No major browser offers an API for formatting. There is also no option to write HTML to an input and have it display it as rich-text. \texttt{input} fields and \texttt{textarea} elements will simply display the HTML as source code. Rich-text can only be implemented as an editable part of the website.
 
 \paragraph{Enabling editing mode without using its API} One way to enable editing but avoiding many bugs and browser inonstistencies, is to enable the editing mode on an element, but avoid using \texttt{execCommand} to format the text. The latter could be implemented using the DOM core APIs. This would provide the user with all basic editing functions, i.e. a caret, text input, mouse interaction and clipboard capabilites. All of this would be taken care of by the browser.
 
@@ -43,7 +43,21 @@ This sem-radical approach would solve the problem of buggy and inconsistent \tex
 
 \paragraph{Imitating native components} These components are natively available in all text inputs across all browsers. Switching an element to editing mode enables these components too. That means a user can click in a text to place a caret and move it with the keyboard's arrow keys. He or she can copy and paste text. The browser offers a native context menu that allows pasting on input elements as well as on element in editing mode. All major browsers implement a behaviour for text input that is common for rich-text editing (as described above).
 
-When not using editing APIs, all of this must be implemented with JavaScript. This requires a lot of trickery and many components must be imitated to make it \textit{seem} there is an input field, where there is none. The user must be convinced he or she is using a native input and must not notice he or she isn't. This has already been done with web-based code editors. ''Ace'' and ''CodeMirror'' display syntax-highlighted text editable by the user. The user seemingly writes inside the highlighted code and is also presented with a caret and all of the above mentioned components. In reality, the user's input will be read with JavaScript and the code he or she sees is HTML generated based on this input to display syntax-highlighted text. Other components, like the caret and even the selection \texttt{div} elements, styled and positioned to mimick their native counterparts. All this creates the illusion of a native text input.
+When not using editing APIs, all of this must be implemented with JavaScript. This requires a lot of trickery and many components must be imitated to make it \textit{seem} there is an input field, where there is none. The user must be convinced he or she is using a native input and must not notice he or she isn't.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[scale=.7]{./images/ace-codemirror-uml.eps}
+\caption{Rendering of highlighted sourcecode}
+\label{fig:ace-rendering-uml}
+\end{figure}
+
+
+Web-based code editors like ''Ace'' and ''CodeMirror'' demonstrate that this is possible. They display syntax-highlighted source code editable by the user. The user seemingly writes inside the highlighted text and is also presented with a caret as well as the above mentioned components. In reality, the content inside the editor that a user sees is non-editable text, colored and formatted using HTML and CSS. When the user enters text, the input will be read with JavaScript. Based on the input Ace and CodeMirror generate HTML and add it to the editors contents, to show a properly syntax highlighted representation. On top of that a \texttt{div} element, styled to look like a caret will be shown and moved with the user's keyboard and mouse input.
+
+%In reality, the user's input will be read with JavaScript and the code he or she sees is HTML generated based on this input to display syntax-highlighted text. Other components, like the caret and even the selection \texttt{div} elements, styled and positioned to mimick their native counterparts. 
+
+%All this creates the illusion of a native text input.
 
 %Many of the techniques to mimick a native text input like this can be found in web-based code editors like ''ACE'' or ''CodeMirror''.
 
