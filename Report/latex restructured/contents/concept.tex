@@ -41,19 +41,19 @@ This sem-radical approach would solve the problem of buggy and inconsistent \tex
 
 \paragraph{Behaviour} Rich-text editors (usually) share a certain behaviour on user input. When writing a bulleted list, pressing the enter key usually creates another bulleting point instead of inserting a new line. Pressing enter inside a heading will insert a new line. However pressing enter when the caret is located at the end of a heading commonly creates a new text paragraph just after that heading. Other rules that need to be considered will be discussed in section [implementation].
 
-\paragraph{Imitating native components} These components are natively available in all text inputs across all browsers. Switching an element to editing mode enables these components too. That means a user can click in a text to place a caret and move it with the keyboard's arrow keys. He or she can copy and paste text. The browser offers a native context menu that allows pasting on input elements as well as on element in editing mode. All major browsers implement a behaviour for text input that is common for rich-text editing (as described above).
+\paragraph{Imitating native components} These components are natively available for text inputs across all browsers. Switching an element to editing mode enables these components too. That means a user can click in a text to place a caret and move it with the keyboard's arrow keys. He or she can copy and paste text. The browser offers a native context menu that allows pasting on input elements as well as on element in editing mode. All major browsers implement a behaviour for the user' input that is common for rich-text editing (as described above).
 
-When not using editing APIs, all of this must be implemented with JavaScript. This requires a lot of trickery and many components must be imitated to make it \textit{seem} there is an input field, where there is none. The user must be convinced he or she is using a native input and must not notice he or she isn't.
+When not using editing APIs, all of this must be implemented with JavaScript. This requires a lot of trickery and many components must be imitated to make it \textit{seem} there is an input field, where there is none. The user must be convinced he or she is using a native input and must not notice he or she is not.
 
 \begin{figure}[!htb]
 \centering
 \includegraphics[scale=.7]{./images/ace-codemirror-uml.eps}
-\caption{Rendering of highlighted sourcecode}
-\label{fig:ace-rendering-uml}
+\caption{Rendering of highlighted source code in Ace and CodeMirror}
+\label{fig:ace_rendering_uml}
 \end{figure}
 
 
-Web-based code editors like ''Ace'' and ''CodeMirror'' demonstrate that this is possible. They display syntax-highlighted source code editable by the user. The user seemingly writes inside the highlighted text and is also presented with a caret as well as the above mentioned components. In reality, the content inside the editor that a user sees is non-editable text, colored and formatted using HTML and CSS. When the user enters text, the input will be read with JavaScript. Based on the input Ace and CodeMirror generate HTML and add it to the editors contents, to show a properly syntax highlighted representation. On top of that a \texttt{div} element, styled to look like a caret will be shown and moved with the user's keyboard and mouse input.
+Web-based code editors like ''Ace'' and ''CodeMirror'' demonstrate that this is possible. They display syntax-highlighted source code editable by the user. The user seemingly writes inside the highlighted text and is also presented with a caret as well as the above mentioned components. In reality, the content inside the editor that a user sees is a regular part of the DOM---non-editable text, colored and formatted using HTML and CSS. When the user enters text, the input will be read with JavaScript. Based on the input Ace and CodeMirror generate HTML and add it to the editors contents, to show a properly syntax-highlighted representation (see figure~\ref{fig:ace_rendering_uml}). A \texttt{div} element that is styled to look like a caret is shown and moved with the user's keyboard and mouse input. The user's text input will be inserted at the according text offset. Amongst others, Ace and CodeMirror use other elements like \texttt{div}s to display a text selection and a \texttt{textarea} to fetch keyboard inputs, to recreate the behavior and capabilites of a native text input. Google's document editor uses similar techniques too.
 
 %In reality, the user's input will be read with JavaScript and the code he or she sees is HTML generated based on this input to display syntax-highlighted text. Other components, like the caret and even the selection \texttt{div} elements, styled and positioned to mimick their native counterparts. 
 
@@ -63,6 +63,13 @@ Web-based code editors like ''Ace'' and ''CodeMirror'' demonstrate that this is 
 
 Using tricks and \textit{faking} elements or behavior is common in web front end development. This applies to JavaScript as well as to CSS. For instance, long before CSS3 has been developed, techniques (often called ''hacks'') have been discussed on how to implement rounded corners without actual browser support. Only years later, this has become a standard. This not only enables features long before the creators of browsers implement them, this \textit{feedback} by the community of web developers also influences future standards. Encorporating feedback is a core philisophy of the WHATWG, the creators of HTML5.
 
+\section{Mimicking native components for rich-text editing}
+
+The techniques used in Ace, CodeMirror and Google's document editor for imitating a native text input are similar. For the caret, each of the editors create a \texttt{div}, style it to make it look like a caret\footnote{inlcuding a blinking animation} and move it when the user clicks in the text or uses his or her arrow keys. Each editor uses \texttt{div} elements to display a text selection, styled to imitate the user's operating system's native selections.
+
+Components like the caret must be displayed in any
+
+% For implementing a rich-text editor without editing APIs, the basics can be learned from ACE and CodeMorror
 
 \section{Conformity with HTML Editing APIs}
 Wie sehr passt meine library zu dein HTML Editing APIs
