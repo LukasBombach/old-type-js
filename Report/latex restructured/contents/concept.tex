@@ -16,7 +16,7 @@ This section will discuss the options to implement rich-text editing without rel
 
 \paragraph{Native input elements} Native text inputs are hard-wired to plain-text editing. No major browser offers an API for formatting. There is also no option to write HTML to an input and have it display it as rich-text. \texttt{input} fields and \texttt{textarea} elements will simply display the HTML as source code. Rich-text can only be implemented as an editable part of the website.
 
-\paragraph{Image elememts} In february 2015, Flipboard Inc. demonstrated an unprecedented technique to achieve fluid full-screen animations with 60 frames per second on their mobile website\footnote{\url{http://engineering.flipboard.com/2015/02/mobile-web/}, last checked on 07/24/2015}. Instead of using the DOM to display their contents, the entire website was rendered to a \texttt{canvas} element. When a user swiped over the website the canvas element was rerendered, essentially imitating the browser's rendering engine. \texttt{canvas} elements allow rendering rich-text too. A rich-text editor can be implemented using this technique. This however has two major downsides. On the one hand it would require implementing a text-rendering engine. The \texttt{canvas} API is only capable of displaying unlayouted text with specifically set line breaks. On the other hand, making the editor accessible to other developers would be much more complex since the text only exists in an internal representaion inside the editor and would not be exposed as DOM component on the website.
+\paragraph{Image elements} In February 2015, Flipboard Inc. demonstrated an unprecedented technique to achieve fluid full-screen animations with 60 frames per second on their mobile website\footnote{\url{http://engineering.flipboard.com/2015/02/mobile-web/}, last checked on 07/24/2015}. Instead of using the DOM to display their contents, the entire website was rendered to a \texttt{canvas} element. When a user swiped over the website the canvas element was rerendered, essentially imitating the browser's rendering engine. \texttt{canvas} elements allow rendering rich-text too. A rich-text editor can be implemented using this technique. This however has two major downsides. On the one hand it would require implementing a text-rendering engine. The \texttt{canvas} API is only capable of displaying unlayouted text with specifically set line breaks. On the other hand, making the editor accessible to other developers would be much more complex since the text only exists in an internal representaion inside the editor and would not be exposed as DOM component on the website.
 
 An approach related to rendering the text on a \texttt{canvas} element is to render the text inside a Scalable Vector Graphic (SVG). In contrast to \texttt{canvas} elements, SVGs contain DOM nodes that can be accesed from the outside. However this has no benefit over using HTML DOM nodes with the downside that SVG too has no native implementation for controlling the text flow.
 
@@ -71,13 +71,11 @@ Using tricks and \textit{faking} elements or behavior is common in web front end
 
 The techniques used in Ace, CodeMirror and Google's document editor for imitating a native text input are similar. For the caret, each of the editors create a \texttt{div} element, style it to make it look like a caret\footnote{inlcuding a blinking animation} and move it when the user clicks in the text or uses his or her arrow keys. Each editor uses \texttt{div} elements to display a text selection, styled to imitate the user's operating system's native selections. %In fact, there is hardly no alternative way
 
-The basic concept of creating DOM elements to imitate native components 
-
-To imitate a native input the concepts of these editors can be used as a basis.
+The concept to use HTML elements for all visible components that are required for text editing is inevitable. Anything that can be seen on a website must exist in the DOM. The only deviation to this approach would be to resort a \texttt{canvas} element, as discussed above. This apporach will be used for the implementation of this editor.
 
 % Google, unlike Ace and CodeMirror displays a custom context menu. 
 
-% For implementing a rich-text editor without editing APIs, the basics can be learned from ACE and CodeMorror
+\section{Wrapping it up}
 
 \section{Conformity with HTML Editing APIs}
 Wie sehr passt meine library zu dein HTML Editing APIs
@@ -117,6 +115,18 @@ Dazu entscheiden dass es ein Type-Internes Eventsystem gibt, dessen Events nur i
 \paragraph{Minimze interaction with the DOM} DOM operations are slow and should be avoided. DOM operations can be ''collected'' and only executed when necessary etc pp like React.
 
 \paragraph{Minimze interaction with unstable APIs} Some APIs like the \texttt{Range} or \texttt{Selection} are prone to numerous bugs. To maximize stability, these APIs should be avoided when possible unless doing so has any downsides (like lower performance).
+
+\section{Disadvantages of offering user interface components}
+
+Most rich-text editors are implemented and distributed as user interface components. That means instead of only providing a library that offers methods to format the selected text and leaving the implementation of the user interface to the respective developer, most libraries are shipped as input fields with a default editor interface that is, at best, customizable.
+
+This can be unfitting for many situations. The user interface of an editor highly depends on the software it will be integrated in. Within the software the interface may even vary depending on the specific purpose within it. For instance, a content management system may require an edtitor with a menubar offering many controls while a comment form on a blog requires only very little controls. Medium.com uses an interface that only shows controls when the user selects text and has no menubar at all. Assuming there are many implementations of editors, it seems, choosing between editors is often just a choice of the desired ui. Customizing a ui can be just as complex as writing a ui from scratch. The latter affords to add HTML elememts and call JavaScript methods. In a worst case styling the elements can be just as much effort. That is why the library ''Type'' will be implemented and offered as a software library, rather than an editor and a user interface component.
+
+It can be much more fitting for developers to include a library that handles all text-input and -formatting operations while only providing a powerful API, leaving the ui to the developer. The API must be \textit{well-designed}. That means it must be simple, effective and fit the developers' needs. The methods it offers should be simple in the sense that they conceal possibly complex tasks with understandable high-level concepts. They should be effective and fit the developers' needs in the sense that the API should be designed so that any requirements should be matched with as little effort as possible. The API should create a workflow for developers that allows them to do what they want to do and is as easy to use as possible. jQuery is an example of encorporating an API conforming these principles.
+
+\section{iFrame}
+
+iFrame hat vor und nachteile. mit meiner library kann es jeder so machen, wie er/sie es will, weil es nur ne library ist.
 
 
 \section{API Design}

@@ -442,14 +442,3 @@ A rich-text editor must be able to edit any of these representations (and more).
 \section{Comparison of these approaches}
 
 HTML editing APIs vs other method, pros and cons, conclusion. Also HTML editing APIs will get better, still the API sucks, fewer features, also still dependent on browser development in terms of possible bugs in the future and further features. Edge casese can be tackled and solutions rolled out immediately. Cross browser inconsistencies are less of a problem and can also be tackled as required.
-
-\section{Disadvantages of offering user interface components}
-
-Most rich-text editors are implemented and distributed as user interface components. That means instead of only providing a library that offers methods to format the selected text and leaving the implementation of the user interface to the respective developer, most libraries are shipped as input fields with a default editor interface that is, at best, customizable.
-
-This can be unfitting for many situations. The user interface of an editor highly depends on the software it will be integrated in. Within the software the interface may even vary depending on the specific purpose within it. For instance, a content management system may require an edtitor with a menubar offering many controls while a comment form on a blog requires only very little controls. Medium.com uses an interface that only shows controls when the user selects text and has no menubar at all. Assuming there are many implementations of editors, it seems, choosing between editors is often just a choice of the desired ui. Customizing a ui can be just as complex as writing a ui from scratch. The latter affords to add HTML elememts and call JavaScript methods. In a worst case styling the elements can be just as much effort. That is why the library ''Type'' will be implemented and offered as a software library, rather than an editor and a user interface component.
-
-It can be much more fitting for developers to include a library that handles all text-input and -formatting operations while only providing a powerful API, leaving the ui to the developer. The API must be \textit{well-designed}. That means it must be simple, effective and fit the developers' needs. The methods it offers should be simple in the sense that they conceal possibly complex tasks with understandable high-level concepts. They should be effective and fit the developers' needs in the sense that the API should be designed so that any requirements should be matched with as little effort as possible. The API should create a workflow for developers that allows them to do what they want to do and is as easy to use as possible. jQuery is an example of encorporating an API conforming these principles.
-
-%iFrame hat vor und nachteile. mit meiner library kann es jeder so machen, wie er/sie es will
-
