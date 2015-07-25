@@ -7,7 +7,11 @@
 \chapter{Concept}
 \label{ch:concept}
 
+Before discussing the software architecture in section~\ref{sec:software_architecture}, sections \ref{sec:rich_text_approaches} through \ref{sec:las_before_software_architecture} will discuss the apporaches, principles and goals for implementing this library without HTML editing APIs.
+
 \section{Approaches for enabling rich-text editing}
+\label{sec:rich_text_approaches}
+
 %When not using HTML editing APIs, the components and the bahavior of native text inputs must be imitated. There are various approaches to this.
 
 %\paragraph{Overlaying an element in editing mode} One way to 
@@ -93,35 +97,11 @@ Some APIs like the browser's \texttt{Range} or \texttt{Selection} interface are 
 
 Avoiding DOM operations and unstable APIs leads to a software architecture where the biggest part remains in its own business logic. Anything that can be implemented in pure JavaScript and does not cost performance or memory \textit{should} be implemented in pure JavaScript using own methods and data structues.
 
-Facebook defined a similar goal for the user interface library React. React implements virtual DOM, an internal represenation of the actual DOM on which all operations should be performed, which in return does as little manipulation to the actual DOM as needed, to maximize performance. While the focus of this goal for this library is not solely performance, this part of it. However, there can be situations in which (even unstable) native browser methods may be faster than a JavaScript implementation. There can also be cases in which a pure JavaScript implementation would be much more complex and would be at the expense of having a simple code structure. It must be decided in each particular case to use native and possible unstable APIs or a pure JavaScript implementation.
-
-%\section{Unstable APIs} The \texttt{Range} and \texttt{Selection} APIs can be useful for caret movement and drawing text selections programatically. These APIs are known to be unstable. However, they offer a 
-
-%For text editing the \texttt{Range} and \texttt{Selection} APIs can be used . However these APIs can be highly beneficial.
-
-%Some APIs like the \texttt{Range} or \texttt{Selection} are prone to numerous bugs. To maximize stability, these APIs should be avoided when possible unless doing so has any downsides (like lower performance).
-
-%\section{Browser interaction} Browser interaction, i.e. the usage of browser APIs
-
-%Browser interaction is a critical topic. It should be kept to a minimun
-
-% Interaction with browser APIs, especially with the DOM, should be kept to a minimum for three reasons
-
-%1. Maximize performance
-%2. Avoid potential bugs
-% 3. Independence from browser 
-
-%For performance reasons, browser interaction, especially with the DOM, should be kept to a minimung. The same
+Facebook defined a similar goal for the user interface library React. React implements virtual DOM, an internal represenation of the actual DOM on which all operations should be performed, which in return does as little manipulation to the actual DOM as needed, to maximize performance. While the focus of this goal for this library is not solely performance, this part of it. However, there can be situations in which (even unstable) native browser methods may be faster than a JavaScript implementation. The text flow for instance should be left to the browser. There can also be cases in which a pure JavaScript implementation would be much more complex and would be at the expense of having a simple code structure. It must be decided in each particular case to use native and possible unstable APIs or a pure JavaScript implementation.
 
 \section{Conformity with HTML Editing APIs}
-Wie sehr passt meine library zu dein HTML Editing APIs
-Was definieren die?
-Was muss ich conformen, welche Freiheiten habe ich?
-https://dvcs.w3.org/hg/editing/raw-file/tip/editing.html
 
-\section{Leave as much implementation to the browser as possible} 
-
-"Easy to make it fast -- The browser (not the app) handles the most computationally intensive task: text layout. Since layout is a core component of browser functionality, you can trust that layout performance has already been heavily optimized." http://googledrive.blogspot.fr/2010/05/whats-different-about-new-google-docs.html
+The library should be capable of any method that HTML editing APIs implement. However the API can differ to improve they way it will be worked with. Improving means it should be more explicit in what it does. The \texttt{bold} command of \texttt{execCommand} will manipulate the DOM to format text bold. It does not state in what how. Simple etc, what I have stated at Disadvantages of offering user interface components.
 
 \section{Markup} 
 
@@ -148,8 +128,6 @@ Dazu entscheiden dass es ein Type-Internes Eventsystem gibt, dessen Events nur i
 
 % dom operations could also be cached
 
-\paragraph{Minimze interaction with the DOM} DOM operations are slow and should be avoided. DOM operations can be ''collected'' and only executed when necessary etc pp like React.
-
 \section{Disadvantages of offering user interface components}
 
 Most rich-text editors are implemented and distributed as user interface components. That means instead of only providing a library that offers methods to format the selected text and leaving the implementation of the user interface to the respective developer, most libraries are shipped as input fields with a default editor interface that is, at best, customizable.
@@ -164,6 +142,7 @@ iFrame hat vor und nachteile. mit meiner library kann es jeder so machen, wie er
 
 
 \section{API Design}
+\label{sec:las_before_software_architecture}
 
 Allgemeine Überlegungen wie man ein Framework gestaltet (siehe ''Freiheit für Programmierer'', gute Arbeitsweise)
 Ursprünglich API und Codestruktur an window.execCommand orientiert, das ist aber doof.
@@ -175,3 +154,6 @@ für beides gibt es die passenden Funktionen, das eine einfach und schlau, das a
 Deswegen werden auch alle Module, alle Klassen exponiert aber es gibt eine eigene API nach jQuery konzept
 Type kommt mit bestimmten Kernmodulen die fuer Textbearbeitung essenziell sind. Aber an dieser Stelle laesst sich Type um weitere Module anhand einer KOnvention (erweitern des Type Objekts) erweitern.
 Ursprünglich API und Codestruktur an window.execCommand orientiert, das ist aber doof.
+
+\section{Software architecture}
+\label{sec:software_architecture}
