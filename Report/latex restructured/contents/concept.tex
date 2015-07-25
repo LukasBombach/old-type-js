@@ -67,15 +67,51 @@ Web-based code editors like ''Ace'' and ''CodeMirror'' demonstrate that this is 
 
 Using tricks and \textit{faking} elements or behavior is common in web front end development. This applies to JavaScript as well as to CSS. For instance, long before CSS3 has been developed, techniques (often called ''hacks'') have been discussed on how to implement rounded corners without actual browser support. Only years later, this has become a standard. This not only enables features long before the creators of browsers implement them, this \textit{feedback} by the community of web developers also influences future standards. Encorporating feedback is a core philisophy of the WHATWG, the creators of HTML5.
 
-\section{Mimicking native components for rich-text editing}
+Hacks are a necessity for an editor like this. The following sections will discuss each part of the editor and describe ideas, techniques and hacks that can be used for an effective implementation. In prior, we will discuss goals and principles that these techniques should be oriented towards as well as restrictions of browsers these techniqes must adapt to. % worst sentence ever
 
-The techniques used in Ace, CodeMirror and Google's document editor for imitating a native text input are similar. For the caret, each of the editors create a \texttt{div} element, style it to make it look like a caret\footnote{inlcuding a blinking animation} and move it when the user clicks in the text or uses his or her arrow keys. Each editor uses \texttt{div} elements to display a text selection, styled to imitate the user's operating system's native selections. %In fact, there is hardly no alternative way
+\section{Usage of HTML elements}
 
-The concept to use HTML elements for all visible components that are required for text editing is inevitable. Anything that can be seen on a website must exist in the DOM. The only deviation to this approach would be to resort a \texttt{canvas} element, as discussed above. This apporach will be used for the implementation of this editor.
+Ace, CodeMirror and Google's document editor shre similar concepts for imitating a native text input. For the caret, each of the editors create a \texttt{div} element, style it to make it look like a caret and move it when the user clicks in the text or uses his or her arrow keys. Each editor uses \texttt{div} elements to display a text selection, styled to imitate the user's operating system's native selections. %In fact, there is hardly no alternative way
+
+The concept to use HTML elements for the visible components of text editing is inevitable. Anything that can be seen on a website must exist in the DOM. The only deviation to this approach would be to resort a \texttt{canvas} element, as discussed above. The apporach to use HTML elements will be used for the implementation of this editor.
 
 % Google, unlike Ace and CodeMirror displays a custom context menu. 
 
-\section{Wrapping it up}
+\section{Interaction with browser APIs}
+
+Interaction with the browser must be well chosen. In some cases browser interaction can cause bugs and slow down performance while in some cases it can increase performance. The library should conform these rules:
+
+\begin{enumerate} 
+\item Minimize interaction with the DOM
+\item Minimize interaction with unstable APIs
+\item Use browser APIs if it improves performance or structure
+\end{enumerate}
+
+DOM operations can trigger a browser reflow\footnote{\url{https://developers.google.com/speed/articles/reflow}, last checked on 07/19/2015} which slows down the browser's performance. For this reason DOM operations should be avoided where possible.
+
+Some APIs like the browser's \texttt{Range} or \texttt{Selection} interface are useful but known to be unstable. Libraries like Rangy try to tackle this by shimming parts of the interfaces. This requires complex methods and it is hard to account for possibly unknown bugs in the browsers' APIs. Ultimately this will also affect the library's file size. Instead of trying to fix native APIs, only as little as possible should be used. Instead of using possibly unstable APIs, pure JavaScript implementations should be used. Possibly unstable native APIs should only be used when it is inevitable.
+
+Avoiding DOM operations and unstable APIs leads to a software architecture where the biggest part remains in its own business logic. Anything that can be implemented in pure JavaScript and does not cost performance or memory \textit{should} be implemented in pure JavaScript using own methods and data structues.
+
+Facebook defined a similar goal for the user interface library React. React implements virtual DOM, an internal represenation of the actual DOM on which all operations should be performed, which in return does as little manipulation to the actual DOM as needed, to maximize performance. While the focus of this goal for this library is not solely performance, this part of it. However, there can be situations in which (even unstable) native browser methods may be faster than a JavaScript implementation. There can also be cases in which a pure JavaScript implementation would be much more complex and would be at the expense of having a simple code structure. It must be decided in each particular case to use native and possible unstable APIs or a pure JavaScript implementation.
+
+%\section{Unstable APIs} The \texttt{Range} and \texttt{Selection} APIs can be useful for caret movement and drawing text selections programatically. These APIs are known to be unstable. However, they offer a 
+
+%For text editing the \texttt{Range} and \texttt{Selection} APIs can be used . However these APIs can be highly beneficial.
+
+%Some APIs like the \texttt{Range} or \texttt{Selection} are prone to numerous bugs. To maximize stability, these APIs should be avoided when possible unless doing so has any downsides (like lower performance).
+
+%\section{Browser interaction} Browser interaction, i.e. the usage of browser APIs
+
+%Browser interaction is a critical topic. It should be kept to a minimun
+
+% Interaction with browser APIs, especially with the DOM, should be kept to a minimum for three reasons
+
+%1. Maximize performance
+%2. Avoid potential bugs
+% 3. Independence from browser 
+
+%For performance reasons, browser interaction, especially with the DOM, should be kept to a minimung. The same
 
 \section{Conformity with HTML Editing APIs}
 Wie sehr passt meine library zu dein HTML Editing APIs
@@ -113,8 +149,6 @@ Dazu entscheiden dass es ein Type-Internes Eventsystem gibt, dessen Events nur i
 % dom operations could also be cached
 
 \paragraph{Minimze interaction with the DOM} DOM operations are slow and should be avoided. DOM operations can be ''collected'' and only executed when necessary etc pp like React.
-
-\paragraph{Minimze interaction with unstable APIs} Some APIs like the \texttt{Range} or \texttt{Selection} are prone to numerous bugs. To maximize stability, these APIs should be avoided when possible unless doing so has any downsides (like lower performance).
 
 \section{Disadvantages of offering user interface components}
 
