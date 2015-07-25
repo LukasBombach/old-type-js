@@ -1,0 +1,12 @@
+%!TEX root = ../../thesis.tex
+
+\section{Treating HTML editing API related issues}
+
+The issues arising with HTML editing APIs cannot be fixed. Many libraries find workarounds to treat them. CKEditor, TinyMCE, that framework. Google Docs finds another way and does not use HTML editing APIs.
+
+huge editor libraries, developed for 10 years trying to fix stuff
+libraries, not editors targeting inconstiencies
+they all can never know what's gonna happen
+medium
+
+\paragraph{Clipboard} CKEditor ''fixes'' paste problems by implementing a custom fake context menu and opening a modal with some instruction that the user should press ctrl+v. This is a UX nightmare. Other editors like retractor (oder so) sanitize any change to the editors contents for the case of input by paste events.
