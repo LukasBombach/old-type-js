@@ -87,20 +87,21 @@ One approach would be to implement a Model--view--controller (MVC) architecture.
 
 An approach to create a structure for the library and achieve strong decoupling would be to follow the principles of modular programming and implement as many components as possible as plugins. In its core, the library could create an environment to allow plugins to register and interact with each other. This would create a system in which other developers could exchange any component easily to improve performance or enrich functionality. However, the biggest factor in coupling the components would still be that components reference each other, not the underlying structure. Formalizing interfaces would create complex structures and could make it harder for other developers to contribute to the library instead of inviting them.
 
+\section{Module architecture}
 
-Ich werde jetzt die einzelnen Module erklären
+This section discusses how the responsibilites of the modules of ''Type'' and how they interact with each other. The implementations and characteristics of each module will be discussed hereinafter.
 
 
-\section{Type}
+\subsection{Type}
 
 Die Type
 
-\section{Range}
+\subsection{Range}
 range
 
 
 
-\section{Input}
+\subsection{Input}
 
 %82.78\% of internet users support listening to and reading clipboard events. I can support 100\% PROBLEMS
 
@@ -128,7 +129,7 @@ Although some smart TVs offer keyboards, mice, pointers similar to Nintendo's Wi
 
 % which is presented to the user as the input field.
 
-\section{Caret}
+\subsection{Caret}
 caret
 \subsection{BiDi support}
 \subsection{IME} 
@@ -136,26 +137,26 @@ http://marijnhaverbeke.nl/blog/browser-input-reading.html
 https://en.wikipedia.org/wiki/Input\_method
 
 
-\section{Selection}
+\subsection{Selection}
 Fake damit copy \& past nativ funktioniert
 Obwohl eine selection mehrere Ranges haben kann, wird das von keinem Browser unterstützt http://stackoverflow.com/questions/4777860/highlight-select-multiple-divs-with-ranges-w-contenteditable/4780571\#4780571
 Habe versucht mit die Darstellung über getClientRects zu emulierten, aber das ist buggy siehe https://github.com/edg2s/rangefix/blob/master/rangefix.js
 
 
-\section{Selection Overlay}
+\subsection{Selection Overlay}
 overlay
 
-\section{Formatting}
+\subsection{Formatting}
 formatting
-\section{Change Listener}
+\subsection{Change Listener}
 change
-\section{Contents}
+\subsection{Contents}
 contents
-\section{Development}
+\subsection{Development}
 developmnent
-\section{Dom Utilities}
+\subsection{Dom Utilities}
 dom util
-\section{Dom Walker}
+\subsection{Dom Walker}
 
 Working with text implies having to traverse the DOM, i.e. the nodes inside the text often. The {DomWalker} utility class solves this problem. The DOM API offers methods to access a node's siblings, children and parents, but it must always accounted for cases when any of these is \code{null} (there is no parent, sibling or child) or when they overflow the bounds of the editor's contents. But more importantly, for text editing, it is usually necessary to access the next (or previous) node in the document's content flow which can either be the parent, sibling or child. Also, it is often the case that it is not only necessary to fetch the next node, but to apply a filter to only fetch a specfic node, for instance a text node or only a text node that has contents visible to the user\footnote{Any text node consisting of whitespace only will not be displayed by any major browser}. Browsers offer a native API for this, called \code{TreeWalker}, but it is said to be slow\footnote{\url{http://jsperf.com/qsa-vs-node-iterator}}, is only partially supported by Internet Explorer 9\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator\#Browser_compatibility}} and has been critisized for its verbose API\footnote{By John Resig, author of jQuery\url{http://ejohn.org/blog/unimpressed-by-nodeiterator/}}.
 
@@ -180,24 +181,24 @@ The \code{DomWalker} class offers high-level methods for traversal, designed to 
 
 %dom walker. Used SO OFTEN in the project. Goal is to have a really simple api new DomWalker('text') by having lots of pre-defined magick in it.
 
-\section{Environment}
+\subsection{Environment}
 env
 
-\section{Core Api}
+\subsection{Core Api}
 
 Api als eigenes Modul, separation of concerns, gute saubere code base und eigene saubere code base für die API. Laesst freiheiten in der Softwarearchitektur - lost coupling, API ein eigenes aenderbares gekapseltes modul:
 
-\section{Event Api}
+\subsection{Event Api}
 ev api
 
-\section{Events}
+\subsection{Events}
 
 Dazu entscheiden dass es ein Type-Internes Eventsystem gibt, dessen Events nur in Type existieren. Damit polluten die nicht den globalen (name)space mit events. Nur bestimmte events werden global (nativ) getriggert, und das sind genau die events, die nach aussenhin von Belang sind und abgegriffen werden koennen sollen (=API design)
 
 \subsection{Input}
 input event only event required so far
 
-\section{Input Pipeline}
+\subsection{Input Pipeline}
 pipeline idea
 rules for behaviours (lists, headlines, enter, spaces...)
 Ursprünglich so gedacht: Was gehört zu einem editor X, Y und Behaviour. Für Behaviour aber das input pipeline system gefunden, welches das ganze schön abbildet/löst.
@@ -221,16 +222,16 @@ remove
 \subsection{Spaces}
 spaces
 
-\section{Plugin Api}
+\subsection{Plugin Api}
 plugin api
-\section{Settings}
+\subsection{Settings}
 settings
-\section{Text Walker}
+\subsection{Text Walker}
 text walker
-\section{Utilities}
+\subsection{Utilities}
 util
 
-\section{Extensions}
+\subsection{Extensions}
 
 \subsection{Plugin API} ...and plugin cache
 
