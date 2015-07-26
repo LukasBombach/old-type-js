@@ -1,5 +1,7 @@
 %!TEX root = ../../thesis.tex
 
+\section{Overview}
+
 Before discussing the software architecture in section~\ref{sec:software_architecture}, sections \ref{sec:rich_text_approaches} through \ref{sec:las_before_software_architecture} will discuss the apporaches, principles and goals for implementing this library without HTML editing APIs.
 
 \section{Approaches for enabling rich-text editing}
@@ -42,7 +44,9 @@ This sem-radical approach would solve the problem of buggy and inconsistent \tex
 
 \paragraph{Behaviour} Rich-text editors (usually) share a certain behaviour on user input. When writing a bulleted list, pressing the enter key usually creates another bulleting point instead of inserting a new line. Pressing enter inside a heading will insert a new line. However pressing enter when the caret is located at the end of a heading commonly creates a new text paragraph just after that heading. Other rules that need to be considered will be discussed in section [implementation].
 
-\section{Imitating native components} These components are natively available for text inputs across all browsers. Switching an element to editing mode enables these components too. That means a user can click in a text to place a caret and move it with the keyboard's arrow keys. He or she can copy and paste text. The browser offers a native context menu that allows pasting on input elements as well as on element in editing mode. All major browsers implement a behaviour for the user' input that is common for rich-text editing (as described above).
+\section{Approaches for imitating native components} 
+
+These components are natively available for text inputs across all browsers. Switching an element to editing mode enables these components too. That means a user can click in a text to place a caret and move it with the keyboard's arrow keys. He or she can copy and paste text. The browser offers a native context menu that allows pasting on input elements as well as on element in editing mode. All major browsers implement a behaviour for the user' input that is common for rich-text editing (as described above).
 
 When not using editing APIs, all of this must be implemented with JavaScript. This requires a lot of trickery and many components must be imitated to make it \textit{seem} there is an input field, where there is none. The user must be convinced he or she is using a native input and must not notice he or she is not.
 
@@ -68,7 +72,7 @@ Hacks are a necessity for an editor like this. The following sections will discu
 
 \section{Usage of HTML elements}
 
-Ace, CodeMirror and Google's document editor shre similar concepts for imitating a native text input. For the caret, each of the editors create a \texttt{div} element, style it to make it look like a caret and move it when the user clicks in the text or uses his or her arrow keys. Each editor uses \texttt{div} elements to display a text selection, styled to imitate the user's operating system's native selections. %In fact, there is hardly no alternative way
+Ace, CodeMirror and Google's document editor shre similar concepts for imitating a native text input. For the caret, each of the editors create a \texttt{div} element, style it to make it look like a caret and move it when the user clicks in the text or uses his or her arrow keys. Each editor also uses \texttt{div} elements to display a text selection, styled to imitate the user's operating system's native selections. %In fact, there is hardly no alternative way
 
 The concept to use HTML elements for the visible components of text editing is inevitable. Anything that can be seen on a website must exist in the DOM. The only deviation to this approach would be to resort a \texttt{canvas} element, as discussed above. The apporach to use HTML elements will be used for the implementation of this editor.
 
@@ -105,13 +109,15 @@ The editor should be a ''good citizen'' in the ecosystem of other editors (see \
 
 % dom operations could also be cached
 
-\section{Disadvantages of offering user interface components}
+\section{User interface components}
 
 Most rich-text editors are implemented and distributed as user interface components. That means instead of only providing a library that offers methods to format the selected text and leaving the implementation of the user interface to the respective developer, most libraries are shipped as input fields with a default editor interface that is, at best, customizable.
 
 This can be unfitting for many situations. The user interface of an editor highly depends on the software it will be integrated in. Within the software the interface may even vary depending on the specific purpose within it. For instance, a content management system may require an edtitor with a menubar offering many controls while a comment form on a blog requires only very little controls. Medium.com uses an interface that only shows controls when the user selects text and has no menubar at all. Assuming there are many implementations of editors, it seems, choosing between editors is often just a choice of the desired ui. Customizing a ui can be just as complex as writing a ui from scratch. The latter affords to add HTML elememts and call JavaScript methods. In a worst case styling the elements can be just as much effort. That is why the library ''Type'' will be implemented and offered as a software library, rather than an editor and a user interface component.
 
 It can be much more fitting for developers to include a library that handles all text-input and -formatting operations while only providing a powerful API, leaving the ui to the developer. The API must be \textit{well-designed}. That means it must be simple, effective and fit the developers' needs. The methods it offers should be simple in the sense that they conceal possibly complex tasks with understandable high-level concepts. They should be effective and fit the developers' needs in the sense that the API should be designed so that any requirements should be matched with as little effort as possible. The API should create a workflow for developers that allows them to do what they want to do and is as easy to use as possible. jQuery is an example of encorporating an API conforming these principles.
+
+
 
 \section{iFrame}
 
@@ -133,8 +139,11 @@ Deswegen werden auch alle Module, alle Klassen exponiert aber es gibt eine eigen
 Type kommt mit bestimmten Kernmodulen die fuer Textbearbeitung essenziell sind. Aber an dieser Stelle laesst sich Type um weitere Module anhand einer KOnvention (erweitern des Type Objekts) erweitern.
 Ursprünglich API und Codestruktur an window.execCommand orientiert, das ist aber doof.
 
+
 \section{Software architecture}
 \label{sec:software_architecture}
+
+
 
 \subsection{MVC}
 Document model -> no
