@@ -141,6 +141,12 @@ developmnent
 \section{Dom Utilities}
 dom util
 \section{Dom Walker}
+
+Working with text implies having to traverse the DOM, i.e. the nodes inside the text often. The {DomWalker} utility class solves this problem. The DOM API offers methods to access a node's siblings, children and parents, but it must always accounted for cases when any of these is \code{null} (there is no parent, sibling or child) or when they overflow the bounds of the editor's contents. But more importantly, for text editing, it is usually necessary to access the next (or previous) node in the document's content flow which can either be the parent, sibling or child. Also, it is often the case that it is not only necessary to fetch the next node, but to apply a filter to only fetch a specfic node, for instance a text node or only a text node that has contents visible to the user\footnote{Any text node consisting of whitespace only will not be displayed by any major browser}. Browsers offer a native API for this, called \code{TreeWalker}, but it is said to be slow\footnote{\url{http://jsperf.com/qsa-vs-node-iterator}}, is not supported by Internet Explorer 8\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator\#Browser_compatibility}} and has been critisized for its verbose API\footnote{By John Resig, author of jQuery\url{http://ejohn.org/blog/unimpressed-by-nodeiterator/}}.
+verbose API.
+The {DomWalker} class offers high-level methods for traversal, designed to quickly apply the most common filters.
+%The API is designed for an easy and high-level usage to simplify the workflow for developing the library, but most importantly to offer a high-level and easy-to-use concept to other developers.
+
 dom walker. Used SO OFTEN in the project. Goal is to have a really simple api new DomWalker('text') by having lots of pre-defined magick in it.
 \section{Environment}
 env
