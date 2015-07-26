@@ -30,19 +30,19 @@ This sem-radical approach would solve the problem of buggy and inconsistent \tex
 % ''ACE'' and ''CodeMirror'' demonstrate an effective way to imitate a text input. 
 
  %''ACE'' and ''CodeMirror'' demonstrate it is possible to imitate a text input by composing various DOM ele
-\subsection{Caret} The most obvious part is probably the text caret. Even if a user types on his or her keyboard, a caret must be seen on the screen to know where the input will be inserted. The caret also needs to be responsive to the user's interaction. In particular, the user must be able to click anywhere in the editable text and use the arrow keys to move it (possibly using modifier keys, which's behaviour even depends on the operating system used).
+\paragraph{Caret} The most obvious part is probably the text caret. Even if a user types on his or her keyboard, a caret must be seen on the screen to know where the input will be inserted. The caret also needs to be responsive to the user's interaction. In particular, the user must be able to click anywhere in the editable text and use the arrow keys to move it (possibly using modifier keys, which's behaviour even depends on the operating system used).
 
-\subsection{Selection} Just like the caret, the user must be able to draw a text selection using his or her mouse and change the selection using shift and the arrow keys. Most systems allow double clicks to select words and sometimes tripple clicks to select entire paragraphs. Other systems, for example OS X, allow holding the option key to draw are rectengular text selection, independent of line breaks.
+\paragraph{Selection} Just like the caret, the user must be able to draw a text selection using his or her mouse and change the selection using shift and the arrow keys. Most systems allow double clicks to select words and sometimes tripple clicks to select entire paragraphs. Other systems, for example OS X, allow holding the option key to draw are rectengular text selection, independent of line breaks.
 
-\subsection{Context menu} The context menu is different in text inputs from other elements on a website. Most importantly, it offers an option to paste text, that is only available in native text inputs or elements in editing mode.
+\paragraph{Context menu} The context menu is different in text inputs from other elements on a website. Most importantly, it offers an option to paste text, that is only available in native text inputs or elements in editing mode.
 
-\subsection{Keyboard shortcuts} Text inputs usually allow keyboard shortcuts to format the text and to perform clipboard operations. Formatting the text is possible through DOM manipulation, pasting text however natively only works on text inputs or elements in editing mode. % is a challenge, since browsers do not offer arbitrary access to the clipboard for security reasons.
+\paragraph{Keyboard shortcuts} Text inputs usually allow keyboard shortcuts to format the text and to perform clipboard operations. Formatting the text is possible through DOM manipulation, pasting text however natively only works on text inputs or elements in editing mode. % is a challenge, since browsers do not offer arbitrary access to the clipboard for security reasons.
 
-\subsection{Undo / Redo} Undo and redo are common functions of text processing and it may be frustrating to users if they were missing.
+\paragraph{Undo / Redo} Undo and redo are common functions of text processing and it may be frustrating to users if they were missing.
 
-\subsection{Behaviour} Rich-text editors (usually) share a certain behaviour on user input. When writing a bulleted list, pressing the enter key usually creates another bulleting point instead of inserting a new line. Pressing enter inside a heading will insert a new line. However pressing enter when the caret is located at the end of a heading commonly creates a new text paragraph just after that heading. Other rules that need to be considered will be discussed in section [implementation].
+\paragraph{Behaviour} Rich-text editors (usually) share a certain behaviour on user input. When writing a bulleted list, pressing the enter key usually creates another bulleting point instead of inserting a new line. Pressing enter inside a heading will insert a new line. However pressing enter when the caret is located at the end of a heading commonly creates a new text paragraph just after that heading. Other rules that need to be considered will be discussed in section [implementation].
 
-\subsection{Imitating native components} These components are natively available for text inputs across all browsers. Switching an element to editing mode enables these components too. That means a user can click in a text to place a caret and move it with the keyboard's arrow keys. He or she can copy and paste text. The browser offers a native context menu that allows pasting on input elements as well as on element in editing mode. All major browsers implement a behaviour for the user' input that is common for rich-text editing (as described above).
+\section{Imitating native components} These components are natively available for text inputs across all browsers. Switching an element to editing mode enables these components too. That means a user can click in a text to place a caret and move it with the keyboard's arrow keys. He or she can copy and paste text. The browser offers a native context menu that allows pasting on input elements as well as on element in editing mode. All major browsers implement a behaviour for the user' input that is common for rich-text editing (as described above).
 
 When not using editing APIs, all of this must be implemented with JavaScript. This requires a lot of trickery and many components must be imitated to make it \textit{seem} there is an input field, where there is none. The user must be convinced he or she is using a native input and must not notice he or she is not.
 
@@ -94,7 +94,9 @@ Facebook defined a similar goal for the user interface library React. React impl
 
 \section{Conformity with HTML Editing APIs}
 
-The library should be capable of any method that HTML editing APIs implement. However the API can differ to improve they way it will be worked with. Improving means it should be more explicit in what it does. The \texttt{bold} command of \texttt{execCommand} will manipulate the DOM to format text bold. It does not state in what how. Simple etc, what I have stated at Disadvantages of offering user interface components.
+The library should be capable of any method that HTML editing APIs implement. However the API can differ to improve they way it will be worked with. The API design will be discussed in \refsection{sec:api_design}.
+
+%Improving means it should be more explicit in what it does. The \texttt{bold} command of \texttt{execCommand} will manipulate the DOM to format text bold. It does not state in what how. Simple etc, what I have stated at Disadvantages of offering user interface components.
 
 \section{Markup} 
 
@@ -117,6 +119,7 @@ iFrame hat vor und nachteile. mit meiner library kann es jeder so machen, wie er
 
 
 \section{API Design}
+\label{sec:api_design}
 \label{sec:las_before_software_architecture}
 
 Allgemeine Überlegungen wie man ein Framework gestaltet (siehe ''Freiheit für Programmierer'', gute Arbeitsweise)
