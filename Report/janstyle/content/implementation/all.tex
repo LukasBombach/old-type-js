@@ -63,17 +63,32 @@ Eine alternative wäre das Modul-pattern, das ist aber schlechter zu lesen und b
 
 \section{Programmstruktur}
 
-Modulbasiert?
-Erweiterbarkeit
-Es gibt ein Basisobjekt, das ist die Type "Klasse".
-Darin werden dann die anderen Klassen geschrieben "Type.Caret", "Type.Selection", "Type.Range", ...
-Das hat den Vorteil dass das ganze ge-name-spaced ist, so dass ich keine Konflikte mit Systemnamen habe (Range) (und auch nicht mit anderen Bibliotheken)
-Effektiv gibt es eine (flache) Baumstruktur und so mit Ordnung. Für bestimmte Klassen, "Type.Event.Input", "Type.Input.Filter.X" geht es tiefer.
-Der zweite Grund ist, dass ich somit alle Klassen die ich geschrieben habe für Entwickler sichtbar bereit stelle und nicht implizit und versteckt über irgend nen Quatsch.
+%Modulbasiert?
+%Erweiterbarkeit
+%Es gibt ein Basisobjekt, das ist die Type "Klasse".
+%Darin werden dann die anderen Klassen geschrieben "Type.Caret", "Type.Selection", "Type.Range", ...
+%Das hat den Vorteil dass das ganze ge-name-spaced ist, so dass ich keine Konflikte mit Systemnamen habe (Range) (und auch nicht mit anderen Bibliotheken)
+%Effektiv gibt es eine (flache) Baumstruktur und so mit Ordnung. Für bestimmte Klassen, "Type.Event.Input", "Type.Input.Filter.X" geht es tiefer.
+%Der zweite Grund ist, dass ich somit alle Klassen die ich geschrieben habe für Entwickler sichtbar bereit stelle und nicht implizit und versteckt über irgend nen Quatsch.
 
-Ursprünglich ein MVC konzept geplant mit einem Document Model und verschiedenen Renderern, aber über den haufen geworfen.
+%Auch angedacht so wie der CKEditor (?) die komplette funktionalität als Plugins zu schreiben. Im Besten Fall
+\subsection{Modular programming}
 
-Ich werde jetzt die einzelnen Module erlären
+One approch to achieve strong decoupling would be to follow the principles of modular programming and implement as many components as possible as plugins. This would create an environment in which other developers could exchange any component easily to improve performance or enrich functionality. However, the biggest factor in coupling the components would still be that components reference each other, not the underlying structure. Formalizing interfaces would create complex structures and could make it harder for other developers to contribute to the library instead of inviting them.
+
+\subsection{MVC}
+
+Another approach, although one that would not exclude modular programming, would be to implement a Model--view--controller (MVC) architecture. While this apporach can provide clear responsibilites, the problem is that most components like the caret or the selection serve a clear atomic purpose and would need to be broken apart into model, view and controller parts, making the architecture fuzzy and complex instead of simplifying it.
+
+%The biggest advantage of this approach would be that an abstract view layer could not only render rich-text as HTML, but also as Markdown or in the Open Document Format (ODF). Atom, Spotify or Wunderlist show that web technologies find their way into desktop. Writing to custom formats 
+%While especially the latter is not useful in a browser environment
+
+
+
+
+%Ursprünglich ein MVC konzept geplant mit einem Document Model und verschiedenen Renderern, aber über den haufen geworfen.
+
+Ich werde jetzt die einzelnen Module erklären
 
 
 \section{Type}
