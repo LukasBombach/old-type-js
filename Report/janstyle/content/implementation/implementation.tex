@@ -89,15 +89,15 @@ Modular programming could create a system in which other developers could exchan
 
 To close the gap between CKEditors modular programming approach and jQuery's simple extension paradigms, object-oriented programming (OOP) can be used. JavaScript does not offer classes and classical inheritance, however the same functionality can be achieved using the constructor pattern and prototypal inheritance. Functions used as constructors will be called classes hereinafter.
 
-For this library a base class will provide the namespace to be extended with other classes implementing the functionality of this library. A set of core extensions provide all components needed for a rich-text editor. The base class will also provide a constructor that will be the library's entry point for other developers to implement a rich-text editor. The base class and its extensions will be discussed in detail in section \refsection{sec:mudules}. Implementing the library's functionality in classes has many benefits:
+For this library a base class will provide the namespace to be extended with other classes implementing the functionality of this library. A set of core extensions provide all components needed for a rich-text editor. The base class will also provide a constructor that will be the library's entry point for other developers to implement a rich-text editor. The base class and its extensions will be discussed in detail in the sections \refsection{sec:core} and \refsection{sec:modules}. Implementing the library's functionality in classes has many benefits:
 
 \begin{enumerate}
-\item Classes are a proven concept for encapsulating functionality and data, protecting access and structing code as well as making it readable
-\item Through JavaScript's prototypical inheritance, a class' implementation only exists once per website, regardless how often it has been instantiated, thus saving memory and improving performance
-\item Instance variables still allow to reuse a class in different contexts with different inherent data %Die instanzvariablem sind meistens nur Pointer auf Instanzen anderer Klassen % * Das ganze ist dadurch sehr schlank
+\item Classes are a proven concept for encapsulating functionality and data, protecting access and structing code as well as making it readable.
+\item Through JavaScript's prototypical inheritance, the class can be instantiated as often as desired, but will only have one representation in the browser's memory. Thereby the performance will be improved.
+\item Instance variables still allow to reuse a class in different contexts with different inherent data. %Die instanzvariablem sind meistens nur Pointer auf Instanzen anderer Klassen % * Das ganze ist dadurch sehr schlank
 \end{enumerate}
 
-As an alternative apporach, the module pattern can be used, which would also allow namespacing, encapsulation and protected access, but would make an implementation similar to instance variables much more complicated and be much less readable in general.
+As an alternative apporach, the module pattern can be used, which would also allow namespacing, encapsulation and protected access, but would make an implementation much more complicated and be much less readable.
 
 %namespace vorteile = keine namenskonflikte
 
@@ -111,8 +111,8 @@ This section discusses the architecture and interaction of the classes of this l
 
 % directed acyclic graph ? 
 
-\section{Modules}
-\label{sec:mudules}
+\section{Core}
+\label{sec:core}
 
 \subsection{Type}
 
@@ -130,8 +130,24 @@ The ''Type'' class is the starting point for developers and the only class that 
 \item Provid
 \end{enumerate}
 
+\subsection{Extending}
 
+There are generally two types of extensions. On the one hand, there are extensions that extend Type with internal features. The \code{Caret} class for example a class a can offer features for displaying and moving a caret within a text. Other classes, for example the \code{Input} class, can listen for keyboard and mouse events, and use this class to display a caret and make it responsive to input.
 
+To expose a class to other classes, it should be declared within Type's namespace. That means the \code{Caret} class should be declared as \code{Type.Caret} and the \code{Input} class as \code{Type.Input}. This way both classes are visible to each other without polluting the global namespace and are effectively avoiding possible name conflicts.
+
+To support a tidy code structure the Type namespace can be nested and implement a hierachical structure. The \code{Type} base class implements the namespace \code{Type.Events} that is reserved for events within the Type ecosystem. Other classes are encouraged to nest within the namespace if it is reasonable.
+
+The second type of extension extends the public API of the Type library, i.e. adds methods for users of the library\footnote{Programmers implementing an editor with Type, see \refsubsec{subsec:api_design_handling_use_cases}}. jQuery has demonstrated a clever concept for this. It exposes its \code{prototype} with a shorthand attribute named \code{fn} and ecourages developers to extend it. This way developers can easily add methods to the library. Type as intended for developing editors follows the same principle.
+
+%There is a general distinction for modules extending Type's public API (intended for users\footnote{Programmers implementing an editor with Type, see \refsubsec{subsec:api_design_handling_use_cases}} of the library) or extending its internal features (for enabling features for developers of the library and/or ultimatively extending the library's API).
+
+\section{Modules}
+\label{sec:modules}
+
+\subsection{Core Api}
+
+Api als eigenes Modul, separation of concerns, gute saubere code base und eigene saubere code base für die API. Laesst freiheiten in der Softwarearchitektur - lost coupling, API ein eigenes aenderbares gekapseltes modul:
 
 
 
@@ -187,14 +203,21 @@ overlay
 
 \subsection{Formatting}
 formatting
+
 \subsection{Change Listener}
 change
+
 \subsection{Contents}
 contents
+
 \subsection{Development}
-developmnent
+
+The \code{Development} class is intended to contain utility methods to support the development of the library. As for the development of this thesis, it was sufficient to implement logging methods.
+
 \subsection{Dom Utilities}
-dom util
+
+The \code{DomUtilities} class encapsulates common methods for all DOM operations other than traversal. It has no inherent purpose but many other classes perform the same DOM operations, which hence reside in a common library to avoid code duplication.
+
 \subsection{Dom Walker}
 
 Working with text implies having to traverse the DOM, i.e. the nodes inside the text often. The {DomWalker} utility class solves this problem. The DOM API offers methods to access a node's siblings, children and parents, but it must always accounted for cases when any of these is \code{null} (there is no parent, sibling or child) or when they overflow the bounds of the editor's contents. But more importantly, for text editing, it is usually necessary to access the next (or previous) node in the document's content flow which can either be the parent, sibling or child. Also, it is often the case that it is not only necessary to fetch the next node, but to apply a filter to only fetch a specfic node, for instance a text node or only a text node that has contents visible to the user\footnote{Any text node consisting of whitespace only will not be displayed by any major browser}. Browsers offer a native API for this, called \code{TreeWalker}, but it is said to be slow\footnote{\url{http://jsperf.com/qsa-vs-node-iterator}}, is only partially supported by Internet Explorer 9\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator\#Browser_compatibility}} and has been critisized for its verbose API\footnote{By John Resig, author of jQuery\url{http://ejohn.org/blog/unimpressed-by-nodeiterator/}}.
@@ -221,11 +244,8 @@ The \code{DomWalker} class offers high-level methods for traversal, designed to 
 %dom walker. Used SO OFTEN in the project. Goal is to have a really simple api new DomWalker('text') by having lots of pre-defined magick in it.
 
 \subsection{Environment}
-env
 
-\subsection{Core Api}
-
-Api als eigenes Modul, separation of concerns, gute saubere code base und eigene saubere code base für die API. Laesst freiheiten in der Softwarearchitektur - lost coupling, API ein eigenes aenderbares gekapseltes modul:
+The \code{Environment} class checks and provides informations on the current browser environment and its features. This class is especially important to mimick native behavior for user interaction. For instance, depending on the operating system, either the control key or the command key should be used to implemnt keyboard shortcuts. To check for specific feature support, it is favourable to use duck typing within each class.
 
 \subsection{Event Api}
 ev api

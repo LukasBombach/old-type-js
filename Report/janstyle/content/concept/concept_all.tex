@@ -179,17 +179,18 @@ editor.redo();
 %\noindent This will even account for cases where it is necessary to differenciate between an \code{i} element and an \code{em} element for semantical reasons.
 
 \subsection{Handling use cases}
+\label{subsec:api_design_handling_use_cases}
 
-We can call programmers extending the library ''developers of the library'' and programmers using the library to implement editors ''users of the library''. To account for both use cases and maintain a clear software architecture and separation of concerns, all classes that provide functionality to the library must remain in a designated namespace which the library has access to. 
+We can call programmers extending the library ''developers of the library'' and programmers using the library to implement editors ''users of the library''. To account for both use cases and maintain a clear software architecture as well as a separation of concerns, all classes that provide functionality to the library must remain in a designated namespace which the library has access to. 
 
 \begin{figure}[!htb]
 \centering
 \makebox[\textwidth]{\includegraphics[width=\textwidth]{images/concept-sep-use-cases.pdf}}
-\caption{UML of the Type library and its internally used classes (exceperpt)}
+\caption{UML diagram of the Type library and its internally used classes (excerpt)}
 \label{fig:type_uml_excerpt}
 \end{figure}
 
-The library itself will be exposed as a class to the global namespace with the name ''Type''. It can be instantiated and then provides an own API, the high-level methods, for implementing a rich-text editor.
+The library itself will be exposed as a class to the global namespace with the name ''Type''. It can be instantiated and then provides an own API, high-level methods, for implementing a rich-text editor.
 
 %Ursprünglich API und Codestruktur an window.execCommand orientiert, das ist aber doof.
 %Bessere (weil präzisere) API mit mehr Möglichkeiten als der contentEditable scheiss
