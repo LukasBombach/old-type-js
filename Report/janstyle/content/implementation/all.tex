@@ -61,7 +61,7 @@ Sie bewirkt keine echte accessibility restriction, aber es ist eine allgemein an
 
 %Auch angedacht so wie der CKEditor (?) die komplette funktionalität als Plugins zu schreiben. Im Besten Fall
 
-\subsection{MVC}
+\subsection{Model--view--controller}
 
 Model--view--controller (MVC) is a common apprach for implementing user interfaces and it can be applied to user interface components too. While this apporach can provide clear responsibilites, the problem is that most components, like the caret or the selection, serve a clear atomic purpose and would need to be broken apart into model, view and controller parts themselves, making the architecture fuzzy and complex instead of simplifying it. Following the MVC architecture, the contents of the editor (the text) can be represented in a model (holding the text data and allowing methods to be performed on) and be rendered with a view (displaying the text in the browser). As discussed in \refsection{sec:api_design}, the library shall leave as much freedom as possible to the developers. In and MVC system like this, the contents of the editor could only be changed though the API, since arbitrarily modifying the HTML of the editor's contents would change the view, but not the model. This would create an artificial bottleneck, which cannot be desired.
 
@@ -71,11 +71,22 @@ Model--view--controller (MVC) is a common apprach for implementing user interfac
 
 %Ursprünglich ein MVC konzept geplant mit einem Document Model und verschiedenen Renderern, aber über den haufen geworfen.
 
-\subsection{Modular programming}
+%\subsection{Modular programming}
+
+\section{Modular and object-oriented programming}
+
+jQuery and CKEditor demonstrate a software architecture in which a core object mainly provides a system to extend its functionality, but does not offer many methods itself\footnote{CKEditor provides a framework for implementing components for it, but does not offer any rich-text functionality in its core. jQuery provides low-level utility methods for JavaScript.}. The actual functionality of both libraries is implemented through extensions while the libraries are usually bundled with a set of ''core extensions'' that provide basic features. CKEditor makes use of modular programming by implementing a major part of its editor as plugins that communicated via well-defined interfaces. jQuery established a paradigm calling any extension a ''plugin'' but instead of using clearly defined interfaces, developers are encouraged to add arbitrary methods to jQuery's base object, which can then be directly accessed. Extending a base object has many advantages
+
+\begin{enumerate} 
+\item It provides a namespace for the library
+\item It provides a structure for extensions to access each other
+\item It approaches modular programming and strong decoupling
+\end{enumerate}
+
+One disadvantage of actual modular programming is the need for well-defined interfaces which can diminish flexibility. jQuery goes the opposite direction and encourages arbitrary extension. jQuery's approach demonstrates that this flexibility can withstand possible conflict. In turn, the low barrier for extending jQuery has spawned a rich community of developers.
 
 
-
-\section{OOP}
+JavaScript does not offer classes and classical inheritance. However it offers object-oriented programming (OOP) with prototypal inheritance.
 
 Ich habe mich für Klassen entschieden. Das hat folgende Vorteile:
 
@@ -90,7 +101,7 @@ Eine alternative wäre das Modul-pattern, das ist aber schlechter zu lesen und b
 
 \subsection{Modular programming}
 
-An approach to create a structure for the library and achieve strong decoupling would be to follow the principles of modular programming. jQuery and CKEditor demonstrate a software architecture in which a core object mainly provides a system to extend its functionality, but does not offer many methods itself\footnote{CKEditor provides a framework for implementing components for it, but does not offer any rich-text functionality in its core. jQuery provides low-level utility methods for JavaScript apart from methods to extend it.}. The actual functionality of both libraries is implemented through plugins while the libraries are usually bundled with a set of ''core plugins'' that provide basic features.
+An approach to create a structure for the library and achieve strong decoupling would be to follow the principles of modular programming.
 
 CKEditor strongly follows the principles of modular programming by interface
 
