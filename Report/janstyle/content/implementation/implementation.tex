@@ -77,34 +77,31 @@ Model--view--controller (MVC) is a common apprach for implementing user interfac
 
 jQuery and CKEditor demonstrate a software architecture in which a core object mainly provides a system to extend its functionality, but does not offer many methods itself\footnote{CKEditor provides a framework for implementing components for it, but does not offer any rich-text functionality in its core. jQuery provides low-level utility methods for JavaScript.}. The actual functionality of both libraries is implemented through extensions while the libraries are usually bundled with a set of ''core extensions'' that provide basic features. CKEditor makes use of modular programming by implementing a major part of its editor as plugins that communicated via well-defined interfaces. jQuery established a paradigm calling any extension a ''plugin'' but instead of using clearly defined interfaces, developers are encouraged to add arbitrary methods to jQuery's base object, which can then be directly accessed. Extending a base object has many advantages
 
-\begin{enumerate} 
+\begin{enumerate}
 \item It provides a namespace for the library
 \item It provides a structure for extensions to access each other
 \item It approaches modular programming and strong decoupling
 \end{enumerate}
 
-One disadvantage of modular programming is that the need for well-defined interfaces can diminish flexibility. jQuery goes the opposite direction and encourages arbitrary extensions. jQuery's approach demonstrates that this flexibility, in practice, can withstand possible conflicts. In turn, the low barrier for extending jQuery has spawned a rich collection of extensions and a big community of developers. While jQuery allows to be extended with complex libraries, it is designed to be extended with simple methods. It is difficult to establish complex interactions between extensions.
+Modular programming could create a system in which other developers could exchange any component easily to improve performance or enrich functionality. The disadvantage this apporach would be that the need for well-defined interfaces can diminish flexibility. Formalizing interfaces would create complex structures and could make it harder for other developers to contribute to the library instead of inviting them. jQuery goes the opposite direction and encourages arbitrary extensions. jQuery's approach demonstrates that this flexibility, in practice, can withstand possible conflicts. In turn, the low barrier for extending jQuery has spawned a rich collection of extensions and a big community of developers. While jQuery allows to be extended with complex libraries, it is designed to be extended with simple methods. It is difficult to establish complex interactions between extensions.
 
-To close the gap between CKEditors modular programming approach and jQuery's simple extension paradigms,  object-oriented programming (OOP) can be used. JavaScript does not offer classes and classical inheritance. However it offers OOP with prototypal inheritance.
+% However, the biggest factor in coupling the components would still be that components reference each other, not the underlying structure. 
 
-Ich habe mich für Klassen entschieden. Das hat folgende Vorteile:
+To close the gap between CKEditors modular programming approach and jQuery's simple extension paradigms, object-oriented programming (OOP) can be used. JavaScript does not offer classes and classical inheritance, however the same functionality can be achieved using the constructor pattern and prototypal inheritance. Functions used as constructors will be called classes hereinafter.
 
-* Klassen sind ein bewährtes Konzept um Code zu kapseln, logisch zu strukturieren und lesbar zu verwalten
-* Durch prototypische Vererbung existiert die funktionalität von Klassen nur 1x im Browser 7 RAM
-* Zudem gibt es Instanzvariablen, die für jede Type Instanz extra existieren und so mehrere Instanzen erlauben
-* Die instanzvariablem sind meistens nur Pointer auf Instanzen anderer Klassen
-* Das ganze ist dadurch sehr schlank
+For this library a base class will provide the namespace to be extended with other classes implementing the functionality of this library. A set of core extensions provide all components needed for a rich-text editor. The base class will also provide a constructor that will be the library's entry point for other developers to implement a rich-text editor. The base class and its extensions will be discussed in detail in section \refsection{sec:mudules}. Implementing the library's functionality in classes has many benefits:
 
-Eine alternative wäre das Modul-pattern, das ist aber schlechter zu lesen und bietet die oben genannten vorteile nur teilweise.
+\begin{enumerate}
+\item Classes are a proven concept for encapsulating functionality and data, protecting access and structing code as well as making it readable
+\item Through JavaScript's prototypical inheritance, a class' implementation only exists once per website, regardless how often it has been instantiated, thus saving memory and improving performance
+\item Instance variables still allow to reuse a class in different contexts with different inherent data %Die instanzvariablem sind meistens nur Pointer auf Instanzen anderer Klassen % * Das ganze ist dadurch sehr schlank
+\end{enumerate}
 
+As an alternative apporach, the module pattern can be used, which would also allow namespacing, encapsulation and protected access, but would make an implementation similar to instance variables much more complicated and be much less readable in general.
 
-\subsection{Modular programming}
+%namespace vorteile = keine namenskonflikte
 
-An approach to create a structure for the library and achieve strong decoupling would be to follow the principles of modular programming.
-
-CKEditor strongly follows the principles of modular programming by interface
-
- and implement as many components as possible as plugins. In its core, the library could create an environment to allow plugins to register and interact with each other. This would create a system in which other developers could exchange any component easily to improve performance or enrich functionality. However, the biggest factor in coupling the components would still be that components reference each other, not the underlying structure. Formalizing interfaces would create complex structures and could make it harder for other developers to contribute to the library instead of inviting them.
+% and implement as many components as possible as plugins. In its core, the library could create an environment to allow plugins to register and interact with each other. This would 
 
 
 \section{Module architecture}
@@ -114,6 +111,7 @@ This section discusses how the responsibilites of the modules of ''Type'' and ho
 directed acyclic graph ? 
 
 \section{Modules}
+\label{sec:mudules}
 
 \subsection{Type}
 
