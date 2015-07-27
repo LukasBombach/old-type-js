@@ -150,20 +150,33 @@ For web developers implementing an editor (assuming the library offers all neces
 \item Controlling the caret
 \item Controlling the text selection
 \item Controlling the clipboard
-\item Undo / Redo commands
+\item Controlling settings
+\item Undo / redo commands
 \end{enumerate}
 
-jQuery demonstrates an effective and simple approach to API design, conforming the principles as discussed above. In jQuery all methods remain in a flat hierarchy within the root of a jQuery collection. Any method that is not a getter allows chainging and most methods are overloaded to allow passing various kinds of parameters, to determine what the function should do.
+\noindent jQuery demonstrates an effective and simple approach to API design, conforming the principles as discussed above. In jQuery all methods remain in a flat hierarchy within the root of a jQuery collection. Any method that is not a getter allows chainging and most methods are overloaded to allow passing various kinds of parameters, to determine what the function should do. Following these and the abovementioned principles, the components listed above can be expressed in 11 functions:
+
+\begin{lstlisting}[language=JavaScript, caption=API for implementing a rich-text editor, label=lst:rich_text_api]
+editor.caret([options, ...]);
+editor.selection([options, ...]);
+editor.insert([options, ...]);
+editor.format([options, ...]);
+editor.remove([options, ...]);
+editor.settings([options, ...]);
+editor.copy();
+editor.cut();
+editor.paste();
+editor.undo();
+editor.redo();
+\end{lstlisting}
+
+\noindent The functions in lines 1 through 6 can take various overloaded parameters to determine the specific action. The selection command, for instance, can be called with two numbers to draw a selection from one character offset to another (to draw a selection from characters 10 to 20 \code{editor.selection(10, 20);} can be called). It can also be called without passing parameters, to read the selection. \code{editor.selection();} would return the currently selected text as a string. A full API description can be found at table TODO.
 
 %Applied to Type, this means
 
-As discussed in \refsubsec{subsec:flawed_api}, the HTML editing APIs, while being high-level and simple, still lack control and can be improved in that sense while still being simplified. As proposed in \refsubsec{subsec:adv_flawed_api}, to simplify the API and to increase control, all 17 formatting commands will be replaced with a single \code{format} method that accepts an \code{htmlString} compatible to jQuery.
+%As discussed in \refsubsec{subsec:flawed_api}, the HTML editing APIs, while being high-level and simple, still lack control and can be improved in that sense while still being simplified. As proposed in \refsubsec{subsec:adv_flawed_api}, to simplify the API and to increase control, all 17 formatting commands will be replaced with a single \code{format} method that accepts an \code{htmlString} compatible to jQuery.
 
-\begin{lstlisting}[language=JavaScript, caption=Example call to emphasize a text, label=lst:em_example]
-editor.format('<em />');
-\end{lstlisting}
-
-\noindent This will even account for cases where it is necessary to differenciate between an \code{i} element and an \code{em} element for semantical reasons.
+%\noindent This will even account for cases where it is necessary to differenciate between an \code{i} element and an \code{em} element for semantical reasons.
 
 \subsection{Handling use cases}
 
