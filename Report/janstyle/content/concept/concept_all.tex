@@ -141,9 +141,21 @@ For example, with a designated class to show and move a caret, multiple carets c
 
 \paragraph{Editor implementation}
 
-For web developers implementing an editor (assuming the library offers all necessary features) the API should be designed to offer methods for the most common tasks related to rich text editing to allow fast and easy integration in a website. This should be high-level methods as compared to methods required for extending the library. Simplicity is more important than exact control over low-level behaviour.
+For web developers implementing an editor (assuming the library offers all necessary features) the API should be designed to offer methods for the most common tasks related to rich text editing to allow fast and easy integration in a website. This should be high-level methods as compared to methods required for extending the library. Simplicity is more important than exact control over low-level behaviour. For implementing a rich-text editor the exposed methods should cover
 
-As discussed, jQuery demonstrates an effective approach to API design. All methods remain in a flat hierarchy within the root of the library's namespace. 
+\begin{enumerate}
+\item Formatting and removing formats
+\item Insertion
+\item Deletion
+\item Controlling the caret
+\item Controlling the text selection
+\item Controlling the clipboard
+\item Undo / Redo commands
+\end{enumerate}
+
+jQuery demonstrates an effective and simple approach to API design, conforming the principles as discussed above. In jQuery all methods remain in a flat hierarchy within the root of a jQuery collection. Any method that is not a getter allows chainging and most methods are overloaded to allow passing various kinds of parameters, to determine what the function should do.
+
+%Applied to Type, this means
 
 As discussed in \refsubsec{subsec:flawed_api}, the HTML editing APIs, while being high-level and simple, still lack control and can be improved in that sense while still being simplified. As proposed in \refsubsec{subsec:adv_flawed_api}, to simplify the API and to increase control, all 17 formatting commands will be replaced with a single \code{format} method that accepts an \code{htmlString} compatible to jQuery.
 
