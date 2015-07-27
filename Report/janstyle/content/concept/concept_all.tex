@@ -137,7 +137,7 @@ For extension, web developers should have specific access to as many components 
 
 All components of Type will be implemented as classes. To provide as much capabilites as possible to other developers, all classes of Type will be exposed in a designated namespace. The classes should conform the best practices of object-oriented programming to support developers in extending the library. The class design should not only consider the specific needs of the core library but also potential use cases for other developers.
 
-For example, with a designated class to show and move a caret, multiple carets can be instantiated for an extension that allows real-time collaboration with mutliple users. The available classes will be discussed in chapter \refchapter{ch:impl}.
+For example, with a designated class to show and move a caret, multiple carets can be instantiated for an extension that allows real-time collaboration with mutliple users. All available classes will be discussed in chapter \refchapter{ch:impl}.
 
 \paragraph{Editor implementation}
 
@@ -180,7 +180,16 @@ editor.redo();
 
 \subsection{Handling use cases}
 
-We can call programmers extending the library ''developers of the library'' while we can call programmers using the library to implement editors ''users of the library''. To account for both use cases and still maintain a clear separation of concerns, all classes that provide functionality to the library must remain in their designated namespace which the library has access to. The library itself will be exposed as a class to the global namespace with the name ''Type''. It can be instantiated and then provides an own API, the high-level methods, for implementing a rich-text editor.
+We can call programmers extending the library ''developers of the library'' and programmers using the library to implement editors ''users of the library''. To account for both use cases and maintain a clear software architecture and separation of concerns, all classes that provide functionality to the library must remain in a designated namespace which the library has access to. 
+
+\begin{figure}[!htb]
+\centering
+\makebox[\textwidth]{\includegraphics[width=\textwidth]{images/concept-sep-use-cases.pdf}}
+\caption{UML of the Type library and its internally used classes (exceperpt)}
+\label{fig:type_uml_excerpt}
+\end{figure}
+
+The library itself will be exposed as a class to the global namespace with the name ''Type''. It can be instantiated and then provides an own API, the high-level methods, for implementing a rich-text editor.
 
 %Ursprünglich API und Codestruktur an window.execCommand orientiert, das ist aber doof.
 %Bessere (weil präzisere) API mit mehr Möglichkeiten als der contentEditable scheiss
