@@ -49,18 +49,6 @@ Habe mich größtenteils an Crockfordstyle orientiert, aber die Klassen anders g
 https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Contributor\_s\_Guide/Private\_Properties
 Sie bewirkt keine echte accessibility restriction, aber es ist eine allgemein anerkannten convention und ist auch viel besser lesbar.
 
-\section{Class pattern}
-
-Ich habe mich für Klassen entschieden. Das hat folgende Vorteile:
-
-* Klassen sind ein bewährtes Konzept um Code zu kapseln, logisch zu strukturieren und lesbar zu verwalten
-* Durch prototypische Vererbung existiert die funktionalität von Klassen nur 1x im Browser 7 RAM
-* Zudem gibt es Instanzvariablen, die für jede Type Instanz extra existieren und so mehrere Instanzen erlauben
-* Die instanzvariablem sind meistens nur Pointer auf Instanzen anderer Klassen
-* Das ganze ist dadurch sehr schlank
-
-Eine alternative wäre das Modul-pattern, das ist aber schlechter zu lesen und bietet die oben genannten vorteile nur teilweise.
-
 \section{Programmstruktur}
 
 %Modulbasiert?
@@ -75,7 +63,7 @@ Eine alternative wäre das Modul-pattern, das ist aber schlechter zu lesen und b
 
 \subsection{MVC}
 
-One approach would be to implement a Model--view--controller (MVC) architecture. While this apporach can provide clear responsibilites, the problem is that most components, like the caret or the selection, serve a clear atomic purpose and would need to be broken apart into model, view and controller parts themselves, making the architecture fuzzy and complex instead of simplifying it.
+Model--view--controller (MVC) is a common apprach for implementing user interfaces and it can be applied to user interface components too. While this apporach can provide clear responsibilites, the problem is that most components, like the caret or the selection, serve a clear atomic purpose and would need to be broken apart into model, view and controller parts themselves, making the architecture fuzzy and complex instead of simplifying it.
 
 %The biggest advantage of this approach would be that an abstract view layer could not only render rich-text as HTML, but also as Markdown or in the Open Document Format (ODF). Atom, Spotify or Wunderlist show that web technologies find their way into desktop. Writing to custom formats 
 %While especially the latter is not useful in a browser environment
@@ -85,11 +73,35 @@ One approach would be to implement a Model--view--controller (MVC) architecture.
 
 \subsection{Modular programming}
 
-An approach to create a structure for the library and achieve strong decoupling would be to follow the principles of modular programming and implement as many components as possible as plugins. In its core, the library could create an environment to allow plugins to register and interact with each other. This would create a system in which other developers could exchange any component easily to improve performance or enrich functionality. However, the biggest factor in coupling the components would still be that components reference each other, not the underlying structure. Formalizing interfaces would create complex structures and could make it harder for other developers to contribute to the library instead of inviting them.
+
+
+\section{OOP}
+
+Ich habe mich für Klassen entschieden. Das hat folgende Vorteile:
+
+* Klassen sind ein bewährtes Konzept um Code zu kapseln, logisch zu strukturieren und lesbar zu verwalten
+* Durch prototypische Vererbung existiert die funktionalität von Klassen nur 1x im Browser 7 RAM
+* Zudem gibt es Instanzvariablen, die für jede Type Instanz extra existieren und so mehrere Instanzen erlauben
+* Die instanzvariablem sind meistens nur Pointer auf Instanzen anderer Klassen
+* Das ganze ist dadurch sehr schlank
+
+Eine alternative wäre das Modul-pattern, das ist aber schlechter zu lesen und bietet die oben genannten vorteile nur teilweise.
+
+
+\subsection{Modular programming}
+
+An approach to create a structure for the library and achieve strong decoupling would be to follow the principles of modular programming. jQuery and CKEditor demonstrate a software architecture in which a core object mainly provides a system to extend its functionality, but does not offer many methods itself\footnote{CKEditor provides a framework for implementing components for it, but does not offer any rich-text functionality in its core. jQuery provides low-level utility methods for JavaScript apart from methods to extend it.}. The actual functionality of both libraries is implemented through plugins while the libraries are usually bundled with a set of ''core plugins'' that provide basic features.
+
+CKEditor strongly follows the principles of modular programming by interface
+
+ and implement as many components as possible as plugins. In its core, the library could create an environment to allow plugins to register and interact with each other. This would create a system in which other developers could exchange any component easily to improve performance or enrich functionality. However, the biggest factor in coupling the components would still be that components reference each other, not the underlying structure. Formalizing interfaces would create complex structures and could make it harder for other developers to contribute to the library instead of inviting them.
+
 
 \section{Module architecture}
 
 This section discusses how the responsibilites of the modules of ''Type'' and how they interact with each other. The implementations and characteristics of each module will be discussed hereinafter.
+
+directed acyclic graph ? 
 
 \section{Modules}
 
