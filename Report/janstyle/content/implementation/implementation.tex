@@ -83,10 +83,9 @@ jQuery and CKEditor demonstrate a software architecture in which a core object m
 \item It approaches modular programming and strong decoupling
 \end{enumerate}
 
-One disadvantage of actual modular programming is the need for well-defined interfaces which can diminish flexibility. jQuery goes the opposite direction and encourages arbitrary extensions. jQuery's approach demonstrates that this flexibility can withstand possible conflict in practice. In turn, the low barrier for extending jQuery has spawned a rich collection of extensions and a big community of developers.
+One disadvantage of modular programming is that the need for well-defined interfaces can diminish flexibility. jQuery goes the opposite direction and encourages arbitrary extensions. jQuery's approach demonstrates that this flexibility, in practice, can withstand possible conflicts. In turn, the low barrier for extending jQuery has spawned a rich collection of extensions and a big community of developers. While jQuery allows to be extended with complex libraries, it is designed to be extended with simple methods. It is difficult to establish complex interactions between extensions.
 
-
-JavaScript does not offer classes and classical inheritance. However it offers object-oriented programming (OOP) with prototypal inheritance.
+To close the gap between CKEditors modular programming approach and jQuery's simple extension paradigms,  object-oriented programming (OOP) can be used. JavaScript does not offer classes and classical inheritance. However it offers OOP with prototypal inheritance.
 
 Ich habe mich für Klassen entschieden. Das hat folgende Vorteile:
 
