@@ -143,6 +143,8 @@ For example, with a designated class to show and move a caret, multiple carets c
 
 For web developers implementing an editor (assuming the library offers all necessary features) the API should be designed to offer methods for the most common tasks related to rich text editing to allow fast and easy integration in a website. This should be high-level methods as compared to methods required for extending the library. Simplicity is more important than exact control over low-level behaviour.
 
+As discussed, jQuery demonstrates an effective approach to API design. All methods remain in a flat hierarchy within the root of the library's namespace. 
+
 As discussed in \refsubsec{subsec:flawed_api}, the HTML editing APIs, while being high-level and simple, still lack control and can be improved in that sense while still being simplified. As proposed in \refsubsec{subsec:adv_flawed_api}, to simplify the API and to increase control, all 17 formatting commands will be replaced with a single \code{format} method that accepts an \code{htmlString} compatible to jQuery.
 
 \begin{lstlisting}[language=JavaScript, caption=Example call to emphasize a text, label=lst:em_example]
@@ -151,7 +153,9 @@ editor.format('<em />');
 
 \noindent This will even account for cases where it is necessary to differenciate between an \code{i} element and an \code{em} element for semantical reasons.
 
-\paragraph{Handling use cases} We can call programmers extending the library ''developers of the library'' while we can call programmers using the library to implement editors ''users of the library''. To account for both use cases and still maintain a clear separation of concerns, all classes that provide functionality to the library must remain in their designated namespace which the library has access to. The library itself will be exposed as a class to the global namespace with the name ''Type''. It can be instantiated and then provides an own API, the high-level methods, for implementing a rich-text editor.
+\subsection{Handling use cases}
+
+We can call programmers extending the library ''developers of the library'' while we can call programmers using the library to implement editors ''users of the library''. To account for both use cases and still maintain a clear separation of concerns, all classes that provide functionality to the library must remain in their designated namespace which the library has access to. The library itself will be exposed as a class to the global namespace with the name ''Type''. It can be instantiated and then provides an own API, the high-level methods, for implementing a rich-text editor.
 
 %Ursprünglich API und Codestruktur an window.execCommand orientiert, das ist aber doof.
 %Bessere (weil präzisere) API mit mehr Möglichkeiten als der contentEditable scheiss
