@@ -135,11 +135,13 @@ The library's API will have two basic use cases. On the one hand, web developers
 
 For extension, web developers should have specific access to as many components and functions of the library, providing as much freedom and options as possible. This will include low-level access to components while control and explicitness is more imporant than simplicity. 
 
-All components of Type will be implemented as classes. To provide as much capabilites as possible to other developers, all classes of Type will be exposed in a designated namespace. The classes should conform the best practices of object-oriented programming to support developers in extending the library.
+All components of Type will be implemented as classes. To provide as much capabilites as possible to other developers, all classes of Type will be exposed in a designated namespace. The classes should conform the best practices of object-oriented programming to support developers in extending the library. The class design should not only consider the specific needs of the core library but also potential use cases for other developers.
+
+For example, with a designated class to show and move a caret, multiple carets can be instantiated for an extension that allows real-time collaboration with mutliple users. The available classes will be discussed in chapter \refchapter{ch:impl}.
 
 \paragraph{Editor implementation}
 
-For web developers implementing an editor (assuming the library offers all features required for this) the API should be designed to offer methods for the most common tasks related to rich text editing to allow fast and easy integration in a website. This should be high-level methods as compared to methods required for extending the library. Simplicity is more important than exact control over low-level behaviour.
+For web developers implementing an editor (assuming the library offers all necessary features) the API should be designed to offer methods for the most common tasks related to rich text editing to allow fast and easy integration in a website. This should be high-level methods as compared to methods required for extending the library. Simplicity is more important than exact control over low-level behaviour.
 
 As discussed in \refsubsec{subsec:flawed_api}, the HTML editing APIs, while being high-level and simple, still lack control and can be improved in that sense while still being simplified. As proposed in \refsubsec{subsec:adv_flawed_api}, to simplify the API and to increase control, all 17 formatting commands will be replaced with a single \code{format} method that accepts an \code{htmlString} compatible to jQuery.
 
@@ -147,9 +149,9 @@ As discussed in \refsubsec{subsec:flawed_api}, the HTML editing APIs, while bein
 editor.format('<em />');
 \end{lstlisting}
 
-This will even account for cases where it is necessary to differenciate between an \code{i} element and an \code{em} element for semantical reasons.
+\noindent This will even account for cases where it is necessary to differenciate between an \code{i} element and an \code{em} element for semantical reasons.
 
-
+\paragraph{Handling use cases} We can call programmers extending the library ''developers of the library'' while we can call programmers using the library to implement editors ''users of the library''. To account for both use cases and still maintain a clear separation of concerns, all classes that provide functionality to the library must remain in their designated namespace which the library has access to. The library itself will be exposed as a class to the global namespace with the name ''Type''. It can be instantiated and then provides an own API, the high-level methods, for implementing a rich-text editor.
 
 %Ursprünglich API und Codestruktur an window.execCommand orientiert, das ist aber doof.
 %Bessere (weil präzisere) API mit mehr Möglichkeiten als der contentEditable scheiss
@@ -162,15 +164,3 @@ This will even account for cases where it is necessary to differenciate between 
 %Ursprünglich API und Codestruktur an window.execCommand orientiert, das ist aber doof.
 
 %The library shall give other developers as much freedom as possible, meaning other developer should use the library as they see it fit and not the other way around, should try to conform the needs of the library.
-
-
-\section{Software architecture}
-\label{sec:software_architecture}
-
-
-
-\subsection{MVC}
-Document model -> no
-Ursprünglich MVC mäßig mit document im kern geplant 
-
-\subsection{Cache} For traversing the text, for example when the caret moves, the text will need to be measured. All measurements can be stored to a cache to only perform the same measurement operations once. On the other hand, the library should be a ''good citizen'' on a website, which means it should be as unobtrusive and leave the developers as much freedom as possible. The library will essentially modify parts of the DOM that act as the editor's contents. It should be agnostic to the editor's contents at all times to give other developers the freedom to change the contents in any way needed without breaking the editor. A cache must account for external changes. The DOM3 Events specification\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/}, last checked on 07/21/2015} offers \texttt{MutationObserver}s to check for DOM changes. This feature is not supported by Internet Explorer version 10 or less\footnote{\url{http://caniuse.com/\#search=mutation}, last checked on 07/21/2015}. Internet Explorer 9 and 10 offer an implementation for \texttt{MutationEvent}s\footnote{\url{http://help.dottoro.com/ljfvvdnm.php\#additionalEvents }, last checked on 07/21/2015}. The W3C states that ''The MutationEvent interface [...] has not yet been completely and interoperably implemented across user agents. In addition, there have been critiques that the interface, as designed, introduces a performance and implementation challenge.''\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/\#legacy-mutationevent-events}, last checked on 07/21/2015}. Apart from that, the benefits of a cache may not signifcantly increase the library's performance. The actions that can be supported by a cache, most importantly moving the caret in the text, are not very complex and do not noticably afflict the CPU. Implementing an editor that is stateless in regards of its contents can also improve stability.
