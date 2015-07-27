@@ -1,6 +1,6 @@
 %!TEX root = ../../thesis.tex
 
-\section{JavaScript library development}
+\section{Technology}
 
 % There are many popular frameworks and libraries that provide a structure, rules and conventions for implementing websites and web applications. 
 
@@ -73,7 +73,7 @@ Model--view--controller (MVC) is a common apprach for implementing user interfac
 
 %\subsection{Modular programming}
 
-\section{Modular and object-oriented programming}
+\subsection{Modular and object-oriented programming}
 
 jQuery and CKEditor demonstrate a software architecture in which a core object mainly provides a system to extend its functionality, but does not offer many methods itself\footnote{CKEditor provides a framework for implementing components for it, but does not offer any rich-text functionality in its core. jQuery provides low-level utility methods for JavaScript.}. The actual functionality of both libraries is implemented through extensions while the libraries are usually bundled with a set of ''core extensions'' that provide basic features. CKEditor makes use of modular programming by implementing a major part of its editor as plugins that communicated via well-defined interfaces. jQuery established a paradigm calling any extension a ''plugin'' but instead of using clearly defined interfaces, developers are encouraged to add arbitrary methods to jQuery's base object, which can then be directly accessed. Extending a base object has many advantages
 
@@ -106,16 +106,34 @@ As an alternative apporach, the module pattern can be used, which would also all
 
 \section{Module architecture}
 
-This section discusses how the responsibilites of the modules of ''Type'' and how they interact with each other. The implementations and characteristics of each module will be discussed hereinafter.
+This section discusses the architecture and interaction of the classes of this library. The implementations and characteristics of each module will be discussed hereinafter.
 
-directed acyclic graph ? 
+
+% directed acyclic graph ? 
 
 \section{Modules}
 \label{sec:mudules}
 
 \subsection{Type}
 
-Die Type
+The ''Type'' class is the starting point for developers to implement rich-text editors and to extend the library itself.
+
+
+
+The ''Type'' class is the starting point for developers and the only class that is exposed to the global namespace. It serves 4 Resposibilities:
+
+\paragraph{Provide a namespace for all other classes} All other classes are declared within the ''Type'' namespace.
+
+\begin{enumerate}
+\item
+\item Provide a constructor that will instantiate and set up all classes to provide a feature complete library instance to edit rich text.
+\item Provid
+\end{enumerate}
+
+
+
+
+
 
 \subsection{Range}
 range

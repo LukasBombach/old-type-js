@@ -96,10 +96,6 @@ Avoiding DOM operations and unstable APIs leads to a software architecture where
 
 Facebook defined a similar goal for the user interface library React. React implements virtual DOM, an internal represenation of the actual DOM on which all operations should be performed, which in return does as little manipulation to the actual DOM as needed, to maximize performance. While the focus of this goal for this library is not solely performance, this part of it. However, there can be situations in which (even unstable) native browser methods may be faster than a JavaScript implementation. The text flow for instance should be left to the browser. There can also be cases in which a pure JavaScript implementation would be much more complex and would be at the expense of having a simple code structure. It must be decided in each particular case to use native and possible unstable APIs or a pure JavaScript implementation.
 
-\section{Conformity with HTML Editing APIs}
-
-The library should be capable of any method that HTML editing APIs implement. However the API can differ to improve they way it will be worked with. The API design will be discussed in \refsection{sec:api_design}.
-
 %Improving means it should be more explicit in what it does. The \texttt{bold} command of \texttt{execCommand} will manipulate the DOM to format text bold. It does not state in what how. Simple etc, what I have stated at Disadvantages of offering user interface components.
 
 \section{Markup} 
@@ -113,33 +109,59 @@ The editor should be a ''good citizen'' in the ecosystem of other editors (see \
 
 Most rich-text editors are implemented and distributed as user interface components. That means instead of only providing a library that offers methods to format the selected text and leaving the implementation of the user interface to the respective developer, most libraries are shipped as input fields with a default editor interface that is, at best, customizable.
 
-This can be unfitting for many situations. The user interface of an editor highly depends on the software it will be integrated in. Within the software the interface may even vary depending on the specific purpose within it. For instance, a content management system may require an edtitor with a menubar offering many controls while a comment form on a blog requires only very little controls. Medium.com uses an interface that only shows controls when the user selects text and has no menubar at all. Assuming there are many implementations of editors, it seems, choosing between editors is often just a choice of the desired ui. Customizing a ui can be just as complex as writing a ui from scratch. The latter affords to add HTML elememts and call JavaScript methods. In a worst case styling the elements can be just as much effort. That is why the library ''Type'' will be implemented and offered as a software library, rather than an editor and a user interface component.
+This can be unfitting for many situations. The user interface of an editor highly depends on the software it will be integrated in. Within the software the interface may even vary depending on its specific purpose. For instance, a content management system may require an edtitor with a menubar offering many controls while a comment form on a blog requires only very little controls. Medium.com uses an interface that only shows controls when the user selects text and has no menubar at all. Assuming there are many implementations of editors that are in fact functional, it seems, choosing between editors is often just a choice of the desired ui. Customizing a ui can be just as complex as writing a ui from scratch. The latter affords to add HTML elememts and call JavaScript methods while both, customizing a user interface and writing a user interface from scratch require styling. In a worst case scenario, it can be more complex to customize an interface to specific needs then writing one from scratch and being able to define just the elements as they are required. That is why the library ''Type'' will be implemented and offered as a software library, rather than an editor and a user interface component.
 
-It can be much more fitting for developers to include a library that handles all text-input and -formatting operations while only providing a powerful API, leaving the ui to the developer. The API must be \textit{well-designed}. That means it must be simple, effective and fit the developers' needs. The methods it offers should be simple in the sense that they conceal possibly complex tasks with understandable high-level concepts. They should be effective and fit the developers' needs in the sense that the API should be designed so that any requirements should be matched with as little effort as possible. The API should create a workflow for developers that allows them to do what they want to do and is as easy to use as possible. jQuery is an example of encorporating an API conforming these principles.
-
-
-
-\section{iFrame}
-
-iFrame hat vor und nachteile. mit meiner library kann es jeder so machen, wie er/sie es will, weil es nur ne library ist.
+%On a final note, until today, some rich-text editors use an iFrame to encapsulate the editor's contents and some don't. iFrame hat vor und nachteile. mit meiner library kann es jeder so machen, wie er/sie es will, weil es nur ne library ist.
 
 
-\section{API Design}
+\section{API}
 \label{sec:api_design}
 \label{sec:las_before_software_architecture}
 
-Allgemeine Überlegungen wie man ein Framework gestaltet (siehe ''Freiheit für Programmierer'', gute Arbeitsweise)
-Ursprünglich API und Codestruktur an window.execCommand orientiert, das ist aber doof.
-Bessere (weil präzisere) API mit mehr Möglichkeiten als der contentEditable scheiss
-für Programmierer und für 2 anwendungsfälle:
-einen editor bauen
-type mit plugins erweitern
-für beides gibt es die passenden Funktionen, das eine einfach und schlau, das andere präzise
-Deswegen werden auch alle Module, alle Klassen exponiert aber es gibt eine eigene API nach jQuery konzept
-Type kommt mit bestimmten Kernmodulen die fuer Textbearbeitung essenziell sind. Aber an dieser Stelle laesst sich Type um weitere Module anhand einer KOnvention (erweitern des Type Objekts) erweitern.
-Ursprünglich API und Codestruktur an window.execCommand orientiert, das ist aber doof.
+\subsection{Conformity with HTML Editing APIs}
 
-The library shall give other developers as much freedom as possible, meaning other developer should use the library as they see it fit and not the other way around, should try to conform the needs of the library.
+The library should be capable of any method implemented by HTML editing APIs. However the API can differ to improve they way it will be worked with.
+
+\subsection{API Design}
+
+% It can be much more fitting for developers to include a library that handles all text-input and -formatting operations while only providing a powerful API, leaving the ui to the developer. 
+
+% While it can be much more fitting for developers to use an API to implement an
+The API of this library must be \textit{well-designed}. That means it must be simple, effective and fit the developers' needs. The methods it offers should be simple in the sense that they conceal possibly complex tasks with understandable high-level concepts. They should be effective and fit the developers' needs in the sense that the API should be designed so that any requirement to of the developers should be matched with as little effort as possible. The API should create a workflow for developers that allows them to do what they want to do and is as easy to use and plausible as possible. jQuery is an example of encorporating an API conforming these principles.
+
+The library's API will have two basic use cases. On the one hand, web developers must be enabled to implement rich-text editors with it. On the other hand, the library should offer interfaces for enabling web developers to extend the API and add features.
+
+\paragraph{Extension}
+
+For extension, web developers should have specific access to as many components and functions of the library, providing as much freedom and options as possible. This will include low-level access to components while control and explicitness is more imporant than simplicity. 
+
+All components of Type will be implemented as classes. To provide as much capabilites as possible to other developers, all classes of Type will be exposed in a designated namespace. The classes should conform the best practices of object-oriented programming to support developers in extending the library.
+
+\paragraph{Editor implementation}
+
+For web developers implementing an editor (assuming the library offers all features required for this) the API should be designed to offer methods for the most common tasks related to rich text editing to allow fast and easy integration in a website. This should be high-level methods as compared to methods required for extending the library. Simplicity is more important than exact control over low-level behaviour.
+
+As discussed in \refsubsec{subsec:flawed_api}, the HTML editing APIs, while being high-level and simple, still lack control and can be improved in that sense while still being simplified. As proposed in \refsubsec{subsec:adv_flawed_api}, to simplify the API and to increase control, all 17 formatting commands will be replaced with a single \code{format} method that accepts an \code{htmlString} compatible to jQuery.
+
+\begin{lstlisting}[language=JavaScript, caption=Example call to emphasize a text, label=lst:em_example]
+editor.format('<em />');
+\end{lstlisting}
+
+This will even account for cases where it is necessary to differenciate between an \code{i} element and an \code{em} element for semantical reasons.
+
+
+
+%Ursprünglich API und Codestruktur an window.execCommand orientiert, das ist aber doof.
+%Bessere (weil präzisere) API mit mehr Möglichkeiten als der contentEditable scheiss
+%für Programmierer und für 2 anwendungsfälle:
+%einen editor bauen
+%type mit plugins erweitern
+%für beides gibt es die passenden Funktionen, das eine einfach und schlau, das andere präzise
+%Deswegen werden auch alle Module, alle Klassen exponiert aber es gibt eine eigene API nach jQuery konzept
+%Type kommt mit bestimmten Kernmodulen die fuer Textbearbeitung essenziell sind. Aber an dieser Stelle laesst sich Type um weitere Module anhand einer KOnvention (erweitern des Type Objekts) erweitern.
+%Ursprünglich API und Codestruktur an window.execCommand orientiert, das ist aber doof.
+
+%The library shall give other developers as much freedom as possible, meaning other developer should use the library as they see it fit and not the other way around, should try to conform the needs of the library.
 
 
 \section{Software architecture}

@@ -4,7 +4,9 @@
 
 With a pure JavaScript implementation, many of the problems that editing APIs have, can be solved.
 
-\subsection{Generated output and flawed API} The generated markup can be chosen with the implementation of the editor. Furthermore, an editor can be implemented to allow developers using the editor to \textit{choose} the output. Section AX describes the inconsistent output across various browsers as well as the problems of the API design of \texttt{execCommand}. Both issues can be adressed by offering a method to wrap the current selection in arbitrary markup. jQuery's \texttt{htmlString} implementation\footnote{\url{http://api.jquery.com/Types/\#htmlString}, last checked on 07/19/2015} demonstrates a simple and stable way to define markup in a string and pass it as an argument to JavaScript methods. A sample call could read as
+\subsection{Generated output and flawed API} 
+\label{subsec:adv_flawed_api}
+The generated markup can be chosen with the implementation of the editor. Furthermore, an editor can be implemented to allow developers using the editor to \textit{choose} the output. Section AX describes the inconsistent output across various browsers as well as the problems of the API design of \texttt{execCommand}. Both issues can be adressed by offering a method to wrap the current selection in arbitrary markup. jQuery's \texttt{htmlString} implementation\footnote{\url{http://api.jquery.com/Types/\#htmlString}, last checked on 07/19/2015} demonstrates a simple and stable way to define markup in a string and pass it as an argument to JavaScript methods. A sample call could read as
 
 \begin{lstlisting}[language=JavaScript, caption=Example calls to format text, label=lst:format-examples]
 // Mimicking document.execCommand('italic', false, null);
