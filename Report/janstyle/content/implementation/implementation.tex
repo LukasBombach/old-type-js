@@ -177,9 +177,11 @@ Section ABC discusses how Type's classes interact to provide its rich-text funct
 
 \subsection{Exposal of Type's \code{prototype}}
 
-Type's functionality is implemented through classes within its namespace. However, this does not expose its functionality to its instances' API. With the constructor pattern, all methods in the \code{prototype} of the \code{Type} class will be available as instance methods. In a simple approach, the library's API can be implemented directly inside the implementation of the \code{Type} class. This contradicts the modular approach of the implementation. jQuery established an effective principle for extending its API. It exposes the library's \code{prototype} with a shorthand attribute as \code{jQuery.fn} and extends it
+Type's functionality is implemented through classes within its namespace. However, this does not expose its functionality to its instances' API. With the constructor pattern, all methods in the \code{prototype} of the \code{Type} class will be available as instance methods. In a simple approach, the library's API can be implemented directly inside the implementation of the \code{Type} class. This contradicts the modular approach of the implementation. jQuery established an effective principle for extending its API. It exposes the library's \code{prototype} with a shorthand attribute as \code{jQuery.fn}. Other modules can extend the \code{prototype} easily and add methods to the libary's API. Type follows the same principle and exposes its \code{prototype} the same way as \code{Type.fn}. jQuery's \code{prototype}---as well as Type's \code{prototype}---can be extended even without exposing it as an attribute, but apart from providing a more convenient way to do so, the primarily, jQuery established a simple and yet powerful paradigm and workflow of how to extend the library's API.
 
 \subsection{Extending}
+
+
 
 There are generally two types of extensions. On the one hand, there are extensions that extend Type with internal features. The \code{Caret} class for example a class a can offer features for displaying and moving a caret within a text. Other classes, for example the \code{Input} class, can listen for keyboard and mouse events, and use this class to display a caret and make it responsive to input.
 
