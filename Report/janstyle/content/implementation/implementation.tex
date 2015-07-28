@@ -144,7 +144,8 @@ editor.caret(20);
 
 \subsection{Namespace and references} 
 
-The \code{Type} class creates a namespace in order not to create a structure for other classes used in the library and so that these classes do not pollute the global namespace and avoid possible name conflicts. In JavaScript, functions are first-class objects, namespaces are objects and any object is a namespace. This way, the \code{Type} \code{Function} object (the class itself) can act as a valid namespace. CKEditor takes the same apporach and attaches each module to the \code{CKEDITOR} base class. Any of the classes listed in \refsection{sec:modules} are attached to the \code{Type} class this way. As an exmple, listing \ref{lst:type_declaration_example} shows the declaration of the \code{Type} base class as well as the declarations of the classes \code{Caret}, \code{Range} and \code{Environment}:
+%The \code{Type} class creates a namespace providing a structure for other classes used in the library and so that these classes do not pollute the global namespace and avoid possible name conflicts. 
+The \code{Type} class creates a namespace for other classes used in the library. In JavaScript, functions are first-class objects, namespaces are objects and any object is a namespace. This way, the \code{Type} \code{Function} object (the class itself) can act as a valid namespace. CKEditor takes the same apporach and attaches each module to the \code{CKEDITOR} base class. Any of the classes listed in \refsection{sec:modules} are attached to the \code{Type} class this way. As an exmple, listing \ref{lst:type_declaration_example} shows the declaration of the \code{Type} base class as well as the declarations of the classes \code{Caret}, \code{Range} and \code{Environment}:
 
 \begin{lstlisting}[language=JavaScript, caption={Declaration of Caret, Range and Environment classes}, label=lst:type_declaration_example]
 // Declaration of the Type base class
@@ -156,9 +157,11 @@ Type.Range = function () {};
 Type.Environment = function () {};
 \end{lstlisting}
 
+The namespace provides a structure for the classes of the library and prevents the pollution of the global namespace and possible name conflicts. In terms of structure, this does not only encapsulate classes related to the library but also allows nesting. This way sub-namespaces can be created, which is especially important for other developers extending the library. The \code{Type} base class already creates a sub-namespace \code{Type.Events} for events.
 
-event namespace
-nested namespaces
+Section ABC discusses how Type's classes interact to provide its rich-text functionality. One responsibility of the \code{Type} base class is to instanitate all other classes and provide getters to each instance, so that each instance can access the other instantiated classes.
+
+%When \code{Type} gets instantiated it in turn instantiates a set of core classes to provide the functionality for its API. To enable each class to access any of the other instantiated classes, the \code{Type} base class provides getters for any of the instances it uses.
 
 %The \code{Type} class is the starting point for developers to implement rich-text editors and to extend the library itself. The 
 %The ''Type'' class is the starting point for developers and the only class that is exposed to the global namespace. It serves 4 Resposibilities:
