@@ -39,7 +39,7 @@ function Type(options) {
   this._caret      = new Type.Caret(this._root);
   this._selection  = new Type.Selection(this);
   this._input      = new Type.Input(this);
-  this._caret      = new Type.Caret(this._root);
+  //this._caret      = new Type.Caret(this._root);
 
   // Trigger events
   Type.trigger('ready', this);
