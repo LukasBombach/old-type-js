@@ -87,15 +87,17 @@ Modular programming could create a system in which other developers could exchan
 
 % However, the biggest factor in coupling the components would still be that components reference each other, not the underlying structure. 
 
-To close the gap between CKEditors modular programming approach and jQuery's simple extension paradigms, object-oriented programming (OOP) can be used. JavaScript does not offer classes and classical inheritance, however the same functionality can be achieved using the constructor pattern and prototypal inheritance. Functions used as constructors will be called classes hereinafter.
+To close the gap between CKEditor's modular programming approach and jQuery's simple extension paradigms, object-oriented programming (OOP) can be used. JavaScript does not offer classes and classical inheritance, however the same functionality can be achieved using the constructor pattern and prototypal inheritance. Functions used following the contructor pattern are often called classes or pseudo-classes. Hereinafter the term classes will be used.
 
 % maybe explain constructor pattern
 
-For this library a base class will provide the namespace to be extended with other classes implementing the functionality of this library. A set of core extensions provide all components needed for a rich-text editor. The base class will also provide a constructor that will be the library's entry point for other developers to implement a rich-text editor. The base class and its extensions will be discussed in detail in the sections \refsection{sec:core} and \refsection{sec:modules}. Implementing the library's functionality in classes has many benefits:
+For this library a base class will provide the namespace to be extended with other classes implementing the functionality of this library. A set of core extensions provide all components needed for a rich-text editor. The base class will also provide a constructor that will be the library's entry point for other developers to implement a rich-text editor, but, like CKEditor and jQuery, will implement as little functionality as possible itself. The base class and its extensions will be discussed in detail in the sections \refsection{sec:core} and \refsection{sec:modules}. Implementing the library's extensions as classes has many benefits:
 
 \begin{enumerate}
+\item As compared to CKEditor and modular programming, strictly defined interfaces are not a necessity. This can improve flexibility and lower the barrier for other developers to contribute. % Auf Nachteile eingehen?
+\item As compared to jQuery, classes can have complex interfaces, which allows rich functionality and possiblities in interoperation.
 \item Classes are a proven concept for encapsulating functionality and data, protecting access and structing code as well as making it readable.
-\item Through JavaScript's prototypical inheritance, the class can be instantiated as often as desired, but will only have one representation in the browser's memory. Thereby the performance will be improved.
+\item Through JavaScript's prototypical inheritance, the class can be instantiated as often as desired, but will only be allocated once in the browser's memory. Thereby the performance will be improved.
 \item Instance variables still allow to reuse a class in different contexts with different inherent data. %Die instanzvariablem sind meistens nur Pointer auf Instanzen anderer Klassen % * Das ganze ist dadurch sehr schlank
 \end{enumerate}
 
@@ -181,7 +183,7 @@ Type's functionality is implemented through classes within its namespace. Howeve
 
 \subsection{Extending}
 
-
+As discussed in 
 
 There are generally two types of extensions. On the one hand, there are extensions that extend Type with internal features. The \code{Caret} class for example a class a can offer features for displaying and moving a caret within a text. Other classes, for example the \code{Input} class, can listen for keyboard and mouse events, and use this class to display a caret and make it responsive to input.
 
