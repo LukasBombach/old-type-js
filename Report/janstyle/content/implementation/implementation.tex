@@ -238,9 +238,7 @@ When the \code{Type} base class will be instantiated, it in turn instatiates a n
 %\item Input
 %\end{itemize}
 
-\noindent The \code{Contents} and \code{Formatting} classes allow to add and remove text (\code{Contents} class) and to apply text formatting (\code{Formatting} class) to the editor's contents using DOM operations. These classes solely provide functionality. The \code{Input} class will listen to keyboard input and mouse events and utilize the \code{Caret} and \code{Selection} instances to apply the input to the appropriate part of the text.
-
-These classes in turn require further classes for their implementation.
+\noindent The \code{Contents} and \code{Formatting} classes allow to add and remove text (\code{Contents} class) and to apply text formatting (\code{Formatting} class) to the editor's contents using DOM operations. These classes solely provide functionality. The \code{Input} class will listen to keyboard input and mouse events and utilize the \code{Caret} and \code{Selection} instances to apply the input to the appropriate part of the text. These classes in turn require further classes for their implementation. Section \refsection{sec:modules} will discuss the characteristics of these classes and how they interact. %each class and its specific 
 
 
 % directed acyclic graph ? 
@@ -248,18 +246,6 @@ These classes in turn require further classes for their implementation.
 
 \section{Modules}
 \label{sec:modules}
-
-\subsection{Core Api}
-
-Api als eigenes Modul, separation of concerns, gute saubere code base und eigene saubere code base für die API. Laesst freiheiten in der Softwarearchitektur - lost coupling, API ein eigenes aenderbares gekapseltes modul:
-
-We've learned how to extend. For the sake of software architecture we don't add extensions to the api in various modules where we please but have many modules implementing functinality and one module setting tha api making use of the other classes. the other classes are written in a way that the api module usually only requires one or 2 function calls (as few as possible)
-
-
-\subsection{Range}
-range
-
-
 
 \subsection{Input}
 
@@ -288,6 +274,20 @@ Although some smart TVs offer keyboards, mice, pointers similar to Nintendo's Wi
 \subsection{Hidden native input fields} Apart from rich-text editors there are also third-party JavaScript libraries that allow embedding code editors with syntax highlighting in a website. The ''Ajax.org Cloud9 Editor (Ace)'' and ''CodeMirror'' editor are amongst the most well-known choices. Both editors keep an internal representation of the plain-text (i.e. non-highlighted) contents of the editor, parse it and display a highlighted version using HTML in a designated \texttt{div}. Both editors use a hidden \texttt{textarea} in which the user enters his or her input. The input will be read from the \texttt{textarea} and
 
 % which is presented to the user as the input field.
+
+\subsection{Core Api}
+
+Api als eigenes Modul, separation of concerns, gute saubere code base und eigene saubere code base für die API. Laesst freiheiten in der Softwarearchitektur - lost coupling, API ein eigenes aenderbares gekapseltes modul:
+
+We've learned how to extend. For the sake of software architecture we don't add extensions to the api in various modules where we please but have many modules implementing functinality and one module setting tha api making use of the other classes. the other classes are written in a way that the api module usually only requires one or 2 function calls (as few as possible)
+
+
+\subsection{Range}
+range
+
+
+
+
 
 \subsection{Caret}
 caret
