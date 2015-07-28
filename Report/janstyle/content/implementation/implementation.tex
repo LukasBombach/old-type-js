@@ -125,18 +125,19 @@ The \code{Type} class is the starting point for users and developers of the libr
 \item It exposes its \code{prototype} as a public shorthand attribute
 \end{enumerate}
 
-\paragraph{Instantiation} To develop an editor with the library, it must be instantiated. As discussed in \refsubsec{subsec:api_design_handling_use_cases}, all of the libary's functionality is encapsuled in a class (\code{Type}) that exposes its features as high-level functions. The \code{Type} class is exposed to the \code{window} namespace and thereby globally accessible. On instantiation it must be passed an \code{HTMLElement}, which's contents will act as the editor's rich-text content. An optional second parameter can be passed to define settings for the editor's instance.
+\paragraph{Instantiation and usage} To develop an editor with the library, it must be instantiated. As discussed in \refsubsec{subsec:api_design_handling_use_cases}, all of the libary's functionality is encapsuled in a class (\code{Type}) that exposes its features as high-level functions. The \code{Type} class is exposed to the \code{window} namespace and thereby globally accessible. On instantiation it must be passed an \code{HTMLElement}, which's contents will act as the editor's rich-text content. An optional second parameter can be passed to define settings for the editor's instance.
 
 \begin{lstlisting}[language=JavaScript, caption=Type instantiation, label=lst:type_instantiation]
-var element = document.getElementById('myElement'):
-var editor = new Type(element, { paste: 'text' });
+var element = document.getElementById("myElement"):
+var editor = new Type(element, { paste: "text" });
 \end{lstlisting}
 
-The \code{editor} instance variable now offers methods to format, insert and remove text, manipulate the caret and the selection, dynamically change settings and control undo/redo capabilites as well as trigger clipboard commands. The complete API is listed in Figure ABC. For example, to format the characters 10 to 20 as bold, the following methods need to be executed:
+The \code{editor} instance variable now offers methods to format, insert and remove text, manipulate the caret and the selection, dynamically change settings and control undo/redo capabilites as well as trigger clipboard commands. The complete API is listed in Figure ABC. For example, to format the characters 10 to 20 as bold and move the caret behind the formatted text, the following methods need to be executed:
 
 \begin{lstlisting}[language=JavaScript, caption=Example commands to format text, label=lst:type_format_example]
 editor.selection(10, 20);
-editor.format('<strong />');
+editor.format("<strong />");
+editor.caret(20);
 \end{lstlisting}
 
 
