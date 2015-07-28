@@ -157,12 +157,12 @@ For web developers implementing an editor (assuming the library offers all neces
 \noindent jQuery demonstrates an effective and simple approach to API design, conforming the principles as discussed above. In jQuery all methods remain in a flat hierarchy within the root of a jQuery collection. Any method that is not a getter allows chainging and most methods are overloaded to allow passing various kinds of parameters, to determine what the function should do. Following these and the abovementioned principles, the components listed above can be expressed in 11 functions:
 
 \begin{lstlisting}[language=JavaScript, caption=API for implementing a rich-text editor, label=lst:rich_text_api]
-editor.caret([options, ...]);
-editor.selection([options, ...]);
-editor.insert([options, ...]);
-editor.format([options, ...]);
-editor.remove([options, ...]);
-editor.settings([options, ...]);
+editor.caret([options]);
+editor.selection([options]);
+editor.insert([options]);
+editor.format([options]);
+editor.remove([options]);
+editor.settings([options]);
 editor.copy();
 editor.cut();
 editor.paste();
@@ -186,7 +186,7 @@ We can call programmers extending the library ''developers of the library'' and 
 \begin{figure}[!htb]
 \centering
 \makebox[\textwidth]{\includegraphics[width=\textwidth]{images/concept-sep-use-cases.pdf}}
-\caption{UML diagram of the Type library and its internally used classes (excerpt)}
+\caption{Diagram of the Type library and its internally used classes (excerpt)}
 \label{fig:type_uml_excerpt}
 \end{figure}
 

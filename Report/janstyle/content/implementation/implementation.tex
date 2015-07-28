@@ -116,19 +116,35 @@ This section discusses the architecture and interaction of the classes of this l
 
 \subsection{Type}
 
-The ''Type'' class is the starting point for developers to implement rich-text editors and to extend the library itself.
-
-
-
-The ''Type'' class is the starting point for developers and the only class that is exposed to the global namespace. It serves 4 Resposibilities:
-
-\paragraph{Provide a namespace for all other classes} All other classes are declared within the ''Type'' namespace.
+The \code{Type} class is the starting point for users and developers of the library. It provides 4 purposes:
 
 \begin{enumerate}
-\item
-\item Provide a constructor that will instantiate and set up all classes to provide a feature complete library instance to edit rich text.
-\item Provid
+\item It can be instantiated and offer a high-level API to manipulate text and perform other rich-text related functions
+\item It provides a namespace for all of the library's internal classes
+\item As an instance, it exposes references to all instances of the internally used classe
+\item It exposes its \code{prototype} as a public shorthand attribute
 \end{enumerate}
+
+\paragraph{Instantiation} To develop an editor with the library, it must be instantiated. As discussed in \refsubsec{subsec:api_design_handling_use_cases}, all of the libary's functionality is encapsuled in a class (\code{Type}) that exposes its features as high-level functions. The \code{Type} class is exposed to the \code{window} namespace and thereby globally accessible. On instantiation it must be passed an \code{HTMLElement}, which's contents will act as the editor's rich-text content. An optional second parameter can be passed to define settings for the editor's instance.
+
+\begin{lstlisting}[language=JavaScript, caption=Type instantiation, label=lst:type_instantiation]
+var element = document.getElementById('myElement'):
+var editor = new Type(element, { paste: 'text' });
+\end{lstlisting}
+
+The \code{editor} instance variable now offers methods to format, insert and remove text, manipulate the caret and the selection, dynamically change settings and control undo/redo capabilites as well as trigger clipboard commands. The complete API is listed in Figure ABC. For example, to format the characters 10 to 20 as bold, the following methods need to be executed:
+
+\begin{lstlisting}[language=JavaScript, caption=Example commands to format text, label=lst:type_format_example]
+editor.selection(10, 20);
+editor.format('<strong />');
+\end{lstlisting}
+
+
+%The \code{Type} class is the starting point for developers to implement rich-text editors and to extend the library itself. The 
+%The ''Type'' class is the starting point for developers and the only class that is exposed to the global namespace. It serves 4 Resposibilities:
+%\paragraph{Provide a namespace for all other classes} All other classes are declared within the ''Type'' namespace.
+
+
 
 \subsection{Extending}
 
