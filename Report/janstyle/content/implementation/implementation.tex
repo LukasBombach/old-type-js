@@ -88,11 +88,33 @@ Modular programming could create a system in which other developers could exchan
 
 % However, the biggest factor in coupling the components would still be that components reference each other, not the underlying structure. 
 
-To close the gap between CKEditor's modular programming approach and jQuery's simple extension paradigms, object-oriented programming (OOP) can be used. JavaScript does not offer classes and classical inheritance, however the same functionality can be achieved using the constructor pattern and prototypal inheritance. Functions used following the contructor pattern are often called classes or pseudo-classes. Hereinafter the term classes will be used.
+
+\paragraph{Constructor Pattern} To close the gap between CKEditor's modular programming approach and jQuery's simple extension paradigms, object-oriented programming (OOP) can be used. JavaScript does not offer classes and classical inheritance, however the same functionality can be achieved using the constructor pattern and prototypal inheritance. Functions following the contructor pattern are often called classes or pseudo-classes. Hereinafter the term classes will be used.
+
+%\begin{lstlisting}[language=JavaScript, caption=Type instantiation, label=lst:type_instantiation]
+%// Defines the class and its contructor 
+%function Foo() {
+%  this.instanceVariable = "bar";
+%};
+%
+%// Defines a method for the class
+%Foo.prototype.baz = function() {
+%  alert(this.instanceVariable);
+%};
+%
+%// Instantiates the class
+%var myFooInstance = new Foo();
+%
+%// alerts "bar"
+%myFooInstance.baz();
+%\end{lstlisting}
+
+%In JavaScript the \code{new} operator can be used to create instances of \code{Function} objects. Based on prototypical inheritance each instance will share the same methods and attributes of the function's \code{prototype} property, but can still own instance-specific variables and functions by assiging them to the instance object. 
+
 
 % maybe explain constructor pattern
 
-For this library a base class will provide the namespace to be extended with other classes implementing the functionality of this library. A set of core extensions provide all components needed for a rich-text editor. The base class will also provide a constructor that will be the library's entry point for other developers to implement a rich-text editor, but, like CKEditor and jQuery, will implement as little functionality as possible itself. The base class and its extensions will be discussed in detail in the sections \refsection{sec:core} and \refsection{sec:modules}. Implementing the library's extensions as classes has many benefits:
+\paragraph{Modularized structure} For this library a base class will provide the namespace to be extended with other classes implementing the functionality of this library. A set of core extensions provide all components needed for a rich-text editor. The base class will also provide a constructor that will be the library's entry point for other developers to implement a rich-text editor, but, like CKEditor and jQuery, will implement as little functionality as possible itself. The base class and its extensions will be discussed in detail in the sections \refsection{sec:core} and \refsection{sec:modules}. Implementing the library's extensions as classes has many benefits:
 
 \begin{enumerate}
 \item As compared to CKEditor and modular programming, strictly defined interfaces are not a necessity. This can improve flexibility and lower the barrier for other developers to contribute. % Auf Nachteile eingehen?
@@ -198,17 +220,27 @@ Type's functionality is implemented through classes within its namespace. Howeve
 
 As discussed in \refsubsec{subsec:modular_and_oop}, Type's functionality is implemented through classes inside Type's namespace. The classes' functionality will be exposed through the base class' \code{prototype}. This section discusses the architecture and interaction of the classes of this library. The implementations and characteristics of each module will be discussed hereinafter.
 
-When the \code{Type} base class will be instantiated, it in turn instatiates a number of classes passing each instance a reference to itself. As described in \refsubsec{subsec:namespace_and_refs} the base class provides setters for each class instance to allow the instantiated classes to access one another. For its basic functionality, Type instantiates the following classes:
+When the \code{Type} base class will be instantiated, it in turn instatiates a number of classes passing each instance a reference to itself. As described in \refsubsec{subsec:namespace_and_refs} the base class provides setters for each class instance to allow the instantiated classes to access one another. For its basic functionality, Type instantiates the classes \code{Contents}, \code{Formatting}, \code{Caret}, \code{Selection} and \code{Input}.
 
-\begin{itemize}
-\item Contents
-\item Formatting
-\item Caret
-\item Selection
-\item Input
-\end{itemize}
 
-\noindent The \code{Contents} and \code{Formatting} classes allow to add and remove text (\code{Contents} class) and to apply text formatting (\code{Formatting} class). These classes are solely provide the functionality
+\begin{figure}[!htb]
+\centering
+\makebox[\textwidth]{\includegraphics[width=\textwidth]{images/basic-diagram.pdf}}
+\caption{Components instantiated by the Type base class}
+\label{fig:type_base_components}
+\end{figure}
+
+%\begin{itemize}
+%\item Contents
+%\item Formatting
+%\item Caret
+%\item Selection
+%\item Input
+%\end{itemize}
+
+\noindent The \code{Contents} and \code{Formatting} classes allow to add and remove text (\code{Contents} class) and to apply text formatting (\code{Formatting} class) to the editor's contents using DOM operations. These classes solely provide functionality. The \code{Input} class will listen to keyboard input and mouse events and utilize the \code{Caret} and \code{Selection} instances to apply the input to the appropriate part of the text.
+
+These classes in turn require further classes for their implementation.
 
 
 % directed acyclic graph ? 
