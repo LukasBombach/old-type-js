@@ -198,7 +198,7 @@ Type's functionality is implemented through classes within its namespace. Howeve
 
 As discussed in \refsubsec{subsec:modular_and_oop}, Type's functionality is implemented through classes inside Type's namespace. The classes' functionality will be exposed through the base class' \code{prototype}. This section discusses the architecture and interaction of the classes of this library. The implementations and characteristics of each module will be discussed hereinafter.
 
-When the \code{Type} base class will be instantiated, it in turn instatiates a number of classes passing each instance a reference to itself. As described in \refsubsec{subsec:namespace_and_refs} the base class provides setters for each class instance to allow instances to access one another. For its basic functionality, Type instantiates the following classes:
+When the \code{Type} base class will be instantiated, it in turn instatiates a number of classes passing each instance a reference to itself. As described in \refsubsec{subsec:namespace_and_refs} the base class provides setters for each class instance to allow the instantiated classes to access one another. For its basic functionality, Type instantiates the following classes:
 
 \begin{itemize}
 \item Contents
@@ -208,6 +208,7 @@ When the \code{Type} base class will be instantiated, it in turn instatiates a n
 \item Input
 \end{itemize}
 
+\noindent The \code{Contents} and \code{Formatting} classes allow to add and remove text (\code{Contents} class) and to apply text formatting (\code{Formatting} class). These classes are solely provide the functionality
 
 
 % directed acyclic graph ? 
