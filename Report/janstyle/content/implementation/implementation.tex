@@ -20,9 +20,6 @@ d3 mit nested objects (assoc arrays) und funktionen
 jQuery mit .fn
 ACE mit Klassen, daraus habe ich gelernt
 
-ES5 oder ES6?
-
-
 \section{Ich habe verwendet}
 
 Gulp
@@ -42,12 +39,18 @@ Durch Require und AMDClean schöne arbeitsweise (am ende über bord geworfen) un
 
 Automatisierte Client side Tests mit PhantomJs und Mocha/Chai
 
+\subsection{ECMAScript 6} 
+
+ECMAScript 6 offers many features for JavaScript including classes and modules. It is not supported by most browsers yet however there are tools like Babel that can transpile ECMAScript 6 to ECMAScript 5. Babel is already used by popular websites like Netflix for JavaScript libraries and Frameworks like React. 
+
+Type will not use ECMAScript 6 and Babel. Even though its features can support the development with syntactic sugar, most of its features can be approached using JavaScript design patterns. The benefit of not using ECMAScript 6 and transpilers are a smaller file size and more independence from third-party tools.
 
 \section{Coding conventions}
 
 Habe mich größtenteils an Crockfordstyle orientiert, aber die Klassen anders geschrieben. Habe den Stil von ACE editor verwendet, denn der ist gut lesbar. Lesbarkeit war mir wichtiger als Crockford style. Für private Eigenschaften und Methoden habe ich die prefix convention verwedendet.
 https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Contributor\_s\_Guide/Private\_Properties
 Sie bewirkt keine echte accessibility restriction, aber es ist eine allgemein anerkannten convention und ist auch viel besser lesbar.
+
 
 \section{Architecture}
 
@@ -130,12 +133,12 @@ As an alternative apporach, the module pattern can be used, which would also all
 
 % and implement as many components as possible as plugins. In its core, the library could create an environment to allow plugins to register and interact with each other. This would 
 
-\section{Core}
+\section{Base class}
 \label{sec:core}
 
 \subsection{Overview}
 
-The \code{Type} class is the starting point for users and developers of the library. It provides 4 purposes:
+The \code{Type} class is the base class (see \refsubsec{subsec:modular_and_oop}) and the starting point for users and developers of the library. It provides 4 purposes:
 
 \begin{enumerate}
 \item It can be instantiated and offer a high-level API to manipulate text and perform other rich-text related functions
@@ -194,8 +197,9 @@ Section \refsection{sec:module_architecture} discusses how Type's classes intera
 %\paragraph{Provide a namespace for all other classes} All other classes are declared within the ''Type'' namespace.
 
 \subsection{Exposal of Type's \code{prototype}}
+\label{subsec_fn_exposal}
 
-Type's functionality is implemented through classes within its namespace. However, this does not expose its functionality to its instances' API. With the constructor pattern, all methods in the \code{prototype} of the \code{Type} class will be available as instance methods. In a simple approach, the library's API can be implemented directly inside the implementation of the \code{Type} class. This contradicts the modular approach of the implementation. jQuery established an effective principle for extending its API. It exposes the library's \code{prototype} with a shorthand attribute as \code{jQuery.fn}. Other modules can extend the \code{prototype} easily and add methods to the libary's API. Type follows the same principle and exposes its \code{prototype} the same way as \code{Type.fn}. jQuery's \code{prototype}---as well as Type's \code{prototype}---can be extended even without exposing it as an attribute, but apart from providing a more convenient way to do so, the primarily, jQuery established a simple and yet powerful paradigm and workflow of how to extend the library's API.
+Type's functionality is implemented through classes within its namespace. However, this does not expose its functionality to its instances' API. With the constructor pattern, all methods in the \code{prototype} of the \code{Type} class will be available as instance methods. In a simple approach, the library's API can be implemented directly inside the implementation of the \code{Type} class. This contradicts the modular approach of the implementation. jQuery established an effective principle for extending its API. It exposes the library's \code{prototype} with a shorthand attribute as \code{jQuery.fn}. Other modules can extend the \code{prototype} easily and add methods to the libary's API. Type follows the same principle and exposes its \code{prototype} the same way as \code{Type.fn}. jQuery's \code{prototype}---as well as Type's \code{prototype}---can be extended even without exposing it as an attribute, but apart from providing a more convenient way to do so, primarily, jQuery established a simple and yet powerful paradigm that encourages other developers to extend the library's API.
 
 %\subsection{Extensions}
 
@@ -243,25 +247,34 @@ When the \code{Type} base class will be instantiated, it in turn instatiates a n
 
 % directed acyclic graph ? 
 
+\section{Type Api}
 
-\section{Modules}
+As discussed in \refsubsec{subsec_fn_exposal}, Type's public API for implementing editors is not hard-coded to the \code{Type} class. Instead it extends \code{Type}'s \code{prototype} dynamically. This conforms the paradigm of having a base class and implementing all its featues in modules. To still ensure maintanability and a clean software structure, the methods for Type's API will not be added arbitrarily by other classes. Instead, all API methods will be implemented by a single module that in turn calls the required methods of the corresponding classes. This allows for a clean and independent software architecture, a separation of concerns and decouples the API from the structure and implementation of the library.
+
+This module, called ''CoreApi'' is the only exception to the rest of Type's implementation, and is not encapsulated in a class. In order to add a method to Type instances, \code{Type.fn} must be extended with a function. This will be done for all methods discussed in \reflisting{lst:rich_text_api}. However this does not require a class contstruct.
+
+Similar to the principles of MVC in which the controllers should be kept small and the implementation should reside in the models, the functionality of the API should reside in their designated classes, while the API methods be kept small. The classes are written in a way that the API methods usually require one function call to a class method and at most translate their parameters to the methods.
+
+\section{Components}
 \label{sec:modules}
 
-\subsection{Input}
+%\section{Input}
 
 %82.78\% of internet users support listening to and reading clipboard events. I can support 100\% PROBLEMS
+\section{Input reading}
 
-There are many devices (hardware and virtual) a user can interact with native inputs:
+There are various input methods whith which users can interact with native inputs. This includes hardware devices as well as virtual (on screen) devices. This includes:
 
 \begin{enumerate} 
-\item Keyboard (as hardware and as virtual keyboard)
-\item Mouse
-\item Touch
-\item Game controller (on browsers imlpemented in game consoles)
-\item Remote control (on Smart TV einvironments)
+\item Hardware keyboard input
+\item Virtual keyboard input
+\item Mouse input
+\item Touch input
+\item Game controller input (on game consoles)
+\item Remote control input (on smart TVs)
 \end{enumerate}
 
-When simulating a native input, in a best-case scenario, all these input methods should be accounted for. Fetching input needs to account for two scenarios: The user clicks / touches / or selects the input in any way and does so at any position inside the input. If the user touches / clicks / etc in the middle of the text, the caret should move to that position and typing must be enabled. In environments without hardware keyboards, the libarary must ensure that a virutal keyboards, possible native to the system, show up. Once the input is selected, text input must be fetched and written to the editor. There are various options to fetch user input, which will be discussed in the following paragraphs:
+When simulating a native input, in a best-case scenario, all these input methods should be accounted for. Fetching input needs to account for two scenarios: The user clicks / touches / or selects the input in any way and does so at any position inside the input. If the user touches / clicks / etc in the middle of the text, the caret should move to that position and typing must be enabled. In environments without hardware keyboards, the libarary must ensure that a virutal keyboards show up. Once the input component is selected, text input must be fetched and written to the editor. There are various options to fetch user input, which will be discussed in the following paragraphs:
 
 \subsection{Events} One way to fetch user input is by listening to events. Text input can be read through \texttt{KeyboardEvent}s. Keyboard events will be triggered for virtual keyboards just as for hardware keyboards. When the user presses a key, the event can be stopped and the according characters can be inserted at the position of the caret. As a downside, listeners for keyboard events cannot be bound to a specific element that is not a native text input, that means keyboard events must be listened to on the \texttt{document} level. This not only has (minor) performance downsides but als requires more logic to decide whether a keyboard input should be processed and ultimatively stopped or ignored and allowed to bubble to other event listeners of a website. Furthermore, there can be edge cases, where even though a keyboard event should write contents to the editor, the event itself is supposed to trigger other methods that are not part of the editor. Keyboard events are supported by all major browsers across all devices.
 
@@ -274,13 +287,6 @@ Although some smart TVs offer keyboards, mice, pointers similar to Nintendo's Wi
 \subsection{Hidden native input fields} Apart from rich-text editors there are also third-party JavaScript libraries that allow embedding code editors with syntax highlighting in a website. The ''Ajax.org Cloud9 Editor (Ace)'' and ''CodeMirror'' editor are amongst the most well-known choices. Both editors keep an internal representation of the plain-text (i.e. non-highlighted) contents of the editor, parse it and display a highlighted version using HTML in a designated \texttt{div}. Both editors use a hidden \texttt{textarea} in which the user enters his or her input. The input will be read from the \texttt{textarea} and
 
 % which is presented to the user as the input field.
-
-\subsection{Core Api}
-
-Api als eigenes Modul, separation of concerns, gute saubere code base und eigene saubere code base für die API. Laesst freiheiten in der Softwarearchitektur - lost coupling, API ein eigenes aenderbares gekapseltes modul:
-
-We've learned how to extend. For the sake of software architecture we don't add extensions to the api in various modules where we please but have many modules implementing functinality and one module setting tha api making use of the other classes. the other classes are written in a way that the api module usually only requires one or 2 function calls (as few as possible)
-
 
 \subsection{Range}
 range
