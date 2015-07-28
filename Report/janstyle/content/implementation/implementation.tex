@@ -89,6 +89,8 @@ Modular programming could create a system in which other developers could exchan
 
 To close the gap between CKEditors modular programming approach and jQuery's simple extension paradigms, object-oriented programming (OOP) can be used. JavaScript does not offer classes and classical inheritance, however the same functionality can be achieved using the constructor pattern and prototypal inheritance. Functions used as constructors will be called classes hereinafter.
 
+% maybe explain constructor pattern
+
 For this library a base class will provide the namespace to be extended with other classes implementing the functionality of this library. A set of core extensions provide all components needed for a rich-text editor. The base class will also provide a constructor that will be the library's entry point for other developers to implement a rich-text editor. The base class and its extensions will be discussed in detail in the sections \refsection{sec:core} and \refsection{sec:modules}. Implementing the library's functionality in classes has many benefits:
 
 \begin{enumerate}
@@ -142,6 +144,12 @@ editor.format("<strong />");
 editor.caret(20);
 \end{lstlisting}
 
+\noindent Although it should be noted that the API allows chaining and the above code can be simplified to a single line.
+
+\begin{lstlisting}[language=JavaScript, caption=Example chaining, label=lst:type_chaining_example]
+editor.selection(10, 20).format("<strong />").caret(20);
+\end{lstlisting}
+
 \subsection{Namespace and references} 
 
 %The \code{Type} class creates a namespace providing a structure for other classes used in the library and so that these classes do not pollute the global namespace and avoid possible name conflicts. 
@@ -157,9 +165,9 @@ Type.Range = function () {};
 Type.Environment = function () {};
 \end{lstlisting}
 
-The namespace provides a structure for the classes of the library and prevents the pollution of the global namespace and possible name conflicts. In terms of structure, this does not only encapsulate classes related to the library but also allows nesting. This way sub-namespaces can be created, which is especially important for other developers extending the library. The \code{Type} base class already creates a sub-namespace \code{Type.Events} for events.
+The namespace provides a structure for the classes of the library, prevents the pollution of the global namespace and possible name conflicts. In terms of structure, this does not only encapsulate classes related to the library but also allows nesting. This way sub-namespaces can be created, which is especially important for other developers extending the library. The \code{Type} base class already prepares a sub-namespace \code{Type.Events} for events.
 
-Section ABC discusses how Type's classes interact to provide its rich-text functionality. One responsibility of the \code{Type} base class is to instanitate all other classes and provide getters to each instance, so that each instance can access the other instantiated classes.
+Section ABC discusses how Type's classes interact to provide its rich-text functionality. One responsibility of the \code{Type} base class is to instanitate all other classes needed for its API and provide getters to each instance, so that each instance can access the other instantiated classes.
 
 %When \code{Type} gets instantiated it in turn instantiates a set of core classes to provide the functionality for its API. To enable each class to access any of the other instantiated classes, the \code{Type} base class provides getters for any of the instances it uses.
 
@@ -167,7 +175,9 @@ Section ABC discusses how Type's classes interact to provide its rich-text funct
 %The ''Type'' class is the starting point for developers and the only class that is exposed to the global namespace. It serves 4 Resposibilities:
 %\paragraph{Provide a namespace for all other classes} All other classes are declared within the ''Type'' namespace.
 
+\subsection{Exposal of Type's \code{prototype}}
 
+Type's functionality is implemented through classes within its namespace. However, this does not expose its functionality to its instances' API. With the constructor pattern, all methods in the \code{prototype} of the \code{Type} class will be available as instance methods. In a simple approach, the library's API can be implemented directly inside the implementation of the \code{Type} class. This contradicts the modular approach of the implementation. jQuery established an effective principle for extending its API. It exposes the library's \code{prototype} with a shorthand attribute as \code{jQuery.fn} and extends it
 
 \subsection{Extending}
 
