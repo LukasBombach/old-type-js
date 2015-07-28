@@ -74,6 +74,7 @@ Model--view--controller (MVC) is a common apprach for implementing user interfac
 %\subsection{Modular programming}
 
 \subsection{Modular and object-oriented programming}
+\label{subsec:modular_and_oop}
 
 jQuery and CKEditor demonstrate a software architecture in which a core object mainly provides a system to extend its functionality, but does not offer many methods itself\footnote{CKEditor provides a framework for implementing components for it, but does not offer any rich-text functionality in its core. jQuery provides low-level utility methods for JavaScript.}. The actual functionality of both libraries is implemented through extensions while the libraries are usually bundled with a set of ''core extensions'' that provide basic features. CKEditor makes use of modular programming by implementing a major part of its editor as plugins that communicated via well-defined interfaces. jQuery established a paradigm calling any extension a ''plugin'' but instead of using clearly defined interfaces, developers are encouraged to add arbitrary methods to jQuery's base object, which can then be directly accessed. Extending a base object has many advantages
 
@@ -106,14 +107,6 @@ As an alternative apporach, the module pattern can be used, which would also all
 %namespace vorteile = keine namenskonflikte
 
 % and implement as many components as possible as plugins. In its core, the library could create an environment to allow plugins to register and interact with each other. This would 
-
-
-\section{Module architecture}
-
-This section discusses the architecture and interaction of the classes of this library. The implementations and characteristics of each module will be discussed hereinafter.
-
-
-% directed acyclic graph ? 
 
 \section{Core}
 \label{sec:core}
@@ -181,19 +174,31 @@ Section ABC discusses how Type's classes interact to provide its rich-text funct
 
 Type's functionality is implemented through classes within its namespace. However, this does not expose its functionality to its instances' API. With the constructor pattern, all methods in the \code{prototype} of the \code{Type} class will be available as instance methods. In a simple approach, the library's API can be implemented directly inside the implementation of the \code{Type} class. This contradicts the modular approach of the implementation. jQuery established an effective principle for extending its API. It exposes the library's \code{prototype} with a shorthand attribute as \code{jQuery.fn}. Other modules can extend the \code{prototype} easily and add methods to the libary's API. Type follows the same principle and exposes its \code{prototype} the same way as \code{Type.fn}. jQuery's \code{prototype}---as well as Type's \code{prototype}---can be extended even without exposing it as an attribute, but apart from providing a more convenient way to do so, the primarily, jQuery established a simple and yet powerful paradigm and workflow of how to extend the library's API.
 
-\subsection{Extending}
+%\subsection{Extensions}
 
-As discussed in 
+%As discussed in \refsubsec{subsec:modular_and_oop}, Type's functionality is implemented through classes inside Type's namespace. These classes will be utilized by 
 
-There are generally two types of extensions. On the one hand, there are extensions that extend Type with internal features. The \code{Caret} class for example a class a can offer features for displaying and moving a caret within a text. Other classes, for example the \code{Input} class, can listen for keyboard and mouse events, and use this class to display a caret and make it responsive to input.
+%extending works this way: you write classes and extend stuff within type's namespace and when you did that you can add a function to type's api by extending fn.
 
-To expose a class to other classes, it should be declared within Type's namespace. That means the \code{Caret} class should be declared as \code{Type.Caret} and the \code{Input} class as \code{Type.Input}. This way both classes are visible to each other without polluting the global namespace and are effectively avoiding possible name conflicts.
+%There are generally two types of extensions. On the one hand, there are extensions that extend Type with internal features. The \code{Caret} class for example a class a can offer features for displaying and moving a caret within a text. Other classes, for example the \code{Input} class, can listen for keyboard and mouse events, and use this class to display a caret and make it responsive to input.
 
-To support a tidy code structure the Type namespace can be nested and implement a hierachical structure. The \code{Type} base class implements the namespace \code{Type.Events} that is reserved for events within the Type ecosystem. Other classes are encouraged to nest within the namespace if it is reasonable.
+%To expose a class to other classes, it should be declared within Type's namespace. That means the \code{Caret} class should be declared as \code{Type.Caret} and the \code{Input} class as \code{Type.Input}. This way both classes are visible to each other without polluting the global namespace and are effectively avoiding possible name conflicts.
 
-The second type of extension extends the public API of the Type library, i.e. adds methods for users of the library\footnote{Programmers implementing an editor with Type, see \refsubsec{subsec:api_design_handling_use_cases}}. jQuery has demonstrated a clever concept for this. It exposes its \code{prototype} with a shorthand attribute named \code{fn} and ecourages developers to extend it. This way developers can easily add methods to the library. Type as intended for developing editors follows the same principle.
+%To support a tidy code structure the Type namespace can be nested and implement a hierachical structure. The \code{Type} base class implements the namespace \code{Type.Events} that is reserved for events within the Type ecosystem. Other classes are encouraged to nest within the namespace if it is reasonable.
+
+%The second type of extension extends the public API of the Type library, i.e. adds methods for users of the library\footnote{Programmers implementing an editor with Type, see \refsubsec{subsec:api_design_handling_use_cases}}. jQuery has demonstrated a clever concept for this. It exposes its \code{prototype} with a shorthand attribute named \code{fn} and ecourages developers to extend it. This way developers can easily add methods to the library. Type as intended for developing editors follows the same principle.
 
 %There is a general distinction for modules extending Type's public API (intended for users\footnote{Programmers implementing an editor with Type, see \refsubsec{subsec:api_design_handling_use_cases}} of the library) or extending its internal features (for enabling features for developers of the library and/or ultimatively extending the library's API).
+
+
+
+\section{Module architecture}
+
+This section discusses the architecture and interaction of the classes of this library. The implementations and characteristics of each module will be discussed hereinafter.
+
+
+% directed acyclic graph ? 
+
 
 \section{Modules}
 \label{sec:modules}
@@ -202,6 +207,7 @@ The second type of extension extends the public API of the Type library, i.e. ad
 
 Api als eigenes Modul, separation of concerns, gute saubere code base und eigene saubere code base für die API. Laesst freiheiten in der Softwarearchitektur - lost coupling, API ein eigenes aenderbares gekapseltes modul:
 
+We've learned how to extend. For the sake of software architecture we don't add extensions to the api in various modules where we please but have many modules implementing functinality and one module setting tha api making use of the other classes. the other classes are written in a way that the api module usually only requires one or 2 function calls (as few as possible)
 
 
 \subsection{Range}
