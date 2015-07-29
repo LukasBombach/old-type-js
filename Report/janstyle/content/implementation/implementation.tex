@@ -315,6 +315,8 @@ As discussed in \refsection{sec:approaches_for_imitating_native_components}, the
 \section{Input Pipeline}
 \label{sec:input_pipeline}
 
+\subsection{Overview} 
+
 \begin{figure}[!htb]
 \centering
 \makebox[\textwidth]{\includegraphics[width=\textwidth]{images/input-pipeline.pdf}}
@@ -332,15 +334,15 @@ Before the text read from the hidden \code{textarea} will be passed on to the \c
 
 \paragraph{Events} As an alternative apporach, for every input that the user makes, an event could be triggered. Input filters could be implemented as event handlers. With this, the same functionality could be achived. A designated input pipeline however provides a clearer mental model for processing the input, it allows a separation of concerns. An input filter has a specific purpose and context as compared to an arbitrary input event handler. It can also be made sure that any input filter will be run before triggering an input event. This way input event handlers only receive actual text input for the editors contents while keyboard shortcuts and other keypresses have been filtered out.
 
-\paragraph{Extendability}
+\paragraph{Extendability} The input pipeline is intended to be extended. It serves as an entry point for other developers to process input. For this, the \code{Input} class provides an API to add and reorder input filters.
 
-While these are the basic responsibilites 
+%While these are the basic responsibilites 
 
 
-pipeline idea
-rules for behaviours (lists, headlines, enter, spaces...)
-Ursprünglich so gedacht: Was gehört zu einem editor X, Y und Behaviour. Für Behaviour aber das input pipeline system gefunden, welches das ganze schön abbildet/löst.
-Noch mal skimmen und sehen ob da was dabei ist, besonders "Detour": http://marijnhaverbeke.nl/blog/browser-input-reading.html
+%pipeline idea
+%rules for behaviours (lists, headlines, enter, spaces...)
+%Ursprünglich so gedacht: Was gehört zu einem editor X, Y und Behaviour. Für Behaviour aber das input pipeline system gefunden, welches das ganze schön abbildet/löst.
+%Noch mal skimmen und sehen ob da was dabei ist, besonders "Detour": http://marijnhaverbeke.nl/blog/browser-input-reading.html
 
 \subsection{Pasting} Kontrolle durch die Implementierung mit einem versteckten Eingabefeld. Erst mal gibt es ein reliable Paste event, was es in keinem Editor basierend auf contentEditable gibt. 2. Hat man volle Kontrolle über den Inhalt, was gepastet wird und was nicht. Und das ganze mit einer einfachen API. Pasting sollte internes event ausloesen.
 
