@@ -148,8 +148,9 @@ The \code{Type} class is the base class (see \refsubsec{subsec:modular_and_oop})
 \end{enumerate}
 
 \subsection{Instantiation and usage}
+\label{subsec:instantiation_usage}
 
-To develop an editor with the library, it must be instantiated. As discussed in \refsubsec{subsec:api_design_handling_use_cases}, all of the libary's functionality is encapsuled in a class (\code{Type}) that exposes its features as high-level functions. The \code{Type} class is exposed to the \code{window} namespace and thereby globally accessible. On instantiation it must be passed an \code{HTMLElement}, which's contents will act as the editor's rich-text content. An optional second parameter can be passed to define settings for the editor's instance.
+To develop an editor with the library, it must be instantiated. As discussed in \refsubsec{subsec:api_design_handling_use_cases}, all of the libary's functionality is encapsuled in a class (\code{Type}) that exposes its features as high-level functions. The \code{Type} class is exposed to the \code{window} namespace and is thereby globally accessible. On instantiation it must be passed an \code{HTMLElement}, which's contents will act as the editor's rich-text content. An optional second parameter can be passed to define settings for the editor's instance.
 
 \begin{lstlisting}[language=JavaScript, caption=Type instantiation, label=lst:type_instantiation]
 var element = document.getElementById("myElement"):
@@ -169,6 +170,8 @@ editor.caret(20);
 \begin{lstlisting}[language=JavaScript, caption=Example chaining, label=lst:type_chaining_example]
 editor.selection(10, 20).format("<strong />").caret(20);
 \end{lstlisting}
+
+With the second optional parameter for \code{Type} settings can be passed to determine the eiditor's behavior. As for the implementation of this thesis two settings are avaialable. One to determine the behavior on paste events, the other to turn off default keyboard shortcuts. A full description can be found in figure ABC. Section \refsection{sec:extensions} discusses how extensions of the library can add further options for their own use.
 
 \subsection{Namespace and references} 
 \label{subsec:namespace_and_refs}
@@ -244,6 +247,9 @@ When the \code{Type} base class will be instantiated, it in turn instatiates a n
 
 \noindent The \code{Input} class will listen to keyboard input and mouse events. Utilizing the \code{Caret} and \code{Selection} classes it determines which part of the text should be changed or formatted. It passes the formalized edits to the \code{Changes} classes which will record the changes for undo and redo operations. The \code{Contents} class allows adding and removing text and the \code{Formatting} class allows to apply formattings, both using DOM operations. The \code{Changes} class will use these classes to to alter the text according to the change it it should apply.
 
+Usually, text fields contain one caret and display one text selection at a time. This is why the \code{Type} base class instantiate the \code{Caret} and \code{Selection} classes for shared usage within an editor's instance. Of course, this behavior can be extended, for example by instantiating multiple \code{Caret}s for real-time text collaboration.
+
+
 %\noindent The \code{Contents} and \code{Formatting} classes allow to add and remove text (\code{Contents} class) and to apply text formatting (\code{Formatting} class) to the editor's contents using DOM operations. These classes solely provide functionality. The \code{Input} class will listen to keyboard input and mouse events and utilize the \code{Caret} and \code{Selection} instances to
 
 % apply the input to the appropriate part of the text though the \code{Changes} model. These classes in turn require further classes for their implementation. Section \refsection{sec:modules} will discuss the characteristics of these classes and how they interact. %each class and its specific 
@@ -316,6 +322,7 @@ As discussed in \refsection{sec:approaches_for_imitating_native_components}, the
 \label{sec:input_pipeline}
 
 \subsection{Overview} 
+\label{subsec:input_pipeline_overview}
 
 \begin{figure}[!htb]
 \centering
@@ -334,7 +341,9 @@ Before the text read from the hidden \code{textarea} will be passed on to the \c
 
 The input pipeline is part of the \code{Input} class. The pipeline itself is an array of input filters that can be added, removed and orderd with a designated API.
 
-JavaScript does not support the concept of \code{Interfaces} and although the constructor pattern allows class-like structures, it does not support classical inheritance unless implemented with supporting constructs\footnote{Interfaces can be implemented though helper classes too}. These constructs can be costly in terms of file size and performance. For this reason, input filters do not implement a formalized interface and do not inherit a filter base class. Instead, each input filter register and specifies for which input should be called for. For instance, a filter can register to be called when the user presses the \keystroke{ctrl}\keystroke{s} key combination and trigger a ''save'' function. The input is passed to the filters as an event that can be stopped from bubbling. This way it can be prevented that pressing \keystroke{ctrl}\keystroke{s} will also insert an ''s'' character to the editor.
+JavaScript does not support the concept of \code{Interfaces} and although the constructor pattern allows class-like structures, it does not support classical inheritance unless implemented with supporting constructs\footnote{Interfaces can be implemented though helper classes too}. These constructs can be costly in terms of file size and performance. For this reason, input filters do not implement a formalized interface and do not inherit a base filter class. Instead, each input filter registers and specifies for which input should be called. For instance, a filter can register to be called when the user presses the \keystroke{ctrl}\keystroke{s} key combination and trigger a ''save'' function. The input is passed to the filters as an event that can be stopped from bubbling. This way it can be prevented that pressing \keystroke{ctrl}\keystroke{s} will also insert an ''s'' character to the editor. The order in which filters will be called is important. Some filters process the input and must cancel the event not only to prevent a character to be inserted, but also to prevent other filters from taking action.
+
+The basic filters implemented for this library will be listed hereinafter, grouped by the responsibility as listed above.
 
 
 %The \code{Input} class will pass any entry made in the \code{textarea}
@@ -346,28 +355,41 @@ JavaScript does not support the concept of \code{Interfaces} and although the co
 
 \subsection{Triggering functions}
 
-\paragraph{Caret} Commonly, when a user presses one of the arrow keys inside a text, the caret will be moved and of course, in a browser eivironment, this is not different.
+\paragraph{Caret} Commonly, when a user presses one of the arrow keys inside a text, the caret will be moved and of course, in a browser eivironment, this is not different. To mimick this behavior arrow key input will be intercepted by the \code{Caret} input filter class, which will move the caret that has been instantiated by the \code{Type} base class (see \refsection{sec:module_architecture}). It will also account for modifier keys and the operating system used and move the caret accordingly.
 
 
-\paragraph{Command}
-command
+\paragraph{Command} The \code{Command} input filter class checks for and intercepts keyboard shortcuts commonly used for text formatting. 
+
+\begin{itemize}
+\item \keystroke{ctrl}\keystroke{b} Formats the currently selected text bold.
+\item \keystroke{ctrl}\keystroke{i} Formats the currently selected text italic. 
+\item \keystroke{ctrl}\keystroke{u} Formats the currently selected text underlined.
+\end{itemize}
+
+To format the text, by default, the tags \code{strong}, \code{i} and \code{u} will be used. Since in some cases this might not be desired, these default keyboard shortcuts can be turned off by setting the according options (see \refsubsec{subsec:instantiation_usage}).
+
+The input event implements an abstraction to either check for the \keystroke{ctrl} key or the \keystroke{cmd} key depending on the operating system of the user (see \refsection{sec:events}) so that the abovementioned shortcuts can (only) be triggered with the \keystroke{cmd} key instead of the \keystroke{ctrl} key on the OS X systems.
+
+
 \subsection{Rich-text behavior}
-\paragraph{Headlines}
-head lines
-\paragraph{Line Breaks}
-line breaks
-\paragraph{Lists}
-lists
-\subsection{Filtergring and transformation}
-\paragraph{Remove}
-remove
-\paragraph{Spaces}
-spaces
 
+As discussed in \refsubsec{subsec:concept_native_imitation}, most rich-text editors support the user with a common behavior depending on the user's input. This behavior can be abstracted in a simple way using the input pipeline. The following paragraphs describe the rules and filters implemented by default. Further rules can easily implemented as input filter and being added to the input pipeline.
 
-\subsection{Events} As an alternative apporach, for every input that the user makes, an event could be triggered. Input filters could be implemented as event handlers. With this, the same functionality could be achived. A designated input pipeline however provides a clearer mental model for processing the input, it allows a separation of concerns. An input filter has a specific purpose and context as compared to an arbitrary input event handler. It can also be made sure that any input filter will be run before triggering an input event. This way input event handlers only receive actual text input for the editors contents while keyboard shortcuts and other keypresses have been filtered out.
+\paragraph{Headlines} When a user presses \keystroke{enter} while the caret is located at the end of a headline, a new text paragraph will be created behind the headline and the caret will be placed inside it.
 
-\subsection{Extendability} The input pipeline is intended to be extended. It serves as an entry point for other developers to process input. For this, the \code{Input} class provides an API to add and reorder input filters.
+\paragraph{Lists} Pressing \keystroke{enter} inside a list item creates a new list item behind the current one and the caret weill be placed inside it.
+
+\subsection{Filterring and transformation}
+
+\paragraph{Line Breaks} To display a line break in the visible rich text (i.e. the markup) a \code{br} or \code{p} tag must be inserted\footnote{To enforce a line break other tags. like the \code{div} tag can be used, but would not be semantically appropriate in this context}. When the user presses the \keystroke{enter} key it does not suffice to insert a carriage return and/or line feed. This input will be intercepted and instead a \code{br} tag will be inserted to the editor's contents. As discussed in \refsubsec{subsec:input_pipeline_overview}, it is important that this filter will be invoked after the \code{Headlines} and \code{Lists} filters, so they can apply their behavior and prevent this filter's behavior.
+
+\paragraph{Remove} To delete text from the editor the \code{Remove} filter checks for \keystroke{backspace} and \keystroke{del} key inputs. Depending on whether there is a text selection or not, it either deltes the selection's contents or one character left/right of the caret.
+
+\paragraph{Spaces} Browsers display adjacent spaces as a single space. This is an unusual behavoir for text editing. The \code{Spaces} input filter checks if adjacent spaces are being entered and inserts non-breaking spaces.
+
+\subsection{Events} As an alternative apporach, for every input that the user makes, an event could be triggered. Input filters could be implemented as event handlers. With this, the same functionality could be achived without an input pipeline. A designated pipeline however provides a clearer mental model for processing the input, it allows a separation of concerns. An input filter has a specific purpose and context as compared to an arbitrary input event handler. It can also be made sure that any input filter will be run before triggering an input event. This way input event handlers only receive actual text input for the editors contents while keyboard shortcuts and other keypresses have been filtered out.
+
+\subsection{Extendability} The input pipeline is intended to be extended. It serves as an entry point for other developers to process input. For this, the \code{Input} class provides an API to add, remove and reorder input filters.
 
 %While these are the basic responsibilites 
 
@@ -377,11 +399,14 @@ spaces
 %Ursprünglich so gedacht: Was gehört zu einem editor X, Y und Behaviour. Für Behaviour aber das input pipeline system gefunden, welches das ganze schön abbildet/löst.
 %Noch mal skimmen und sehen ob da was dabei ist, besonders "Detour": http://marijnhaverbeke.nl/blog/browser-input-reading.html
 
-\subsection{Pasting} Kontrolle durch die Implementierung mit einem versteckten Eingabefeld. Erst mal gibt es ein reliable Paste event, was es in keinem Editor basierend auf contentEditable gibt. 2. Hat man volle Kontrolle über den Inhalt, was gepastet wird und was nicht. Und das ganze mit einer einfachen API. Pasting sollte internes event ausloesen.
 
 
 
 
+\section{Pasting}
+
+
+Kontrolle durch die Implementierung mit einem versteckten Eingabefeld. Erst mal gibt es ein reliable Paste event, was es in keinem Editor basierend auf contentEditable gibt. 2. Hat man volle Kontrolle über den Inhalt, was gepastet wird und was nicht. Und das ganze mit einer einfachen API. Pasting sollte internes event ausloesen.
 
 
 
@@ -469,6 +494,7 @@ The \code{Environment} class checks and provides informations on the current bro
 ev api
 
 \section{Events}
+\label{sec:events}
 
 Dazu entscheiden dass es ein Type-Internes Eventsystem gibt, dessen Events nur in Type existieren. Damit polluten die nicht den globalen (name)space mit events. Nur bestimmte events werden global (nativ) getriggert, und das sind genau die events, die nach aussenhin von Belang sind und abgegriffen werden koennen sollen (=API design)
 
@@ -488,6 +514,7 @@ util
 \section{Cache} For traversing the text, for example when the caret moves, the text will need to be measured. All measurements can be stored to a cache to only perform the same measurement operations once. On the other hand, the library should be a ''good citizen'' on a website, which means it should be as unobtrusive and leave the developers as much freedom as possible. The library will essentially modify parts of the DOM that act as the editor's contents. It should be agnostic to the editor's contents at all times to give other developers the freedom to change the contents in any way needed without breaking the editor. A cache must account for external changes. The DOM3 Events specification\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/}, last checked on 07/21/2015} offers \texttt{MutationObserver}s to check for DOM changes. This feature is not supported by Internet Explorer version 10 or less\footnote{\url{http://caniuse.com/\#search=mutation}, last checked on 07/21/2015}. Internet Explorer 9 and 10 offer an implementation for \texttt{MutationEvent}s\footnote{\url{http://help.dottoro.com/ljfvvdnm.php\#additionalEvents }, last checked on 07/21/2015}. The W3C states that ''The MutationEvent interface [...] has not yet been completely and interoperably implemented across user agents. In addition, there have been critiques that the interface, as designed, introduces a performance and implementation challenge.''\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/\#legacy-mutationevent-events}, last checked on 07/21/2015}. Apart from that, the benefits of a cache may not signifcantly increase the library's performance. The actions that can be supported by a cache, most importantly moving the caret in the text, are not very complex and do not noticably afflict the CPU. Implementing an editor that is stateless in regards of its contents can also improve stability.
 
 \section{Extensions}
+\label{sec:extensions}
 
 \section{Plugin API} ...and plugin cache
 
