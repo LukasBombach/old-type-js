@@ -399,40 +399,39 @@ As discussed in \refsubsec{subsec:concept_native_imitation}, most rich-text edit
 %Ursprünglich so gedacht: Was gehört zu einem editor X, Y und Behaviour. Für Behaviour aber das input pipeline system gefunden, welches das ganze schön abbildet/löst.
 %Noch mal skimmen und sehen ob da was dabei ist, besonders "Detour": http://marijnhaverbeke.nl/blog/browser-input-reading.html
 
-
-
-
-
 \section{Pasting}
 
-
 Kontrolle durch die Implementierung mit einem versteckten Eingabefeld. Erst mal gibt es ein reliable Paste event, was es in keinem Editor basierend auf contentEditable gibt. 2. Hat man volle Kontrolle über den Inhalt, was gepastet wird und was nicht. Und das ganze mit einer einfachen API. Pasting sollte internes event ausloesen.
-
-
-
-
-
-
-
 
 % Apart from rich-text editors there are also third-party JavaScript libraries that allow embedding code editors with syntax highlighting in a website. The ''Ajax.org Cloud9 Editor (Ace)'' and ''CodeMirror'' editor are amongst the most well-known choices. Both editors keep an internal representation of the plain-text (i.e. non-highlighted) contents of the editor, parse it and display a highlighted version using HTML in a designated \texttt{div}. Both editors use a hidden \texttt{textarea} in which the user enters his or her input. The input will be read from the \texttt{textarea} and
 
 % which is presented to the user as the input field.
 
-\section{Range}
-range
-
-
-
-
-
 \section{Caret}
 \label{subsec:caret}
-caret
+
+The \code{Caret} class provides all functionality to place and move a caret in a text.
+
+
+
 \subsection{BiDi support}
 \subsection{IME} 
 http://marijnhaverbeke.nl/blog/browser-input-reading.html 
 https://en.wikipedia.org/wiki/Input\_method
+
+\section{Range}
+
+The \code{Range} class is a utility class and an abstraction for the native \code{Range} interface. The native implementation is prone to bugs on many browsers. As discussed in \refsection{sec:interaction_with_browser_apis}, instead of fixing the API by shimming its methods, the \code{Range} class implements all methods related to ranges while trying to interact as little as possible with the native API. On top of the methods required by Type that are implemented by the native \code{Range} interface, this class implements additional methods specific to the API.
+
+%CodeMirror uses (native) \code{Range}s for text
+
+%Ranges are specifically used to 
+
+%Ranges are mainly used by the implementations of the caret and the selection.
+
+
+
+
 
 
 \section{Selection}
@@ -508,17 +507,44 @@ input event only event required so far
 settings
 \section{Text Walker}
 text walker
+
 \section{Utilities}
-util
 
-\section{Cache} For traversing the text, for example when the caret moves, the text will need to be measured. All measurements can be stored to a cache to only perform the same measurement operations once. On the other hand, the library should be a ''good citizen'' on a website, which means it should be as unobtrusive and leave the developers as much freedom as possible. The library will essentially modify parts of the DOM that act as the editor's contents. It should be agnostic to the editor's contents at all times to give other developers the freedom to change the contents in any way needed without breaking the editor. A cache must account for external changes. The DOM3 Events specification\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/}, last checked on 07/21/2015} offers \texttt{MutationObserver}s to check for DOM changes. This feature is not supported by Internet Explorer version 10 or less\footnote{\url{http://caniuse.com/\#search=mutation}, last checked on 07/21/2015}. Internet Explorer 9 and 10 offer an implementation for \texttt{MutationEvent}s\footnote{\url{http://help.dottoro.com/ljfvvdnm.php\#additionalEvents }, last checked on 07/21/2015}. The W3C states that ''The MutationEvent interface [...] has not yet been completely and interoperably implemented across user agents. In addition, there have been critiques that the interface, as designed, introduces a performance and implementation challenge.''\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/\#legacy-mutationevent-events}, last checked on 07/21/2015}. Apart from that, the benefits of a cache may not signifcantly increase the library's performance. The actions that can be supported by a cache, most importantly moving the caret in the text, are not very complex and do not noticably afflict the CPU. Implementing an editor that is stateless in regards of its contents can also improve stability.
+The \code{Utilities} class is a general-purpose class that contains methods to extend JavaScript's features. It contains methods to work with data structures and to detect object types.
 
-\section{Extensions}
+\section{Cache}
+
+For traversing the text, for example when the caret moves, the text will need to be measured. All measurements can be stored to a cache to only perform the same measurement operations once. On the other hand, the library should be a ''good citizen'' on a website, which means it should be as unobtrusive and leave the developers as much freedom as possible. The library will essentially modify parts of the DOM that act as the editor's contents. It should be agnostic to the editor's contents at all times to give other developers the freedom to change the contents in any way needed without breaking the editor. A cache must account for external changes. The DOM3 Events specification\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/}, last checked on 07/21/2015} offers \texttt{MutationObserver}s to check for DOM changes. This feature is not supported by Internet Explorer version 10 or less\footnote{\url{http://caniuse.com/\#search=mutation}, last checked on 07/21/2015}. Internet Explorer 9 and 10 offer an implementation for \texttt{MutationEvent}s\footnote{\url{http://help.dottoro.com/ljfvvdnm.php\#additionalEvents }, last checked on 07/21/2015}. The W3C states that ''The MutationEvent interface [...] has not yet been completely and interoperably implemented across user agents. In addition, there have been critiques that the interface, as designed, introduces a performance and implementation challenge.''\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/\#legacy-mutationevent-events}, last checked on 07/21/2015}. Apart from that, the benefits of a cache may not signifcantly increase the library's performance. The actions that can be supported by a cache, most importantly moving the caret in the text, are not very complex and do not noticably afflict the CPU. Implementing an editor that is stateless in regards of its contents can also improve stability.
+
+
+\section{Etherpad integration} 
+
+Etherpad\footnote{Etherpad has been completely rewritten under the name Etherpad Lite. However, its official website no longer links to its former source code. For simplicity, the name Etherpad will be used, referring to its rewrite as Etherpad Lite} is a web-based collaborative real-time text editor with rich-text capabilites. It provides a server, written in JavaScript using Node.js as well as a web-based rich-text editor. Both components are distributed in one package and are meant to be used together.
+
+To achieve real-time rich-text collaboration, multiple web-based clients communicate with a server via WebSockets using socket.io. The server uses an operational transformation algorithm to merge each change to a document accounting for all changes and then urges each client to update their local contents according to the final document. For this, Etherpad uses the concept of so-called ''changesets''.
+
+Each client sends its local changes, debounced to an interval of 500 milliseconds, as a serialized string---the changeset---to the server. The changeset includes all text insertions, removals and formattings of the last time frame. Along with the changeset, it sends a document revision number that the changeset is based on to the server. The document revision number increases with every changeset that has been accepted and applied to the document on the server side. The document on ther server side is saved as a stack of changesets, which ultimatively form the current document. For performance reasons, snapshots can be taken that save the document as formatted text. 
+
+Based on the revision number the client provides with the intended changeset, the server can apply it to the version of the document the client was working on. The server will the apply the resulting changes to all newer revisions of the document (if present) and send a changeset and the latest revision number back to the client.
+
+The changeset it sends back includes the differences from the the client's current revision of the document (with its own changes already applied) to the the revision latest revision on the server that includes the result of all changes the server had to perfom along each revision as just described.
+
+As a last step, the client must apply the changeset it got from the server to its local document and display the most recent version to the user.
+
+It can happen, that two (or more) clients send different changesets to the server, but are based on the same documents's revision. The server merges both changesets to the server's revision and creates two new changesets, one for each client. Each changeset includes the changes the client needs to perform to create a document the is the result of its own and the changes of the other client.
+
+
+
+% Collaboration with etherpad ist wirklich einfach zu machen mit meinem coolen editor. Mein Editor ist ganz ganz toll dass das so einfach geht, ja!
+
+
+
+\section{Extending}
 \label{sec:extensions}
 
-\section{Plugin API} ...and plugin cache
+Type's modular structure is designed for extension. Type's \code{prototype} has been exposed as \code{Type.fn} all its classes in the \code{Type} namespace to provide other developers with all of Type's functionality in a sctructured and easily accessible manner.
 
-\subsection{Many options for programmers}
+\subsection{Plugin API} ...and plugin cache
 
 \begin{lstlisting}[language=JavaScript, caption=Example calls to format text, label=lst:format-examples]
 // Adding contructors
@@ -539,5 +565,4 @@ Type.fn.cmd = function (tag, params) { /* Implementation */ };
 
 Erstellung von Erweiterungen und Plugins soll so einfach und frei wie möglich sein. Es ist die Verantwortung der Programmierer diese Freiheit so zu nutzen, dass sie trotzdem sauber arbeiten. jQuery zeigt, dass Freiheit funktioneren kann und nicht zu schlechtem nutzen führt. Schlechte Plugins sterben durch die Dynamik des ''Marktes'' aus. Die Vorteile ueberwiegen: Beim CKEditor ist es aufwändig (viel Code um sich in den Editor zu integrieren) und schwierig (Lernkurve) Erweiterungen zu schreiben. Der CKEditor ist aber auch ein Produkt und kein Framework. Ein Framework sollte Möglichkeiten geben und einfach (und painless) sein. jQuery hat für sich Konventionen erzeugt und Möglichkeiten gegen, die Programmierer effektiv arbeiten lassen können. Und jQuery zeigt: Es funktioniert.
 
-\subsection{Etherpad} Collaboration with etherpad ist wirklich einfach zu machen mit meinem coolen editor. Mein Editor ist ganz ganz toll dass das so einfach geht, ja!
-Markdown wohl eher als Ausblick.
+%Markdown wohl eher als Ausblick.
