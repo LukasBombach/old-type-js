@@ -332,9 +332,26 @@ Before the text read from the hidden \code{textarea} will be passed on to the \c
 \item Filter and transform input
 \end{itemize}
 
-\paragraph{Events} As an alternative apporach, for every input that the user makes, an event could be triggered. Input filters could be implemented as event handlers. With this, the same functionality could be achived. A designated input pipeline however provides a clearer mental model for processing the input, it allows a separation of concerns. An input filter has a specific purpose and context as compared to an arbitrary input event handler. It can also be made sure that any input filter will be run before triggering an input event. This way input event handlers only receive actual text input for the editors contents while keyboard shortcuts and other keypresses have been filtered out.
+\subsection{Triggering functions}
+\paragraph{Caret}
+caret,
+\paragraph{Command}
+command
+\subsection{Rich-text behavior}
+\paragraph{Headlines}
+head lines
+\paragraph{Line Breaks}
+line breaks
+\paragraph{Lists}
+lists
+\subsection{Filtergring and transformation}
+\paragraph{Remove}
+remove
+\paragraph{Spaces}
+spaces
+\subsection{Events} As an alternative apporach, for every input that the user makes, an event could be triggered. Input filters could be implemented as event handlers. With this, the same functionality could be achived. A designated input pipeline however provides a clearer mental model for processing the input, it allows a separation of concerns. An input filter has a specific purpose and context as compared to an arbitrary input event handler. It can also be made sure that any input filter will be run before triggering an input event. This way input event handlers only receive actual text input for the editors contents while keyboard shortcuts and other keypresses have been filtered out.
 
-\paragraph{Extendability} The input pipeline is intended to be extended. It serves as an entry point for other developers to process input. For this, the \code{Input} class provides an API to add and reorder input filters.
+\subsection{Extendability} The input pipeline is intended to be extended. It serves as an entry point for other developers to process input. For this, the \code{Input} class provides an API to add and reorder input filters.
 
 %While these are the basic responsibilites 
 
@@ -347,20 +364,10 @@ Before the text read from the hidden \code{textarea} will be passed on to the \c
 \subsection{Pasting} Kontrolle durch die Implementierung mit einem versteckten Eingabefeld. Erst mal gibt es ein reliable Paste event, was es in keinem Editor basierend auf contentEditable gibt. 2. Hat man volle Kontrolle über den Inhalt, was gepastet wird und was nicht. Und das ganze mit einer einfachen API. Pasting sollte internes event ausloesen.
 
 
-\subsection{Caret}
-caret
-\subsection{Command}
-command
-\subsection{Headlines}
-head lines
-\subsection{Line Breaks}
-line breaks
-\subsection{Lists}
-lists
-\subsection{Remove}
-remove
-\subsection{Spaces}
-spaces
+
+
+
+
 
 
 
@@ -371,14 +378,14 @@ spaces
 
 % which is presented to the user as the input field.
 
-\subsection{Range}
+\section{Range}
 range
 
 
 
 
 
-\subsection{Caret}
+\section{Caret}
 \label{subsec:caret}
 caret
 \subsection{BiDi support}
@@ -387,33 +394,33 @@ http://marijnhaverbeke.nl/blog/browser-input-reading.html
 https://en.wikipedia.org/wiki/Input\_method
 
 
-\subsection{Selection}
+\section{Selection}
 Fake damit copy \& past nativ funktioniert
 Obwohl eine selection mehrere Ranges haben kann, wird das von keinem Browser unterstützt http://stackoverflow.com/questions/4777860/highlight-select-multiple-divs-with-ranges-w-contenteditable/4780571\#4780571
 Habe versucht mit die Darstellung über getClientRects zu emulierten, aber das ist buggy siehe https://github.com/edg2s/rangefix/blob/master/rangefix.js
 
 
-\subsection{Selection Overlay}
+\paragraph{Selection Overlay}
 overlay
 
-\subsection{Formatting}
+\section{Formatting}
 formatting
 
-\subsection{Change Listener}
+\section{Change Listener}
 change
 
-\subsection{Contents}
+\section{Contents}
 contents
 
-\subsection{Development}
+\section{Development}
 
 The \code{Development} class is intended to contain utility methods to support the development of the library. As for the development of this thesis, it was sufficient to implement logging methods.
 
-\subsection{Dom Utilities}
+\section{Dom Utilities}
 
 The \code{DomUtilities} class encapsulates common methods for all DOM operations other than traversal. It has no inherent purpose but many other classes perform the same DOM operations, which hence reside in a common library to avoid code duplication.
 
-\subsection{Dom Walker}
+\section{Dom Walker}
 
 Working with text implies having to traverse the DOM, i.e. the nodes inside the text often. The {DomWalker} utility class solves this problem. The DOM API offers methods to access a node's siblings, children and parents, but it must always accounted for cases when any of these is \code{null} (there is no parent, sibling or child) or when they overflow the bounds of the editor's contents. But more importantly, for text editing, it is usually necessary to access the next (or previous) node in the document's content flow which can either be the parent, sibling or child. Also, it is often the case that it is not only necessary to fetch the next node, but to apply a filter to only fetch a specfic node, for instance a text node or only a text node that has contents visible to the user\footnote{Any text node consisting of whitespace only will not be displayed by any major browser}. Browsers offer a native API for this, called \code{TreeWalker}, but it is said to be slow\footnote{\url{http://jsperf.com/qsa-vs-node-iterator}}, is only partially supported by Internet Explorer 9\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator\#Browser_compatibility}} and has been critisized for its verbose API\footnote{By John Resig, author of jQuery\url{http://ejohn.org/blog/unimpressed-by-nodeiterator/}}.
 
@@ -438,14 +445,14 @@ The \code{DomWalker} class offers high-level methods for traversal, designed to 
 
 %dom walker. Used SO OFTEN in the project. Goal is to have a really simple api new DomWalker('text') by having lots of pre-defined magick in it.
 
-\subsection{Environment}
+\section{Environment}
 
 The \code{Environment} class checks and provides informations on the current browser environment and its features. This class is especially important to mimick native behavior for user interaction. For instance, depending on the operating system, either the control key or the command key should be used to implemnt keyboard shortcuts. To check for specific feature support, it is favourable to use duck typing within each class.
 
 \subsection{Event Api}
 ev api
 
-\subsection{Events}
+\section{Events}
 
 Dazu entscheiden dass es ein Type-Internes Eventsystem gibt, dessen Events nur in Type existieren. Damit polluten die nicht den globalen (name)space mit events. Nur bestimmte events werden global (nativ) getriggert, und das sind genau die events, die nach aussenhin von Belang sind und abgegriffen werden koennen sollen (=API design)
 
@@ -453,20 +460,20 @@ Dazu entscheiden dass es ein Type-Internes Eventsystem gibt, dessen Events nur i
 input event only event required so far
 
 
-\subsection{Plugin Api}
-plugin api
-\subsection{Settings}
+%\section{Plugin Api}
+%plugin api
+\section{Settings}
 settings
-\subsection{Text Walker}
+\section{Text Walker}
 text walker
-\subsection{Utilities}
+\section{Utilities}
 util
 
-\subsection{Cache} For traversing the text, for example when the caret moves, the text will need to be measured. All measurements can be stored to a cache to only perform the same measurement operations once. On the other hand, the library should be a ''good citizen'' on a website, which means it should be as unobtrusive and leave the developers as much freedom as possible. The library will essentially modify parts of the DOM that act as the editor's contents. It should be agnostic to the editor's contents at all times to give other developers the freedom to change the contents in any way needed without breaking the editor. A cache must account for external changes. The DOM3 Events specification\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/}, last checked on 07/21/2015} offers \texttt{MutationObserver}s to check for DOM changes. This feature is not supported by Internet Explorer version 10 or less\footnote{\url{http://caniuse.com/\#search=mutation}, last checked on 07/21/2015}. Internet Explorer 9 and 10 offer an implementation for \texttt{MutationEvent}s\footnote{\url{http://help.dottoro.com/ljfvvdnm.php\#additionalEvents }, last checked on 07/21/2015}. The W3C states that ''The MutationEvent interface [...] has not yet been completely and interoperably implemented across user agents. In addition, there have been critiques that the interface, as designed, introduces a performance and implementation challenge.''\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/\#legacy-mutationevent-events}, last checked on 07/21/2015}. Apart from that, the benefits of a cache may not signifcantly increase the library's performance. The actions that can be supported by a cache, most importantly moving the caret in the text, are not very complex and do not noticably afflict the CPU. Implementing an editor that is stateless in regards of its contents can also improve stability.
+\section{Cache} For traversing the text, for example when the caret moves, the text will need to be measured. All measurements can be stored to a cache to only perform the same measurement operations once. On the other hand, the library should be a ''good citizen'' on a website, which means it should be as unobtrusive and leave the developers as much freedom as possible. The library will essentially modify parts of the DOM that act as the editor's contents. It should be agnostic to the editor's contents at all times to give other developers the freedom to change the contents in any way needed without breaking the editor. A cache must account for external changes. The DOM3 Events specification\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/}, last checked on 07/21/2015} offers \texttt{MutationObserver}s to check for DOM changes. This feature is not supported by Internet Explorer version 10 or less\footnote{\url{http://caniuse.com/\#search=mutation}, last checked on 07/21/2015}. Internet Explorer 9 and 10 offer an implementation for \texttt{MutationEvent}s\footnote{\url{http://help.dottoro.com/ljfvvdnm.php\#additionalEvents }, last checked on 07/21/2015}. The W3C states that ''The MutationEvent interface [...] has not yet been completely and interoperably implemented across user agents. In addition, there have been critiques that the interface, as designed, introduces a performance and implementation challenge.''\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/\#legacy-mutationevent-events}, last checked on 07/21/2015}. Apart from that, the benefits of a cache may not signifcantly increase the library's performance. The actions that can be supported by a cache, most importantly moving the caret in the text, are not very complex and do not noticably afflict the CPU. Implementing an editor that is stateless in regards of its contents can also improve stability.
 
-\subsection{Extensions}
+\section{Extensions}
 
-\subsection{Plugin API} ...and plugin cache
+\section{Plugin API} ...and plugin cache
 
 \subsection{Many options for programmers}
 
