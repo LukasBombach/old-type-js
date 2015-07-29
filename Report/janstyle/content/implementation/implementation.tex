@@ -313,8 +313,25 @@ As discussed in \refsection{sec:approaches_for_imitating_native_components}, the
 \paragraph{Reading input} \code{textarea} elements support \code{input} events which can be used to read the text entered by the user. The input can be processed as discussed in \refsection{sec:module_architecture} and be removed from the textarea. Input reading requires further processing before it can be passed on to trigger a change in the editor's contents. The specifics on processing the input will be discussed in section \refsection{sec:input_pipeline}.
 
 \section{Input Pipeline}
-
 \label{sec:input_pipeline}
+
+\begin{figure}[!htb]
+\centering
+\makebox[\textwidth]{\includegraphics[width=\textwidth]{images/input-pipeline.pdf}}
+\caption{Input pipeline with sample filters}
+\label{fig:type_base_components}
+\end{figure}
+
+Before the text read from the hidden \code{textarea} will be passed on to the \code{Changes} class, it will be passed though a series of \code{Filter}s, called the ''input pipeline''. 
+
+\begin{itemize}
+\item Catch input that that shoud trigger functions of the library
+\item Implement rich-text editing behavior
+\item Filter and transform input
+\end{itemize}
+
+While these are the basic responsibilites 
+
 
 pipeline idea
 rules for behaviours (lists, headlines, enter, spaces...)
