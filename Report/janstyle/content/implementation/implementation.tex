@@ -290,7 +290,61 @@ When simulating a native input, in a best-case scenario, all these input methods
 
 \paragraph{Clipboard} A problem with relying entirely on events is the lack of native clipboard capabilities. Unless a native text input (including elememts with enabled editing mode) is focused, shortcut keys for pasting will not trigger a paste event and the mouse's context menu will not offer an option for pasting. \textit{Recent versions of Chrome, Opera and Android Browser\footnote{\url{http://caniuse.com/\#feat=clipboard}, last checked on 07/22/2015} allow triggering arbitrary paste events on elements in editing mode thereby read the cliboard contents. With this, shortcuts could be enabled with JavaScript and instead of the native context menu, a customly build context menu using HTML could be shown that allows the user to paste, but this only works on elements in editing mode and only in these three browsers.}
 
-\subsection{Hidden native input fields} Apart from rich-text editors there are also third-party JavaScript libraries that allow embedding code editors with syntax highlighting in a website. The ''Ajax.org Cloud9 Editor (Ace)'' and ''CodeMirror'' editor are amongst the most well-known choices. Both editors keep an internal representation of the plain-text (i.e. non-highlighted) contents of the editor, parse it and display a highlighted version using HTML in a designated \texttt{div}. Both editors use a hidden \texttt{textarea} in which the user enters his or her input. The input will be read from the \texttt{textarea} and
+\subsection{Hidden native input fields} 
+
+As discussed in \refsection{sec:approaches_for_imitating_native_components}, the source code editors Ace and CodeMirror use a hidden (native) input field to fetch the user's keyboard input. While it appears to the user he or she is entering text in a syntax-highlighted representation of the source code, in reality the user enters his or her text in a hidden \code{textarea} element. The input will be processed and displayed with syntax-highlighting. This solves many problems of relying solely on events
+
+\begin{itemize}
+\item The hidden \code{textarea} can be focused with the tab key.
+\item The hidden \code{textarea} can be focused with remote controls.
+\item Virtual (on screen) keyboards will show up.
+\item Keyboard shortcuts for clipboard events work.
+\item It can display a native context menu that allows pasting.
+\end{itemize}
+
+\paragraph{Implementation} To achieve this, a \code{textarea} must be created when the editor gets instantiated. Since browsers scroll the \code{textarea} into view when it receives the focus, it must be positioned in the visual representation of the editor, so the editor will be scrolled into view. This perfectly mimicks the browser's native behavior. To maintain the illusion that the user acutally writes inside the visual represenation of the editor the \code{textarea} must be hidden.
+
+\paragraph{Focus} Whenever the user clicks inside the editors visible contents, the (fake) caret will be set (see \refsubsec{subsec:caret}) at the according text position. To enable text input, the hidden \code{textarea} will be focused. The \code{textarea} is focusable using the tab key or a remote control on a smart TV. It will also trigger focus and blur events. This way, it is possible to display the caret when the \code{textarea} receives the focus and read its input as well as hiding the caret on blur and thereby perfectly mimick the native behavior for input events.
+
+\paragraph{Virtual (on screen) keyboard support} The \code{textarea} will be focused when the user clicks or touches inside the editor as well as with the tab key and remote controls. Focusing a text input triggers the display of native virtual keyboards.
+
+\paragraph{Pasting} When a the textarea is foucsed, pastiing via keyboard shortcuts is natively available. To enable pasting with the context menu, the \code{textarea} must be moved to the pointer's position on a \code{mousedown} event. Following the order of \code{MouseEvent}s, this will be completed, before the context menu will be triggerd. This way it will be triggered on the \code{textarea} and contain a paste option.
+
+\paragraph{Reading input} \code{textarea} elements support \code{input} events which can be used to read the text entered by the user. The input can be processed as discussed in \refsection{sec:module_architecture} and be removed from the textarea. Input reading requires further processing before it can be passed on to trigger a change in the editor's contents. The specifics on processing the input will be discussed in section \refsection{sec:input_pipeline}.
+
+\section{Input Pipeline}
+
+\label{sec:input_pipeline}
+
+pipeline idea
+rules for behaviours (lists, headlines, enter, spaces...)
+Ursprünglich so gedacht: Was gehört zu einem editor X, Y und Behaviour. Für Behaviour aber das input pipeline system gefunden, welches das ganze schön abbildet/löst.
+Noch mal skimmen und sehen ob da was dabei ist, besonders "Detour": http://marijnhaverbeke.nl/blog/browser-input-reading.html
+
+\subsection{Pasting} Kontrolle durch die Implementierung mit einem versteckten Eingabefeld. Erst mal gibt es ein reliable Paste event, was es in keinem Editor basierend auf contentEditable gibt. 2. Hat man volle Kontrolle über den Inhalt, was gepastet wird und was nicht. Und das ganze mit einer einfachen API. Pasting sollte internes event ausloesen.
+
+
+\subsection{Caret}
+caret
+\subsection{Command}
+command
+\subsection{Headlines}
+head lines
+\subsection{Line Breaks}
+line breaks
+\subsection{Lists}
+lists
+\subsection{Remove}
+remove
+\subsection{Spaces}
+spaces
+
+
+
+
+
+
+% Apart from rich-text editors there are also third-party JavaScript libraries that allow embedding code editors with syntax highlighting in a website. The ''Ajax.org Cloud9 Editor (Ace)'' and ''CodeMirror'' editor are amongst the most well-known choices. Both editors keep an internal representation of the plain-text (i.e. non-highlighted) contents of the editor, parse it and display a highlighted version using HTML in a designated \texttt{div}. Both editors use a hidden \texttt{textarea} in which the user enters his or her input. The input will be read from the \texttt{textarea} and
 
 % which is presented to the user as the input field.
 
@@ -302,6 +356,7 @@ range
 
 
 \subsection{Caret}
+\label{subsec:caret}
 caret
 \subsection{BiDi support}
 \subsection{IME} 
@@ -371,32 +426,9 @@ ev api
 
 Dazu entscheiden dass es ein Type-Internes Eventsystem gibt, dessen Events nur in Type existieren. Damit polluten die nicht den globalen (name)space mit events. Nur bestimmte events werden global (nativ) getriggert, und das sind genau die events, die nach aussenhin von Belang sind und abgegriffen werden koennen sollen (=API design)
 
-\subsection{Input}
+\paragraph{Input}
 input event only event required so far
 
-\subsection{Input Pipeline}
-pipeline idea
-rules for behaviours (lists, headlines, enter, spaces...)
-Ursprünglich so gedacht: Was gehört zu einem editor X, Y und Behaviour. Für Behaviour aber das input pipeline system gefunden, welches das ganze schön abbildet/löst.
-Noch mal skimmen und sehen ob da was dabei ist, besonders "Detour": http://marijnhaverbeke.nl/blog/browser-input-reading.html
-
-\subsection{Pasting} Kontrolle durch die Implementierung mit einem versteckten Eingabefeld. Erst mal gibt es ein reliable Paste event, was es in keinem Editor basierend auf contentEditable gibt. 2. Hat man volle Kontrolle über den Inhalt, was gepastet wird und was nicht. Und das ganze mit einer einfachen API. Pasting sollte internes event ausloesen.
-
-
-\subsection{Caret}
-caret
-\subsection{Command}
-command
-\subsection{Headlines}
-head lines
-\subsection{Line Breaks}
-line breaks
-\subsection{Lists}
-lists
-\subsection{Remove}
-remove
-\subsection{Spaces}
-spaces
 
 \subsection{Plugin Api}
 plugin api
