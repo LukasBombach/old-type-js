@@ -15,3 +15,18 @@
 \newcommand{\refsubsec}[1]{\textbf{\hyperref[#1]{\ref*{#1}: \nameref{#1}}}}
 \newcommand{\code}[1]{\texttt{#1}}
 \newcommand{\sectionheading}[1]{\noindent{\textbf{#1}}}
+
+\newcommand*\keystroke[1]{%
+  \tikz[baseline=(key.base)]
+    \node[%
+      draw,
+      fill=white,
+      drop shadow={shadow xshift=0.25ex,shadow yshift=-0.25ex,fill=black,opacity=0.75},
+      rectangle,
+      rounded corners=2pt,
+      inner sep=1pt,
+      line width=0.5pt,
+      font=\scriptsize\sffamily
+    ](key) {#1\strut}
+  ;
+}

@@ -332,9 +332,23 @@ Before the text read from the hidden \code{textarea} will be passed on to the \c
 \item Filter and transform input
 \end{itemize}
 
+The input pipeline is part of the \code{Input} class. The pipeline itself is an array of input filters that can be added, removed and orderd with a designated API.
+
+JavaScript does not support the concept of \code{Interfaces} and although the constructor pattern allows class-like structures, it does not support classical inheritance unless implemented with supporting constructs\footnote{Interfaces can be implemented though helper classes too}. These constructs can be costly in terms of file size and performance. For this reason, input filters do not implement a formalized interface and do not inherit a filter base class. Instead, each input filter register and specifies for which input should be called for. For instance, a filter can register to be called when the user presses the \keystroke{ctrl}\keystroke{s} key combination and trigger a ''save'' function. The input is passed to the filters as an event that can be stopped from bubbling. This way it can be prevented that pressing \keystroke{ctrl}\keystroke{s} will also insert an ''s'' character to the editor.
+
+
+%The \code{Input} class will pass any entry made in the \code{textarea}
+
+%The \code{Input} module checks .
+%Filters are classes that can be instantited and added to the 
+
+% The order in which filters will be applied can be important
+
 \subsection{Triggering functions}
-\paragraph{Caret}
-caret,
+
+\paragraph{Caret} Commonly, when a user presses one of the arrow keys inside a text, the caret will be moved and of course, in a browser eivironment, this is not different.
+
+
 \paragraph{Command}
 command
 \subsection{Rich-text behavior}
@@ -349,6 +363,8 @@ lists
 remove
 \paragraph{Spaces}
 spaces
+
+
 \subsection{Events} As an alternative apporach, for every input that the user makes, an event could be triggered. Input filters could be implemented as event handlers. With this, the same functionality could be achived. A designated input pipeline however provides a clearer mental model for processing the input, it allows a separation of concerns. An input filter has a specific purpose and context as compared to an arbitrary input event handler. It can also be made sure that any input filter will be run before triggering an input event. This way input event handlers only receive actual text input for the editors contents while keyboard shortcuts and other keypresses have been filtered out.
 
 \subsection{Extendability} The input pipeline is intended to be extended. It serves as an entry point for other developers to process input. For this, the \code{Input} class provides an API to add and reorder input filters.
