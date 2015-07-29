@@ -322,13 +322,17 @@ As discussed in \refsection{sec:approaches_for_imitating_native_components}, the
 \label{fig:type_base_components}
 \end{figure}
 
-Before the text read from the hidden \code{textarea} will be passed on to the \code{Changes} class, it will be passed though a series of \code{Filter}s, called the ''input pipeline''. 
+Before the text read from the hidden \code{textarea} will be passed on to the \code{Changes} class, it will be passed though a series of \code{Filter}s, called the ''input pipeline''. The input pipeline has 3 basic responsibilites.
 
 \begin{itemize}
-\item Catch input that that shoud trigger functions of the library
+\item Stop and dispatch input that that shoud trigger functions of the library
 \item Implement rich-text editing behavior
 \item Filter and transform input
 \end{itemize}
+
+\paragraph{Events} As an alternative apporach, for every input that the user makes, an event could be triggered. Input filters could be implemented as event handlers. With this, the same functionality could be achived. A designated input pipeline however provides a clearer mental model for processing the input, it allows a separation of concerns. An input filter has a specific purpose and context as compared to an arbitrary input event handler. It can also be made sure that any input filter will be run before triggering an input event. This way input event handlers only receive actual text input for the editors contents while keyboard shortcuts and other keypresses have been filtered out.
+
+\paragraph{Extendability}
 
 While these are the basic responsibilites 
 
