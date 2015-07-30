@@ -539,13 +539,17 @@ As a last step, the client must apply the changeset it got from the server to it
 
 In a collaborative environment, it can happen that two (or more) clients send different changesets to the server that are based on the same document revision. It is the responsibility of the server to merge both changes so that it preserves either intend. As explained in the ''Etherpad and EasySync Technical Manual''[citation needed], to solve this, for a document $X$ with the conflicting changesets $A$ and $B$, the server computes the new changesets $A'$ and $B'$ such that
 $$XAB' = XBA' = Xm(A,B)$$
-where $Xm(A,B)$ is the merge of $A$ and $B$ applied to the document $X$. The changesets $A'$ and $B'$ will be sent to the respective clients, which will apply it to their local documents to sync with the document on the server.
+where $Xm(A,B)$ is the merge of $A$ and $B$ applied to the document $X$. The changesets $A'$ and $B'$ will be sent to the respective clients, which will apply it to their local documents to sync with the document on the server. To compute a changeset $A'$
 
+\begin{itemize}
+\item Insertions in $B$ become retained characters in $A'$
+\item Insertions in $A$ stay insertions in $A'$
+\item Retain whatever characters are retained in \emph{both} $A$ and $B$
+\end{itemize}
 
-%The server merges both changesets to the server's revision and creates two new changesets, one for each client. Each changeset includes the changes the client needs to perform to create a document that resembles the result of its own changes and the changes of the other client.
+For $B'$ this applies vice versa. This implies that anything affected by the changesets and is not inserted or retained will be removed. \textit{// CHECK ON THIS AGAIN!}
 
-%To merge conflicting changesets and generate new changesets for each client, the server has 2 responsiblities.% must make sure
-
+\subsection{Client implementation}
 
 % Collaboration with etherpad ist wirklich einfach zu machen mit meinem coolen editor. Mein Editor ist ganz ganz toll dass das so einfach geht, ja!
 
