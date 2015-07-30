@@ -551,6 +551,15 @@ For $B'$ this applies vice versa. This implies that anything affected by the cha
 
 \subsection{Etherpad Client implementation}
 
+Clients interact with the server via WebSockets using socket.io. To sync their own changes with other clients, a client does 4 things.
+
+\begin{itemize}
+\item Request a the full document from the server
+\item Send a changeset to the server
+\item Receive acknowledgement from the server for a submitted changeset
+\item Receive a changeset from the server submitted by another client
+\end{itemize}
+
 \subsection{Type Client implementation}
 
 Etherpad's client--server protocol can be reverse engineered.
