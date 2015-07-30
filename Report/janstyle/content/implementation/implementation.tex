@@ -632,11 +632,11 @@ Type.myConstructor = function () {
 };
 \end{lstlisting}
 
-\subsection{Class extension}
+\subsection{Namespace extension}
 
 As discussed in \refsubsec{subsec:namespace_and_refs}, to implement extensions for Type, the \code{Type} namespace can be used to add custom classes or sub-namespaces.
 
-\begin{lstlisting}[language=JavaScript, caption=Example Type namespace extension and usage of a built-in class, label=lst:namespace_extension_example]
+\begin{lstlisting}[language=JavaScript, caption=Example Type namespace extension and usage of a built-in class., label=lst:namespace_extension_example]
 Type.MyClass = function () {
   var caret = new Type.Caret();
 };
@@ -646,29 +646,27 @@ Type.MyClass = function () {
 %Type.MyPluginNamespace.Foo = function() {};
 %Type.MyPluginNamespace.Bar = function() {};
 
-All other classes that Type uses are exposed in this namespace and can be used by extensions. This can be used to provide other developers with functionality and / or to support API extensions.
+\noindent All other classes that Type uses are exposed in this namespace and can be used by extensions. This can be used to provide other developers with functionality and / or to support API extensions.
 
 \subsection{Plugin API}
 
-...and plugin cache
+A plugin may need to be initialized when an editor will be instantiated. To support this, Type will trigger an event on instantiation and pass the Type instance to the event handler
 
-\begin{lstlisting}[language=JavaScript, caption=Example calls to format text, label=lst:format-examples]
-// Adding contructors
-Type.fromEtherpad = function() { /* Implementation */ };
-
-// Events to load plugins on instantiation
-Type.on('ready', function(type) { /* Implementation */ });
-
-// Lazy loading using plugin cache
-Type.fn.myPluginMethod = function (tag, params) {
-  var cmd = this.plugin('cmd', /* Plugin instantiation */ );
-  /* Execute myPluginMethod */
-};
-
-// Static function calls just like jQuery
-Type.fn.cmd = function (tag, params) { /* Implementation */ };
+\begin{lstlisting}[language=JavaScript, caption=Example event handler for a Type instantiation, label=lst:instantiation_even_handler_example]
+Type.on('ready', function(typeInstance) {});
 \end{lstlisting}
 
-Erstellung von Erweiterungen und Plugins soll so einfach und frei wie möglich sein. Es ist die Verantwortung der Programmierer diese Freiheit so zu nutzen, dass sie trotzdem sauber arbeiten. jQuery zeigt, dass Freiheit funktioneren kann und nicht zu schlechtem nutzen führt. Schlechte Plugins sterben durch die Dynamik des ''Marktes'' aus. Die Vorteile ueberwiegen: Beim CKEditor ist es aufwändig (viel Code um sich in den Editor zu integrieren) und schwierig (Lernkurve) Erweiterungen zu schreiben. Der CKEditor ist aber auch ein Produkt und kein Framework. Ein Framework sollte Möglichkeiten geben und einfach (und painless) sein. jQuery hat für sich Konventionen erzeugt und Möglichkeiten gegen, die Programmierer effektiv arbeiten lassen können. Und jQuery zeigt: Es funktioniert.
+\noindent To store and read data specific to an instance, Type offers the \code{data} method, that will return an \code{Object} for arbitrary access.
+
+\begin{lstlisting}[language=JavaScript, caption=Example calls to format text, label=lst:format-examples]
+Type.fn.myMethod = function () {
+  this.data("myPlugin").foo = 'bar';
+  var bar = this.data("myPlugin").foo;
+};
+\end{lstlisting}
+
+\noindent To give each plugin an own namespace, an arbitrary identifier must be passed as a \code{String} to the \code{data} method, which will provide a unique \code{Object} for different strings. This can possibly cause name conflicts if two plugins choose to use the same string. Developers are advised to always to always use their own extension name as identifier. Experience with jQuery's plugin system as well as jQuery's \code{data} method shows that while this cannot prevent name conflicts, it is rarely a problem.
+
+% Erstellung von Erweiterungen und Plugins soll so einfach und frei wie möglich sein. Es ist die Verantwortung der Programmierer diese Freiheit so zu nutzen, dass sie trotzdem sauber arbeiten. jQuery zeigt, dass Freiheit funktioneren kann und nicht zu schlechtem nutzen führt. Schlechte Plugins sterben durch die Dynamik des ''Marktes'' aus. Die Vorteile ueberwiegen: Beim CKEditor ist es aufwändig (viel Code um sich in den Editor zu integrieren) und schwierig (Lernkurve) Erweiterungen zu schreiben. Der CKEditor ist aber auch ein Produkt und kein Framework. Ein Framework sollte Möglichkeiten geben und einfach (und painless) sein. jQuery hat für sich Konventionen erzeugt und Möglichkeiten gegen, die Programmierer effektiv arbeiten lassen können. Und jQuery zeigt: Es funktioniert.
 
 %Markdown wohl eher als Ausblick.
