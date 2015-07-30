@@ -616,7 +616,9 @@ This architecture provides an unobtrusive way to integrate real-time collaborati
 
 \subsection{Overview}
 
-Type's modular structure is designed for extension. Type's \code{prototype} has been exposed as \code{Type.fn} and all its classes in the \code{Type} namespace. This provides other developers with all of Type's functionality in a sctructured and accessible manner. Type is designed to give developers freedom in how to implement an extension.
+Type's modular structure is designed for extension. Type's \code{prototype} has been exposed as \code{Type.fn} and all its classes in the \code{Type} namespace. This provides other developers with all of Type's functionality in a sctructured and accessible manner. Type is designed to lower the barrier for and encourage developers to extend Type by giving freedom and possiblities in how to implement an extension and trying to avoid compulsorily use of interfaces or configurations.
+
+jQuery demonstrates a liberal apporach for writing extensions and experience shows that name comflicts are minimal and ''good'' extensions are naturally favored over ''bad'' extensions by the community of web developers.
 
 \subsection{API extension}
 
@@ -665,7 +667,7 @@ Type.fn.myMethod = function () {
 };
 \end{lstlisting}
 
-\noindent To give each plugin an own namespace, an arbitrary identifier must be passed as a \code{String} to the \code{data} method, which will provide a unique \code{Object} for different strings. This can possibly cause name conflicts if two plugins choose to use the same string. Developers are advised to always to always use their own extension name as identifier. Experience with jQuery's plugin system as well as jQuery's \code{data} method shows that while this cannot prevent name conflicts, it is rarely a problem.
+\noindent To give each plugin an own namespace, an arbitrary identifier must be passed as a \code{String} to the \code{data} method, which will provide a unique \code{Object} for different strings. This can possibly cause name conflicts if two plugins choose to use the same string. Developers are advised to always use their own extension name as identifier. Experience with jQuery's plugin system as well as jQuery's \code{data} method shows that while this cannot prevent name conflicts, it is rarely a problem.
 
 % Erstellung von Erweiterungen und Plugins soll so einfach und frei wie möglich sein. Es ist die Verantwortung der Programmierer diese Freiheit so zu nutzen, dass sie trotzdem sauber arbeiten. jQuery zeigt, dass Freiheit funktioneren kann und nicht zu schlechtem nutzen führt. Schlechte Plugins sterben durch die Dynamik des ''Marktes'' aus. Die Vorteile ueberwiegen: Beim CKEditor ist es aufwändig (viel Code um sich in den Editor zu integrieren) und schwierig (Lernkurve) Erweiterungen zu schreiben. Der CKEditor ist aber auch ein Produkt und kein Framework. Ein Framework sollte Möglichkeiten geben und einfach (und painless) sein. jQuery hat für sich Konventionen erzeugt und Möglichkeiten gegen, die Programmierer effektiv arbeiten lassen können. Und jQuery zeigt: Es funktioniert.
 
