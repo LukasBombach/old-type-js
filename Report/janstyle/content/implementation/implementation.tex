@@ -560,11 +560,20 @@ Clients interact with the server via WebSockets using socket.io. To sync their o
 \item Receive a changeset from the server submitted by another client
 \end{itemize}
 
-\noindent When Etherpad's client connects to the server it receives an initial snapshot of the entire document as a string. To submit changes, the client uses a three-step architecture. Any local changes that have not been sent to the server yet, the client stores in a representation $Y$. Any change sent (as a changeset) to the server must be acknowledged by the server as it has applied the changeset to its document. Any change that has been sent and not been acknowledged yet will be stored in a representation $X$. The document as it is acknowledged by the server is stored in a representation $A$.
+\noindent When Etherpad's client connects to the server it receives an initial snapshot of the entire document as a string. To submit changes, the client uses a three-step architecture. Any local changes that have not been sent to the server yet, the client stores in a changeset $Y$. Any changeset sent to the server must be acknowledged by the server as it has applied  the changeset to its document. Any changeset that has been sent and not been acknowledged yet will be stored in a as the changeset $X$. The document as it is acknowledged by the server is stored in a changeset $A$. The document visible to the users can be expressed by the represention of $A\cdot X \cdot Y$, i.e. applying each changeset to the next.
 
-Whenever a user applies a local change, the representation $Y$ will be updated. Every 500 milliseconds, but not before a changeset submitted to the server as been acknowledged, the changes $Y$ will be sent to the server and the representation $Y$ will be assigned to the representation $X$. $Y$ will be set to a representation that contains no changes. When the client hears the acknowledgement for $X$ from the server, $X$ will be assigned to the representation $A$ and $X$ will be assigned to contain no changes.
+Whenever a user applies a local change, the changeset $Y$ will be updated. Every 500 milliseconds, but not before a changeset submitted to the server as been acknowledged, the changeset $Y$ will be sent to the server and $Y$ will be assigned to $X$. $Y$ will be set to a changeset that contains no changes. When the client hears the acknowledgement for $X$ from the server, $X$ will be applied the changeset $A$ and $X$ will be set to contain no changes.
 
-This architecture supports receiving changes (changesets) from other clients as it must be applied to a client's local changes, committed and uncommited, as well as the document version as acknowledged by the server. When a client receives another client's changes B
+This architecture supports receiving changesets from other clients as they must be applied to a client's local changes, committed and uncommited, as well as the document version as acknowledged by the server. When a client receives another client's changeset $B$ it will perform 4 steps.
+
+\begin{enumerate}
+\item Compute a new changeset by merging $X$ and $B$ and $Y$ and apply it to the document visible to the user.
+\item Apply $B$ to $A$.
+\item Compute a new changeset by merging $B$ and $X$ and assign it to $X$
+\item Compute a new changeset by merging $X$ and $B$ and $Y$ and assign it to $Y$
+\end{enumerate}
+
+The operations needed to merge the changesets on the client, are the same operations for merging changesets on the server.
 
 \subsection{Type Client implementation}
 
