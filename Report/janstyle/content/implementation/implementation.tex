@@ -519,17 +519,23 @@ For traversing the text, for example when the caret moves, the text will need to
 
 \section{Etherpad integration} 
 
+\subsection{Overview}
+
 Etherpad\footnote{Etherpad has been completely rewritten under the name Etherpad Lite. However, its official website no longer links to its former source code. For simplicity, the name Etherpad will be used, referring to its rewrite as Etherpad Lite} is a web-based collaborative real-time text editor with rich-text capabilites. It provides a server, written in JavaScript using Node.js as well as a web-based rich-text editor. Both components are distributed in one package and are meant to be used together.
 
-To achieve real-time rich-text collaboration, multiple web-based clients communicate with a server via WebSockets using socket.io. The server uses an operational transformation algorithm to merge each change to a document accounting for all changes and then urges each client to update their local contents according to the final document. For this, Etherpad uses the concept of so-called ''changesets''.
+To achieve real-time rich-text collaboration, multiple web-based clients communicate with a server via WebSockets using socket.io. Each client owns a local version of the document that it needs to sync with the server. The server uses an operational transformation algorithm to merge each change to the document accounting for all changes and then urges each client to update their local contents according to the final document.
 
-Each client sends its local changes, debounced to an interval of 500 milliseconds, as a serialized string---the changeset---to the server. The changeset includes all text insertions, removals and formattings of the last time frame. Along with the changeset, it sends a document revision number that the changeset is based on to the server. The document revision number increases with every changeset that has been accepted and applied to the document on the server side. The document on ther server side is saved as a stack of changesets, which ultimatively form the current document. For performance reasons, snapshots can be taken that save the document as formatted text. 
+\subsection{Changesets}
+
+For this, Etherpad uses the concept of so-called ''changesets''. Each client sends its local changes, debounced to an interval of 500 milliseconds, as a serialized string---the changeset---to the server. The changeset includes all text insertions, removals and formattings of the last time frame. Along with the changeset, it sends a document revision number that the changeset is based on to the server. The document revision number increases with every changeset that has been accepted and applied to the document on the server side. The document on ther server side is saved as a stack of changesets, which ultimatively form the current document. For performance reasons, snapshots can be taken that save the document as formatted text. 
 
 Based on the revision number that the client provides with the changeset, the server can apply it to the version of the document the client was working on. The server will apply the resulting changes to all newer revisions of the document (if present) and send a changeset and the latest revision number back to the client.
 
 The changeset it sends back includes the differences from the the client's current revision of the document (with its own changes already applied) to the the latest revision on the server that includes the result of all changes the server had to perfom along each revision as just described.
 
-As a last step, the client must apply the changeset it got from the server to its local document to display the most recent version to the user.
+As a last step, the client must apply the changeset it got from the server to its local document to display the most recent version to the user and update its local revision number to what it got from the server.
+
+\subsection{Merging}
 
 In a collaborative environment, it can happen that two (or more) clients send different changesets to the server that are based on the same document revision. It is the responsibility of the server to merge both changes so that it preserves either intend. As explained in the ''Etherpad and EasySync Technical Manual''[citation needed], to solve this, for a document $X$ with the conflicting changesets $A$ and $B$, the server computes the new changesets $A'$ and $B'$ such that
 $$XAB' = XBA' = Xm(A,B)$$
