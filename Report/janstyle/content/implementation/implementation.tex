@@ -577,15 +577,15 @@ The operations needed to merge the changesets on the client, are the same operat
 
 \subsection{Type Client implementation}
 
-Etherpad's technology can be used to enable real-time collaboration for Type. While Etherpad offers a web-based client, its imeplementation has two flaws:
+Etherpad's technology can be used to enable real-time collaboration for Type. While Etherpad offers a web-based client, its imeplementation has three flaws:
 
 \begin{enumerate}
-\item It cannot be easily integrated in other web applications.
+\item It cannot be integrated easily in other web applications.
 \item It does not generate semantic markup. It is cluttered with control sequences.
 \item It's hard to extend.
 \end{enumerate}
 
-Etherpad does not provide a documentation on its client--server protocol, but it can be reverse engineered. It is possible for third-party libraries to communicate with an Etherpad server alongside Etherpad's ''native'' clients, as long as a third-party library (i.e. Type) conforms the protocol.
+Etherpad does not provide a documentation on its client--server protocol, but it can be reverse engineered. It is possible for third-party libraries to communicate with an Etherpad server alongside Etherpad's ''native'' clients, as long as a third-party library (like Type) conforms the protocol.
 
 Etherpad's collaboartion functionality comes with a cost in file size and may only be used in specific use cases. This is why this feature is implemented as an optional plugin in a separate file. To enable collaboration the designated JavaScript file needs to be added to the website.
 
@@ -600,6 +600,10 @@ Etherpad's collaboartion functionality comes with a cost in file size and may on
 var element = document.getElementById("myElement");
 var editor = Type.fromEtherpad(element, "http://example.com/editor/myEditorId");
 \end{lstlisting}
+
+The constructor used in line 2 of \reflisting{lst:etherpad_constructor} will connect to an Etherpad server and load the contents of a document and append it to the element given as first argument.
+
+Will use the change listener to watch changes. Has an own class to serialize changesets. One class for pushing changes to the server. Uses caret class to display other collaborators. And has a class to apply incoming changes.
 
 % Collaboration with etherpad ist wirklich einfach zu machen mit meinem coolen editor. Mein Editor ist ganz ganz toll dass das so einfach geht, ja!
 
