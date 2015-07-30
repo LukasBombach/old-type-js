@@ -614,9 +614,43 @@ This architecture provides an unobtrusive way to integrate real-time collaborati
 \section{Extending}
 \label{sec:extensions}
 
-Type's modular structure is designed for extension. Type's \code{prototype} has been exposed as \code{Type.fn} all its classes in the \code{Type} namespace to provide other developers with all of Type's functionality in a sctructured and easily accessible manner.
+\subsection{Overview}
 
-\subsection{Plugin API} ...and plugin cache
+Type's modular structure is designed for extension. Type's \code{prototype} has been exposed as \code{Type.fn} and all its classes in the \code{Type} namespace. This provides other developers with all of Type's functionality in a sctructured and accessible manner. Type is designed to give developers freedom in how to implement an extension.
+
+\subsection{API extension}
+
+\begin{lstlisting}[language=JavaScript, caption=Example Type API extension, label=lst:api_extension_example]
+Type.fn.myMethod = function () {};
+\end{lstlisting}
+
+As discussed in \refsubsec{subsec_fn_exposal}, to add a method to Type's public API, its base class' prototye can be extended with a function using the \code{Type.fn} shorthand attribute. Static constructors can be added by extending the \code{Type} \code{Function} object.
+
+\begin{lstlisting}[language=JavaScript, caption=Example custom static constructor, label=lst:example_static_constructor_extension]
+Type.myConstructor = function () {
+  return new Type();
+};
+\end{lstlisting}
+
+\subsection{Class extension}
+
+As discussed in \refsubsec{subsec:namespace_and_refs}, to implement extensions for Type, the \code{Type} namespace can be used to add custom classes or sub-namespaces.
+
+\begin{lstlisting}[language=JavaScript, caption=Example Type namespace extension and usage of a built-in class, label=lst:namespace_extension_example]
+Type.MyClass = function () {
+  var caret = new Type.Caret();
+};
+\end{lstlisting}
+
+%Type.MyPluginNamespace = {};
+%Type.MyPluginNamespace.Foo = function() {};
+%Type.MyPluginNamespace.Bar = function() {};
+
+All other classes that Type uses are exposed in this namespace and can be used by extensions. This can be used to provide other developers with functionality and / or to support API extensions.
+
+\subsection{Plugin API}
+
+...and plugin cache
 
 \begin{lstlisting}[language=JavaScript, caption=Example calls to format text, label=lst:format-examples]
 // Adding contructors
