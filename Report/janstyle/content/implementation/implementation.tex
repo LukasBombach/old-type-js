@@ -560,6 +560,12 @@ Clients interact with the server via WebSockets using socket.io. To sync their o
 \item Receive a changeset from the server submitted by another client
 \end{itemize}
 
+\noindent When Etherpad's client connects to the server it receives an initial snapshot of the entire document as a string. To submit changes, the client uses a three-step architecture. Any local changes that have not been sent to the server yet, the client stores in a representation $Y$. Any change sent to the server must be acknowledged by the server as it has applied the change to its document. Any change that has been sent and not been acknowledged yet will be stored in a representation $X$. The document as it is acknowledged by the server is stored in a representation $A$.
+
+Whenever a user applies a local change, the representation $Y$ will be updated. Every 500 milliseconds, but not before a change submitted to the server as been acknowledged, the changes $Y$ will be sent to the server and the representation $Y$ will be assigned to the representation $X$. $Y$ will be set to a representation that contains no changes. When the client hears the acknowledgement for $X$ from the server, $X$ will be assigned to the representation $A$ and $X$ will be assigned to contain no changes.
+
+This architecture supports 
+
 \subsection{Type Client implementation}
 
 Etherpad's client--server protocol can be reverse engineered.
