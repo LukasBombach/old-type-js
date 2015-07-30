@@ -577,7 +577,15 @@ The operations needed to merge the changesets on the client, are the same operat
 
 \subsection{Type Client implementation}
 
-Etherpad does not provide a documentation on its client--server protocol, but it can be reverse engineered.
+Etherpad's technology can be used to enable real-time collaboration for Type. While Etherpad offers a web-based client, its imeplementation has two flaws:
+
+\begin{enumerate}
+\item It cannot be easily integrated in other web applications.
+\item It does not generate semantic markup. It is cluttered with control sequences.
+\item It's hard to extend.
+\end{enumerate}
+
+Etherpad does not provide a documentation on its client--server protocol, but it can be reverse engineered. It is possible for third-party libraries to communicate with an Etherpad server alongside Etherpad's ''native'' clients, as long as a third-party library (i.e. Type) conforms the protocol.
 
 % Collaboration with etherpad ist wirklich einfach zu machen mit meinem coolen editor. Mein Editor ist ganz ganz toll dass das so einfach geht, ja!
 
