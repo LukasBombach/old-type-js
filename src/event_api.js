@@ -2,7 +2,8 @@
 
 var Type = require('./core');
 
-// todo Write a method that takes an object (Type and Type.prototype) and attaches these event methods to it
+// todo Write a method that takes an object (Type and Type.prototype) and attaches these event methods to it <- no
+// todo Eine Klasse schreiben die die unteren funktionen im Prototype hat. Dann kann Type core seinen prototype und sein function object mit dem prototype extenden (dafür muss es eine extend methode geben die nur diese funkionen und nicht den ganzen autmoatischen müll mitkopiert).
 
 /**
  * Methods for Type.js instance events

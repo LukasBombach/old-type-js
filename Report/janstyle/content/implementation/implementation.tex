@@ -92,7 +92,7 @@ Modular programming could create a system in which other developers could exchan
 % However, the biggest factor in coupling the components would still be that components reference each other, not the underlying structure. 
 
 
-\paragraph{Constructor Pattern} To close the gap between CKEditor's modular programming approach and jQuery's simple extension paradigms, object-oriented programming (OOP) can be used. JavaScript does not offer classes and classical inheritance, however the same functionality can be achieved using the constructor pattern and prototypal inheritance. Functions following the contructor pattern are often called classes or pseudo-classes. Hereinafter the term classes will be used.
+\paragraph{Constructor Pattern} To close the gap between CKEditor's modular programming approach and jQuery's simple extension paradigms, object-oriented programming (OOP) can be used. JavaScript does not offer classes and classical inheritance, however the same functionality can be achieved using the constructor pattern and prototypal inheritance (see \refsection{sec:oop_class}). Functions following the contructor pattern are often called classes or pseudo-classes. Hereinafter the term classes will be used.
 
 %\begin{lstlisting}[language=JavaScript, caption=Type instantiation, label=lst:type_instantiation]
 %// Defines the class and its contructor 
@@ -341,7 +341,9 @@ Before the text read from the hidden \code{textarea} will be passed on to the \c
 
 The input pipeline is part of the \code{Input} class. The pipeline itself is an array of input filters that can be added, removed and orderd with a designated API.
 
-JavaScript does not support the concept of \code{Interfaces} and although the constructor pattern allows class-like structures, it does not support classical inheritance unless implemented with supporting constructs\footnote{Interfaces can be implemented though helper classes too}. These constructs can be costly in terms of file size and performance. For this reason, input filters do not implement a formalized interface and do not inherit a base filter class. Instead, each input filter registers and specifies for which input should be called. For instance, a filter can register to be called when the user presses the \keystroke{ctrl}\keystroke{s} key combination and trigger a ''save'' function. The input is passed to the filters as an event that can be stopped from bubbling. This way it can be prevented that pressing \keystroke{ctrl}\keystroke{s} will also insert an ''s'' character to the editor. The order in which filters will be called is important. Some filters process the input and must cancel the event not only to prevent a character to be inserted, but also to prevent other filters from taking action.
+JavaScript does not support the concept of \code{Interfaces} and although the constructor pattern allows class-like structures, it does not support classical inheritance. Both can be implemented through supporting constructs and the \code{Utilities} class (see \refsection{sec:utilities_class}) implements a method for the latter. \textit{REWRITE CORRECT} Instead, each input filter registers and specifies for which input should be called. For instance, a filter can register to be called when the user presses the \keystroke{ctrl}\keystroke{s} key combination and trigger a ''save'' function. The input is passed to the filters as an event that can be stopped from bubbling. This way it can be prevented that pressing \keystroke{ctrl}\keystroke{s} will also insert an ''s'' character to the editor. The order in which filters will be called is important. Some filters process the input and must cancel the event not only to prevent a character to be inserted, but also to prevent other filters from taking action.
+
+%    unless implemented with supporting constructs\footnote{Interfaces can be implemented though helper classes too}. These constructs can be costly in terms of file size and performance. For this reason, input filters do not implement a formalized interface and do not inherit a base filter class. 
 
 The basic filters implemented for this library will be listed hereinafter, grouped by the responsibility as listed above.
 
@@ -489,27 +491,52 @@ The \code{DomWalker} class offers high-level methods for traversal, designed to 
 
 The \code{Environment} class checks and provides informations on the current browser environment and its features. This class is especially important to mimick native behavior for user interaction. For instance, depending on the operating system, either the control key or the command key should be used to implemnt keyboard shortcuts. To check for specific feature support, it is favourable to use duck typing within each class.
 
-\subsection{Event Api}
-ev api
 
 \section{Events}
 \label{sec:events}
+\subsection{Overview}
 
-Dazu entscheiden dass es ein Type-Internes Eventsystem gibt, dessen Events nur in Type existieren. Damit polluten die nicht den globalen (name)space mit events. Nur bestimmte events werden global (nativ) getriggert, und das sind genau die events, die nach aussenhin von Belang sind und abgegriffen werden koennen sollen (=API design)
+It is possible to trigger custom (native) events using the \code{CustomEvent} interface on modern browsers \textit{todo explain browser support}\footnote{\url{https://developer.mozilla.org/en/docs/Web/API/CustomEvent\#Browser_compatibility}}. Internet Explorer 9 and below allow this through similar interfaces. This system could be use for triggering events for components of Type. However, this would trigger events that that are only relevant within the library in the global namespace. To avoid this, Type implements its own event system that populates events only within the library. Events from within the editor that can be useful to the website or web application Type is used in should still be triggered as native events in the browser's global namespace. During the development of the library no such even has (yet) occured.
 
-\paragraph{Input}
+%Dazu entscheiden dass es ein Type-Internes Eventsystem gibt, dessen Events nur in Type existieren. Damit polluten die nicht den globalen (name)space mit events. Nur bestimmte events werden global (nativ) getriggert, und das sind genau die events, die nach aussenhin von Belang sind und abgegriffen werden koennen sollen (=API design)
+
+\subsection{Event Api}
+
+The \code{EventApi} class provides an API with three methods
+
+\begin{itemize}
+\item \code{on}
+\item \code{off} 
+\item \code{trigger} 
+\end{itemize}
+
+Using the \code{Oop}
+
+\subsection{Input Event}
+input event only event required so far
+
+\subsection{Input Event}
 input event only event required so far
 
 
 %\section{Plugin Api}
 %plugin api
 \section{Settings}
-settings
+
+Settings
+
 \section{Text Walker}
-text walker
+
+The \code{TextWalker} class acts as a container for all functions related to measuring text offsets. It provides utility methods to determine the character offset from one text node to another or, vice versa, which text node can be found at a text offset, starting from another given node. Both methods are required by various classes and are thus, centralised. 
+
+
+\section{OOP}
+\label{sec:oop_class}
+The \code{Oop} class implements a simple approach to extend the contructor pattern with basic classical inheritance. It does so by providing an \code{inherits} method, that copies all methods and attributes from one prototype of a class to another. In this simplified apporach, parent methods cannot be called from child classes with a unique keyword (like ''super'') as it is the case with Java or other languages using classical inheritance.
+
 
 \section{Utilities}
-
+\label{sec:utilities_class}
 The \code{Utilities} class is a general-purpose class that contains methods to extend JavaScript's features. It contains methods to work with data structures and to detect object types.
 
 \section{Cache}
@@ -587,7 +614,7 @@ Etherpad's technology can be used to enable real-time collaboration for Type. Wh
 
 Etherpad does not provide a documentation on its client--server protocol, but it can be reverse engineered. It is possible for third-party libraries to communicate with an Etherpad server alongside Etherpad's ''native'' clients, as long as a third-party library (like Type) conforms the protocol.
 
-Etherpad's collaboartion functionality comes with a cost in file size and may only be used in specific use cases. This is why this feature is implemented as an optional plugin in a separate file. To enable collaboration the designated JavaScript file needs to be added to the website.
+Etherpad's collaboartion functionality comes with a cost in file size and may only be used in specific use cases. This is why this feature is implemented as an optional extemsion (compare \refsection{sec:extensions}) in a separate file. To enable collaboration the designated JavaScript file needs to be added to the website.
 
 \begin{lstlisting}[language=html, caption=Enabling real-time collaboration to Type, label=lst:add_etherpad_html]
 <script src="type.js"></script>
