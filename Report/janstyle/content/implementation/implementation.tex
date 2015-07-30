@@ -531,9 +531,9 @@ The changeset it sends back includes the differences from the the client's curre
 
 As a last step, the client must apply the changeset it got from the server to its local document to display the most recent version to the user.
 
-In a collaborative environment, it can happen that two (or more) clients send different changesets to the server that are based on the same document revision. It is the responsibility of the server to merge both changes so that it preserves either intend. As explained in the ''Etherpad and EasySync Technical Manual''[citation needed], to solve this, for a document $X$ with the conflicting changesets $A$ and $B$, the server computes the new changesets $B'$ and $A'$ such that
+In a collaborative environment, it can happen that two (or more) clients send different changesets to the server that are based on the same document revision. It is the responsibility of the server to merge both changes so that it preserves either intend. As explained in the ''Etherpad and EasySync Technical Manual''[citation needed], to solve this, for a document $X$ with the conflicting changesets $A$ and $B$, the server computes the new changesets $A'$ and $B'$ such that
 $$XAB' = XBA' = Xm(A,B)$$
-where $Xm(A,B)$ is the merge of $A$ and $B$ applied to the document $X$.
+where $Xm(A,B)$ is the merge of $A$ and $B$ applied to the document $X$. The changesets $A'$ and $B'$ will be sent to the respective clients, which will apply it to their local documents to sync with the document on the server.
 
 
 %The server merges both changesets to the server's revision and creates two new changesets, one for each client. Each changeset includes the changes the client needs to perform to create a document that resembles the result of its own changes and the changes of the other client.
