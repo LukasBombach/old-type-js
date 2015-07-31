@@ -403,6 +403,8 @@ As discussed in \refsubsec{subsec:concept_native_imitation}, most rich-text edit
 
 \section{Pasting}
 
+
+
 Kontrolle durch die Implementierung mit einem versteckten Eingabefeld. Erst mal gibt es ein reliable Paste event, was es in keinem Editor basierend auf contentEditable gibt. 2. Hat man volle Kontrolle über den Inhalt, was gepastet wird und was nicht. Und das ganze mit einer einfachen API. Pasting sollte internes event ausloesen.
 
 % Apart from rich-text editors there are also third-party JavaScript libraries that allow embedding code editors with syntax highlighting in a website. The ''Ajax.org Cloud9 Editor (Ace)'' and ''CodeMirror'' editor are amongst the most well-known choices. Both editors keep an internal representation of the plain-text (i.e. non-highlighted) contents of the editor, parse it and display a highlighted version using HTML in a designated \texttt{div}. Both editors use a hidden \texttt{textarea} in which the user enters his or her input. The input will be read from the \texttt{textarea} and
@@ -502,22 +504,53 @@ It is possible to trigger custom (native) events using the \code{CustomEvent} in
 
 \subsection{Event Api}
 
-The \code{EventApi} class provides an API with three methods
+The \code{EventApi} class provides an API to add and remove event listeners as well as to trigger events. It provides instance and static methods.
 
-\begin{itemize}
-\item \code{on}
-\item \code{off} 
-\item \code{trigger} 
-\end{itemize}
+\begin{lstlisting}[language=JavaScript, caption={EventApi methods}, label=lst:eventapi_methods]
+// Static methods
+EventApi.on(eventName, eventHandler);
+EventApi.off(eventName, eventHandler);
+EventApi.trigger(eventName, eventObject);
 
-Using the \code{Oop} class (see \refsection{sec:oop_class}), these methods will be inherited by a \code{Type} instance. This way, using the \code{trigger} method, events can be triggered and be listened to with the \code{on} method within a type instance. 
-and by the \code{Type} class itself The latter ist used for triggering the ''ready'' event on the 
+// Instance methods
+EventApi.prototype.on(eventName, eventHandler);
+EventApi.prototype.off(eventName, eventHandler);
+EventApi.prototype.trigger(eventName, eventObject);
+\end{lstlisting}
 
-\subsection{Input Event}
-input event only event required so far
+%\begin{itemize}
+%\item \code{trigger} 
+%\item \code{on}
+%\item \code{off} 
+%\end{itemize}
 
-\subsection{Input Event}
-input event only event required so far
+Using the \code{Oop} class (see \refsection{sec:oop_class}), these methods will be inherited by the \code{Type} class. This way, using the \code{trigger} method, events can be triggered within the scope of a \code{Type} instance and be captured using the  the \code{on} method. Event handlers can be removed using \code{off} method.
+
+The static methods will also be inherited by the \code{Type} class. This is necessary to trigger events that are \textit{Type} specific but not \textit{instance} specific. Most importantly a ''ready'' event will be triggered on every instantiation of the \code{Type} class. This way plugins and other third-party scripts can run initialization scripts.
+
+The first parameter for any of these methods is always the event name that should be listened to, stopped to be listened to or triggered. The second parameter of the \code{trigger} method is an event object that can be an instance of any of the classes discussed in sections \refsubsec{subsec:type_event} through \refsubsec{subsec:paste_event}. The second parameter of the \code{on} and \code{off} methods can be a \code{Function} that will receive the object, that has been passed to the trigger method, as first parameter.
+
+Plugins and third-party libraries can trigger arbitrary event names and pass arbitrary data. As a paradigm and in terms of a \textit{good programming style}, event objects should be passed. Event objects are inherited from the \code{TypeEvent} or conform its API.
+
+\subsection{TypeEvent}
+\label{subsec:type_event}
+
+\begin{lstlisting}[language=JavaScript, caption={TypeEvent API}, label=lst:eventapi_methods]
+TypeEvent.data([options]);
+TypeEvent.cancel();
+\end{lstlisting}
+
+The \code{TypeEvent} is a generic, general-purpose event. It can store arbitrary data and offers an API to be stopped from bubbling. A full API description can be found in Listing XY.
+
+\subsection{InputEvent}
+\label{subsec:input_event}
+
+The Input \code{InputEvent} will be triggered by the \code{Input} class after a keyboard input has passed the input pipeline. It inherits all methods from the \code{TypeEvent} to conform the event system and contains information on the key and the modifier keys pressed. The key is represented with its key code and the keyname. They keyname will be mapped from the keycode and is represented by a list of many readable names including ''backspace'', ''enter'', ''space'', all letters and many others. The list not complete but can be extended during further development. The modifier keys include ''shift'', ''alt'', ''ctrl'' and ''meta''. ''meta'' is the browser's name for the \keystroke{cmd} key on OS X systems. OS X uses the \keystroke{cmd} key as modifier the same way Windows and Linux use the \keystroke{ctrl} key. To support implementing for both platforms the ''cmd'' modifier will be set when a user holds the \keystroke{cmd} key on OS X \textit{or} the \keystroke{ctrl} key on other platforms.
+
+\subsection{PasteEvent}
+\label{subsec:paste_event}
+
+The \code{PasteEvent} will be triggered when the user pastes contents from the clipboard \textit{before} it will be inserted to the editor's contents. It contains the clipboards contents and can be cancelled so that other developers are free to manipulate and stop a paste event.
 
 
 %\section{Plugin Api}
@@ -533,7 +566,10 @@ The \code{TextWalker} class acts as a container for all functions related to mea
 
 \section{OOP}
 \label{sec:oop_class}
+
 The \code{Oop} class implements a simple approach to extend the contructor pattern with basic classical inheritance. It does so by providing an \code{inherits} method, that copies all methods and attributes from one prototype of a class to another. In this simplified apporach, parent methods cannot be called from child classes with a unique keyword (like ''super'') as it is the case with Java or other languages using classical inheritance.
+
+Any static methods and attributes of a class will also be inherited by coping any method and variable defined on the \code{Function} object passed.
 
 
 \section{Utilities}
