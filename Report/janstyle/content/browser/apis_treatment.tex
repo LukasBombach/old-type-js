@@ -6,6 +6,9 @@ Since the issues arising with HTML editing APIs are part of the browser's implem
 
 Having to account for multiple browser implementations, working around bugs can result in a big file size and a complex architecture. Most edge cases can only be learned from experience, not be foreseen or analyzed by debugging source code. Piotrek Koszuli\'{n}ski writes ''We [...] are working on this for years and we still have full bugs lists''\cite{sopp}.
 
+There are various approaches to implement workarounds. Some libaries attempt to wrap HTML editing APIs and treat bugs and inconsitent behaviour internally. This apporach is generally not well-adopted. The most popular libraries related to web-based rich-text editing, rated by the numbers of ''stars'' given, are distributed as rich-text-editing user interface components (i.e. rich-text editors).
+
+In general, most editors implement solutions for addressing the beforementioned issues independently or are forks of other editors, which come with a different user interface.
 
 
 %The issues arising with HTML editing APIs cannot be fixed. Many libraries find workarounds to treat them. CKEditor, TinyMCE, that framework. Google Docs finds another way and does not use HTML editing APIs.
