@@ -19,6 +19,10 @@ Type.Caret = function (options) {
 
   options = options || {constrainingNode: null, color: null};
 
+  //if (options.typeInstance === true) {
+  //  options = { constrainingNode: options.getRoot(), color: null };
+  //}
+
   if (Type.DomUtilities.isNode(options)) {
     options = { constrainingNode: options, color: null };
   }
