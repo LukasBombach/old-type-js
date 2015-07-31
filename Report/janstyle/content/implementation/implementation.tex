@@ -426,7 +426,6 @@ The \code{Caret} class provides all functionality to place and move a caret in a
 
 To move the caret left or right, the according characters left and right of its current offset will be measured using this method. To move it up and down across text lines, the caret must check the offsets of every character, starting from the character of the current offset, until it reaches the character above or below it that is closest to its horizontal position. As discussed in section \refsection{sec:cache}, a cache for this cannot be applied. The complexity of this is $O(n)$, however in practice, the number if characters this will affect is limited by readability and usability of the text editor. Mobile devices, that generally have less performance than desktop machines, have smallers screens displaying less characters per line. While this is not necessarily the case, it can be expected by good software design.
 
-%every character between the character at the current offset and the character above or below it must be checked to 
 
 
 \subsection{BiDi support}
