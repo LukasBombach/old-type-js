@@ -2,11 +2,17 @@
 
 \section{Treating HTML editing API related issues}
 
-The issues arising with HTML editing APIs cannot be fixed. Many libraries find workarounds to treat them. CKEditor, TinyMCE, that framework. Google Docs finds another way and does not use HTML editing APIs.
+Since the issues arising with HTML editing APIs are part of the browser's implementation, they cannot be fixed by JavaScript developers. The common approach for most rich-text editors is to use HTML editing APIs and find work-arounds for its issues and bugs. It is to be noted, as Piotrek Koszuli, that the majority of rich-text editors ''really do not work''\'{n}ski points out\footnote{\url{http://stackoverflow.com/questions/10162540/contenteditable-div-vs-iframe-in-making-a-rich-text-wysiwyg-editor/11479435\#11479435}}. This is usually the case when the problems discussed in \refsection{sec:disadvantages_of_html_editing_apis} have not been adressed and the library solely consists of a user interface wrapping an element in editing mode.
 
-huge editor libraries, developed for 10 years trying to fix stuff
-libraries, not editors targeting inconstiencies
-they all can never know what's gonna happen
-medium
+Having to account for multiple browser implementations, working around bugs can result in a big file size and a complex architecture. Most edge cases can only be learned from experience, not be foreseen or analyzed by debugging source code. Piotrek Koszuli\'{n}ski writes ''We [...] are working on this for years and we still have full bugs lists''\cite{sopp}.
 
-\subsection{Clipboard} CKEditor ''fixes'' paste problems by implementing a custom fake context menu and opening a modal with some instruction that the user should press ctrl+v. This is a UX nightmare. Other editors like retractor (oder so) sanitize any change to the editors contents for the case of input by paste events.
+
+
+%The issues arising with HTML editing APIs cannot be fixed. Many libraries find workarounds to treat them. CKEditor, TinyMCE, that framework. Google Docs finds another way and does not use HTML editing APIs.
+
+%huge editor libraries, developed for 10 years trying to fix stuff
+%libraries, not editors targeting inconstiencies
+%they all can never know what's gonna happen
+%medium
+
+%\subsection{Clipboard} CKEditor ''fixes'' paste problems by implementing a custom fake context menu and opening a modal with some instruction that the user should press ctrl+v. This is a UX nightmare. Other editors like retractor (oder so) sanitize any change to the editors contents for the case of input by paste events.
