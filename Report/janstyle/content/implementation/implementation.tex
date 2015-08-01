@@ -475,6 +475,8 @@ this way we can write a recursive algorithm
 
 to create clean code at the end we check if the nodes before and after the new formatting have the same formatting and connect those (whitespace nodes in between will be ignored)
 
+to improve performance we collect all these nodes an perform the minimum of dom operations necessary
+
 \section{Change Listener}
 
 Has been abstracted to decouple functionality from undo/redo functionality to be reused by other developers and with the etherpad extension in mind.
