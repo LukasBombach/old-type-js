@@ -467,20 +467,25 @@ The downside of this technique is that copy commands will not work anymore due t
 
 
 \section{Contents}
+\label{sec:contents_impl}
 
 The \code{Contents} class provides an API to add, remove and format text. This functionality is implemented through the \code{Writer} and \code{Formatter} classes. Its central responsibility is to proxy commands to these classes and to trigger \code{ChangeEvent}s (see \refsubsec{subsec:change_event}) that contain a formalized description of the edit operation. \code{ChangeEvent}s will be observed by the \code{UndoManager} (see \refsection{sec:undo_manager}) to implement undo / redo functionality.
 
+This architecture has been chosen not only to achieve a decoupled software architecture with a clear separation of concerns, but to allow extensions to observe content changes. For instance, the Etherpad extension uses this to populate changes to other clients (see \refsubsec{subsec:etherpad_type_client_implementation}).
 
+%Apart from a separation of concerns, this architecture allows for extensions and possible future internal use cases to perform edit operations either directly, by using the \code{Writer} and \code{Formatter} independently of the \code{Contents} class
 
 %Its central responsibility is to keep track of these changes and provide an API for \code{ChangeListener}.
 
 %All components should be usable by extensions, that's one of the big reasons why it should be ausgelagert, apart from software architecture
 
 
-\section{Writer}
+\subsection{Writer}
+
+The \code{Writer} class implements functionality to add and remove contents to and from the editor. Along with the \code{Formatter} class, this is the lowest layer that will perform DOM operations to modify the contents in the browser.
 
 
-\section{Formatter}
+\subsection{Formatter}
 
 code examples
 
@@ -502,8 +507,32 @@ to improve performance we collect all these nodes an perform the minimum of dom 
 
 \section{Undo Manager}
 \label{sec:undo_manager}
+
+The \code{UndoManager} class will observe \code{Change} events (see \refsubsec{subsec:change_event}) and keep a history of the performed changes. Every change must include an identifier of the source of the change. The \code{Contents} class will declare the \code{Input} class as the source for the change. This is to enable extensions to work with the \code{UndoManager}. The Etherpad extension (see \refsection{sec:etherpad}) will change the editor's contents too. If, at a given time, the local user added some text and after that another connected client would add some text a few characters before the local user's change, the local user's change could not be undone properly, since the underlying contents would have changed, without the \code{UndoManager} noticing it.
+
 \subsection{Change Listener}
-Has been abstracted to decouple functionality from undo/redo functionality to be reused by other developers and with the etherpad extension in mind.
+
+In its core the changes observed by the \code{UndoManager} will be kept track of by the \code{ChangeListener}. It will accumulate every change in a data structure and take a ''snapshot'' every 500 milliseconds and store it in a history. The \code{UndoManager} will use the history to implement and offer undo and redo commands.
+
+This functionatlity has been abstracted to be reused by other extensions. The Etherpad extension uses this class to publish local changes every 500 milliseconds to its connected clients independently of the \code{UndoManager}.
+
+\subsection{Undo / Redo}
+
+The \code{Change} event can contain operations to
+
+\begin{itemize}
+\item Insert or remove text
+\item Format text
+\end{itemize}
+
+Inserting and removing can be undone easily by performing and insertion to undo a remove operation and vice versa. Formatting text is more difficult since Type allows formatting with arbitrary markup. This can be solved by keeping track of the offsets and characters affected by the formatting command and removing the HTML tags at the corresponding positions
+
+
+
+%The \code{UndoManager} will keep track of all changes and take a ''snapshot'' every 500 milliseconds and store it in its history. It offers an API to to undo and redo changes based on this history. 
+
+
+%Has been abstracted to decouple functionality from undo/redo functionality to be reused by other developers and with the etherpad extension in mind.
 
 
 \section{Range}
@@ -616,13 +645,45 @@ The \code{PasteEvent} will be triggered when the user pastes contents from the c
 \subsection{ChangeEvent}
 \label{subsec:change_event}
 
+As discussed in section \refsection{sec:contents_impl} a \code{ChangeEvent} will be triggered when changes have been made to the editor's contents. It contains an array of formalized data structures describing the changes that have been made. There are two types of data structures, one for text insertion and removal and one for text formatting.
 
+\begin{lstlisting}[language=JavaScript, caption={Data structure for insert and remove operations}, label=lst:add_remove_structure]
+{
+    "offset": 10,
+    "operation": "insert",
+    "contents": "Lorem ipsum",
+}
+{
+    "offset": 10,
+    "operation": "remove",
+    "contents": "Lorem ipsum",
+}
+\end{lstlisting}
+
+Lines 1--5 in \reflisting{lst:add_remove_structure} show the data structure for an insert operation.
+
+\begin{lstlisting}[language=JavaScript, caption={Change data structure}, label=lst:format_structure]
+{
+    "offset": 10,
+    "characters": 5,
+    "operation": "format",
+    "parameters": "<strong />",
+}
+{
+    "offset": 10,
+    "characters": 5,
+    "operation": "removeformat",
+    "parameters": "<strong class='important' />",
+}
+\end{lstlisting}
+
+It contains the 
 
 %\section{Plugin Api}
 %plugin api
 \section{Settings}
 
-Settings
+The settings class stores settings required for Type's modules, for instance the \code{id} of the DOM-container which all helper DOM-nodes from other classes will be appended to.
 
 \section{Text Walker}
 
@@ -650,6 +711,7 @@ For traversing the text, for example when the caret moves, the text will need to
 
 
 \section{Real-time collaboration with Etherpad} 
+\label{sec:etherpad}
 
 \subsection{Overview}
 
@@ -708,6 +770,7 @@ This architecture supports receiving changesets from other clients as they must 
 The operations needed to merge the changesets on the client, are the same operations for merging changesets on the server.
 
 \subsection{Type Client implementation}
+\label{subsec:etherpad_type_client_implementation}
 
 Etherpad's technology can be used to enable real-time collaboration for Type. While Etherpad offers a web-based client, its imeplementation has three flaws:
 
