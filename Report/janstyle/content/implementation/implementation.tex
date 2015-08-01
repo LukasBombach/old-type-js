@@ -596,9 +596,11 @@ The \code{TextWalker} class acts as a container for all functions related to mea
 \section{OOP}
 \label{sec:oop_class}
 
-The \code{Oop} class implements a simple approach to extend the contructor pattern with basic classical inheritance. It does so by providing an \code{inherits} method, that copies all methods and attributes from one prototype of a class to another. In this simplified apporach, parent methods cannot be called from child classes with a unique keyword (like ''super'') as it is the case with Java or other languages using classical inheritance.
+The \code{OOP} class extends the contructor pattern with basic classical inheritance. It provides the method \code{inherits} that will duplicate and copy the \code{prototype} from one \code{Function} object to another. It also copy attributes and methods defined on the \code{Function} object itself to implement inheritance of static definitions and adds the attribute \code{\_super} to the inheriting \code{Function} object to referencing its parent class to enable child classes to access their respective superclasses.
 
-Any static methods and attributes of a class will also be inherited by coping any method and variable defined on the \code{Function} object passed.
+%The \code{OOP} class implements a simple approach to extend the contructor pattern with basic classical inheritance. It does so by providing an \code{inherits} method, that copies all methods and attributes from one prototype of a class to another. In this simplified apporach, parent methods cannot be called from child classes with a unique keyword (like ''super'') as it is the case with Java or other languages using classical inheritance.
+
+%Any static methods and attributes of a class will also be inherited by coping any method and variable defined on the \code{Function} object passed.
 
 
 \section{Utilities}
