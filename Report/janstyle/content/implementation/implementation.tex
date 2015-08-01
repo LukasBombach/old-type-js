@@ -298,6 +298,8 @@ When simulating a native input, in a best-case scenario, all these input methods
 
 \subsection{Hidden native input fields} 
 
+\label{subsec:hidden_native_input_fields}
+
 As discussed in \refsection{sec:approaches_for_imitating_native_components}, the source code editors Ace and CodeMirror use a hidden (native) input field to fetch the user's keyboard input. While it appears to the user he or she is entering text in a syntax-highlighted representation of the source code, in reality the user enters his or her text in a hidden \code{textarea} element. The input will be processed and displayed with syntax-highlighting. This solves many problems of relying solely on events
 
 \begin{itemize}
@@ -405,7 +407,18 @@ As discussed in \refsubsec{subsec:concept_native_imitation}, most rich-text edit
 
 \section{Pasting}
 
-Damit rich text gepastet werden kann elememt in editing mode anstatt textarea verwedent. Kontrolle durch die Implementierung mit einem versteckten Eingabefeld. Erst mal gibt es ein reliable Paste event, was es in keinem Editor basierend auf contentEditable gibt. 2. Hat man volle Kontrolle über den Inhalt, was gepastet wird und was nicht. Und das ganze mit einer einfachen API. Pasting sollte internes event ausloesen.
+As discussed in \refsubsec{subsec:hidden_native_input_fields}, all text input will be read from a designated input field. It is useful to distinguish between regular keyboard input from input pasted from the clipboard since the clipboard can contain rich text contents. Developers implementing an editor with type should be able to determine which formattings should be allowed to be entered in the editor, i.e. pasted from the clipboard. This requires two steps.
+
+\begin{enumerate}
+\item Determine if an input has been made through typing or pasted from the clipboard
+\item Process the clipboard contents and make it accessible to developers
+\end{enumerate}
+
+\paragraph{Paste detection} As discussed in \refsubsec{subsec:editing_disadvantages_clipboard}, modern browsers trigger paste events, which can be listened to. Not all browsers allow reading contents from a paste event, but this is not necessary. The paste paste event will insert its contents into the designated input element from which its contents can be read, after it has completed. Some older browsers, specifically Opera versions older than 12.1 do not trigger paste events at all. For legacy support, the browser can be tested for an available clipboard API and in case it is missing the regular text input can be checked for its text length. With the system discussed in, an input will always have the length of a single character. If the input is longer than that, this either means more than one character has been inserted or a single formatted character has been inserted\footnote{The input field will contain markup of more than one character}. These cases can only happen when contents have been pasted from the clipboard. However, if a sinlge unformatted character has been pasted, it cannot be distingushed from a regular text input. According to statcounter.com, 0.08\% of all internet users use Opera version older than 12.1. It is to be noted that the use case this feature is designed for, is to sanitize pasted input, which is not necessary for a single plain text character input, although it must be acknowlegdet that there can be other use cases requiring to register any paste event whatsoever.
+
+\paragraph{Processing} To process the pasted contents and possibly prevent inserting the contents to the editor an \code{InputEvent} will be generated and passed through the input pipeline. Any filter can be implemented to treat or ignore paste events. Developers using the library can set an option on instantiation to determine how to treat pasted contents. These options include to allow plain text only, to allow any formatted text or specifiying rules to allow specifc formattings only. A full API desciption can be found at ABC. These options are implemented in the \code{Paste} filter, that will either let any contents pass through (allow any formatting) or filter out specific or all HTML tags.
+
+%Damit rich text gepastet werden kann elememt in editing mode anstatt textarea verwedent. Kontrolle durch die Implementierung mit einem versteckten Eingabefeld. Erst mal gibt es ein reliable Paste event, was es in keinem Editor basierend auf contentEditable gibt. 2. Hat man volle Kontrolle über den Inhalt, was gepastet wird und was nicht. Und das ganze mit einer einfachen API. Pasting sollte internes event ausloesen.
 
 % Apart from rich-text editors there are also third-party JavaScript libraries that allow embedding code editors with syntax highlighting in a website. The ''Ajax.org Cloud9 Editor (Ace)'' and ''CodeMirror'' editor are amongst the most well-known choices. Both editors keep an internal representation of the plain-text (i.e. non-highlighted) contents of the editor, parse it and display a highlighted version using HTML in a designated \texttt{div}. Both editors use a hidden \texttt{textarea} in which the user enters his or her input. The input will be read from the \texttt{textarea} and
 
