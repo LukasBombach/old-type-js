@@ -2,12 +2,15 @@
 
 var Type = require('../core');
 
+/**
+ * Creates a new Type event
+ * @constructor
+ */
 Type.Events.Type = function () {
   this.canceled = false;
 };
 
 (function () {
-
 
   /**
    * Sets or gets data for this event. Parameters can be set

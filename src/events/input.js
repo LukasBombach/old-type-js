@@ -37,18 +37,10 @@ Type.Events.Input = function (options) {
 
 };
 
-(function () {
-
-  /**
-   * Sets this event instance to be cancelled
-   * @returns {Type.Events.Input}
-   */
-  this.cancel = function () {
-    this.canceled = true;
-    return this;
-  };
-
-}).call(Type.Events.Input.prototype);
+/**
+ * Inherit from general Type event
+ */
+Type.OOP.inherits(Type.Events.Input, Type.Events.Type);
 
 /**
  * Maps character codes from key down events to readable names

@@ -114,7 +114,8 @@ function Type(options) {
     }
 
     // Chaining
-    return this;
+    return arguments.length ? this : this._options;
+    //return this;
 
   };
 
