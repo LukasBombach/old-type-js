@@ -465,6 +465,8 @@ The W3C specifies an API to add multiple ranges to a selection, which should app
 
 CodeMirror, ACE and Google's document editor each implement text selections by displaying \code{div} elements that mimick the look of a natural selection. The same technique has been implemented for Type too. In contrast to the mentioned editors, the selection's DOM elements stored within the editor's contents to keep the content's markup clean at all times. Instead they will be written to the end of the document's body, positioned absolutely and repositioned when the browser will be resized.
 
+The downside of this technique is that copy commands will not work anymore due to the fact that there is no actual text selection, even though it appears to the users there is. To come by this issue, CodeMirror adds the contents of the imitated selection to the input field and selects these contents with a native selection. This allows the user to use keyboard shortcuts at any time and to copy from the context menu. When the user types, the selected contents in the input field will be overwritten by the browser, so this does not affect input reading.
+
 %Fake damit copy \& past nativ funktioniert
 %Obwohl eine selection mehrere Ranges haben kann, wird das von keinem Browser unterstützt http://stackoverflow.com/questions/4777860/highlight-select-multiple-divs-with-ranges-w-contenteditable/4780571\#4780571
 %Habe versucht mit die Darstellung über getClientRects zu emulierten, aber das ist buggy siehe https://github.com/edg2s/rangefix/blob/master/rangefix.js
