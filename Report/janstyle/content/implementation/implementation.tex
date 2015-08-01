@@ -314,9 +314,11 @@ As discussed in \refsection{sec:approaches_for_imitating_native_components}, the
 
 \paragraph{Virtual (on screen) keyboard support} The \code{textarea} will be focused when the user clicks or touches inside the editor as well as with the tab key and remote controls. Focusing a text input triggers the display of native virtual keyboards.
 
-\paragraph{Pasting} When a the textarea is foucsed, pastiing via keyboard shortcuts is natively available. To enable pasting with the context menu, the \code{textarea} must be moved to the pointer's position on a \code{mousedown} event. Following the order of \code{MouseEvent}s, this will be completed, before the context menu will be triggerd. This way it will be triggered on the \code{textarea} and contain a paste option.
+\paragraph{Pasting} When a the textarea is foucsed, pasting via keyboard shortcuts is natively available. To enable pasting with the context menu, the \code{textarea} must be moved to the pointer's position on a \code{mousedown} event. Following the order of \code{MouseEvent}s, this will be completed, before the context menu will be triggerd. This way it will be triggered on the \code{textarea} and contain a paste option.
 
-\paragraph{Reading input} \code{textarea} elements support \code{input} events which can be used to read the text entered by the user. The input can be processed as discussed in \refsection{sec:module_architecture} and be removed from the textarea. Input reading requires further processing before it can be passed on to trigger a change in the editor's contents. The specifics on processing the input will be discussed in section \refsection{sec:input_pipeline}.
+\paragraph{Reading input} \code{textarea} elements support \code{input} events which can be used to read the text entered by the user. The input can be processed as discussed in \refsection{sec:module_architecture} and be removed from the textarea. In practice, this means that once a single character has been entered in the \code{textarea} it will be read from the \code{textarea}, inserted into the editor's contents and the \code{textarea} will be cleared again. Input reading requires further processing before it can be passed on to trigger a change in the editor's contents. The specifics on processing the input will be discussed in section \refsection{sec:input_pipeline}.
+
+\paragraph{Editing mode} Using a \code{textarea} element allows plain text input only. This is not a problem for regular keyboard input but rich text contents pasted from the clipboard will be inserted as plain text. To come around this issue, a \code{div} element in editing mode can be used instead of a \code{textarea} element for input reading. This does not cause any of the issues discussed in \refsection{sec:disadvantages_of_html_editing_apis}. Formatting and generating HTML, the related API are implemented though JavaScript and not through HTML editing APIs. The contents of the editor are not directly affected by the editing mode and its restrictions. The (known) bugs of HTML editing APIs do not affect text input or the paste event itself. The issues arise with pasting and HTML editing APIs are related to controlling process of pasting, which happens after the HTML editing API related pasting, by reading from the \code{div} element and is implemented independently of the editing API though the input pipeline (see \refsection{sec:input_pipeline}).
 
 \section{Input Pipeline}
 \label{sec:input_pipeline}
@@ -403,9 +405,7 @@ As discussed in \refsubsec{subsec:concept_native_imitation}, most rich-text edit
 
 \section{Pasting}
 
-
-
-Kontrolle durch die Implementierung mit einem versteckten Eingabefeld. Erst mal gibt es ein reliable Paste event, was es in keinem Editor basierend auf contentEditable gibt. 2. Hat man volle Kontrolle über den Inhalt, was gepastet wird und was nicht. Und das ganze mit einer einfachen API. Pasting sollte internes event ausloesen.
+Damit rich text gepastet werden kann elememt in editing mode anstatt textarea verwedent. Kontrolle durch die Implementierung mit einem versteckten Eingabefeld. Erst mal gibt es ein reliable Paste event, was es in keinem Editor basierend auf contentEditable gibt. 2. Hat man volle Kontrolle über den Inhalt, was gepastet wird und was nicht. Und das ganze mit einer einfachen API. Pasting sollte internes event ausloesen.
 
 % Apart from rich-text editors there are also third-party JavaScript libraries that allow embedding code editors with syntax highlighting in a website. The ''Ajax.org Cloud9 Editor (Ace)'' and ''CodeMirror'' editor are amongst the most well-known choices. Both editors keep an internal representation of the plain-text (i.e. non-highlighted) contents of the editor, parse it and display a highlighted version using HTML in a designated \texttt{div}. Both editors use a hidden \texttt{textarea} in which the user enters his or her input. The input will be read from the \texttt{textarea} and
 
@@ -449,6 +449,9 @@ The \code{Range} class is a utility class and an abstraction for the native \cod
 
 
 \section{Selection}
+
+Using a designated input element for input reading comes with the cost of having to emlulate the text selection.
+
 Fake damit copy \& past nativ funktioniert
 Obwohl eine selection mehrere Ranges haben kann, wird das von keinem Browser unterstützt http://stackoverflow.com/questions/4777860/highlight-select-multiple-divs-with-ranges-w-contenteditable/4780571\#4780571
 Habe versucht mit die Darstellung über getClientRects zu emulierten, aber das ist buggy siehe https://github.com/edg2s/rangefix/blob/master/rangefix.js
