@@ -446,16 +446,6 @@ To move the caret left or right, the according characters left and right of its 
 http://marijnhaverbeke.nl/blog/browser-input-reading.html 
 https://en.wikipedia.org/wiki/Input\_method
 
-\section{Range}
-
-The \code{Range} class is a utility class and an abstraction for the native \code{Range} interface. The native implementation is prone to bugs on many browsers. As discussed in \refsection{sec:interaction_with_browser_apis}, instead of fixing the API by shimming its methods, the \code{Range} class implements all methods related to ranges while trying to interact as little as possible with the native API. On top of the methods required by Type that are implemented by the native \code{Range} interface, this class implements additional methods specific to the API.
-
-%CodeMirror uses (native) \code{Range}s for text
-
-%Ranges are specifically used to 
-
-%Ranges are mainly used by the implementations of the caret and the selection.
-
 
 \section{Selection}
 
@@ -475,7 +465,22 @@ The downside of this technique is that copy commands will not work anymore due t
 %\paragraph{Selection Overlay}
 %overlay
 
-\section{Formatting}
+
+\section{Contents}
+
+The \code{Contents} class provides an API to add, remove and format text. This functionality is implemented through the \code{Writer} and \code{Formatter} classes. Its central responsibility is to proxy commands to these classes and to trigger \code{ChangeEvent}s (see \refsubsec{subsec:change_event}) that contain a formalized description of the edit operation. \code{ChangeEvent}s will be observed by the \code{UndoManager} (see \refsection{sec:undo_manager}) to implement undo / redo functionality.
+
+
+
+%Its central responsibility is to keep track of these changes and provide an API for \code{ChangeListener}.
+
+%All components should be usable by extensions, that's one of the big reasons why it should be ausgelagert, apart from software architecture
+
+
+\section{Writer}
+
+
+\section{Formatter}
 
 code examples
 
@@ -495,13 +500,22 @@ to create clean code at the end we check if the nodes before and after the new f
 
 to improve performance we collect all these nodes an perform the minimum of dom operations necessary
 
-\section{Change Listener}
-
+\section{Undo Manager}
+\label{sec:undo_manager}
+\subsection{Change Listener}
 Has been abstracted to decouple functionality from undo/redo functionality to be reused by other developers and with the etherpad extension in mind.
 
 
-\section{Contents}
-contents
+\section{Range}
+
+The \code{Range} class is a utility class and an abstraction for the native \code{Range} interface. The native implementation is prone to bugs on many browsers. As discussed in \refsection{sec:interaction_with_browser_apis}, instead of fixing the API by shimming its methods, the \code{Range} class implements all methods related to ranges while trying to interact as little as possible with the native API. On top of the methods required by Type that are implemented by the native \code{Range} interface, this class implements additional methods specific to the API.
+
+%CodeMirror uses (native) \code{Range}s for text
+
+%Ranges are specifically used to 
+
+%Ranges are mainly used by the implementations of the caret and the selection.
+
 
 \section{Development}
 
@@ -598,6 +612,10 @@ The Input \code{InputEvent} will be triggered by the \code{Input} class after a 
 \label{subsec:paste_event}
 
 The \code{PasteEvent} will be triggered when the user pastes contents from the clipboard \textit{before} it will be inserted to the editor's contents. It contains the clipboards contents and can be cancelled so that other developers are free to manipulate and stop a paste event.
+
+\subsection{ChangeEvent}
+\label{subsec:change_event}
+
 
 
 %\section{Plugin Api}
