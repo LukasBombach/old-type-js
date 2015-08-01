@@ -66,10 +66,14 @@ Type.Events.Type = function () {
 
   /**
    * Sets this event instance to be cancelled
-   * @returns {Type.Events.Type}
+   *
+   * @param {boolean} doCancel - Set to false to uncancel
+   *     the event. All other values or no value at all
+   *     will set the event to be cancelled
+   * @returns {Type.Events.Type} - This instance
    */
-  this.cancel = function () {
-    this.canceled = true;
+  this.cancel = function (doCancel) {
+    this.canceled = doCancel !== false;
     return this;
   };
 
