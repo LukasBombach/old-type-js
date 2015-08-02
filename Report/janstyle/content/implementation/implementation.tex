@@ -558,10 +558,21 @@ The formatter is one of the key classes of the Type library. As discussed in \re
   \Procedure{Format}{$s,e$}\Comment{s and e are the distinct start and end nodes}
     \State $c \gets s$
     \State Let $a$ is an empty array
-     \While{$c\not=null$ and $c$ does not contain $e$}
+     \While{$c\not=null$ and $c\not=e$ and $c$ does not contain $e$}
       \State $a$.push($c$)
       \State $c \gets c$.nextSibling
      \EndWhile
+     \If{$c=e$}
+      \State $a$.push($c$)
+     \EndIf
+     \If{$c$ contains $e$}
+      \State \Call{Format}{$c$.firstChild, $e$}
+     \EndIf
+     \If{$c=null$}
+      \State $n \gets $ next node in document flow
+      \State \Call{Format}{$n,e$}
+     \EndIf
+     \State Wrap all nodes from $a$ in format tag
   \EndProcedure
 \end{algorithmic}
 \end{algorithm}
