@@ -510,7 +510,7 @@ The \code{Writer} class implements functionality to add and remove contents to a
 
 \subsection{Formatter}
 
-The formatter is one of the key classes of the Type library. As discussed in \refsubsec{subsec:noapi_dis_formatting} it must generate \textit{well-formatted} markup while being able to work on any \textit{ill-formatted} markup it has been given. There is a virtually infinite number of edge-cases that text can be formatted with. Assume we have the following string.
+The formatter is one of the key classes of the Type library. As discussed in \refsubsec{subsec:noapi_dis_formatting} it must generate \textit{well-formatted} markup while being able to work on any \textit{ill-formatted} markup it will be given. There is a virtually infinite number of edge-cases for markup that formatting commands can be applied to. Assume we have the following string.
 
 %\begin{quotation}
 %Lorem \tikzmarkin{a}ipsum \textit{dolor \underline{sit\tikzmarkend{a} amet}}
@@ -524,7 +524,7 @@ The formatter is one of the key classes of the Type library. As discussed in \re
 <p>Lorem §\tikzmarkin{glw}§ipsum <em>dolor<u> sit§\tikzmarkend{glw}§ amet</u></em></p>
 \end{lstlisting}
 
-\reflisting{lst:formatter_code_example} shows an example string formatted with HTML. The highlighted part (yellow) represents the part of the text that should be formatted using a formatting command.
+\reflisting{lst:formatter_code_example} represents markup for the formatted string ''Lorem ipsum \textit{dolor \underline{sit amet}}''. The highlighted part (yellow) represents the part of the text that should be formatted using a formatting command.
 
 \begin{figure}[!htb]
 \centering
@@ -533,7 +533,40 @@ The formatter is one of the key classes of the Type library. As discussed in \re
 \label{fig:formatting_dom_tree}
 \end{figure}
 
-\reffigure{fig:formatting_dom_tree} shows the DOM representation of the markup of \reflisting{lst:formatter_code_example}. We can split up the text node ''Lorem ipsum'' into two text nodes ''Lorem'' and '' ipsum'' to create a distinct node in which the formatting (yellow highlight) starts and do the same with the ending text node ''sit amet''.
+\reffigure{fig:formatting_dom_tree} shows the DOM representation of the markup of \reflisting{lst:formatter_code_example}. We can split up the text node ''Lorem ipsum'' into two text nodes ''Lorem'' and '' ipsum'' to create a distinct node in which the formatting (yellow highlight) starts and do the same with the ending text node ''sit amet''. Ths gives us a distinct starting node and ending node. When we traverse each node from the start to the end, every traversed node falls on eithe of the following cases:
+
+\begin{enumerate}
+\item It is the start node
+\item It is the end node
+\item It is a node between start and end node (but is not and does not contain the start or end node)
+\item It contains end node
+\end{enumerate}
+
+\noindent To generate \textit{well-formatted} markup, we must conform the 
+
+\begin{enumerate}
+\item Conform the validation rules of HTML as specified by the W3C
+\item Generate as little DOM nodes as possible
+\end{enumerate}
+
+\noindent From this derive a recursive algorithm:
+
+\begin{algorithm}
+\caption{Recursive algorithm to apply text formatting}
+\label{alg:text_formatting}
+\begin{algorithmic}[1]
+  \Procedure{Format}{$s,e$}\Comment{s and e are the distinct start and end nodes}
+    \State $c \gets s$
+    \State Let $a$ is an empty array
+     \While{$c\not=null$ and $c$ does not contain $e$}
+      \State $a$.push($c$)
+     \EndWhile
+  \EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+%    \State Split start end end text nodes to generate distinct start end end nodes
+%\andnext does not contain end node
 
 %when we create distinct start and end nodes and traverse node from the start to the end node
 %we can break it down to these / is always one of these patterns: 
