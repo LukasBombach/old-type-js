@@ -510,23 +510,36 @@ The \code{Writer} class implements functionality to add and remove contents to a
 
 \subsection{Formatter}
 
-code examples
+The formatter is one of the key classes of the Type library. As discussed in \refsubsec{subsec:noapi_dis_formatting} it must generate \textit{well-formatted} markup while being able to work on any \textit{ill-formatted} markup it has been given. There is a virtually infinite number of edge-cases that text can be formatted with. %It does not only need to deal with different markup, these edge cases also include formatting with different tags and on different parts of the same markup. %the number of edge cases is virtually unlimited
 
-the number of edge cases is virtually unlimited
+\begin{lstlisting}[language=html, caption=Markup with highlighted target for formatting, label=lst:formatter_code_example]
+<p>Lorem §\tikzmarkin{glw}§ipsum<em>dolor<u>sit§\tikzmarkend{glw}§ amet</u></em> consectetur</p>
+\end{lstlisting}
 
-when we create distinct start and end nodes and traverse node from the start to the end node
-we can break it down to these / is always one of these patterns: 
+\reflisting{lst:formatter_code_example} shows an example string formatted with HTML. The highlighted part (yellow) represents the part of the text that should be formatted using a formatting command.
 
-- is the start node
-- is the endnode
-- is between start and end node
-- contains end node
+\begin{figure}[!htb]
+\centering
+\makebox[\textwidth]{\includegraphics[width=0.5\textwidth]{images/dom-tree.pdf}}
+\caption{DOM representation of figure \ref{lst:formatter_code_example}}
+\label{fig:formatting_dom_tree}
+\end{figure}
 
-this way we can write a recursive algorithm
+\reffigure{fig:formatting_dom_tree} shows the DOM representation of the markup of \reflisting{lst:formatter_code_example}.
 
-to create clean code at the end we check if the nodes before and after the new formatting have the same formatting and connect those (whitespace nodes in between will be ignored)
+%when we create distinct start and end nodes and traverse node from the start to the end node
+%we can break it down to these / is always one of these patterns: 
 
-to improve performance we collect all these nodes an perform the minimum of dom operations necessary
+%- is the start node
+%- is the endnode
+%- is between start and end node
+%- contains end node
+
+%this way we can write a recursive algorithm
+
+%to create clean code at the end we check if the nodes before and after the new formatting have the same formatting and connect those (whitespace nodes in between will be ignored)
+
+%to improve performance we collect all these nodes an perform the minimum of dom operations necessary
 
 \section{Undo Manager}
 \label{sec:undo_manager}
