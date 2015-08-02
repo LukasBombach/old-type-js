@@ -2,57 +2,80 @@
 
 \section{Technology}
 
-% There are many popular frameworks and libraries that provide a structure, rules and conventions for implementing websites and web applications. 
+\subsection{Overview}
 
-No IDEs, tools, not even conventions. Es gibt frameworks die eine architektur für webseiten und web-applikationen vorgeben, aber nichts dergleichen für bibliotheken.
+To support development, the library is split up into multiple files. There are no pre-made solutions or conventions suggesting how to design, structure and concatenate components for a JavaScript library. The most popular JavaScript libraries on GitHub\footnote{\url{https://github.com/search?l=JavaScript\&q=stars\%3A\%3E1\&s=stars\&type=Repositories}} each implement custom and different solutions. Angular.js implements a custom module-system and uses the tool ''Grunt'' to concatenate multiple files into one. D3.js uses a Makefile and various Node.js modules for building and concatenation. jQuery uses Grunt for concatenation and runs custom scripts implemented using Node.js to manipulate and clean up the resulting source code file.
 
-Not for building:
-Big JS libraries all do it differently.
-Top 3 client side JavaScript repositories (stars) on github
-https://github.com/search?l=JavaScript\&q=stars\%3A\%3E1\&s=stars\&type=Repositories
-Angular.js: Grunt
-d3 Makefile, also ein custom build script welche node packages aufruft
-jQuery custom scripts, mit grunt und regex und so
+\subsection{Gulp}
 
-Not for Architecture
-Angular custom module system with own conventions
-d3 mit nested objects (assoc arrays) und funktionen
-jQuery mit .fn
-ACE mit Klassen, daraus habe ich gelernt
+Gulp is a Node.js-based task runnner that is widely used as a build system for web applications. Gulp taks are used to concate source files, linting, checking code style rules and minifying the library.
 
-\section{Ich habe verwendet}
+\subsection{RequireJS, AMDclean and UglifyJS2}
 
-Gulp
-requireJs
-AMDClean
-Uglify
+Each file is written as a CommonJS module that will be concatenated using RequireJS in a designated Gulp task. RequireJS generates code structures around each module so that each module can access one another. This will increase the library's file size. AMDclean is used to remove as much of this supporting code while maintaining the same functionality. When all source code files have been concatinated and cleaned from RequireJS, it will be compressed using UglifyJS2.
 
-JSLint - Douglas Crockford coding dogmatas / conventions
-JSCS - JavaScript style guide checker
+\subsection{JSLint}
 
-~~Livereload~~
-PhantomJs
-Mocha
-Chai
+JSLint is used to lint the source code before any concatenation happens. It will also check if the code conforms the conventions introduced by Douglas Crockford.
 
-Durch Require und AMDClean schöne arbeitsweise (am ende über bord geworfen) und kleine Dateigröße, wenig overhead.
 
-Automatisierte Client side Tests mit PhantomJs und Mocha/Chai
+%\section{Coding conventions}
+
+%Habe mich größtenteils an Crockfordstyle orientiert, aber die Klassen anders geschrieben. Habe den Stil von ACE editor verwendet, denn der ist gut lesbar. Lesbarkeit war mir wichtiger als Crockford style. Für private Eigenschaften und Methoden habe ich die prefix convention verwedendet.
+%https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Contributor\_s\_Guide/Private\_Properties
+%Sie bewirkt keine echte accessibility restriction, aber es ist eine allgemein anerkannten convention und ist auch viel besser lesbar.
+
+
+\subsection{JSCS}
+
+JSCS is used to check the code to conform formatting conventions. i.e. the number of spaces used for indentation or a consistend use of CamelCase. Along with JSLint checking for Douglas Crockford's conventions this ensures a consistend coding style across all files and classes.
 
 \subsection{ECMAScript 6} 
 
 ECMAScript 6 offers many features for JavaScript including classes and modules. It is not supported by most browsers yet however there are tools like Babel that can transpile ECMAScript 6 to ECMAScript 5. Babel is already used by popular websites like Netflix for JavaScript libraries and Frameworks like React. 
 
-Type will not use ECMAScript 6 and Babel. Even though its features can support the development with syntactic sugar, most of its features can be approached using JavaScript design patterns. The benefit of not using ECMAScript 6 and transpilers are a smaller file size and more independence from third-party tools.
+Type will not use ECMAScript 6 and Babel. Even though its features can support the development with syntactic sugar, most of its features can be approached using ECMAScript 5 design patterns. The benefit of not using ECMAScript 6 and transpilers are a smaller file size and more independence from third-party tools.
 
-\section{Coding conventions}
 
-Habe mich größtenteils an Crockfordstyle orientiert, aber die Klassen anders geschrieben. Habe den Stil von ACE editor verwendet, denn der ist gut lesbar. Lesbarkeit war mir wichtiger als Crockford style. Für private Eigenschaften und Methoden habe ich die prefix convention verwedendet.
-https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Contributor\_s\_Guide/Private\_Properties
-Sie bewirkt keine echte accessibility restriction, aber es ist eine allgemein anerkannten convention und ist auch viel besser lesbar.
+% There are many popular frameworks and libraries that provide a structure, rules and conventions for implementing websites and web applications. 
 
+%No IDEs, tools, not even conventions. Es gibt frameworks die eine architektur für webseiten und web-applikationen vorgeben, aber nichts dergleichen für bibliotheken.
+
+%Not for building:
+%Big JS libraries all do it differently.
+%Top 3 client side JavaScript repositories (stars) on github
+%https://github.com/search?l=JavaScript\&q=stars\%3A\%3E1\&s=stars\&type=Repositories
+%Angular.js: Grunt
+%d3 Makefile, also ein custom build script welche node packages aufruft
+%jQuery custom scripts, mit grunt und regex und so
+
+%Not for Architecture
+%Angular custom module system with own conventions
+%d3 mit nested objects (assoc arrays) und funktionen
+%jQuery mit .fn
+%ACE mit Klassen, daraus habe ich gelernt
+
+%\section{Ich habe verwendet}
+
+%Gulp
+%requireJs
+%AMDClean
+%Uglify
+
+%JSLint - Douglas Crockford coding dogmatas / convetions
+%JSCS - JavaScript style guide checker
+
+%~~Livereload~~
+%PhantomJs
+%Mocha
+%Chai
+
+%Durch Require und AMDClean schöne arbeitsweise (am ende über bord geworfen) und kleine Dateigröße, wenig overhead.
+
+%Automatisierte Client side Tests mit PhantomJs und Mocha/Chai
 
 \section{Architecture}
+\label{sec:impl_architecture}
 
 %Modulbasiert?
 %Erweiterbarkeit

@@ -208,3 +208,8 @@ The library itself will be exposed as a class to the global namespace with the n
 %Ursprünglich API und Codestruktur an window.execCommand orientiert, das ist aber doof.
 
 %The library shall give other developers as much freedom as possible, meaning other developer should use the library as they see it fit and not the other way around, should try to conform the needs of the library.
+
+
+\section{Distribution}
+
+The library will be distributed as a single JavaScript file. Extensions of third-party developers will each be distributed as independent and separate (JavaScript) files. By exposing Type and its classes as discussed in section \refsection{sec:api_design} they can be accessed from other files. This provides a modular ''plug and play'' system for distributing and loading extensions. To improve loading times, web developers can concatinate Type and its extensions to a single file in a web project.
