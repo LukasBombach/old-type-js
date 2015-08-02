@@ -560,6 +560,7 @@ The formatter is one of the key classes of the Type library. As discussed in \re
     \State Let $a$ is an empty array
      \While{$c\not=null$ and $c$ does not contain $e$}
       \State $a$.push($c$)
+      \State $c \gets c$.nextSibling
      \EndWhile
   \EndProcedure
 \end{algorithmic}
