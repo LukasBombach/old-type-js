@@ -1,0 +1,35 @@
+%!TEX root = ../thesis.tex
+
+\section{Basics of plain-text editing} % word-processing
+
+caret
+selection
+input
+
+\section{Basics of rich-text editing} % word-processing
+
+document tree
+formatting algorithms
+
+% we will see that contenteditable handles all this, but in my solution this all needs to be coded again
+% I need to discuss that the benefits are bigger than having to do this
+
+\section{Libraries for desktop environments}
+
+It is no longer needed to implement basic rich-text editing components from the ground up. Rich-text editing has become a standard and most modern Frameworks, system APIs or GUI libraries come with built-in capabilites. Table \ref{table:rich-text-components-desktop} lists rich-text text components for popular languages and frameworks.
+
+\begin{table}[]
+\centering
+\begin{tabular}{ll}
+\hline
+Environment & Component \\ \hline
+Java (Swing) & JTextPane / JEditorPane \\
+MFC & CRichEditCtrl \\
+Windows Forms / .NET & RichTextBox \\
+Cocoa & NSTextView \\
+Python & Tkinter Text \\
+Qt & QTextDocument \\ \hline
+\end{tabular}
+\caption{Rich-text components in desktop environments}
+\label{table:rich-text-components-desktop}
+\end{table}

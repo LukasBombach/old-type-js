@@ -1,0 +1,45 @@
+\documentclass[
+  a4paper,
+  oneside,
+  titlepage,
+  11pt
+]{memoir}
+
+
+%\usepackage{urlbst}
+\usepackage[breaklinks=true]{hyperref} % for all the refs (chapter, website)
+\usepackage{listings}                  % for code
+\usepackage{caption}                   % all the captions
+\usepackage{color}                     % for proper color handling
+\usepackage{todonotes}                 % for notes
+\usepackage[toc]{glossaries}           % for the glossary
+\usepackage{graphicx}                  % for advanced image handling
+\usepackage{fixltx2e}                  % for subscript
+\usepackage{amssymb,amsmath}           % for math equations
+\usepackage{lscape}                    % for landscape pages
+\usepackage{breakcites}                % breaks overfloating cites
+
+%\usepackage[]{algorithm2e}             %
+%\usepackage{algorithm}                 % For writing algorithms
+%\usepackage[noend]{algpseudocode}      %
+\usepackage{algorithm}% http://ctan.org/pkg/algorithm
+\usepackage{algpseudocode}% http://ctan.org/pkg/algorithmicx
+
+
+\usepackage[T1]{fontenc}               %
+\usepackage[utf8]{inputenc}            % For displaying
+\usepackage{tikz}                      % keyboard keys
+\usetikzlibrary{shadows}               %
+
+\lstset{escapechar=§}
+\usepackage[norndcorners,customcolors]{hf-tikz}
+\hfsetbordercolor{yellow}
+\hfsetfillcolor{yellow}
+
+
+\input{config/code_highlighting}
+
+\linespread{1.3}        % one and a half
+
+\makeglossaries
+\glsaddall

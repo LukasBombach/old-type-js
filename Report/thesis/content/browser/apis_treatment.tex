@@ -1,0 +1,45 @@
+%!TEX root = ../../thesis.tex
+
+\section{Treating HTML editing API related issues}
+
+Since the issues arising with HTML editing APIs are part of the browser's implementation, they cannot be fixed by JavaScript developers. The common approach for most rich-text editors is to use HTML editing APIs and find work-arounds for its issues and bugs. It is to be noted, as Piotrek Koszuli, that the majority of rich-text editors ''really do not work''\'{n}ski points out\footnote{\url{http://stackoverflow.com/questions/10162540/contenteditable-div-vs-iframe-in-making-a-rich-text-wysiwyg-editor/11479435\#11479435}}. This is usually the case when the problems discussed in \refsection{sec:disadvantages_of_html_editing_apis} have not been adressed and the library solely consists of a user interface wrapping an element in editing mode.
+
+Having to account for multiple browser implementations, working around bugs can result in a big file size and a complex architecture. Most edge cases can only be learned from experience, not be foreseen or analyzed by debugging source code. Piotrek Koszuli\'{n}ski writes ''We [...] are working on this for years and we still have full bugs lists''\cite{sopp}.
+
+There are various approaches to implement workarounds. Some libaries attempt to wrap HTML editing APIs and treat bugs and inconsitent behaviour internally. This apporach is generally not well-adopted. The most popular libraries related to web-based rich-text editing, rated by the numbers of ''stars'' given, are distributed as rich-text-editing user interface components (i.e. rich-text editors).
+
+In general, most editors implement solutions for addressing the beforementioned issues independently---or are forks of other editors implemented with a different user interface.
+
+\paragraph{HTML output} Editors like CKEditor offer some configuration on the generated HTML output\footnote{\url{http://docs.ckeditor.com/\#!/guide/dev\_output\_format-section-adjusting-output-formatting-through-configuration}}, but in the case of CKEditor this is very limited. The underlying issue is that HTML editing APIs cannot be configured. The only way to work around this issue is to implement custom methods for formatting in JavaScript. The proprietary ''Redactor Text Editor'' demonstrates such an implementation. Medium.com has written an extensive proprietary framework that will compare the markup of the editor with the visual output and sanitize and correct the DOM on each change\footnote{\url{https://medium.com/medium-eng/why-contenteditable-is-terrible-122d8a40e480}} to conform a difined norm.
+
+\paragraph{Flawed API} HTML editing APIs are usually wrapped in the API of an editor, that offer more functionality than the original API. \code{execCommand} offers the \code{insertHTML} command that allows inserting custom elements. As discussed in the previous paragraph, extending the formatting capabilites requires a JavaScript implementation.
+
+\paragraph{Clipboard} There is no native support to control and process the contents pasted from the clipboard. To gain control, workarounds must be used. There are two approaches to this
+
+\begin{enumerate}
+\item Sanitize the editor's contents after a paste event
+\item Proxy a paste event to insert its contents into another element and read the contents from it
+\end{enumerate}
+
+The ''Redactor Text Editor'' uses the first approach. While reading contents from the a paste event is not fully supported, the event itself will be triggered by all major browsers. Once the event has finished and the contents have been inserted to the editor, it can be ''cleaned up'' to remove unwanted contents
+
+CKEditor and TinyMCE have been developed before all major browsers supported clipboard events. To allow developers to permit pasting formatted text, the editors created a hidden \code{textarea} element and listened for common ''paste'' keyboard shortcuts (\keystroke{ctrl}\keystroke{v} and \keystroke{shift}\keystroke{ins}). When a user presses these keys, the hidden \code{textarea} will be focussed and thereby be the target in which the browser will paste the clipboard's contents into. After a short delay, the editors can read the \code{textarea}'s contents and process and insert it to the editor. This does not account for pasting from the context menu. For this CKEditor overrides the native context menu with a custom paste menu item, that will open a modal instructing the user to paste his or her contents using the keyboard shortcuts. TinyMCE overrides the native context menu too, but does not display a past option. Up to the current versions CKEditor 4.5.1 and TinyMCE 4.2.3, this is still the case.
+
+CodeMirror, a web-based source code editor enhances this approach by moving the textarea to the mouse pointer's position when the user presses his or her right mouse button. This way a native context menu can be displayed while the paste option would insert the clipboard's contents to a designated \code{textarea}, that can be read from.
+
+On the downside, the paste event cannot be proxied to the \code{textarea} if the user uses the browser's menu bar to paste contents.
+
+%To control and sanitize the contents pasted by from the clipboard, editors take various approaches. Since not all browsers support listening to paste events and reading its contents, some editors and focus a hidden textarea, that the contents will then be pasted into by the browser. After a delay, the editor reads the contents from the textarea, which can then be processed and inserted to the editor's contents. CKEditor and TinyMCE enable the option to restrict pasting to unformatted text this way. 
+
+\paragraph{Bugs} Generally, bugs cannot be fixed. The only way to treat bugs in browsers is by avoiding them and/or shimming them with JavaScript methods or ''cleaning up'' after they have occcured.
+
+\paragraph{Not extendable} The restrictions the HTML editing API puts into the contents that is currently edited is an even bigger problem. Taking the example of layouting with tab stops, the only solution is by not making the entire contents of the eidtor acutally editable and implementing layouting in JavaScript while making parts of the layout editable using the HTML editing APIs.
+
+%The issues arising with HTML editing APIs cannot be fixed. Many libraries find workarounds to treat them. CKEditor, TinyMCE, that framework. Google Docs finds another way and does not use HTML editing APIs.
+
+%huge editor libraries, developed for 10 years trying to fix stuff
+%libraries, not editors targeting inconstiencies
+%they all can never know what's gonna happen
+%medium
+
+%\subsection{Clipboard} CKEditor ''fixes'' paste problems by implementing a custom fake context menu and opening a modal with some instruction that the user should press ctrl+v. This is a UX nightmare. Other editors like retractor (oder so) sanitize any change to the editors contents for the case of input by paste events.
