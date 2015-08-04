@@ -37,3 +37,9 @@ compatible with) IE's "contentEditable" and "designMode" attributes.}
 Mark Pilgrim lists this as milestone of the decision to integrate Microsoft's HTML editing APIs in the HTML5 standard.\footnote{\url{https://blog.whatwg.org/the-road-to-html-5-contenteditable}, last checked on 07/16/2015}.
 
 % By understanding the origins, the development and the process of standardization, it can be seen that the incorporation of the HTML editing APIs as designed by Microsoft has not been decided because they are a \textit{good idea}, but to be compatible with other systems and ultimately Internet Explorer 5.5.
+
+
+\section{Usage of HTML Editing APIs for rich-text editors}
+\label{sec:useage-of-html-editing-apis}
+
+Most rich-text editors use HTLM editing APIs as their basis. CKEditor and TinyMCE dynamically create an \texttt{iframe} on instantiation and set its \texttt{body} to editing mode using \texttt{contenteditable}. Doing so, users can type inside the \texttt{iframe} so it effectively acts as text input field. Both libraries wrap the \texttt{iframe} in a user interface with buttons to format the \texttt{iframe}'s contents. When a user clicks on a button in the interface \texttt{document.execCommand} will be called on the \texttt{iframe}'s \texttt{document} and the selected text will be formatted. While using an \texttt{iframe} is still in practice, many newer editors use a  \texttt{div} instead. The advantages and disadvatanges of this technique will be discussed in Sections XY.
