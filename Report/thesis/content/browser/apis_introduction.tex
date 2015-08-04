@@ -46,3 +46,10 @@ document.execCommand('createLink', false, 'http://google.de/');
 \end{lstlisting}
 
 The \textit{third} parameter will be passed on to the internal command given as first parameter. In the case of a \texttt{createLink} command, the third parameter is the URL to be used for the link to create. The \textit{second} paramter determines if executing a command should display a user interface specific to the command. For instance, using the \texttt{createLink} command with the second parameter set to \texttt{true} and not passing a third parameter, the user will be prompted with a system dialog to enter a URL. A full list of possible command identifiers can be found on MSDN\footnote{\url{https://msdn.microsoft.com/en-us/library/ms533049(v=vs.85).aspx}, last checked on 07/10/2015}.
+
+
+
+\section{Usage of HTML Editing APIs for rich-text editors}
+\label{sec:useage-of-html-editing-apis}
+
+Most rich-text editors use HTLM editing APIs as their basis. CKEditor and TinyMCE dynamically create an \texttt{iframe} on instantiation and set its \texttt{body} to editing mode using \texttt{contenteditable}. Doing so, users can type inside the \texttt{iframe} so it effectively acts as text input field. Both libraries wrap the \texttt{iframe} in a user interface with buttons to format the \texttt{iframe}'s contents. When a user clicks on a button in the interface \texttt{document.execCommand} will be called on the \texttt{iframe}'s \texttt{document} and the selected text will be formatted. While using an \texttt{iframe} is still in practice, many newer editors use a  \texttt{div} instead. The advantages and disadvatanges of this technique will be discussed in Sections XY.
