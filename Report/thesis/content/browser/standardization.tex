@@ -3,9 +3,11 @@
 \section{Standardization of HTML Editing APIs}
 \label{sec:standardization-of-html-editing-apis}
 
-It makes sense to use HTML editing APIs for rich-text editing. Microsoft's demos published with the release of these API suggest to do so. Mozilla picked up on it and called their implementation ''rich-text editing API''. Other browsers followed with APIs based on Microsoft's idea of editable elements. However, it would have been imaginable for browsers to offer a native user interface component, a dedicated rich-text input field.
+% It makes sense to use HTML editing APIs for rich-text editing. 
 
-The HTML editing APIs have only been standardized with HTML5, which itself introduces 13 new types of input fields\footnote{\url{https://developer.mozilla.org/en/docs/Web/HTML/Element/Input}, last checked on 07/16/2015}, but none with rich-text capabilites. The WHATWG discussed various ways to specify rich-text editing for the upcoming HTML5 standard, including dedicated input fields. The issues that have been faced with that idea are 
+HTML editing APIs, although not standardized, have been the de-facto standard for implementing rich-text editors on the web. Microsoft's demos that have been published with the release of these APIs suggested this application. Mozilla picked up on it and called their implementation ''rich-text editing API''. Other browsers followed with APIs based on Microsoft's idea of editable elements. However, it would have been imaginable for browsers to offer a native user interface component, a dedicated rich-text input field.
+
+HTML editing APIs have only been standardized with HTML5, which itself introduces 13 new types of input fields\footnote{\url{https://developer.mozilla.org/en/docs/Web/HTML/Element/Input}, last checked on 07/16/2015}, but none with rich-text capabilites. The WHATWG discussed various ways to specify rich-text editing for the upcoming HTML5 standard, including dedicated input fields. The issues that have been faced with that idea are as follows:
 
 \begin{enumerate} 
 \item Finding a way to tell the browser which language the rich-text input should generate. E.g. should it output (the then popular) ''bb'' code, (X)HTML, Textile or something else?
@@ -34,7 +36,9 @@ as being realistic would be to do something similar to (and ideally
 compatible with) IE's "contentEditable" and "designMode" attributes.}
 \end{quotation}
 
-Mark Pilgrim lists this as milestone of the decision to integrate Microsoft's HTML editing APIs in the HTML5 standard.\footnote{\url{https://blog.whatwg.org/the-road-to-html-5-contenteditable}, last checked on 07/16/2015}.
+Mark Pilgrim lists this as milestone of the decision to integrate Microsoft's HTML editing APIs in the HTML5 standard.\footnote{\url{https://blog.whatwg.org/the-road-to-html-5-contenteditable}, last checked on 07/16/2015}. The WHATWG incorporated these APIs. In coorporation with the W3C, the work by the WHATWG, including the standardization of the editing APIs, have been incorporated in the HTML5 standard and released in October 2014. When the coorporation ended in Juli 2012\footnote{todo confirm: \url{http://lists.w3.org/Archives/Public/public-whatwg-archive/2012Jul/0119.html}}, the WHATWG kept their work in the HTML Living Standard, including the same API as in HTML5.
+
+%HTML editing APIs have been standardized in the HTML5
 
 % By understanding the origins, the development and the process of standardization, it can be seen that the incorporation of the HTML editing APIs as designed by Microsoft has not been decided because they are a \textit{good idea}, but to be compatible with other systems and ultimately Internet Explorer 5.5.
 
