@@ -1,1 +1,23 @@
 %!TEX root = ../thesis.tex
+
+
+\begin{table}[]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llll}
+\hline
+Method                & Description \\ \hline
+execCommand           & Executes a command. \\
+queryCommandEnabled   & Returns whether or not a given command can currently be executed. \\
+queryCommandIndeterm  & Returns whether or not a given command is in the indeterminate state. \\
+queryCommandState     & Returns the current state of a given command. \\
+queryCommandSupported & Returns whether or not a given command is supported by the current document's range. \\
+queryCommandValue     & Returns the value for the given command. \\ \hline
+\end{tabular}
+}
+\caption{HTML Editing API}
+\label{table:editing_mode_api}
+\end{table}
+
+\clearpage
+\newpage
