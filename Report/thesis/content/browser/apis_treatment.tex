@@ -25,22 +25,22 @@ Medium.com takes a different approach and implements an extensive framework that
 
 \subsection{Flawed API}
 
-HTML editing APIs are usually wrapped in the API of an editor, that offer more functionality than the original API. \code{execCommand} offers the \code{insertHTML} command that allows inserting custom elements. As discussed in the previous paragraph, extending the formatting capabilites requires a JavaScript implementation.
+HTML editing APIs are usually wrapped in the API of an editor, that offers more functionality than the original API. \code{execCommand} offers the \code{insertHTML} command that allows inserting custom elements. As discussed in the previous paragraph, extending the formatting capabilites requires a JavaScript implementation.
 
 \subsection{Clipboard}
 
-There is no native support to control and process the contents pasted from the clipboard. To gain control, workarounds must be used. There are two approaches to this
+For browsers, that do not offer native support to control and process the contents pasted from the clipboard, workarounds must be used. There are two approaches to this
 
 \begin{enumerate}
 \item Sanitize the editor's contents after a paste event
 \item Proxy a paste event to insert its contents into another element and read the contents from it
 \end{enumerate}
 
-The ''Redactor Text Editor'' uses the first approach. While reading contents from the a paste event is not fully supported, the event itself will be triggered by all major browsers. Once the event has finished and the contents have been inserted to the editor, it can be ''cleaned up'' to remove unwanted contents
+The ''Redactor Text Editor'' uses the first approach. While reading contents from the a paste event is not fully supported, the event itself will be triggered by all major browsers, even most older versions\footnote{That have a market share BETTER CHECK THIS AGAIN}. Once the event has finished and the contents have been inserted to the editor, it can be ''cleaned up'' to remove unwanted contents
 
-CKEditor and TinyMCE have been developed before all major browsers supported clipboard events. To allow developers to permit pasting formatted text, the editors created a hidden \code{textarea} element and listened for common ''paste'' keyboard shortcuts (\keystroke{ctrl}\keystroke{v} and \keystroke{shift}\keystroke{ins}). When a user presses these keys, the hidden \code{textarea} will be focussed and thereby be the target in which the browser will paste the clipboard's contents into. After a short delay, the editors can read the \code{textarea}'s contents and process and insert it to the editor. This does not account for pasting from the context menu. For this CKEditor overrides the native context menu with a custom paste menu item, that will open a modal instructing the user to paste his or her contents using the keyboard shortcuts. TinyMCE overrides the native context menu too, but does not display a past option. Up to the current versions CKEditor 4.5.1 and TinyMCE 4.2.3, this is still the case.
+CKEditor and TinyMCE have been developed before most major browsers supported clipboard events. Both editors implemented a technique to permit pasting formatted text, that has been the standard for many years. CKEditor and TinyMCE created a hidden \code{textarea} element and listened for common ''paste'' keyboard shortcuts (\keystroke{ctrl}\keystroke{v} and \keystroke{shift}\keystroke{ins}). When a user presses these keys, the hidden \code{textarea} will be focussed and thereby be the target in which the browser will paste the clipboard's contents instead of the actual editor. After a short delay, the editors can read the \code{textarea}'s contents. Since \code{textarea} elements allow plain text only, the contents will be removed of any formatting and can then be insterted to the actual editor. However, this does not account for pasting from the context menu. For this CKEditor overrides the native context menu with a custom menu containing a custom ''paste'' menu item, that will open a modal instructing the user to paste his or her contents using the keyboard shortcuts. TinyMCE overrides the native context menu too, but does not display a paste option. Up to the current versions CKEditor\footnote{CKEditor 4.5.1 } and TinyMCE \footnote{TinyMCE 4.2.3}, this is still the case.
 
-CodeMirror, a web-based source code editor enhances this approach by moving the textarea to the mouse pointer's position when the user presses his or her right mouse button. This way a native context menu can be displayed while the paste option would insert the clipboard's contents to a designated \code{textarea}, that can be read from.
+CodeMirror, a web-based source code editor enhances this approach by moving the textarea to the cursor's position when the user presses his or her right mouse button. This way a native context menu can be displayed while the paste option would insert the clipboard's contents to a designated \code{textarea}, that can be read from.
 
 On the downside, the paste event cannot be proxied to the \code{textarea} if the user uses the browser's menu bar to paste contents.
 
@@ -48,12 +48,12 @@ On the downside, the paste event cannot be proxied to the \code{textarea} if the
 
 \subsection{Bugs}
 
-Generally, bugs cannot be fixed. The only way to treat bugs in browsers is by avoiding them and/or shimming them with JavaScript methods or ''cleaning up'' after they have occcured.
+Generally, bugs cannot be fixed. The only way to treat bugs in browsers is by avoiding them, shimming them with JavaScript methods or ''cleaning up'' after they have occcured.
 
 \subsection{Not extendable}
 \label{subsec:treating_issues_last}
 
-The restrictions the HTML editing API puts into the contents that is currently edited is an even bigger problem. Taking the example of layouting with tab stops, the only solution is by not making the entire contents of the eidtor acutally editable and implementing layouting in JavaScript while making parts of the layout editable using the HTML editing APIs.
+The restrictions the HTML editing API imposes on the contents of the editor is an even bigger problem. Taking the example of layouting with tab stops\footnote{\url{http://googledrive.blogspot.fr/2010/05/whats-different-about-new-google-docs.html}}, the only solution is not making the entire contents of the editor editable, but implementing a layouting engine in JavaScript and enabling the editing mode only on parts of the layout.
 
 %The issues arising with HTML editing APIs cannot be fixed. Many libraries find workarounds to treat them. CKEditor, TinyMCE, that framework. Google Docs finds another way and does not use HTML editing APIs.
 
