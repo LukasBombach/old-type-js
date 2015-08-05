@@ -7,15 +7,29 @@ Since the issues arising with HTML editing APIs are part of the browser's implem
 
 Having to account for multiple browser implementations, working around bugs can result in a big file size and a complex architecture. Most edge cases can only be learned from experience, not be foreseen or analyzed by debugging source code. Piotrek Koszuli\'{n}ski writes ''We [...] are working on this for years and we still have full bugs lists''\cite{sopp}.
 
-There are various approaches to implement workarounds. Some libaries attempt to wrap HTML editing APIs and treat bugs and inconsitent behaviour internally. This apporach is generally not well-adopted. The most popular libraries related to web-based rich-text editing, rated by the numbers of ''stars'' given, are distributed as rich-text-editing user interface components (i.e. rich-text editors).
+In practice, there are a few attempts to implement wrappers that will take care of the beforementioned issues, to support other developers with a working api. This apporach is generally not well-adopted though. In general, most libraries are distributed as independent editors implementing their own solutions for addressing these issues---or are forks of other editors implemented with a different user interface.
 
-In general, most editors implement solutions for addressing the beforementioned issues independently---or are forks of other editors implemented with a different user interface.
+Subsections \refsubsec{subsec:treating_issues_first} through \refsubsec{subsec:treating_issues_last} will discuss some approaches to treat the beforementioned issues.
 
-\paragraph{HTML output} Editors like CKEditor offer some configuration on the generated HTML output\footnote{\url{http://docs.ckeditor.com/\#!/guide/dev\_output\_format-section-adjusting-output-formatting-through-configuration}}, but in the case of CKEditor this is very limited. The underlying issue is that HTML editing APIs cannot be configured. The only way to work around this issue is to implement custom methods for formatting in JavaScript. The proprietary ''Redactor Text Editor'' demonstrates such an implementation. Medium.com has written an extensive proprietary framework that will compare the markup of the editor with the visual output and sanitize and correct the DOM on each change\footnote{\url{https://medium.com/medium-eng/why-contenteditable-is-terrible-122d8a40e480}} to conform a difined norm.
 
-\paragraph{Flawed API} HTML editing APIs are usually wrapped in the API of an editor, that offer more functionality than the original API. \code{execCommand} offers the \code{insertHTML} command that allows inserting custom elements. As discussed in the previous paragraph, extending the formatting capabilites requires a JavaScript implementation.
+%There are various approaches to implement workarounds. Some libaries attempt to wrap HTML editing APIs and treat bugs and inconsitent behaviour internally. This apporach is generally not well-adopted. The most popular libraries related to web-based rich-text editing, rated by the numbers of ''stars'' given, are distributed as rich-text-editing user interface components (i.e. rich-text editors).
 
-\paragraph{Clipboard} There is no native support to control and process the contents pasted from the clipboard. To gain control, workarounds must be used. There are two approaches to this
+
+
+\subsection{HTML output} 
+\label{subsec:treating_issues_first}
+
+Editors like CKEditor offer some configuration on the generated HTML output\footnote{\url{http://docs.ckeditor.com/\#!/guide/dev\_output\_format-section-adjusting-output-formatting-through-configuration}}, but in the case of CKEditor this is very limited. The underlying issue is that HTML editing APIs cannot be configured. The only way to work around this issue is to implement custom methods to apply formatting in JavaScript and not using the \code{execCommand} interface\footnote{HTML editiing APIs can still be used for text input and other functionality}. The proprietary ''Redactor Text Editor'' demonstrates such an implementation.
+
+Medium.com takes a different approach and implements an extensive framework that will compare the markup of the editor with a model of the visual represenation that the markup generates and corrects the DOM on each change\footnote{\url{https://medium.com/medium-eng/why-contenteditable-is-terrible-122d8a40e480}} to conform a defined norm.
+
+\subsection{Flawed API}
+
+HTML editing APIs are usually wrapped in the API of an editor, that offer more functionality than the original API. \code{execCommand} offers the \code{insertHTML} command that allows inserting custom elements. As discussed in the previous paragraph, extending the formatting capabilites requires a JavaScript implementation.
+
+\subsection{Clipboard}
+
+There is no native support to control and process the contents pasted from the clipboard. To gain control, workarounds must be used. There are two approaches to this
 
 \begin{enumerate}
 \item Sanitize the editor's contents after a paste event
@@ -32,9 +46,14 @@ On the downside, the paste event cannot be proxied to the \code{textarea} if the
 
 %To control and sanitize the contents pasted by from the clipboard, editors take various approaches. Since not all browsers support listening to paste events and reading its contents, some editors and focus a hidden textarea, that the contents will then be pasted into by the browser. After a delay, the editor reads the contents from the textarea, which can then be processed and inserted to the editor's contents. CKEditor and TinyMCE enable the option to restrict pasting to unformatted text this way. 
 
-\paragraph{Bugs} Generally, bugs cannot be fixed. The only way to treat bugs in browsers is by avoiding them and/or shimming them with JavaScript methods or ''cleaning up'' after they have occcured.
+\subsection{Bugs}
 
-\paragraph{Not extendable} The restrictions the HTML editing API puts into the contents that is currently edited is an even bigger problem. Taking the example of layouting with tab stops, the only solution is by not making the entire contents of the eidtor acutally editable and implementing layouting in JavaScript while making parts of the layout editable using the HTML editing APIs.
+Generally, bugs cannot be fixed. The only way to treat bugs in browsers is by avoiding them and/or shimming them with JavaScript methods or ''cleaning up'' after they have occcured.
+
+\subsection{Not extendable}
+\label{subsec:treating_issues_last}
+
+The restrictions the HTML editing API puts into the contents that is currently edited is an even bigger problem. Taking the example of layouting with tab stops, the only solution is by not making the entire contents of the eidtor acutally editable and implementing layouting in JavaScript while making parts of the layout editable using the HTML editing APIs.
 
 %The issues arising with HTML editing APIs cannot be fixed. Many libraries find workarounds to treat them. CKEditor, TinyMCE, that framework. Google Docs finds another way and does not use HTML editing APIs.
 
