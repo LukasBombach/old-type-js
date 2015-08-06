@@ -256,7 +256,7 @@ Unfortunately, this apprach would make the contents of the editor only editable 
 \section{Modular and object-oriented programming}
 \label{subsec:modular_and_oop}
 
-jQuery and CKEditor demonstrate a software architecture in which a core object mainly provides a system to extend its functionality, but does not offer many methods itself\footnote{CKEditor provides a framework for implementing components for it, but does not offer any rich-text functionality in its core. jQuery provides low-level utility methods for JavaScript.}. The actual functionality of both libraries is implemented through extensions while the libraries are usually bundled with a set of ''core extensions'' that provide basic features. CKEditor makes use of modular programming by implementing a major part of its editor as plugins that communicated via well-defined interfaces. jQuery established a paradigm calling any extension a ''plugin'' but instead of using clearly defined interfaces, developers are encouraged to add arbitrary methods to jQuery's base object, which can then be directly accessed. Extending a base object has many advantages
+jQuery and CKEditor demonstrate a software architecture in which a core object mainly provides a system to extend its functionality, but does not offer many methods itself\footnote{CKEditor provides a framework for implementing components for it, but does not offer any rich-text functionality in its core. jQuery provides low-level utility methods for JavaScript.}. The actual functionality of both libraries is implemented through extensions while the libraries are usually bundled with a set of ''core extensions'' that provide basic features. CKEditor makes use of modular programming techniques by implementing a major part of its editor as plugins that communicate via strictly defined interfaces. jQuery established a paradigm calling any extension a ''plugin'' but instead of using strictly defined interfaces, developers are encouraged to add arbitrary methods to jQuery's base object, which can then be directly accessed. Extending a base object has many advantages:
 
 \begin{enumerate}
 \item It provides a namespace for the library
@@ -264,12 +264,14 @@ jQuery and CKEditor demonstrate a software architecture in which a core object m
 \item It approaches modular programming and strong decoupling
 \end{enumerate}
 
-Modular programming could create a system in which other developers could exchange any component easily to improve performance or enrich functionality. The disadvantage this apporach would be that the need for well-defined interfaces can diminish flexibility. Formalizing interfaces would create complex structures and could make it harder for other developers to contribute to the library instead of inviting them. jQuery goes the opposite direction and encourages arbitrary extensions. jQuery's approach demonstrates that this flexibility, in practice, can withstand possible conflicts. In turn, the low barrier for extending jQuery has spawned a rich collection of extensions and a big community of developers. While jQuery allows to be extended with complex libraries, it is designed to be extended with simple methods. It is difficult to establish complex interactions between extensions.
+Strict modular programming could create a system in which other developers can exchange any component easily to improve performance or enrich functionality. The disadvantage this apporach would be that the need for well-defined interfaces can diminish flexibility. Formalizing interfaces would create complex structures and could make it harder for other developers to contribute to the library instead of inviting them. jQuery uses another approach and encourages arbitrary extensions. jQuery's approach demonstrates that this flexibility, in practice, can withstand possible conflicts. In turn, the low barrier for extending jQuery has spawned a rich collection of extensions and a big community of developers. While jQuery technically allows to be extended with complex libraries, it is designed to be extended with simple methods. It is difficult to establish complex interactions between extensions.
 
 % However, the biggest factor in coupling the components would still be that components reference each other, not the underlying structure. 
 
 
-\subsection{Constructor Pattern} To close the gap between CKEditor's modular programming approach and jQuery's simple extension paradigms, object-oriented programming (OOP) can be used. JavaScript does not offer classes and classical inheritance, however the same functionality can be achieved using the constructor pattern and prototypal inheritance (see \refsection{sec:oop_class}). Functions following the contructor pattern are often called classes or pseudo-classes. Hereinafter the term classes will be used.
+\subsection{Constructor Pattern \& modularized structure}
+
+To close the gap between CKEditor's modular programming approach and jQuery's simple extension paradigms, object-oriented programming (OOP) can be used. JavaScript does not offer classes and classical inheritance, however the same functionality can be achieved using the constructor pattern and prototypal inheritance (see \refsection{sec:oop_class}). Functions following the contructor pattern are often called classes or pseudo-classes. Hereinafter the term classes will be used.
 
 %\begin{lstlisting}[language=JavaScript, caption=Type instantiation, label=lst:type_instantiation]
 %// Defines the class and its contructor 
@@ -294,7 +296,9 @@ Modular programming could create a system in which other developers could exchan
 
 % maybe explain constructor pattern
 
-\subsection{Modularized structure} For this library a base class will provide the namespace to be extended with other classes implementing the functionality of this library. A set of core extensions provide all components needed for a rich-text editor. The base class will also provide a constructor that will be the library's entry point for other developers to implement a rich-text editor, but, like CKEditor and jQuery, will implement as little functionality as possible itself. The base class and its extensions will be discussed in detail in the sections \refsection{sec:core} and \refsection{sec:modules}. Implementing the library's extensions as classes has many benefits:
+% \subsection{Modularized structure} 
+
+For this library a base class will provide the namespace to be extended with other classes implementing the functionality of this library. A set of core extensions provide all components needed for a rich-text editor. The base class will also provide a constructor that will be the library's entry point for \textit{users} of the library (see \refsubsec{subsec:api_design_handling_use_cases}) to implement a rich-text editor, but, like CKEditor and jQuery, will implement as little functionality as possible itself. The base class and its extensions will be discussed in detail in chapter \refchapter{ch:impl}. Implementing the library's extensions as classes has many benefits:
 
 \begin{enumerate}
 \item As compared to CKEditor and modular programming, strictly defined interfaces are not a necessity. This can improve flexibility and lower the barrier for other developers to contribute. % Auf Nachteile eingehen?
@@ -304,7 +308,7 @@ Modular programming could create a system in which other developers could exchan
 \item Instance variables still allow to reuse a class in different contexts with different inherent data. %Die instanzvariablem sind meistens nur Pointer auf Instanzen anderer Klassen % * Das ganze ist dadurch sehr schlank
 \end{enumerate}
 
-As an alternative apporach, the module pattern can be used, which would also allow namespacing, encapsulation and protected access, but would make an implementation much more complicated and be much less readable.
+%As an alternative apporach, the module pattern can be used, which would also allow namespacing, encapsulation and protected access, but would make an implementation much more complicated and be much less readable.
 
 %namespace vorteile = keine namenskonflikte
 
