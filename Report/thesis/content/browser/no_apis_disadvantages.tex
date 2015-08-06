@@ -36,7 +36,10 @@ A rich-text editor must be able to edit any of these representations (and more).
 
 % Also this can be seen as ''yet another'' implementation of contenteditable, equal to browser implementations. Just one more editor for developers to take care of. However, this isn't quite correct, cos developers usually can choose a single editor that is used for the entire project, so they only have to take care of a single editor.
 
-\subsection{Mimicking native functionality} As described in section XY, rich-text editing consists of many components like the caret or the ability to paste text via a context menu. These basic components require complex implementations. HTML editing APIs offer these components natively without further scripting.
+\subsection{Mimicking native functionality}
+\label{subsec:disadv_mimic_native}
+
+As described in section XY, rich-text editing consists of many components like the caret or the ability to paste text via a context menu. These basic components require complex implementations. HTML editing APIs offer these components natively without further scripting.
 
 \subsection{Possible performance disadvantages} Modifying the text on a website means manipulating the DOM. DOM operations can be costly in terms of performance as they can trigger a browser reflow\cite{br}. The same goes for mimicking some elements like the caret. To display a caret a DOM element like a \texttt{div} is needed and it needs to be moved by changing its style attribute. While it should be a goal to keep browser interactions to a minimum, there is no way to avoid DOM interaction with any visual text change.
 
