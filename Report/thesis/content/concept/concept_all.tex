@@ -75,13 +75,14 @@ Web-based code editors like ''Ace'' and ''CodeMirror'' demonstrate that this is 
 
 Using tricks and \textit{faking} elements or behavior is common in web front end development. This applies to JavaScript as well as to CSS. For instance, long before CSS3 has been developed, techniques (often called ''hacks'') have been discussed on how to implement rounded corners without actual browser support. Only years later, this has become a standard. This not only enables features long before the creators of browsers implement them, this \textit{feedback} by the community of web developers also influences future standards. Encorporating feedback is a core philisophy of the WHATWG, the original creators of HTML5.
 
-Hacks are a necessity for an editor like this. The following sections will discuss each part of the editor and describe ideas, techniques and hacks that can be used for an effective implementation. In prior, we will discuss goals and principles that these techniques should be oriented towards as well as restrictions of browsers these techniqes must adapt to. % worst sentence ever
+\textit{Hacks are a necessity for an editor like this. The following sections will discuss each part of the editor and describe ideas, techniques and hacks that can be used for an effective implementation. In prior, we will discuss goals and principles that these techniques should be oriented towards as well as restrictions of browsers these techniqes must adapt to. BEHANDLE DIE THEMEN GAR NICHT SO} % worst sentence ever
 
 
 
 % Google, unlike Ace and CodeMirror displays a custom context menu. 
 
 \chapter{Principles}
+\label{ch:concept_principles}
 
 \section{Interaction with browser APIs}
 \label{sec:interaction_with_browser_apis}
@@ -133,9 +134,9 @@ The library should be capable of any method implemented by HTML editing APIs. Ho
 % It can be much more fitting for developers to include a library that handles all text-input and -formatting operations while only providing a powerful API, leaving the ui to the developer. 
 
 % While it can be much more fitting for developers to use an API to implement an
-The API of this library must be \textit{well-designed}. That means it must be simple, effective and fit the developers' needs. The methods it offers should be simple in the sense that they conceal possibly complex tasks with understandable high-level concepts. They should be effective and fit the developers' needs in the sense that the API should be designed so that any requirement to of the developers should be matched with as little effort as possible. The API should create a workflow for developers that allows them to do what they want to do and is as easy to use and plausible as possible. jQuery is an example of encorporating an API conforming these principles.
+The API of this library must be \textit{well-designed}. That means it must be simple, effective and fit the developers' needs. The methods it offers should be simple in the sense that they conceal possibly complex tasks with understandable high-level concepts. They should be effective and fit the developers' needs in the sense that the API should be designed so that any requirement to of the developers should be matched with as little effort as possible. The API should create a workflow for developers that allows them to do what they intend to do and is as easy to use and as plausible as possible. jQuery is an example of encorporating an API conforming these principles.
 
-The library's API will have two basic use cases. On the one hand, web developers must be enabled to implement rich-text editors with it. On the other hand, the library should offer interfaces for enabling web developers to extend the API and add features.
+The library's API will have two basic use cases. On the one hand, web developers must be enabled to implement rich-text editors with it. On the other hand, the library should offer interfaces for enabling web developers to extend the library and add features.
 
 \paragraph{Extension}
 
