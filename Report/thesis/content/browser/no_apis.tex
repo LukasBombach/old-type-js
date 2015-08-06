@@ -71,7 +71,7 @@ Algorithm~\ref{alg:insert_pseudocode} demostrates a simplified procedure to inse
 \end{algorithmic}
 \end{algorithm}
 
-Algorithm~\ref{alg:remove_pseudocode} demonstrates a procedure to mimick the \texttt{delete} command of \texttt{execCommand}.
+Algorithm~\ref{alg:remove_pseudocode} demonstrates a procedure to mimick the deletion commands of \texttt{execCommand}.
 
 \begin{algorithm}
 \caption{Simplified element unwrapping pseudocode}
@@ -83,9 +83,14 @@ Algorithm~\ref{alg:remove_pseudocode} demonstrates a procedure to mimick the \te
 \end{algorithmic}
 \end{algorithm}
 
-Algorithm~\ref{alg:unwrap_pseudocode} demonstrates a procedure to unwrap an element, mimicking the \texttt{removeFormat} and \texttt{unlink} commands of \texttt{execCommand}.
-With formatting and removing text as well as inserting and unwrapping elements, we can find equivalents for all commands of the HTML editing APIs related to manipulating rich-text using only methods specified by the ''Document Object Model (Core) Level 1''. Aside from this, editing APIs offer commands for undo/redo and clipboard capabilites as well as a command for selecting the entire contents of the editable elements. The latter can easily be implemented with the designated selection API, whereas chapter \refchapter{ch:impl} demonstrates an implementation for undo, redo and clipboard capabilities. Table \ref{tab:execCommand_equivalents} lists all commands available for \texttt{execCommand} and possible equivilents with DOM Level 1 methods. However, these are just simplified examples. A specific implementation accounting for all commands and all edge-cases will be discussed in chapters {ch:concept} and {ch:implementation}.
+Algorithm~\ref{alg:unwrap_pseudocode} demonstrates a procedure to unwrap an element, mimicking the commands of \texttt{execCommand} to remove formatting.
+
+With formatting and removing text as well as inserting and unwrapping elements, we can find equivalents for all commands of the HTML editing APIs related to manipulating rich-text using only methods specified by the ''Document Object Model (Core) Level 1''. This shows, that HTML editing APis are not a necessity for rich-text editing. Chapter \refchapter{ch:impl} demonstrates ways to implement clipboard, undo/redo and selection capabilites.
+
+%Aside from this, editing APIs offer commands for undo/redo and clipboard capabilites as well as a command for selecting the entire contents of the editable elements. The latter can easily be implemented with the designated selection API, whereas chapter \refchapter{ch:impl} demonstrates an implementation for undo, redo and clipboard capabilities. Table \ref{tab:execCommand_equivalents} lists all commands available for \texttt{execCommand} and possible equivilents with DOM Level 1 methods. However, these are just simplified examples. A specific implementation accounting for all commands and all edge-cases will be discussed in chapters {ch:concept} and {ch:implementation}.
 
 %Insertion commands can be implemented with basic DOM Level 1 methods to create and append elements.
 
-\subsection{Third-party alternatives} The only alternative way to display and edit rich-text inside a browser is through third-party plugins like Adobe Flash or Microsoft Silverlight. Flash and Silverlight lack mobile adoptions and have been subject to critique since the introduction of smartphones and HTML5. Other third-party plugins are even less well adopted. This makes Flash, Silverlight and other third-party browser-plugins a worse choice as compared to displaying and manipulating rich-text though the DOM.
+\subsection{Third-party alternatives}
+
+The only alternative way to display and edit rich-text inside a browser is through third-party plugins like Adobe Flash or Microsoft Silverlight. Flash and Silverlight lack mobile adoptions and have been subject to critique since the introduction of smartphones and HTML5. Other third-party plugins are even less well adopted. This makes Flash, Silverlight and other third-party browser-plugins a worse choice as compared to displaying and manipulating rich-text though the DOM.
