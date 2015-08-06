@@ -83,14 +83,14 @@ The \code{Type} class is the base class (see \refsubsec{subsec:modular_and_oop})
 \begin{enumerate}
 \item It can be instantiated and offer a high-level API to manipulate text and perform other rich-text related functions
 \item It provides a namespace for all of the library's internal classes
-\item As an instance, it exposes references to all instances of the internally used classe
+\item An instance provides references to all instances of the internally used classes
 \item It exposes its \code{prototype} as a public shorthand attribute
 \end{enumerate}
 
 \subsection{Instantiation and usage}
 \label{subsec:instantiation_usage}
 
-To develop an editor with the library, it must be instantiated. As discussed in \refsubsec{subsec:api_design_handling_use_cases}, all of the libary's functionality is encapsuled in a class (\code{Type}) that exposes its features as high-level functions. The \code{Type} class is exposed to the \code{window} namespace and is thereby globally accessible. On instantiation it must be passed an \code{HTMLElement}, which's contents will act as the editor's rich-text content. An optional second parameter can be passed to define settings for the editor's instance.
+To develop an editor with the library, the \code{Type} base class must be instantiated. As discussed in \refsubsec{subsec:api_design_handling_use_cases}, all of the libary's functionality is encapsuled this class. It exposes its features as high-level instance methods. The \code{Type} class is exposed to the \code{window} namespace and is thereby globally accessible. On instantiation it must be passed an \code{HTMLElement}, which's contents will act as the editor's rich-text content. An optional second parameter can be passed to the class to define settings for the editor's instance.
 
 \begin{lstlisting}[language=JavaScript, caption=Type instantiation, label=lst:type_instantiation]
 var element = document.getElementById("myElement");
