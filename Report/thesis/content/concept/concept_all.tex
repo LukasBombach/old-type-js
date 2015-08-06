@@ -298,7 +298,7 @@ To close the gap between CKEditor's modular programming approach and jQuery's si
 
 % \subsection{Modularized structure} 
 
-For this library a base class will provide the namespace to be extended with other classes implementing the functionality of this library. A set of core extensions provide all components needed for a rich-text editor. The base class will also provide a constructor that will be the library's entry point for \textit{users} of the library (see \refsubsec{subsec:api_design_handling_use_cases}) to implement a rich-text editor, but, like CKEditor and jQuery, will implement as little functionality as possible itself. The base class and its extensions will be discussed in detail in chapter \refchapter{ch:impl}. Implementing the library's extensions as classes has many benefits:
+For this library a base class will provide the namespace to be extended with other classes implementing the functionality of this library. A set of core extensions provide all components needed for a rich-text editor. The base class will also provide a constructor that will be the library's entry point for \textit{users} of the library (see \refsubsec{subsec:api_design_handling_use_cases}) to implement a rich-text editor, but, like CKEditor and jQuery, will implement as little functionality as possible itself. The base class as well as the architecture and interaction of its extensions will be discussed in detail in chapter \refchapter{ch:impl}. Implementing the library's extensions as classes has many benefits:
 
 \begin{enumerate}
 \item As compared to CKEditor and modular programming, strictly defined interfaces are not a necessity. This can improve flexibility and lower the barrier for other developers to contribute. % Auf Nachteile eingehen?
