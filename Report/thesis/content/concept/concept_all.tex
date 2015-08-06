@@ -140,15 +140,15 @@ The library's API will have two basic use cases. On the one hand, web developers
 
 \paragraph{Extension}
 
-For extension, web developers should have specific access to as many components and functions of the library, providing as much freedom and options as possible. This will include low-level access to components while control and explicitness is more imporant than simplicity. 
+For extension, web developers should have precise access to as many components and functions of the library, providing as much freedom and options as possible. This will include low-level access to components while control and explicitness is more imporant than simplicity. 
 
-All components of Type will be implemented as classes. To provide as much capabilites as possible to other developers, all classes of Type will be exposed in a designated namespace. The classes should conform the best practices of object-oriented programming to support developers in extending the library. The class design should not only consider the specific needs of the core library but also potential use cases for other developers.
+All components of the library will be implemented as classes. To provide as much capabilites as possible to other developers, all classes of the libarry will be exposed in a designated namespace. The classes should conform the best practices of object-oriented programming to support developers in extending the library. The class design should not only consider the specific needs of the core library but also potential use cases for other developers.
 
 For example, with a designated class to show and move a caret, multiple carets can be instantiated for an extension that allows real-time collaboration with mutliple users. All available classes will be discussed in chapter \refchapter{ch:impl}.
 
 \paragraph{Editor implementation}
 
-For web developers implementing an editor (assuming the library offers all necessary features) the API should be designed to offer methods for the most common tasks related to rich text editing to allow fast and easy integration in a website. This should be high-level methods as compared to methods required for extending the library. Simplicity is more important than exact control over low-level behaviour. For implementing a rich-text editor the exposed methods should cover
+For web developers implementing an editor, the API should be designed to offer methods for the most common tasks related to rich-text editing to allow fast and easy integration in a website. This should be high-level methods as compared to methods required for extending the library. Simplicity is more important than precise control over low-level behaviour. For implementing a rich-text editor the exposed methods should cover
 
 \begin{enumerate}
 \item Formatting and removing formats
@@ -177,7 +177,7 @@ editor.undo();
 editor.redo();
 \end{lstlisting}
 
-\noindent The functions in lines 1 through 6 can take various overloaded parameters to determine the specific action. The selection command, for instance, can be called with two numbers to draw a selection from one character offset to another (to draw a selection from characters 10 to 20 \code{editor.selection(10, 20);} can be called). It can also be called without passing parameters, to read the selection. \code{editor.selection();} would return the currently selected text as a string. A full API description can be found at table TODO.
+\noindent The functions in lines 1 through 6 can take various overloaded parameters to determine the specific action. The selection command, for instance, can be called with two numbers to draw a selection from one character offset to another. To draw a selection from characters 10 to 20 \code{editor.selection(10, 20)} can be called. The function can also be called without passing parameters, to read the selection. \code{editor.selection()} will return the currently selected text as a string. A full API description can be found at table TODO.
 
 %Applied to Type, this means
 
@@ -188,7 +188,7 @@ editor.redo();
 \subsection{Handling use cases}
 \label{subsec:api_design_handling_use_cases}
 
-We can call programmers extending the library ''developers of the library'' and programmers using the library to implement editors ''users of the library''. To account for both use cases and maintain a clear software architecture as well as a separation of concerns, all classes that provide functionality to the library must remain in a designated namespace which the library has access to. 
+We can call programmers extending the library ''developers of the library'' and programmers using the library to implement editors ''users of the library''. To account for both use cases and maintain a clear software architecture as well as a separation of concerns, all classes that provide functionality to the library must remain in a designated namespace which the library has access to. Developers of the library have access to the namespace and can utilize any of Type's classes to extend its functions while users of the library can access the globally available ''Type'' class that provides all methods for the implementation of a rich-text editor.
 
 \begin{figure}[!htb]
 \centering
@@ -197,7 +197,7 @@ We can call programmers extending the library ''developers of the library'' and 
 \label{fig:type_uml_excerpt}
 \end{figure}
 
-The library itself will be exposed as a class to the global namespace with the name ''Type''. It can be instantiated and then provides an own API, high-level methods, for implementing a rich-text editor.
+The library itself will be exposed as a class to the global namespace with the name ''Type''. It can be instantiated and then provides an own API---high-level methods---for implementing a rich-text editor.
 
 %Ursprünglich API und Codestruktur an window.execCommand orientiert, das ist aber doof.
 %Bessere (weil präzisere) API mit mehr Möglichkeiten als der contentEditable scheiss
