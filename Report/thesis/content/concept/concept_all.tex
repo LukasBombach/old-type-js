@@ -1,10 +1,10 @@
 %!TEX root = ../../thesis.tex
 
+%\section{Overview}
+
+%Before discussing the software architecture in section~\ref{sec:software_architecture}, sections \ref{sec:rich_text_approaches} through \ref{sec:las_before_software_architecture} will discuss the apporaches, principles and goals for implementing this library without HTML editing APIs.
+
 \section{Overview}
-
-Before discussing the software architecture in section~\ref{sec:software_architecture}, sections \ref{sec:rich_text_approaches} through \ref{sec:las_before_software_architecture} will discuss the apporaches, principles and goals for implementing this library without HTML editing APIs.
-
-\section{Approaches for enabling rich-text editing}
 \label{sec:rich_text_approaches}
 
 %When not using HTML editing APIs, the components and the bahavior of native text inputs must be imitated. There are various approaches to this.
@@ -13,17 +13,17 @@ Before discussing the software architecture in section~\ref{sec:software_archite
 
 This section will discuss the options to implement rich-text editing without relying (entirely) on HTML editing APIs and discuss the advantages and disadvantages of each method. % Diese Art zu schreiben sollte der Style der Arbeit sein.
 
-\subsection{Native input elements} Native text inputs are hard-wired to plain-text editing. No major browser offers an API for formatting. There is also no option to write HTML to an input and have it display it as rich-text. \texttt{input} fields and \texttt{textarea} elements will simply display the HTML as source code. Rich-text can only be implemented as an editable part of the website.
+\section{Native input elements} Native text inputs are hard-wired to plain-text editing. No major browser offers an API for formatting. There is also no option to write HTML to an input and have it display it as rich-text. \texttt{input} fields and \texttt{textarea} elements will simply display the HTML as source code. Rich-text can only be implemented as an editable part of the website.
 
-\subsection{Image elements} In February 2015, Flipboard Inc. demonstrated an unprecedented technique to achieve fluid full-screen animations with 60 frames per second on their mobile website\footnote{\url{http://engineering.flipboard.com/2015/02/mobile-web/}, last checked on 07/24/2015}. Instead of using the DOM to display their contents, the entire website was rendered to a \texttt{canvas} element. When a user swiped over the website the canvas element was rerendered, essentially imitating the browser's rendering engine. \texttt{canvas} elements allow rendering rich-text too. A rich-text editor can be implemented using this technique. This however has two major downsides. On the one hand it would require implementing a text-rendering engine. The \texttt{canvas} API is only capable of displaying unlayouted text with specifically set line breaks. On the other hand, making the editor accessible to other developers would be much more complex since the text only exists in an internal representaion inside the editor and would not be exposed as DOM component on the website.
+\section{Image elements} In February 2015, Flipboard Inc. demonstrated an unprecedented technique to achieve fluid full-screen animations with 60 frames per second on their mobile website\footnote{\url{http://engineering.flipboard.com/2015/02/mobile-web/}, last checked on 07/24/2015}. Instead of using the DOM to display their contents, the entire website was rendered to a \texttt{canvas} element. When a user swiped over the website the canvas element was rerendered, essentially imitating the browser's rendering engine. \texttt{canvas} elements allow rendering rich-text too. A rich-text editor can be implemented using this technique. This however has two major downsides. On the one hand it would require implementing a text-rendering engine. The \texttt{canvas} API is only capable of displaying unlayouted text with specifically set line breaks. On the other hand, making the editor accessible to other developers would be much more complex since the text only exists in an internal representaion inside the editor and would not be exposed as DOM component on the website.
 
 An approach related to rendering the text on a \texttt{canvas} element is to render the text inside a Scalable Vector Graphic (SVG). In contrast to \texttt{canvas} elements, SVGs contain DOM nodes that can be accesed from the outside. However this has no benefit over using HTML DOM nodes with the downside that SVG too has no native implementation for controlling the text flow.
 
-\subsection{Enabling editing mode without using its API} One way to enable editing but avoiding many bugs and browser inonstistencies, is to enable the editing mode on an element, but avoid using \texttt{execCommand} to format the text. The latter could be implemented using the DOM core APIs. This would provide the user with all basic editing functions, i.e. a caret, text input, mouse interaction and clipboard capabilites. All of this would be taken care of by the browser.
+\section{Enabling editing mode without using its API} One way to enable editing but avoiding many bugs and browser inonstistencies, is to enable the editing mode on an element, but avoid using \texttt{execCommand} to format the text. The latter could be implemented using the DOM core APIs. This would provide the user with all basic editing functions, i.e. a caret, text input, mouse interaction and clipboard capabilites. All of this would be taken care of by the browser.
 
 This sem-radical approach would solve the problem of buggy and inconsistent \texttt{execCommand} implementations but not the problems that arise with different browser behavior on the user's text input---for instance when entering a line break. If the markup is customly generated with JavaScript, the input may break elements or simply get stuck. This was one of the reasons why Google decided to abandon editing APIs entirely\footnote{\url{http://googledrive.blogspot.fr/2010/05/whats-different-about-new-google-docs.html}, last checked on 07/21/2015}. It could be the source to many bugs, have the development of the library be dependent on browser development and ultimatively restrict the editors capabilites.
 
-\subsection{Native text input imitation} 
+\section{Native text input imitation} 
 \label{subsec:concept_native_imitation}
 
 The only other option to allow the user to change the text on a website is by manually fetching the user's input and manipulating the DOM with JavaScript. However, this does not suffice to provide the experience of a text input. The following components, common to text editing, must also be accounted for:
@@ -35,17 +35,17 @@ The only other option to allow the user to change the text on a website is by ma
 % ''ACE'' and ''CodeMirror'' demonstrate an effective way to imitate a text input. 
 
  %''ACE'' and ''CodeMirror'' demonstrate it is possible to imitate a text input by composing various DOM ele
-\paragraph{Caret} The most obvious part is probably the text caret. Even if a user types on his or her keyboard, a caret must be seen on the screen to know where the input will be inserted. The caret also needs to be responsive to the user's interaction. In particular, the user must be able to click anywhere in the editable text and use the arrow keys to move it (possibly using modifier keys, which's behaviour even depends on the operating system used).
+\subsection{Caret} The most obvious part is probably the text caret. Even if a user types on his or her keyboard, a caret must be seen on the screen to know where the input will be inserted. The caret also needs to be responsive to the user's interaction. In particular, the user must be able to click anywhere in the editable text and use the arrow keys to move it (possibly using modifier keys, which's behaviour even depends on the operating system used).
 
-\paragraph{Selection} Just like the caret, the user must be able to draw a text selection using his or her mouse and change the selection using shift and the arrow keys. Most systems allow double clicks to select words and sometimes tripple clicks to select entire paragraphs. Other systems, for example OS X, allow holding the option key to draw are rectengular text selection, independent of line breaks.
+\subsection{Selection} Just like the caret, the user must be able to draw a text selection using his or her mouse and change the selection using shift and the arrow keys. Most systems allow double clicks to select words and sometimes tripple clicks to select entire paragraphs. Other systems, for example OS X, allow holding the option key to draw are rectengular text selection, independent of line breaks.
 
-\paragraph{Context menu} The context menu is different in text inputs from other elements on a website. Most importantly, it offers an option to paste text, that is only available in native text inputs or elements in editing mode.
+\subsection{Context menu} The context menu is different in text inputs from other elements on a website. Most importantly, it offers an option to paste text, that is only available in native text inputs or elements in editing mode.
 
-\paragraph{Keyboard shortcuts} Text inputs usually allow keyboard shortcuts to format the text and to perform clipboard operations. Formatting the text is possible through DOM manipulation, pasting text however natively only works on text inputs or elements in editing mode. % is a challenge, since browsers do not offer arbitrary access to the clipboard for security reasons.
+\subsection{Keyboard shortcuts} Text inputs usually allow keyboard shortcuts to format the text and to perform clipboard operations. Formatting the text is possible through DOM manipulation, pasting text however natively only works on text inputs or elements in editing mode. % is a challenge, since browsers do not offer arbitrary access to the clipboard for security reasons.
 
-\paragraph{Undo / Redo} Undo and redo are common functions of text processing and it may be frustrating to users if they were missing.
+\subsection{Undo / Redo} Undo and redo are common functions of text processing and it may be frustrating to users if they were missing.
 
-\paragraph{Behaviour} Rich-text editors (usually) share a certain behaviour on user input. When writing a bulleted list, pressing the enter key usually creates another bulleting point instead of inserting a new line. Pressing enter inside a heading will insert a new line. However pressing enter when the caret is located at the end of a heading commonly creates a new text paragraph just after that heading. Other rules that need to be considered will be discussed in section [implementation].
+\subsection{Behaviour} Rich-text editors (usually) share a certain behaviour on user input. When writing a bulleted list, pressing the enter key usually creates another bulleting point instead of inserting a new line. Pressing enter inside a heading will insert a new line. However pressing enter when the caret is located at the end of a heading commonly creates a new text paragraph just after that heading. Other rules that need to be considered will be discussed in section [implementation].
 
 \section{Approaches for imitating native components} 
 \label{sec:approaches_for_imitating_native_components}
