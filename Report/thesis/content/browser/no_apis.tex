@@ -4,9 +4,21 @@
 
 HTML editing APIs are the recommended way for implementing a web-based rich-text editor. There is no native text input that can display formatted text. The only way to natively display rich-text on a website is through the Document Object Model (DOM). Editors based on HTML editing APIs utilize the DOM to display their rich-text contents too. Only the editing (of the DOM), commonly phrased ''DOM manipulation'', is implemented with HTML editing APIs.
 
-\subsection{Manipulation via the DOM APIs} Manipulating the DOM has been possible since the first implementations of JavaScript and JScript. It has been standardised in 1998 with the W3C's ''Document Object Model (DOM) Level 1 Specification'' as part of the ''Document Object Model (Core) Level 1''\footnote{\url{http://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html}, last checked on 07/10/2015}.
+\subsection{Manipulation via the DOM APIs} Manipulating the DOM has been possible since the first implementations of JavaScript and JScript. It has been standardised in 1998 with the W3C's ''Document Object Model (Core) Level 1'' specification\footnote{\url{http://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html}, last checked on 07/10/2015} as part of the ''Document Object Model (DOM) Level 1 Specification''.
 
-The DOM and its API is the recommended\footnote{recommended by the W3C and WHATWG} way to change a website's contents and---apart from HTML editing APIs---the only possibility \textit{natively} implemented in any major browser. Popular libraries like jQuery, React or AngularJS are based on it. The API has been developed for 17 years and proven to be stable across browsers. Any DOM manipulation that can be achieved with HTML editing APIs can also be achieved using this API.
+The DOM and its API is the recommended\footnote{recommended by the W3C and WHATWG} way to change a website's contents and---apart from HTML editing APIs---the only option \textit{natively} implemented in any major browser. Popular libraries like jQuery, React or AngularJS are based on it. The API has been developed for 17 years and proven to be stable across browsers. 
+
+MDN lists 44 commands for the \code{execCommand} interface\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/Document/execCommand}}. 
+
+\begin{itemize}
+\item 23 commands apply text formatting.
+\item 6 commands insert HTML elements.
+\item 2 commands remove contents.
+\item 2 commands remove formatting.
+\item The other commands enable control over the clipboard, implemend undo/redo commands, set settings for the editing mode and one command can select all text of the editable element.
+\end{itemize}
+
+Algorithms \ref{alg:format_pseudocode_dom} through \ref{alg:unwrap_pseudocode} demonstrate alternatives to commands of the \code{execCommand} interface related to text formatting, insertion and deletion implemented with methods of the ''Document Object Model (Core) Level 1'' specification.
 
 %% %%%%%%%%%%%%
 %% contenteditable is also DOM API (but not core API?)
@@ -14,7 +26,7 @@ The DOM and its API is the recommended\footnote{recommended by the W3C and WHATW
 
 \begin{algorithm}
 \caption{Simplified text formatting pseudocode}
-\label{alg:format_pseudocode}
+\label{alg:format_pseudocode_dom}
 \begin{algorithmic}[1]
 \State Split text nodes at beginning and end of selection
 \State Create a new tag before the beginning text node of the selection
@@ -27,7 +39,7 @@ The DOM and its API is the recommended\footnote{recommended by the W3C and WHATW
 % \State Move all nodes until end text node inside new tag
 % \State Move end text node inside new tag
 
-Algorithm~\ref{alg:format_pseudocode} demonstrates a simplified procedure to wrap a text selection in a tag. To implement the \texttt{bold} commmand of \texttt{execCommand}, this procedure can be implemented using the \texttt{strong} tag. The text selection can be read with the browser's selection API\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/Selection}, last checked on 07/18/2015}\footnote{Internet Explorer prior version 9 uses a non-standard API \url{https://msdn.microsoft.com/en-us/library/ms535869(v=VS.85).aspx}, last checked on 07/18/2015}.
+Algorithm~\ref{alg:format_pseudocode_dom} demonstrates a simplified procedure to wrap a text selection in a tag. To implement the \texttt{bold} commmand of \texttt{execCommand}, this procedure can be implemented using the \texttt{strong} tag. The text selection can be read with the browser's selection API\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/Selection}, last checked on 07/18/2015}\footnote{Internet Explorer prior version 9 uses a non-standard API \url{https://msdn.microsoft.com/en-us/library/ms535869(v=VS.85).aspx}, last checked on 07/18/2015}.
 
 % To implement formatting commands, the currently selected text can be wrapped in newly created tags, depending on what formatting shall be achieved. For instance, to implement the \texttt{bold} commmand of \texttt{execCommand}, the selected text can be read with the browser's selection API\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/Selection}, last checked on 07/18/2015}\footnote{Internet Explorer prior version 9 uses a non-standard API \url{https://msdn.microsoft.com/en-us/library/ms535869(v=VS.85).aspx}, last checked on 07/18/2015} and wrapped in \texttt{strong} tags using basic DOM Level 1 methods. 
 
@@ -44,7 +56,7 @@ Algorithm~\ref{alg:format_pseudocode} demonstrates a simplified procedure to wra
 \end{algorithmic}
 \end{algorithm}
 
-Algorithm~\ref{alg:insert_pseudocode} demostrates a simplified procedure to insert a new tag and possibly overwriting the current text selection and thereby mimicking \texttt{execCommand}'s command based on insertion.
+Algorithm~\ref{alg:insert_pseudocode} demostrates a simplified procedure to insert a new tag and possibly overwrite the current text selection and thereby mimicking \texttt{execCommand}'s insertion commands.
 
 \begin{algorithm}
 \caption{Simplified text removal pseudocode}
@@ -72,7 +84,7 @@ Algorithm~\ref{alg:remove_pseudocode} demonstrates a procedure to mimick the \te
 \end{algorithm}
 
 Algorithm~\ref{alg:unwrap_pseudocode} demonstrates a procedure to unwrap an element, mimicking the \texttt{removeFormat} and \texttt{unlink} commands of \texttt{execCommand}.
-With formatting and removing text as well as inserting and unwrapping elements, we can find equivalents for all commands of the HTML editing APIs related to manipulating rich-text. Aside from this, editing APIs offer commands for undo/redo and clipboard capabilites as well as a command for selecting the entire contents of the editable elements. The latter can easily be implemented with the designated selection API, whereas chapter {ch:implementation} demonstrates an implementation for undo, redo and clipboard capabilities. Table \ref{tab:execCommand_equivalents} lists all commands available for \texttt{execCommand} and possible equivilents with DOM Level 1 methods. However, these are just simplified examples. A specific implementation accounting for all commands and all edge-cases will be discussed in chapters {ch:concept} and {ch:implementation}.
+With formatting and removing text as well as inserting and unwrapping elements, we can find equivalents for all commands of the HTML editing APIs related to manipulating rich-text using only methods specified by the ''Document Object Model (Core) Level 1''. Aside from this, editing APIs offer commands for undo/redo and clipboard capabilites as well as a command for selecting the entire contents of the editable elements. The latter can easily be implemented with the designated selection API, whereas chapter \refchapter{ch:impl} demonstrates an implementation for undo, redo and clipboard capabilities. Table \ref{tab:execCommand_equivalents} lists all commands available for \texttt{execCommand} and possible equivilents with DOM Level 1 methods. However, these are just simplified examples. A specific implementation accounting for all commands and all edge-cases will be discussed in chapters {ch:concept} and {ch:implementation}.
 
 %Insertion commands can be implemented with basic DOM Level 1 methods to create and append elements.
 
