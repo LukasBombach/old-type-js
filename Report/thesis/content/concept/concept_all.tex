@@ -214,13 +214,13 @@ The library itself will be exposed as a class to the global namespace with the n
 
 \section{Distribution}
 
-The library will be distributed as a single JavaScript file. Extensions of third-party developers will each be distributed as independent and separate (JavaScript) files. By exposing Type and its classes as discussed in section \refsection{sec:api_design} they can be accessed from other files. This provides a modular ''plug and play'' system for distributing and loading extensions. To improve loading times, web developers can concatinate Type and its extensions to a single file in a web project.
+The library will be distributed as a single JavaScript file. Extensions by third-party developers will each be distributed as independent and separate (JavaScript) files. By exposing Type and its classes as discussed in section \refsection{sec:api_design} they can be accessed from other files. This provides a modular ''plug and play'' system for distributing and loading extensions. To improve loading times, web developers can concatinate Type and its extensions to a single file in a web project.
 
 \section{Usage of HTML elements}
 
-Ace, CodeMirror and Google's document editor shre similar concepts for imitating a native text input. For the caret, each of the editors create a \texttt{div} element, style it to make it look like a caret and move it when the user clicks in the text or uses his or her arrow keys. Each editor also uses \texttt{div} elements to display a text selection, styled to imitate the user's operating system's native selections. %In fact, there is hardly no alternative way
+\textit{Ace, CodeMirror and Google's document editor shre similar concepts for imitating a native text input. For the caret, each of the editors create a \texttt{div} element, style it to make it look like a caret and move it when the user clicks in the text or uses his or her arrow keys. Each editor also uses \texttt{div} elements to display a text selection, styled to imitate the user's operating system's native selections.} %In fact, there is hardly no alternative way
 
-The concept to use HTML elements for the visible components of text editing is inevitable. Anything that can be seen on a website must exist in the DOM. The only deviation to this approach would be to resort a \texttt{canvas} element, as discussed above. The apporach to use HTML elements will be used for the implementation of this editor.
+\textit{The concept to use HTML elements for the visible components of text editing is inevitable. Anything that can be seen on a website must exist in the DOM. The only deviation to this approach would be to resort a \texttt{canvas} element, as discussed above. The apporach to use HTML elements will be used for the implementation of this editor.}
 
 \chapter{Architecture}
 \label{sec:impl_architecture}
