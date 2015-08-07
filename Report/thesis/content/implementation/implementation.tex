@@ -402,7 +402,7 @@ As discussed in \refsubsec{subsec:hidden_native_input_fields}, all text input wi
 \section{Caret}
 \label{subsec:caret}
 
-The \code{Caret} class provides all functionality to place and move a caret in a text. It provides methods to be moved left, right, up and down in a text as well as to be placed at at specific position in a text. The visual representaion of the caret is a \code{div} element, styled to imitate a text caret. Using a CSS3 animation, it imitates the ''blinking'' common for native text carets. The challenge with this class is that it must be able to be moved within text and in any kind of formatting, split up into any combination of DOM nodes. In terms of text and text formatting, it must account for that
+The \code{Caret} class provides all functionality to place and move a caret in a text. It provides methods to be moved left, right, up and down in a text as well as to be placed at at specific position in a text. The visual representaion of the caret is a \code{div} element, styled to imitate a text caret. Using a CSS3 animation, it imitates the ''blinking'' common for native text carets. The challenge with this class is that it must be able to be moved within text and in any kind of formatting, split up into any combination of DOM nodes. To be moved across letters and text lines, the caret must take into account that:
 
 \begin{enumerate}
 \item Letters have different widths and heights
@@ -410,7 +410,7 @@ The \code{Caret} class provides all functionality to place and move a caret in a
 \item Different formattings like a headline, italicised text or text with a specifically set font size, result in different letter dimensions
 \end{enumerate}
 
-\code{CodeMirror} solves these problems by measuring each letter with the use of text ranges. The \code{Range} interface offers methods to be spanned over a specific text and to read the range's offsets. These methods can be used to span a range over a single character, read its offsets and place the caret next to it and giving it the same height as the character.
+\code{CodeMirror} solves these problems by measuring each letter with the use of text ranges. Browsers offer a \code{Range} interface, a construct that has a start- and end-offset in a text. A range has methods to read its offsets (x- and y-coordinates) on the website. These methods can be used to span a range over a single character, read its offsets and place the caret next to it and giving it the same height as the character.
 
 To move the caret left or right, the according characters left and right of its current offset will be measured using this method. To move it up and down across text lines, the caret must check the offsets of every character, starting from the character of the current offset, until it reaches the character above or below it that is closest to its horizontal position. As discussed in section \refsection{sec:cache}, a cache for this cannot be applied. The complexity of this is $O(n)$, however in practice, the number if characters this will affect is limited by readability and usability of the text editor. Mobile devices, that generally have less performance than desktop machines, have smallers screens displaying less characters per line. While this is not necessarily the case, it can be expected by good software design.
 
