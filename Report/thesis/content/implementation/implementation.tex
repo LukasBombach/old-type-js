@@ -572,11 +572,11 @@ To format the nodes that have been collected by the algorithm, they will be wrap
 \section{Undo Manager}
 \label{sec:undo_manager}
 
-The \code{UndoManager} class will observe \code{Change} events (see \refsubsec{subsec:change_event}) and keep a history of the performed changes. Every change must include an identifier of the source of the change. The \code{Contents} class will declare the \code{Input} class as the source for the change. This is to enable extensions to work with the \code{UndoManager}. The Etherpad extension (see \refsection{sec:etherpad}) will change the editor's contents too. If, at a given time, the local user added some text and after that another connected client would add some text a few characters before the local user's change, the local user's change could not be undone properly, since the underlying contents would have changed, without the \code{UndoManager} noticing it.
+The \code{UndoManager} class will observe \code{ChangeEvent}s (see \refsubsec{subsec:change_event}) and keep a history of the performed changes. Every change must include an identifier of the source of the change. The \code{Contents} class will declare the \code{Input} class as the source for the change. This is to enable extensions to work with the \code{UndoManager}. The Etherpad extension (see \refsection{sec:etherpad}) will change the editor's contents too. If, at a given time, the local user added some text and after that another connected client would add some text a few characters before the local user's change, the \code{UndoManager} must account for both changes to undo the local user's change.
 
 \subsection{Change Listener}
 
-In its core the changes observed by the \code{UndoManager} will be kept track of by the \code{ChangeListener}. It will accumulate every change in a data structure and take a ''snapshot'' every 500 milliseconds and store it in a history. The \code{UndoManager} will use the history to implement and offer undo and redo commands.
+In its core the changes observed by the \code{UndoManager} will be kept track of by the \code{ChangeListener}. It will accumulate every change in a data structure and take a ''snapshot'' every 500 milliseconds and store it in a history. The \code{UndoManager} uses this history to implement and offer undo and redo commands.
 
 This functionatlity has been abstracted to be reused by other extensions. The Etherpad extension uses this class to publish local changes every 500 milliseconds to its connected clients independently of the \code{UndoManager}.
 
@@ -589,7 +589,7 @@ The \code{Change} event can contain operations to
 \item Format text
 \end{itemize}
 
-Inserting and removing can be undone easily by performing and insertion to undo a remove operation and vice versa. Formatting text is more difficult since Type allows formatting with arbitrary markup. This can be solved by keeping track of the offsets and characters affected by the formatting command and removing the HTML tags at the corresponding positions
+Inserting and removing can be undone easily by performing and insertion to undo a remove operation and vice versa. Formatting text is more difficult since Type allows formatting with arbitrary markup. This can be solved by keeping track of the offsets and characters affected by the formatting command and removing the HTML tags at the corresponding positions.
 
 
 
