@@ -634,15 +634,18 @@ Using the \code{Oop} class (see \refsection{sec:oop_class}), these methods will 
 
 The static methods will also be inherited by the \code{Type} class. This is necessary to trigger events that are \textit{Type} specific but not \textit{instance} specific. Most importantly a ''ready'' event will be triggered on every instantiation of the \code{Type} class. This way plugins and other third-party scripts can run initialization routines.
 
-The first parameter for any of these methods is always the event name that should be listened to, stopped to be listened to or triggered. The second parameter of the \code{trigger} method is an event object that can be an instance of any of the classes discussed in sections \refsubsec{subsec:type_event} through \refsubsec{subsec:paste_event}. The second parameter of the \code{on} and \code{off} methods can be a \code{Function} that will receive the object, that has been passed to the trigger method, as first parameter.
+%The first parameter for any of these methods is always the event name that should be listened to, stopped to be listened to or triggered. The second parameter of the \code{trigger} method is an event object that can be an instance of any of the classes discussed in sections \refsubsec{subsec:type_event} through \refsubsec{subsec:paste_event}. The second parameter of the \code{on} and \code{off} methods can be a \code{Function} that will receive the object, that has been passed to the trigger method, as first parameter.
 
-Plugins and third-party libraries can trigger arbitrary event names and pass arbitrary data. As a paradigm and in terms of a \textit{good programming style}, event objects should be passed. Event objects are inherited from the \code{TypeEvent} or conform its API.
+Plugins and third-party libraries can trigger arbitrary events and pass along arbitrary data. As a paradigm and in terms of a \textit{good programming style}, event objects should be passed. Event objects are inherited from the \code{TypeEvent} or conform its API.
 
 \subsection{TypeEvent}
 \label{subsec:type_event}
 
 \begin{lstlisting}[language=JavaScript, caption={TypeEvent API}, label=lst:eventapi_methods]
+// Gets or sets data
 TypeEvent.data([options]);
+
+// Stops the event from bubbling
 TypeEvent.cancel();
 \end{lstlisting}
 
@@ -651,7 +654,7 @@ The \code{TypeEvent} is a generic, general-purpose event. It can store arbitrary
 \subsection{InputEvent}
 \label{subsec:input_event}
 
-The Input \code{InputEvent} will be triggered by the \code{Input} class after a keyboard input has passed the input pipeline. It inherits all methods from the \code{TypeEvent} to conform the event system and contains information on the key and the modifier keys pressed. The key is represented with its key code and the keyname. They keyname will be mapped from the keycode and is represented by a list of many readable names including ''backspace'', ''enter'', ''space'', all letters and many others. The list not complete but can be extended during further development. The modifier keys include ''shift'', ''alt'', ''ctrl'' and ''meta''. ''meta'' is the browser's name for the \keystroke{cmd} key on OS X systems. OS X uses the \keystroke{cmd} key as modifier the same way Windows and Linux use the \keystroke{ctrl} key. To support implementing for both platforms the ''cmd'' modifier will be set when a user holds the \keystroke{cmd} key on OS X \textit{or} the \keystroke{ctrl} key on other platforms.
+The Input \code{InputEvent} will be triggered by the \code{Input} class after a keyboard input has passed the input pipeline. It inherits all methods from the \code{TypeEvent} to conform the event system and contains information on the key and the modifier keys pressed. The key is represented with its key code and a key name. They key name will be mapped from the key code and is implemented with a list of readable names including ''backspace'', ''enter'', ''space'', all letters and many others. The list not complete but can be extended during further development. The modifier keys include ''shift'', ''alt'', ''ctrl'' and ''meta''. ''meta'' is the browser's name for the \keystroke{cmd} key on OS X systems. OS X uses the \keystroke{cmd} key as modifier the same way Windows and Linux use the \keystroke{ctrl} key. To support developing an editor for both platforms the ''cmd'' modifier will be set when a user holds the \keystroke{cmd} key on OS X \textit{or} the \keystroke{ctrl} key on other platforms.
 
 \subsection{PasteEvent}
 \label{subsec:paste_event}
