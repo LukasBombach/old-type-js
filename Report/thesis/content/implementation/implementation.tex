@@ -602,7 +602,9 @@ Inserting and removing can be undone easily by performing and insertion to undo 
 \label{sec:events}
 \subsection{Overview}
 
-It is possible to trigger custom (native) events using the \code{CustomEvent} interface on modern browsers \textit{todo explain browser support}\footnote{\url{https://developer.mozilla.org/en/docs/Web/API/CustomEvent\#Browser_compatibility}}. Internet Explorer 9 and below allow this through similar interfaces. This system could be use for triggering events for components of Type. However, this would trigger events that that are only relevant within the library in the global namespace. To avoid this, Type implements its own event system that populates events only within the library. Events from within the editor that can be useful to the website or web application Type is used in should still be triggered as native events in the browser's global namespace. During the development of the library no such even has (yet) occured.
+It is possible to trigger custom (native) events using the \code{CustomEvent} interface on modern browsers\footnote{\url{https://developer.mozilla.org/en/docs/Web/API/CustomEvent\#Browser_compatibility}}. Internet Explorer 9 and below allow this through similar interfaces. These interfaces could be used for triggering events for components of Type. However, this would trigger events that that are only relevant within the library in the global namespace. To avoid this, Type implements its own event system that populates events only within the library. Events from within the editor that can be useful to the website or web application Type is used in should still be triggered as native events in the browser's global namespace. During the development of the library no such use case has occured.
+
+%\textit{todo explain browser support}
 
 %Dazu entscheiden dass es ein Type-Internes Eventsystem gibt, dessen Events nur in Type existieren. Damit polluten die nicht den globalen (name)space mit events. Nur bestimmte events werden global (nativ) getriggert, und das sind genau die events, die nach aussenhin von Belang sind und abgegriffen werden koennen sollen (=API design)
 
@@ -628,9 +630,9 @@ EventApi.prototype.trigger(eventName, eventObject);
 %\item \code{off} 
 %\end{itemize}
 
-Using the \code{Oop} class (see \refsection{sec:oop_class}), these methods will be inherited by the \code{Type} class. This way, using the \code{trigger} method, events can be triggered within the scope of a \code{Type} instance and be captured using the  the \code{on} method. Event handlers can be removed using \code{off} method.
+Using the \code{Oop} class (see \refsection{sec:oop_class}), these methods will be inherited by the \code{Type} class. This way, using the \code{trigger} method, events can be triggered within the scope of a \code{Type} instance and be observed using the  the \code{on} method. Event handlers can be removed using \code{off} method.
 
-The static methods will also be inherited by the \code{Type} class. This is necessary to trigger events that are \textit{Type} specific but not \textit{instance} specific. Most importantly a ''ready'' event will be triggered on every instantiation of the \code{Type} class. This way plugins and other third-party scripts can run initialization scripts.
+The static methods will also be inherited by the \code{Type} class. This is necessary to trigger events that are \textit{Type} specific but not \textit{instance} specific. Most importantly a ''ready'' event will be triggered on every instantiation of the \code{Type} class. This way plugins and other third-party scripts can run initialization routines.
 
 The first parameter for any of these methods is always the event name that should be listened to, stopped to be listened to or triggered. The second parameter of the \code{trigger} method is an event object that can be an instance of any of the classes discussed in sections \refsubsec{subsec:type_event} through \refsubsec{subsec:paste_event}. The second parameter of the \code{on} and \code{off} methods can be a \code{Function} that will receive the object, that has been passed to the trigger method, as first parameter.
 
