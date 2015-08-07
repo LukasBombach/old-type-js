@@ -103,6 +103,7 @@ Facebook defined a similar goal for the user interface library React. React impl
 %Improving means it should be more explicit in what it does. The \texttt{bold} command of \texttt{execCommand} will manipulate the DOM to format text bold. It does not state in what how. Simple etc, what I have stated at Disadvantages of offering user interface components.
 
 \section{Markup} 
+\label{sec:concept_markup}
 
 As discussed in \refsubsec{subsec:noapi_dis_formatting}, the editor should be a ''good citizen'' in the ecosystem of other editors and should generate valid markup, expressing a formatting semantically correct with as few tags as possible. The algorithm for creating markup must be able to work on any markup parsable by the browser and in return must generate predictable, \textit{simple} markup itself. It must not inject markup required for the internal workings of the editor\footnote{Which is the case with FirePad and Google' document editor that inject markup necessary for the internal functions of the editors}.
 

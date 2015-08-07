@@ -405,7 +405,11 @@ As discussed in \refsubsec{subsec:hidden_native_input_fields}, all text input wi
 \section{Caret}
 \label{subsec:caret}
 
-The \code{Caret} class provides all functionality to place and move a caret in a text. It provides methods to be moved left, right, up and down in a text as well as to be placed at at specific position in a text. The visual representaion of the caret is a \code{div} element, styled to imitate a text caret. Using a CSS3 animation, it imitates the ''blinking'' common for native text carets. The challenge with this class is that it must be able to be moved within text and in any kind of formatting, split up into any combination of DOM nodes. To be moved across letters and text lines, the caret must take into account that:
+The \code{Caret} class provides all functionality to place and move a caret in a text. It provides methods to be moved left, right, up and down in a text as well as to be placed at at specific position in a text. The visual representaion of the caret is a \code{div} element, styled to imitate a text caret. Using a CSS3 animation, it imitates the ''blinking'' common for native text carets.
+
+It is to be noted that the elements for carets as well as for the text selection will not be written to the editor's contents. As discussed in \refsection{sec:concept_markup}, the eidors contents should not contain any markup other than for the text itself. Instead this and all other elements will be stored in a designated \code{div} element at the end of the website's \code{body} and be positionied using CSS.
+
+ The challenge with this class is that it must be able to be moved within text and in any kind of formatting, split up into any combination of DOM nodes. To be moved across letters and text lines, the caret must take into account that:
 
 \begin{enumerate}
 \item Letters have different widths and heights
@@ -696,7 +700,7 @@ Lines 1--5 in \reflisting{lst:add_remove_structure} show the data structure for 
 }
 \end{lstlisting}
 
-It contains the 
+These data structures contain the information to undo user input and to redo the same input again.
 
 
 \section{Utility classes}
@@ -704,7 +708,7 @@ It contains the
 \subsection{OOP}
 \label{sec:oop_class}
 
-The \code{OOP} class extends the contructor pattern with basic classical inheritance. It provides the method \code{inherits} that will duplicate and copy the \code{prototype} from one \code{Function} object to another. It also copy attributes and methods defined on the \code{Function} object itself to implement inheritance of static definitions and adds the attribute \code{\_super} to the inheriting \code{Function} object to referencing its parent class to enable child classes to access their respective superclasses.
+The \code{OOP} class extends the contructor pattern with basic classical inheritance. It provides the method \code{inherits} that will duplicate and copy the \code{prototype} from one \code{Function} object to another. It also copys attributes and methods defined on the \code{Function} object itself to implement inheritance of static definitions. It adds the attribute \code{\_super} to the inheriting \code{Function} object referencing its parent class to enable child classes to access their respective superclasses.
 
 %The \code{OOP} class implements a simple approach to extend the contructor pattern with basic classical inheritance. It does so by providing an \code{inherits} method, that copies all methods and attributes from one prototype of a class to another. In this simplified apporach, parent methods cannot be called from child classes with a unique keyword (like ''super'') as it is the case with Java or other languages using classical inheritance.
 
@@ -713,7 +717,7 @@ The \code{OOP} class extends the contructor pattern with basic classical inherit
 
 \subsection{Range}
 
-The \code{Range} class is a utility class and an abstraction for the native \code{Range} interface. The native implementation is prone to bugs on many browsers. As discussed in \refsection{sec:interaction_with_browser_apis}, instead of fixing the API by shimming its methods, the \code{Range} class implements all methods related to ranges while trying to interact as little as possible with the native API. On top of the methods required by Type that are implemented by the native \code{Range} interface, this class implements additional methods specific to the API.
+The \code{Range} class is an abstraction for the native \code{Range} interface. The native implementation is prone to bugs on many browsers. As discussed in \refsection{sec:interaction_with_browser_apis}, instead of fixing the API by shimming its methods, the \code{Range} class implements all methods related to ranges while trying to interact as little as possible with the native API. On top of the methods of the native \code{Range} interface, this class implements additional methods required for Type.
 
 %CodeMirror uses (native) \code{Range}s for text
 
@@ -722,44 +726,58 @@ The \code{Range} class is a utility class and an abstraction for the native \cod
 %Ranges are mainly used by the implementations of the caret and the selection.
 
 
-\subsection{Development}
 
-The \code{Development} class is intended to contain utility methods to support the development of the library. As for the development of this thesis, it was sufficient to implement logging methods.
-
-\subsection{Dom Utilities}
-
-The \code{DomUtilities} class encapsulates common methods for all DOM operations other than traversal. It has no inherent purpose but many other classes perform the same DOM operations, which hence reside in a common library to avoid code duplication.
 
 \subsection{Dom Walker}
 
-Working with text implies having to traverse the DOM, i.e. the nodes inside the text often. The {DomWalker} utility class solves this problem. The DOM API offers methods to access a node's siblings, children and parents, but it must always accounted for cases when any of these is \code{null} (there is no parent, sibling or child) or when they overflow the bounds of the editor's contents. But more importantly, for text editing, it is usually necessary to access the next (or previous) node in the document's content flow which can either be the parent, sibling or child. Also, it is often the case that it is not only necessary to fetch the next node, but to apply a filter to only fetch a specfic node, for instance a text node or only a text node that has contents visible to the user\footnote{Any text node consisting of whitespace only will not be displayed by any major browser}. Browsers offer a native API for this, called \code{TreeWalker}, but it is said to be slow\footnote{\url{http://jsperf.com/qsa-vs-node-iterator}}, is only partially supported by Internet Explorer 9\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator\#Browser_compatibility}} and has been critisized for its verbose API\footnote{By John Resig, author of jQuery\url{http://ejohn.org/blog/unimpressed-by-nodeiterator/}}.
+Working with text implies having to traverse the DOM, i.e. the nodes inside the text often. The \code{DomWalker} utility class solves this problem. The DOM API offers methods to access a node's siblings, children and parents, but it must always accounted for cases when any of these is \code{null} (there is no parent, sibling or child) or when they overflow the bounds of the editor's contents. But more importantly, for text editing, it is usually necessary to access the next (or previous) node in the document's content flow which can either be the parent, sibling or child. Also, it is often the case that it is not only necessary to fetch the next node, but to apply a filter to only fetch a specfic node, for instance a text node or only a text node that has contents visible to the user\footnote{Any text node consisting of whitespace only will not be displayed by any major browser}. Browsers offer a native API for this, called \code{TreeWalker}, but it is said to be slow\footnote{\url{http://jsperf.com/qsa-vs-node-iterator}}, is only partially supported by Internet Explorer 9\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator\#Browser_compatibility}} and has been critisized for its verbose API\footnote{By John Resig, author of jQuery\url{http://ejohn.org/blog/unimpressed-by-nodeiterator/}}.
 
-\paragraph{API}
+The \code{DomWalker} can be instantitated by providing a starting node and the type of nodes it should traverse. The latter argument can either be a string identifying a premade filter of the Type library or a custom filter function. Premade filters include:
 
-The \code{DomWalker} class offers high-level methods for traversal, designed to quickly apply the most common filters. I can be instantiated with multiple shorthand parameters.
+\begin{itemize}
+\item ''text'' - A text node with visible contents
+\item ''textNode'' - Any text node, visible or invisible
+\item ''visible'' - Any visible DOM node
+\end{itemize}
 
-\begin{algorithm}
-\caption{Simplified text formatting pseudocode}
-\label{alg:format_pseudocode}
-\begin{algorithmic}[1]
-\State new DomWalker(startNode, node);
-\State new DomWalker(startNode, 'filtername');
-\State new DomWalker(startNode, filterFunction()\{\});
-\State new DomWalker(startNode,\{optionsObject\});
-\end{algorithmic}
-\end{algorithm}
+A \code{DomWalker} instance offers the high-level methods \code{next}, \code{prev}, \code{first} and \code{last} amongst others. A full API description can be found in XYZ. All methods can be called statically without having to instantiate a \code{DomWalker}.
 
-\noindent The API is not only designed for the development of this library but most importantly to be a utility too for developers extending the library or implementing editors.
+%\paragraph{API}
+
+%The \code{DomWalker} class offers high-level methods for traversal, designed to quickly apply the most common filters. I can be instantiated with multiple shorthand parameters.
+
+%\begin{algorithm}
+%\caption{Simplified text formatting pseudocode}
+%\label{alg:format_pseudocode}
+%\begin{algorithmic}[1]
+%\State new DomWalker(startNode, node);
+%\State new DomWalker(startNode, 'filtername');
+%\State new DomWalker(startNode, filterFunction()\{\});
+%\State new DomWalker(startNode,\{optionsObject\});
+%\end{algorithmic}
+%\end{algorithm}
+
+%\noindent The API is not only designed for the development of this library but most importantly to be a utility too for developers extending the library or implementing editors.
 
 %The API is designed for an easy and high-level usage to simplify the workflow for developing the library, but most importantly to offer a high-level and easy-to-use concept to other developers.
 
 %dom walker. Used SO OFTEN in the project. Goal is to have a really simple api new DomWalker('text') by having lots of pre-defined magick in it.
 
+\subsection{Text Walker}
+
+The \code{TextWalker} class acts as a container for all functions related to measuring text offsets. It provides utility methods to determine the character offset from one text node to another or, vice versa, which text node can be found at a text offset, starting from another given node. Both methods are required by various classes and are thus, centralised. 
+
+\subsection{Dom Utilities}
+
+The \code{DomUtilities} class encapsulates common methods for all DOM operations other than traversal. It has no inherent purpose but many other classes perform the same DOM operations, which hence reside in a common library to avoid code duplication.
+
+\subsection{Utilities}
+\label{sec:utilities_class}
+The \code{Utilities} class is a general-purpose class that contains methods to extend JavaScript's features. It contains methods to work with data structures and to detect object types.
+
 \subsection{Environment}
 
-The \code{Environment} class checks and provides informations on the current browser environment and its features. This class is especially important to mimick native behavior for user interaction. For instance, depending on the operating system, either the control key or the command key should be used to implemnt keyboard shortcuts. To check for specific feature support, it is favourable to use duck typing within each class.
-
-
+The \code{Environment} class checks and provides informations on the current browser environment and its features. This class is especially important to mimick native behavior for user interaction. For instance, as discussed before, either the control key or the command key should be used to implemnt keyboard shortcuts depending on the operating system. To check for specific feature support, it is favourable to use duck typing within each class.
 
 %\section{Plugin Api}
 %plugin api
@@ -767,19 +785,18 @@ The \code{Environment} class checks and provides informations on the current bro
 
 The settings class stores settings required for Type's modules, for instance the \code{id} of the DOM-container which all helper DOM-nodes from other classes will be appended to.
 
-\subsection{Text Walker}
+\subsection{Development}
 
-The \code{TextWalker} class acts as a container for all functions related to measuring text offsets. It provides utility methods to determine the character offset from one text node to another or, vice versa, which text node can be found at a text offset, starting from another given node. Both methods are required by various classes and are thus, centralised. 
+The \code{Development} class is intended to contain utility methods to support the development of the library. As for the development of this thesis, it was sufficient to implement logging methods.
 
-\subsection{Utilities}
-\label{sec:utilities_class}
-The \code{Utilities} class is a general-purpose class that contains methods to extend JavaScript's features. It contains methods to work with data structures and to detect object types.
 
 \section{Cache}
 \label{sec:cache}
 
-For traversing the text, for example when the caret moves, the text will need to be measured. All measurements can be stored to a cache to only perform the same measurement operations once. On the other hand, the library should be a ''good citizen'' on a website, which means it should be as unobtrusive and leave the developers as much freedom as possible. The library will essentially modify parts of the DOM that act as the editor's contents. It should be agnostic to the editor's contents at all times to give other developers the freedom to change the contents in any way needed without breaking the editor. A cache must account for external changes. The DOM3 Events specification\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/}, last checked on 07/21/2015} offers \texttt{MutationObserver}s to check for DOM changes. This feature is not supported by Internet Explorer version 10 or less\footnote{\url{http://caniuse.com/\#search=mutation}, last checked on 07/21/2015}. Internet Explorer 9 and 10 offer an implementation for \texttt{MutationEvent}s\footnote{\url{http://help.dottoro.com/ljfvvdnm.php\#additionalEvents }, last checked on 07/21/2015}. The W3C states that ''The MutationEvent interface [...] has not yet been completely and interoperably implemented across user agents. In addition, there have been critiques that the interface, as designed, introduces a performance and implementation challenge.''\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/\#legacy-mutationevent-events}, last checked on 07/21/2015}. Apart from that, the benefits of a cache may not signifcantly increase the library's performance. The actions that can be supported by a cache, most importantly moving the caret in the text, are not very complex and do not noticably afflict the CPU. Implementing an editor that is stateless in regards of its contents can also improve stability.
+For traversing the text, for example when the caret moves, the text will need to be measured. All measurements can be stored to a cache to only perform the same measurement operations once. When the user edits the contents of the editor, these texts will change and the cache must be updated. A cache must also account for external changes. The DOM3 Events specification\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/}, last checked on 07/21/2015} offers \texttt{MutationObserver}s to check for DOM changes. This feature is not supported by Internet Explorer version 10 or less\footnote{\url{http://caniuse.com/\#search=mutation}, last checked on 07/21/2015}. Internet Explorer 9 and 10 offer an implementation for \texttt{MutationEvent}s\footnote{\url{http://help.dottoro.com/ljfvvdnm.php\#additionalEvents }, last checked on 07/21/2015}. The W3C states that ''The MutationEvent interface [...] has not yet been completely and interoperably implemented across user agents. In addition, there have been critiques that the interface, as designed, introduces a performance and implementation challenge.''\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/\#legacy-mutationevent-events}, last checked on 07/21/2015}. Apart from that, the benefits of a cache may not signifcantly increase the library's performance. The actions that can be supported by a cache, most importantly moving the caret in the text, are not very complex and do not noticably affect the CPU. For this reason, the editor does nut use any caching. Implementing an editor that is stateless in regards of its contents can also improve stability.
 
+% It should be agnostic to the editor's contents at all times to give other developers the freedom to change the contents in any way needed without breaking the editor.
+% On the other hand, the library should be a ''good citizen'' on a website, which means it should be as unobtrusive and leave the developers as much freedom as possible. 
 
 \section{Real-time collaboration with Etherpad} 
 \label{sec:etherpad}
