@@ -220,7 +220,7 @@ To enable reading the user's input and writing it to the editor's contents, the 
 %\item Input
 %\end{itemize}
 
-\noindent The \code{Input} class will listen to keyboard input and mouse input. Utilizing the \code{Caret} and \code{Selection} classes it determines which part of the text should be changed or formatted. It passes the formalized edits to the \code{Contents} class which will emit events for an \code{UndoManager} that enables undo and redo operations. It will use the \code{Writer} and \code{Formatter} instances to manipulate the visible text on the website. These classes perform the actual DOM operations.
+\noindent The \code{Input} class will listen to keyboard input and mouse input. Utilizing the \code{Caret} and \code{Selection} classes it determines which part of the text should be changed or formatted. It passes the formalized edits to the \code{Contents} class which will emit events for an \code{UndoManager} that enables undo and redo operations. It will use the \code{Writer} and \code{Formatter} instances to manipulate the visible text on the website. These classes perform the actual DOM operations on the contents of the element passed to Type on instiation (see \refsubsec{subsec:instantiation_usage}).
 
 %class allows adding and removing text and the \code{Formatting} class allows to apply formattings, both using DOM operations. The \code{Changes} class will use these classes to to alter the text according to the change it it should apply.
 
@@ -238,16 +238,16 @@ Usually, text input fields contain one caret and display one text selection at a
 
 There are various input methods with which users can interact with native inputs. This includes using hardware devices as well as virtual (on screen) devices:
 
-\begin{enumerate} 
+\begin{itemize} 
 \item Hardware keyboard input
 \item Virtual keyboard input
-\item Mouse (pointer) input
+\item Mouse / pointer input
 \item Touch input
 \item Game controller input (on game consoles)
 \item Remote control input (on smart TVs)
-\end{enumerate}
+\end{itemize}
 
-When simulating a native input, in a best-case scenario, all these input methods should be accounted for. Fetching input includes two scenarios: The user clicks / touches / or selects the input in any way and does so at any position inside the input. If the user touches / clicks / etc in the middle of the text, the caret should move to that position and typing must be enabled. In environments without hardware keyboards, the libarary must ensure that a virutal keyboards show up. Once the input component is selected, text input must be fetched and written to the editor. There are various options to fetch user input, which will be discussed in the following paragraphs.
+When mimicking a native input, in a best-case scenario, all these input methods should be accounted for. Fetching input includes two scenarios: The user clicks / touches / or selects the input in any way and does so at any position inside the input. If the user touches / clicks / etc in the middle of the text, the caret should move to that position and typing must be enabled. In environments without hardware keyboards, the libarary must ensure that a virutal keyboards show up. Once the input component is selected, text input must be fetched and written to the editor. There are various options to fetch user input, which will be discussed in the following paragraphs.
 
 \subsection{Events} 
 
