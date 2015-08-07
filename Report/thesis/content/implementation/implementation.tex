@@ -465,7 +465,7 @@ This architecture has been chosen not only to achieve a decoupled software archi
 
 \subsection{Writer}
 
-The \code{Writer} class implements functionality to add and remove contents to and from the editor. Along with the \code{Formatter} class, this is the lowest layer that will perform DOM operations to modify the contents in the browser.
+The \code{Writer} class implements functionality to add and remove contents to and from the editor. Along with the \code{Formatter} class, this is the lowest layer of the editor that will perform DOM operations to modify the contents in the browser.
 
 
 \subsection{Formatter}
@@ -493,7 +493,7 @@ The formatter is one of the key classes of the Type library. As discussed in \re
 \label{fig:formatting_dom_tree}
 \end{figure}
 
-\reffigure{fig:formatting_dom_tree} shows the DOM representation of the markup of \reflisting{lst:formatter_code_example}. We can split up the text node ''Lorem ipsum'' into two text nodes ''Lorem'' and '' ipsum'' to create a distinct node in which the formatting (yellow highlight) starts and do the same with the ending text node ''sit amet''. Ths gives us a distinct starting node and ending node. When we traverse each node from the start to the end, every traversed node falls on eithe of the following cases:
+\reffigure{fig:formatting_dom_tree} shows the DOM representation of the markup of \reflisting{lst:formatter_code_example}. We can split up the text node ''Lorem ipsum'' into two text nodes ''Lorem'' and '' ipsum'' to create a distinct node in which the formatting (yellow highlight) starts and do the same with the ending text node ''sit amet''. Ths gives us a distinct nodes for both, that start and the end of the selection. When we traverse each node from the start to the end, every traversed node falls on either of the following cases:
 
 \begin{enumerate}
 \item It is the start node
@@ -502,11 +502,11 @@ The formatter is one of the key classes of the Type library. As discussed in \re
 \item It contains end node
 \end{enumerate}
 
-\noindent To generate \textit{well-formatted} markup, we must conform the 
+\noindent To generate \textit{well-formatted} markup as discussed in \refsubsec{subsec:noapi_dis_formatting}, the following 2 rules must be followed:
 
 \begin{enumerate}
-\item Conform the validation rules of HTML as specified by the W3C
-\item Generate as little DOM nodes as possible
+\item The markup must conform the validation rules of HTML as specified by the W3C.
+\item The markup must use as little DOM nodes as possible.
 \end{enumerate}
 
 \begin{algorithm}
@@ -538,11 +538,15 @@ The formatter is one of the key classes of the Type library. As discussed in \re
 
 \refalg{alg:text_formatting} demonstrates a recursive algorithm, that will start iterating from the given start node over all its subsequent siblings until there are no siblings anymore \textit{or} it found the end node \textit{or} it found a node containing the end node.
 
-If it found the end node, it will wrap all all nodes it found with a node that applies the desired formatting.
+\begin{itemize}
 
-If there are no more siblings, it means it has reached the last sibling inside the node containing the start node. By the validation rules of the W3C, nodes are not allowed to intersect. The algorithm will wrap all nodes it found so far with a node that applies the desired formatting and apply the formatting algorithm recusively with the start node being the next node in the document flow and the end node remaining the same end node.
+\item If the end node was found, the algorithm will wrap all all nodes it found with a node that applies the desired formatting.
 
-If an element has been found that contains the end node, the algorithm will wrap all nodes it found so far with a node that applies the desired formatting in order to conform the validation rules and not intersect nodes too. It will then apply the formatting algorithm recursively to the first child of the containing node. If this node in return is a container to the end node, the recursion will repeat until a sibling of the end node or the end node itself has been found.
+\item If there are no more siblings, it means it has reached the last sibling inside the node containing the start node. By the validation rules of the W3C, nodes are not allowed to intersect. The algorithm will wrap all nodes it found so far with a node that applies the desired formatting and apply the formatting algorithm recusively with the start node being the next node in the document flow and the end node remaining the same end node.
+
+\item If an element has been found that contains the end node, the algorithm will wrap all nodes it found so far with a node that applies the desired formatting (to avoid intersecting nodes). It will then apply the formatting algorithm recursively to the first child of the containing node. If this node in return is another container to the end node, the recursion will repeat until a sibling of the end node or the end node itself has been found.
+
+\end{itemize}
 
 These rules perfom the minimally necessary steps to format contents while conforming the HTML validation rules. By adding only the minimum of nodes, this will ensure simple (and valid) markup.
 
