@@ -803,7 +803,7 @@ For traversing the text, for example when the caret moves, the text will need to
 
 \subsection{Overview}
 
-To achieve real-time collaboration with multiple type editors, Etherpad\footnote{Etherpad has been completely rewritten under the name Etherpad Lite. However, its official website no longer links to its former source code. For simplicity, the name Etherpad will be used, referring to its rewrite as Etherpad Lite} can be used. Etherpad is a web-based collaborative real-time text editor with rich-text capabilites. It provides a server, written in JavaScript using Node.js as well as a web-based rich-text editor. Both components are distributed in one package and are meant to be used together.
+To achieve real-time collaboration with multiple Type editors, Etherpad\footnote{Etherpad has been completely rewritten under the name Etherpad Lite. However, its official website no longer links to its former source code. For simplicity, the name Etherpad will be used, referring to its rewrite as Etherpad Lite} can be used. Etherpad is a web-based collaborative real-time text editor with rich-text capabilites. It provides a server, written in JavaScript using Node.js as well as a web-based rich-text editor. Both components are distributed in one package and are meant to be used together.
 
 To achieve real-time rich-text collaboration, multiple web-based clients communicate with a server via WebSockets using socket.io. Each client owns a local version of the document that it needs to sync with the server. The server uses an operational transformation algorithm to merge each change to the document accounting for all changes and then urges each client to update their local contents according to the final document.
 
@@ -811,9 +811,9 @@ To achieve real-time rich-text collaboration, multiple web-based clients communi
 
 For this, Etherpad uses the concept of so-called ''changesets''. Each client sends its local changes, debounced to an interval of 500 milliseconds, as a serialized string---the changeset---to the server. The changeset includes all text insertions, removals and formattings of the last time frame. Along with the changeset, it sends a document revision number that the changeset is based on to the server. The document revision number increases with every changeset that has been accepted and applied to the document on the server side. The document on ther server side is saved as a stack of changesets, which ultimatively form the current document. For performance reasons, snapshots can be taken that save the document as formatted text. 
 
-Based on the revision number that the client provides with the changeset, the server can apply it to the version of the document the client was working on. The server will apply the resulting changes to all newer revisions of the document (if present) and send a changeset and the latest revision number back to the client.
+Based on the revision number that the client provides with the changeset, the server can apply it to the version of the document the client was working on. The server will apply the resulting changes to all newer revisions of the document (if present) and send a changeset and the latest revision number back to the client. The changeset sent to the client includes all operations it needs to perform to update its local version to the newest version on the server.
 
-The changeset it sends back includes the differences from the the client's current revision of the document (with its own changes already applied) to the the latest revision on the server that includes the result of all changes the server had to perfom along each revision as just described.
+%The changeset it sends back includes the differences from the the client's current revision of the document (with its own changes already applied) to the the latest revision on the server that includes the result of all changes the server had to perfom along each revision as just described.
 
 As a last step, the client must apply the changeset it got from the server to its local document to display the most recent version to the user and update its local revision number to what it got from the server.
 
@@ -829,7 +829,7 @@ where $Xm(A,B)$ is the merge of $A$ and $B$ applied to the document $X$. The cha
 \item Retain whatever characters are retained in \emph{both} $A$ and $B$
 \end{itemize}
 
-For $B'$ this applies vice versa. This implies that anything affected by the changesets and is not inserted or retained will be removed. \textit{// CHECK ON THIS AGAIN!}
+For $B'$ this applies vice versa. %This implies that anything affected by the changesets and is not inserted or retained will be removed. \textit{// CHECK ON THIS AGAIN!}
 
 \subsection{Etherpad Client implementation}
 
@@ -842,7 +842,7 @@ Clients interact with the server via WebSockets using socket.io. To sync their o
 \item Receive a changeset from the server submitted by another client
 \end{itemize}
 
-\noindent When Etherpad's client connects to the server it receives an initial snapshot of the entire document as a string. To submit changes, the client uses a three-step architecture. Any local changes that have not been sent to the server yet, the client stores in a changeset $Y$. Any changeset sent to the server must be acknowledged by the server as it has applied  the changeset to its document. Any changeset that has been sent and not been acknowledged yet will be stored in a as the changeset $X$. The document as it is acknowledged by the server is stored in a changeset $A$. The document visible to the users can be expressed by the represention of $A \cdot X \cdot Y$, i.e. applying each changeset to the next.
+\noindent When Etherpad's client connects to the server it receives an initial snapshot of the entire document as a string. To submit changes, the client uses a three-step architecture. The client stores any local changes that have not been sent to the server yet in a changeset $Y$. Any changeset sent to the server must be acknowledged by the server as it has applied  the changeset to its document. Any changeset that has been sent and not been acknowledged yet will be stored in a as the changeset $X$. The document as it is acknowledged by the server is stored in a changeset $A$. The document visible to the users can be expressed by the represention of $Y \cdot X \cdot A$, i.e. applying each changeset to the next.
 
 Whenever a user applies a local change, the changeset $Y$ will be updated. Every 500 milliseconds, but not before a changeset submitted to the server as been acknowledged, the changeset $Y$ will be sent to the server and $Y$ will be assigned to $X$. $Y$ will be set to a changeset that contains no changes. When the client hears the acknowledgement for $X$ from the server, $X$ will be applied the changeset $A$ and $X$ will be set to contain no changes.
 
