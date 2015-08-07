@@ -198,9 +198,11 @@ Similar to the principles of MVC in which the controllers should be kept small a
 %\section{Module architecture}
 \label{sec:module_architecture}
 
-As discussed in \refsubsec{subsec:modular_and_oop}, Type's functionality is implemented through classes inside Type's namespace. The classes' functionality will be exposed through the base class' \code{prototype}. This section discusses the architecture and interaction of the classes of this library. The implementations and characteristics of each module will be discussed hereinafter.
+%As discussed in \refsubsec{subsec:modular_and_oop}, Type's functionality is implemented through classes inside Type's namespace. The classes' functionality will be exposed through the base class' \code{prototype}. This section discusses the architecture and interaction of the classes of this library. The implementations and characteristics of each module will be discussed hereinafter.
 
-When the \code{Type} base class will be instantiated, it in turn instatiates a number of classes passing each instance a reference to itself. As described in \refsubsec{subsec:namespace_and_refs} the base class provides setters for each class instance to allow the instantiated classes to access one another. For its basic functionality, Type instantiates the classes \code{Contents}, \code{Formatting}, \code{Caret}, \code{Selection} and \code{Input}.
+%When the \code{Type} base class will be instantiated, it in turn instatiates a number of classes passing each instance a reference to itself. As described in \refsubsec{subsec:namespace_and_refs} the base class provides setters for each class instance to allow the instantiated classes to access one another. For its basic functionality, Type instantiates the classes \code{Contents}, \code{Formatting}, \code{Caret}, \code{Selection} and \code{Input}.
+
+To enable reading the user's input and writing it to the editor's contents, the classes \code{Input}, \code{Contents}, \code{Writer}, \code{Formatter}, \code{Caret} and \code{Selection} will be instantied by the \code{Type} base class.
 
 
 \begin{figure}[!htb]
@@ -218,9 +220,11 @@ When the \code{Type} base class will be instantiated, it in turn instatiates a n
 %\item Input
 %\end{itemize}
 
-\noindent The \code{Input} class will listen to keyboard input and mouse events. Utilizing the \code{Caret} and \code{Selection} classes it determines which part of the text should be changed or formatted. It passes the formalized edits to the \code{Changes} classes which will record the changes for undo and redo operations. The \code{Contents} class allows adding and removing text and the \code{Formatting} class allows to apply formattings, both using DOM operations. The \code{Changes} class will use these classes to to alter the text according to the change it it should apply.
+\noindent The \code{Input} class will listen to keyboard input and mouse input. Utilizing the \code{Caret} and \code{Selection} classes it determines which part of the text should be changed or formatted. It passes the formalized edits to the \code{Contents} class which will emit events for an \code{UndoManager} that enables undo and redo operations. It will use the \code{Writer} and \code{Formatter} instances to manipulate the visible text on the website. These classes perform the actual DOM operations.
 
-Usually, text fields contain one caret and display one text selection at a time. This is why the \code{Type} base class instantiate the \code{Caret} and \code{Selection} classes for shared usage within an editor's instance. Of course, this behavior can be extended, for example by instantiating multiple \code{Caret}s for real-time text collaboration.
+%class allows adding and removing text and the \code{Formatting} class allows to apply formattings, both using DOM operations. The \code{Changes} class will use these classes to to alter the text according to the change it it should apply.
+
+Usually, text input fields contain one caret and display one text selection at a time. This is why the \code{Type} base class instantiates the \code{Caret} and \code{Selection} classes for shared usage within an editor's instance. Of course, this behavior can be extended, for example by instantiating multiple \code{Caret}s for real-time text collaboration.
 
 
 %\noindent The \code{Contents} and \code{Formatting} classes allow to add and remove text (\code{Contents} class) and to apply text formatting (\code{Formatting} class) to the editor's contents using DOM operations. These classes solely provide functionality. The \code{Input} class will listen to keyboard input and mouse events and utilize the \code{Caret} and \code{Selection} instances to
