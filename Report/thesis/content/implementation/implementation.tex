@@ -133,7 +133,7 @@ The namespace provides a structure for the classes of the library, prevents the 
 
 %Section \refsection{sec:module_architecture} discusses how Type's classes interact to provide its rich-text functionality. 
 
-When instantiated, the \code{Type} class in turn will instantiate classes of its namepsace that implement its rich-text editing functionality. The \code{Type} instance will pass a reference to itself to all classes and offers getters for every class instance it created, to provide mutual access. 
+When instantiated, the \code{Type} class, in turn, will instantiate classes of its namepsace that implement its rich-text editing functionality. The \code{Type} instance will pass a reference to itself to all classes and offers getters for every class instance it created, to provide mutual access. 
 
 %Apart from providing a namespace for all classes, a type instance provides references of all classes it 
 
@@ -148,7 +148,9 @@ When instantiated, the \code{Type} class in turn will instantiate classes of its
 \subsection{Exposal of Type's \code{prototype}}
 \label{subsec_fn_exposal}
 
-While Type's functionality is implemented through classes within its namespace, this does not expose its functionality to its instances' API. With the constructor pattern, all methods in the \code{prototype} of the \code{Type} class will be available as instance methods. In a simple approach, the library's API can be implemented directly in the implementation of the \code{Type} class. This contradicts the modular approach of the implementation. jQuery established an effective principle for extending its API. It exposes the library's \code{prototype} with a shorthand attribute as \code{jQuery.fn}. Other modules can extend the \code{prototype} easily and add methods to the libary's API. Type follows the same principle and exposes its \code{prototype}  as \code{Type.fn}. %jQuery's \code{prototype}---as well as Type's \code{prototype}---can be extended even without exposing it as an attribute, but apart from providing a more convenient way to do so, primarily, jQuery established a simple and yet powerful paradigm that encourages other developers to extend the library's API.
+While Type's functionality is implemented through classes within its namespace, this does not expose its functionality to its instance-API. With the constructor pattern, all methods in the \code{prototype} of the \code{Type} class will be available as instance methods. In a simple approach, the library's API can be implemented directly in the implementation of the \code{Type} class. This contradicts the modular approach of the library. jQuery established an effective principle for extending its API. It exposes the library's \code{prototype} with a shorthand attribute as \code{jQuery.fn}. Other modules can extend the \code{prototype} easily and add methods to the libary's API. Type follows the same principle and exposes its \code{prototype}  as \code{Type.fn}. The \code{prototype} could also be accessed without exposing it with a shorthand attribute, but intends to clearify its purpose and paradigm similar to jQuery and encourage developers to extend it.
+
+  %jQuery's \code{prototype}---as well as Type's \code{prototype}---can be extended even without exposing it as an attribute, but apart from providing a more convenient way to do so, primarily, jQuery established a simple and yet powerful paradigm that encourages other developers to extend the library's API.
 
 %\subsection{Extensions}
 
