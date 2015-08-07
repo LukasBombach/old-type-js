@@ -177,11 +177,14 @@ While Type's functionality is implemented through classes within its namespace, 
 
 \section{Api}
 
-As discussed in \refsubsec{subsec_fn_exposal}, Type's public API for implementing editors is not hard-coded to the \code{Type} class. Instead it extends \code{Type}'s \code{prototype} dynamically. This conforms the paradigm of having a base class and implementing all its featues in modules. To still ensure maintanability and a clean software structure, the methods for Type's API will not be added arbitrarily by other classes. Instead, all API methods will be implemented by a single module that in turn calls the required methods of the corresponding classes. This allows for a clean and independent software architecture, a separation of concerns and decouples the API from the structure and the implementation of the library.
+%As discussed in \refsubsec{subsec_fn_exposal}, Type's public API for implementing editors is not hard-coded to the \code{Type} class. Instead it extends \code{Type}'s \code{prototype} dynamically. This conforms the paradigm of having a base class and implementing all its featues in modules. To still ensure maintanability and a clean software structure, the methods for Type's API will not be added arbitrarily by other classes. Instead, all API methods will be implemented by a single module that in turn calls the required methods of the corresponding classes. This allows for a clean and independent software architecture, a separation of concerns and decouples the API from the structure and the implementation of the library.
 
-The module for this, called ''CoreApi'', is the only exception to the rest of Type's implementation in the way that it is not encapsulated in a class. In order to add a method to Type instances, \code{Type.fn} must be extended with a function. This will be done for all methods discussed in \reflisting{lst:rich_text_api}. However this does not require a class contstruct.
 
-Similar to the principles of MVC in which the controllers should be kept small and the implementation should reside in the model layer, the functionality of the API resides in their designated classes, while the API methods are being kept small. The classes are written in a way that allow the API methods to require not more than one function call for their implementation and at most translate their parameters for the class methods.
+The methods of Type instances can be added through any of the classes used by the library. However, to achieve a clear separation of concerns, maintainability and to conform the modularized structure, Type's instance API is implemented through a designated module that adds all methods to the API.
+
+The module for this, called ''CoreApi'', is the only exception in Type's implementation. The module directly extends \code{Type.fn} with all methods listed in XYZ, \textit{without} using a class.
+
+Similar to the principles of MVC in which the controllers should be kept small and the implementation should reside in the model layer, the functionality of the API resides in their designated classes, while the API methods are kept small. The classes are written in a way that allow the API methods to require not more than one function call for their implementation and at most translate their parameters for the class methods.
 
 %\section{Components}
 %\label{sec:modules}
