@@ -1,6 +1,12 @@
 %!TEX root = ../../thesis.tex
 
+
+\section{Overview XX}
+
+As discussed in \refsubsec{subsec:const_pat_and_modules}, Type's implementation relies on a base class that provides a high-level API for implementing rich-text editors. The library's functionality is implemented through various other classes encapsulated in a designated namespace. Section \refsection{sec:impl_technology} will discuss the tool used to develop and build the library. Section \refsection{sec:core} will discuss the base class and the namespace it creates. Sections \refsection{sec:module_architecture} and following discuss the functionality, architecture and the classes involved in Type by explaining how the user's input will be read, processed and written to the website.
+
 \section{Technology}
+\label{sec:impl_technology}
 
 \subsection{Overview}
 
@@ -133,7 +139,7 @@ The namespace provides a structure for the classes of the library, prevents the 
 
 %Section \refsection{sec:module_architecture} discusses how Type's classes interact to provide its rich-text functionality. 
 
-When instantiated, the \code{Type} class, in turn, will instantiate classes of its namepsace that implement its rich-text editing functionality. The \code{Type} instance will pass a reference to itself to all classes and offers getters for every class instance it created, to provide mutual access. 
+When instantiated, the \code{Type} class, in turn, will instantiate classes of its namepsace that implement its rich-text editing functionality. The \code{Type} instance will pass a reference to itself to all classes and offers getters for every class instance it created, to provide mutual access.
 
 %Apart from providing a namespace for all classes, a type instance provides references of all classes it 
 
