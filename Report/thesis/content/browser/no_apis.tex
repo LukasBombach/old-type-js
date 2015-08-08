@@ -31,12 +31,18 @@ Algorithms \ref{alg:format_pseudocode_dom} through \ref{alg:unwrap_pseudocode} d
 \caption{Simplified text formatting pseudocode}
 \label{alg:format_pseudocode_dom}
 \begin{algorithmic}[1]
-\State Split text nodes at beginning and end of selection
-\State Create a new tag before the beginning text node of the selection
-\State Loop over all nodes inside selection
-\State Move each node inside new tag
+\State $s \gets$ split text node at beginning of text
+\State $e \gets$ split text node at end of text
+\State $t \gets$ new tag before $s$
+\ForAll{$node$ in selection}
+  \State Move $node$ to $t$
+\EndFor
 \end{algorithmic}
 \end{algorithm}
+
+%\State Create a new tag before the beginning text node of the selection
+% \State Split text nodes at beginning and end of selection
+%\State Loop over all nodes inside selection
 
 % \State Move beginning text node from selection inside new tag
 % \State Move all nodes until end text node inside new tag
