@@ -64,7 +64,7 @@ HTML editing APIs are prone to numerous bugs. Especially older browser versions 
 \end{quotation} %\footnote{\url{http://stackoverflow.com/questions/11240602/paste-as-plain-text-contenteditable-div-textarea-word-excel/11290082#11290082}, last checked on 07/13/2015}
 
 
-\noindent Mozilla lists 1060 active issues related to its ''Editor'' component\cite{bi}. Google lists 420 active issues related to ''Cr-Blink-Editing''\cite{bh}. The WebKit project lists 641 active issues related to ''HTML Editing''\cite{bg}. Microsoft and Opera Software allow public access to their bug trackers. Some rich-text editors like CKEditor have been developed for over 10 years and still need to fix bugs related to the editing API\cite{bf}\cite{so_paste_plain}. Some bugs have caused big websites to block particular browsers entirely\cite{medium_blocked}. %Medium however has contacted Microsoft and lead them to fix this bug.
+\noindent Mozilla lists 1060 active issues related to its ''Editor'' component\cite{bi}. Google lists 420 active issues related to ''Cr-Blink-Editing''\cite{bh}. The WebKit project lists 641 active issues related to ''HTML Editing''\cite{bg}. Microsoft and Opera Software allow public access to their bug trackers. As quoted above, some rich-text editors like CKEditor have been developed for over 10 years and still need to fix bugs related to the editing API\cite{bf}\cite{so_paste_plain}. Some bugs have caused big websites to block particular browsers entirely\cite{medium_blocked}. %Medium however has contacted Microsoft and lead them to fix this bug.
 
 %\footnote{\url{https://bugzilla.mozilla.org/buglist.cgi?bug\_status=\_\_open\_\_\&component=Editor\&product=Core\&query\_format=advanced\&order=bug\_status\%2Cpriority\%2Cassigned\_to\%2Cbug\_id\&limit=0}, last checked on 07/18/2015}
 %\footnote{\url{https://code.google.com/p/chromium/issues/list?q=label:Cr-Blink-Editing}, last checked on 07/18/2015}
@@ -75,4 +75,4 @@ HTML editing APIs are prone to numerous bugs. Especially older browser versions 
 %
 %
 
-Given the argument that editing APIs provide easy to use and high-level methods to format text, in practice, the number of bugs and work-arounds required, renders a ''easy and quick'' implementation impossible. Also, browser bugs cannot be fixed by web developers. At best they can be worked around, enforcing particular software design on developers and possibly spawning more bugs.
+Given the argument that editing APIs provide easy to use and high-level methods to format text, in practice, the number of bugs and workarounds required, renders a ''quick and easy'' implementation impossible. Most importantly, browser bugs cannot be fixed by web developers. At best they can be worked around, enforcing particular software design on developers, possibly spawning more bugs and making the development dependent of the development of browsers and user adoption.
