@@ -126,9 +126,13 @@ As discussed in \refsubsec{subsec:noapi_dis_formatting}, the editor should be a 
 
 Most rich-text editors are implemented and distributed as user interface components. That means instead of only providing a library that offers methods to format the selected text and leaving the implementation of the user interface to the respective developer, most libraries are distributed as input fields with a default editor interface that is, at best, customizable.
 
-This can be unfitting for many situations. The user interface of an editor highly depends on the software it will be integrated in. Within the software the interface may even vary depending on its specific purpose. For instance, a content management system may require an edtitor with a menubar offering many controls while a comment form on a blog requires only very little controls. Medium.com uses an interface that only shows controls when the user selects text and has no menubar at all. Assuming there are many implementations of editors that are functional, it can be argued, that choosing between editors is often really a choice of the desired user interface. Customizing a user interface can be just as complex as writing an interface from scratch. The latter affords to add HTML elememts and call JavaScript methods while both require styling. While adding HTML elements to a website is not a complex task, in a worst case scenario, it can be more complicated to customize an interface to specific needs then writing one from scratch and being able to define just the elements as they are required. 
+This can be unfitting for many situations. The user interface of an editor highly depends on the software it will be integrated in. Within the software the interface may even vary depending on its specific purpose. For instance, a content management system may require an edtitor with a menubar offering many controls while a comment form on a blog requires only very little controls. Medium.com uses an interface that only shows controls when the user selects text and has no menubar at all. Assuming there are many implementations of editors that are functional, it can be argued, that choosing between editors is often really a choice of the desired user interface.
 
-As for the current state of the internet, web developers cannot easily implement a rich-text for themselves, they have to make a choice between pre-made solutions and customize them. Apart from the perspective of the user interface, integrating a fully featured editor into a software project can be invasive to the structure of the project. For these reasons the library of this thesis will be implemented and distributed as a pure software library, offering developers an API to create a rich-text editor, rather than a fully implemented rich-text editor and a user interface component. 
+Customizing a user interface can be just as complex as writing an interface from scratch. The latter affords to add HTML elememts and call JavaScript methods while both require styling. While adding HTML elements to a website is not a complex task, in a worst case scenario, it can be more complicated to customize an interface to specific needs than writing an interface from scratch and being able to define just the elements as they are required. 
+
+As for the current state of the internet, web developers cannot easily implement a rich-text for themselves, they have to make a choice between pre-made solutions and customize them. Apart from the perspective of the user interface, integrating a fully featured editor into a software project can be invasive to the structure of the project.
+
+For these reasons the library of this thesis will be implemented and distributed as a pure software library, offering developers an API to create a rich-text editor, rather than a fully implemented rich-text editor as a user interface component. 
 
 %On a final note, until today, some rich-text editors use an iFrame to encapsulate the editor's contents and some don't. iFrame hat vor und nachteile. mit meiner library kann es jeder so machen, wie er/sie es will, weil es nur ne library ist.
 
@@ -139,14 +143,14 @@ As for the current state of the internet, web developers cannot easily implement
 
 %\subsection{Conformity with HTML Editing APIs}
 
-The library should be capable of any method implemented by HTML editing APIs. However the API design can differ to improve they way it will be worked with. In particular the API and aims at providing a quick and simple way to instantiate editable areas and connecting functional user interfaces to it.
+The library should be capable of any method implemented by HTML editing APIs. However the API design can differ to improve they way it will be worked with. In particular the API and aims at providing a quick and simple way to create editable areas and connecting a user interfaces to it.
 
 \subsection{API Design}
 
 % It can be much more fitting for developers to include a library that handles all text-input and -formatting operations while only providing a powerful API, leaving the ui to the developer. 
 
 % While it can be much more fitting for developers to use an API to implement an
-The API of this library must be \textit{well-designed}. That means it must be simple, effective and fit the developers' needs. The methods it offers should be simple in the sense that they conceal possibly complex tasks with understandable high-level concepts. They should be effective and fit the developers' needs in the sense that the API should be designed so that any requirement to of the developers should be matched with as little effort as possible. The API should create a workflow for developers that allows them to do what they intend to do and is as easy to use and as plausible as possible. jQuery is an example of encorporating an API conforming these principles.
+The API of this library must be \textit{well-designed}. That means it must be simple, effective and fit the developers' needs. The methods it offers should be simple in the sense that they conceal possibly complex tasks with understandable high-level concepts. They should be effective and fit the developers' needs in the sense that the API should be designed so that any requirement to of the developers should be matched with as little effort as possible. The API should create a workflow for developers that allows them to do what they intend to do and is as easy to use and as plausible as possible. jQuery is an example of encorporating an API that comes close to these goals.
 
 The library's API will have two basic use cases. On the one hand, web developers must be enabled to implement rich-text editors with it. On the other hand, the library should offer interfaces for enabling web developers to extend the library and add features.
 
@@ -154,7 +158,7 @@ The library's API will have two basic use cases. On the one hand, web developers
 
 For extension, web developers should have precise access to as many components and functions of the library, providing as much freedom and options as possible. This will include low-level access to components while control and explicitness is more imporant than simplicity. 
 
-All components of the library will be implemented as classes. To provide as much capabilites as possible to other developers, all classes of the libarry will be exposed in a designated namespace. The classes should conform the best practices of object-oriented programming to support developers in extending the library. The class design should not only consider the specific needs of the core library but also potential use cases for other developers.
+All components of the library will be implemented as classes. To provide as much capabilites as possible to other developers, all classes of the libary will be exposed in a designated namespace. The classes should conform the best practices of object-oriented programming to support developers in extending the library. The class design should not only consider the specific needs of the core library but also potential use cases for other developers.
 
 For example, with a designated class to show and move a caret, multiple carets can be instantiated for an extension that allows real-time collaboration with mutliple users. All available classes will be discussed in chapter \refchapter{ch:impl}.
 
@@ -200,7 +204,7 @@ editor.redo();
 \subsection{Handling use cases}
 \label{subsec:api_design_handling_use_cases}
 
-We can call programmers extending the library ''developers of the library'' and programmers using the library to implement editors ''users of the library''. To account for both use cases and maintain a clear software architecture as well as a separation of concerns, all classes that provide functionality to the library must remain in a designated namespace which the library has access to. Developers of the library have access to the namespace and can utilize any of Type's classes to extend its functions while users of the library can access the globally available ''Type'' class that provides all methods for the implementation of a rich-text editor.
+We can call programmers extending the library ''developers of the library'' and programmers using the library to implement editors ''users of the library''. To account for both use cases and maintain a clear software architecture as well as a separation of concerns, all classes that provide functionality to the library must remain in a designated namespace which the library has access to. Developers of the library have access to the namespace and can utilize any of its classes to extend its functions.
 
 \begin{figure}[!htb]
 \centering
@@ -209,7 +213,11 @@ We can call programmers extending the library ''developers of the library'' and 
 \label{fig:type_uml_excerpt}
 \end{figure}
 
-The library itself will be exposed as a class to the global namespace with the name ''Type''. It can be instantiated and then provides an own API---high-level methods---for implementing a rich-text editor.
+All of these classes will be used by a globally accessible class called ''Type'' which is the entry point for the users of the library to implement rich-text editors. The Type class provides an API with all of the abovementioned methods and uses the classes inside the namespace for their implementation. It must be instantiated and be passed an element on the website (for example a \code{div} element) which it will then use as its ''editor contents''. The users of the library can build an interface for this editable element and use the instance's API to manipulate it.
+
+%Users of the library can access the globally available ''Type'' class that provides all methods for the implementation of a rich-text editor.
+
+%The library itself will be exposed as a class to the global namespace with the name ''Type''. It can be instantiated and then provides an own API---high-level methods---for implementing a rich-text editor.
 
 %Ursprünglich API und Codestruktur an window.execCommand orientiert, das ist aber doof.
 %Bessere (weil präzisere) API mit mehr Möglichkeiten als der contentEditable scheiss
