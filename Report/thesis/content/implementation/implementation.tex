@@ -846,7 +846,7 @@ Clients interact with the server via WebSockets using socket.io. To sync their o
 
 Whenever a user applies a local change, the changeset $Y$ will be updated. Every 500 milliseconds, but not before a changeset submitted to the server as been acknowledged, the changeset $Y$ will be sent to the server and $Y$ will be assigned to $X$. $Y$ will be set to a changeset that contains no changes. When the client hears the acknowledgement for $X$ from the server, $X$ will be applied the changeset $A$ and $X$ will be set to contain no changes.
 
-This architecture supports receiving changesets from other clients as they must be applied to a client's local changes, committed and uncommited, as well as the document version as acknowledged by the server. When a client receives another client's changeset $B$ it will perform 4 steps.
+This architecture supports receiving changesets from other clients as they must be applied to a client's local changes (committed and uncommited) as well as the document version as acknowledged by the server. When a client receives another client's changeset $B$ it will perform 4 steps.
 
 \begin{enumerate}
 \item Compute a new changeset by merging $Y (X \cdot B)$ and apply it to the document visible to the user.
@@ -860,7 +860,7 @@ The operations needed to merge the changesets on the client, are the same operat
 \subsection{Type Client implementation}
 \label{subsec:etherpad_type_client_implementation}
 
-Etherpad's technology can be used to enable real-time collaboration for Type. While Etherpad offers a web-based client, its imeplementation has three flaws:
+Etherpad's technology can be used to enable real-time collaboration for Type. While Etherpad offers a web-based client, its implementation has three flaws:
 
 \begin{enumerate}
 \item It cannot be integrated easily in other web applications.
@@ -870,23 +870,23 @@ Etherpad's technology can be used to enable real-time collaboration for Type. Wh
 
 Etherpad does not provide a documentation on its client--server protocol, but it can be reverse engineered. It is possible for third-party libraries to communicate with an Etherpad server alongside Etherpad's ''native'' clients, as long as a third-party library (like Type) conforms the protocol.
 
-Etherpad's collaboartion functionality comes with a cost in file size and may only be used in specific use cases. This is why this feature is implemented as an optional extemsion (compare \refsection{sec:extensions}) in a separate file. To enable collaboration the designated JavaScript file needs to be added to the website.
+Etherpad's collaboartion functionality comes with a cost in file size for Type and may only be used in specific use cases. This is why this feature is implemented as an optional extemsion (compare \refsection{sec:extensions}) in a separate file. To enable collaboration the designated JavaScript file needs to be added to the website.
 
 \begin{lstlisting}[language=html, caption=Enabling real-time collaboration to Type, label=lst:add_etherpad_html]
 <script src="type.js"></script>
 <script src="type.etherpad.js"></script>
 \end{lstlisting}
 
-\code{type.etherpad.js} adds the classes it requires to the \code{Type} namespace and add a static constructor to the Type library:
+\code{type.etherpad.js} adds the classes it requires to the \code{Type} namespace and adds a static constructor to the Type library:
 
-\begin{lstlisting}[language=JavaScript, caption=Factory method to generate a collaborative Type instance, label=lst:etherpad_constructor]
+\begin{lstlisting}[language=JavaScript, caption=Static constructor to generate a collaborative Type instance, label=lst:etherpad_constructor]
 var element = document.getElementById("myElement");
 var editor = Type.fromEtherpad(element, "http://example.com/editor/myEditorId");
 \end{lstlisting}
 
-The constructor used in line 2 of \reflisting{lst:etherpad_constructor} will connect to an Etherpad server and load the contents of a document and append it to the element given as first argument.
+The constructor used in line 2 of \reflisting{lst:etherpad_constructor} will connect to an Etherpad server and load the contents of a document and append them to the element given as first argument.
 
-Will use the change listener to watch changes. Has an own class to serialize changesets. One class for pushing changes to the server. Uses caret class to display other collaborators. And has a class to apply incoming changes.
+\textit{Todo Will use the change listener to watch changes. Has an own class to serialize changesets. One class for pushing changes to the server. Uses caret class to display other collaborators. And has a class to apply incoming changes.}
 
 This architecture provides an unobtrusive way to integrate real-time collaboration in the Type library. It does not depend on a specific implementation of an editor. Developers are free to implement any editor specific to their needs with integrated real-time collaboration.
 
@@ -901,11 +901,11 @@ This architecture provides an unobtrusive way to integrate real-time collaborati
 
 Type's modular structure is designed for extension. Type's \code{prototype} has been exposed as \code{Type.fn} and all its classes in the \code{Type} namespace. This provides other developers with all of Type's functionality in a sctructured and accessible manner. Type is designed to lower the barrier for and encourage developers to extend Type by giving freedom and possiblities in how to implement an extension and trying to avoid compulsorily use of interfaces or configurations.
 
-jQuery demonstrates a liberal apporach for writing extensions and experience shows that name comflicts are minimal and ''good'' extensions are naturally favored over ''bad'' extensions by the community of web developers.
+jQuery demonstrates a similarly liberal apporach for writing extensions and experience shows that name conflicts are minimal and ''good'' extensions are naturally favored over ''bad'' extensions by the community of web developers.
 
 \subsection{API extension}
 
-\begin{lstlisting}[language=JavaScript, caption=Example Type API extension, label=lst:api_extension_example]
+\begin{lstlisting}[language=JavaScript, caption=Example Type instance API extension, label=lst:api_extension_example]
 Type.fn.myMethod = function () {};
 \end{lstlisting}
 
@@ -931,7 +931,7 @@ Type.MyClass = function () {
 %Type.MyPluginNamespace.Foo = function() {};
 %Type.MyPluginNamespace.Bar = function() {};
 
-\noindent All other classes that Type uses are exposed in this namespace and can be used by extensions. This can be used to provide other developers with functionality and / or to support API extensions.
+\noindent All other classes that Type uses are exposed in this namespace and can be used by extensions.% This can be used to provide other developers with functionality and / or to support API extensions.
 
 \subsection{Plugin API}
 
@@ -950,7 +950,7 @@ Type.fn.myMethod = function () {
 };
 \end{lstlisting}
 
-\noindent To give each plugin an own namespace, an arbitrary identifier must be passed as a \code{String} to the \code{data} method, which will provide a unique \code{Object} for different strings. This can possibly cause name conflicts if two plugins choose to use the same string. Developers are advised to always use their own extension name as identifier. Experience with jQuery's plugin system as well as jQuery's \code{data} method shows that while this cannot prevent name conflicts, it is rarely a problem.
+\noindent To give each plugin an own namespace, an arbitrary identifier must be passed as a \code{String} to the \code{data} method, which will provide a unique \code{Object} for different string identifiers. This can possibly cause name conflicts if two plugins choose to use the same string. Developers are advised to always use their own extension name as identifier. Experience with jQuery's plugin system as well as jQuery's \code{data} method shows that while this cannot prevent name conflicts, it is rarely a problem.
 
 % Erstellung von Erweiterungen und Plugins soll so einfach und frei wie möglich sein. Es ist die Verantwortung der Programmierer diese Freiheit so zu nutzen, dass sie trotzdem sauber arbeiten. jQuery zeigt, dass Freiheit funktioneren kann und nicht zu schlechtem nutzen führt. Schlechte Plugins sterben durch die Dynamik des ''Marktes'' aus. Die Vorteile ueberwiegen: Beim CKEditor ist es aufwändig (viel Code um sich in den Editor zu integrieren) und schwierig (Lernkurve) Erweiterungen zu schreiben. Der CKEditor ist aber auch ein Produkt und kein Framework. Ein Framework sollte Möglichkeiten geben und einfach (und painless) sein. jQuery hat für sich Konventionen erzeugt und Möglichkeiten gegen, die Programmierer effektiv arbeiten lassen können. Und jQuery zeigt: Es funktioniert.
 
