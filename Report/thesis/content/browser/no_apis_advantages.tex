@@ -2,14 +2,14 @@
 
 \section{Advantages of rich-text editing without editing APIs}
 
-With a pure JavaScript implementation, many of the problems that HTML editing APIs have, can be solved. The issues discussed in \refsection{sec:disadvantages_of_html_editing_apis} will be discussed in this context hereinafter.
+With a pure JavaScript implementation, many of the problems that HTML editing APIs have, can be solved. The issues discussed in \refsection{sec:disadvantages_of_html_editing_apis} will be addressed hereinafter.
 
 \subsection{Generated output and flawed API} 
 \label{subsec:adv_flawed_api}
 
  % an editor can be implemented to allow developers using the editor to \textit{choose} the output
 
-The generated markup, if implemented through JavaScript and DOM Level 1 methods, can be chosen with the implementation of the editor. Furthermore, the decision of the generated output can be given to the developers using the editor. Section \refsection{sec:disadvantages_of_html_editing_apis} describes the inconsistent output across various browsers as well as the problems of the API design of \texttt{execCommand}. Both issues can be adressed by offering a method to wrap the current selection in arbitrary markup. jQuery's \texttt{htmlString} implementation\footnote{\url{http://api.jquery.com/Types/\#htmlString}, last checked on 07/19/2015} demonstrates a simple and stable way to define markup in a string and pass it as an argument to JavaScript methods. A sample call could read as follows.
+The generated markup, if implemented through JavaScript and DOM Level 1 methods, can be chosen with the implementation of the editor. Furthermore, the decision of the generated output can be given to the developers working with the editor. Section \refsection{sec:disadvantages_of_html_editing_apis} describes the inconsistent output across various browsers as well as the problems of the API design of \texttt{execCommand}. Both issues can be adressed by offering a method to wrap the current selection in arbitrary markup. jQuery's \texttt{htmlString} implementation\footnote{\url{http://api.jquery.com/Types/\#htmlString}, last checked on 07/19/2015} demonstrates a simple and stable way to define markup in a string and pass it as an argument to JavaScript methods. A sample call could read as follows.
 
 \begin{lstlisting}[language=JavaScript, caption=Example calls to format text, label=lst:format-examples-api-alternative]
 // Mimicking document.execCommand('italic', false, null);
