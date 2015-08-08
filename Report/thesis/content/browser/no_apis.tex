@@ -56,11 +56,14 @@ Algorithm~\ref{alg:format_pseudocode_dom} demonstrates a simplified procedure to
 \caption{Simplified element insertion pseudocode}
 \label{alg:insert_pseudocode}
 \begin{algorithmic}[1]
-\State If\{Selection is not collapsed\}\{
-\State Split text nodes at beginning and end of selection
-\State Loop over all nodes inside selection
-\State Remove each node
-\State Collapse selection\}
+\If{Selection is not collapsed}
+  \State $s \gets$ split text node at beginning of text
+  \State $e \gets$ split text node at end of text
+  \ForAll{$node$ in selection}
+    \State Remove $node$
+  \EndFor
+  \State Collapse selection
+\EndIf
 \State Insert new tag at beginning of selection
 \end{algorithmic}
 \end{algorithm}
@@ -71,12 +74,16 @@ Algorithm~\ref{alg:insert_pseudocode} demostrates a simplified procedure to inse
 \caption{Simplified text removal pseudocode}
 \label{alg:remove_pseudocode}
 \begin{algorithmic}[1]
-\State If\{Selection is not collapsed\}\{
-\State Loop over all nodes inside selection
-\State Remove each node
-\State Collapse selection\}
-\State Else\{
-\State Remove one character left of the beginning of the selection\}
+\If{Selection is not collapsed}
+  \State $s \gets$ split text node at beginning of text
+  \State $e \gets$ split text node at end of text
+  \ForAll{$node$ in selection}
+    \State Remove $node$
+  \EndFor
+  \State Collapse selection
+\Else
+  \State Remove one character left of the beginning of the selection
+\EndIf
 \end{algorithmic}
 \end{algorithm}
 
@@ -86,8 +93,9 @@ Algorithm~\ref{alg:remove_pseudocode} demonstrates a procedure to mimick the del
 \caption{Simplified element unwrapping pseudocode}
 \label{alg:unwrap_pseudocode}
 \begin{algorithmic}[1]
-\State Loop over all nodes inside element
-\State Move each node before element
+\ForAll{$node$ in element}
+  \State Move $node$ before element
+\EndFor
 \State Remove element
 \end{algorithmic}
 \end{algorithm}
