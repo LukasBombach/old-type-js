@@ -31,12 +31,14 @@ Algorithms \ref{alg:format_pseudocode_dom} through \ref{alg:unwrap_pseudocode} d
 \caption{Simplified text formatting pseudocode}
 \label{alg:format_pseudocode_dom}
 \begin{algorithmic}[1]
+\Procedure{Format}{}
 \State $s \gets$ split text node at beginning of text
 \State $e \gets$ split text node at end of text
 \State $t \gets$ new tag before $s$
-\ForAll{$node$ in selection}
-  \State Move $node$ to $t$
+\ForAll{$n$ in selection}\Comment{n is a node in the selection}
+  \State Move $n$ to $t$
 \EndFor
+\EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
@@ -56,15 +58,17 @@ Algorithm~\ref{alg:format_pseudocode_dom} demonstrates a simplified procedure to
 \caption{Simplified element insertion pseudocode}
 \label{alg:insert_pseudocode}
 \begin{algorithmic}[1]
+\Procedure{Insert}{}
 \If{Selection is not collapsed}
   \State $s \gets$ split text node at beginning of text
   \State $e \gets$ split text node at end of text
-  \ForAll{$node$ in selection}
-    \State Remove $node$
+  \ForAll{$n$ in selection}\Comment{n is a node in the selection}
+    \State Remove $n$
   \EndFor
   \State Collapse selection
 \EndIf
 \State Insert new tag at beginning of selection
+\EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
@@ -74,16 +78,18 @@ Algorithm~\ref{alg:insert_pseudocode} demostrates a simplified procedure to inse
 \caption{Simplified text removal pseudocode}
 \label{alg:remove_pseudocode}
 \begin{algorithmic}[1]
+\Procedure{Remove}{}
 \If{Selection is not collapsed}
   \State $s \gets$ split text node at beginning of text
   \State $e \gets$ split text node at end of text
-  \ForAll{$node$ in selection}
-    \State Remove $node$
+  \ForAll{$n$ in selection}\Comment{n is a node in the selection}
+    \State Remove $n$
   \EndFor
   \State Collapse selection
 \Else
   \State Remove one character left of the beginning of the selection
 \EndIf
+\EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
@@ -93,9 +99,11 @@ Algorithm~\ref{alg:remove_pseudocode} demonstrates a procedure to mimick the del
 \caption{Simplified element unwrapping pseudocode}
 \label{alg:unwrap_pseudocode}
 \begin{algorithmic}[1]
-\ForAll{$node$ in element}
-  \State Move $node$ before element
-\EndFor
+\Procedure{Unwrap}{$e$}\Comment{e is an element}
+  \ForAll{$n$ in $e$}\Comment{n is a node in e}
+    \State Move $n$ before $e$
+  \EndFor
+\EndProcedure
 \State Remove element
 \end{algorithmic}
 \end{algorithm}
