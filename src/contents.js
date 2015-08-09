@@ -22,29 +22,33 @@ Type.Contents = function (type) {
    * @returns {Type.Contents}
    */
   this.insertText = function (textNode, offset, str) {
-
     var newNode, nodeText;
-
     if (/^[\n\r]+$/.test(str)) {
-
       newNode = textNode.splitText(offset);
       newNode.parentNode.insertBefore(document.createElement('br'), newNode);
       this.moveTo(newNode, 0);
-
     } else {
-
       nodeText = textNode.nodeValue;
-
       if (offset > 0) {
         textNode.nodeValue = nodeText.substring(0, offset) + str + nodeText.substring(offset, nodeText.length);
       } else {
         textNode.nodeValue = str + nodeText;
       }
-
     }
-
     return this;
+  };
 
+  /**
+   * Inserts DOM nodes at the offset of a text node
+   *
+   * @param textNode
+   * @param offset
+   * @param {String} htmlString - A string containing HTML
+   * @returns {Type.Contents} - This instance
+   */
+  this.insertHTML = function (textNode, offset, htmlString) {
+    var nodes = Type.DomUtilities.parseHTML(htmlString);
+    return this;
   };
 
   /**
