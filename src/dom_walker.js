@@ -151,8 +151,7 @@ Type.DomWalker = function (node, options) {
   Type.DomWalker._filterFunctions = {
     text     : '_isTextNodeWithContents',
     textNode : '_isTextNode',
-
-      : '_isVisible'
+    visible  : '_isVisible'
   };
 
   /**
