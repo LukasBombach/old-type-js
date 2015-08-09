@@ -77,7 +77,11 @@ Using tricks and \textit{faking} elements or behavior is common in web front end
 
 %As discussed in \refsection{sec:approaches_for_imitating_native_components}, the source code editors Ace and CodeMirror use various DOM elements to mimick a native text input while actually reading the user's input with JavaScript and displaying a custom ouput.
 
-The library implemented for this thesis uses similar techniques to create a rich-text editor. The contents of the editor are represented by by a \code{div} element that contains the formatted text using HTML. The caret as a \code{div} element styled to mimick a native caret. The text selection is also displayed by using \code{div} elements that are styled accordingly. Ace, CodeMirror and Google's document editor share these concepts. The specifics on the implementation of these components and how they interact will be discussed in \refchapter{ch:impl}.
+\section{Implementation}
+
+The library implemented for this thesis uses similar techniques as Ace and CodeMorror to create a rich-text editor. The contents of the editor are represented by by a \code{div} element that contains the formatted text using HTML. The caret as a \code{div} element styled to mimick a native caret. The text selection is also displayed by using \code{div} elements that are styled accordingly. The keyboard and mouse input will be read with JavaScript and the contents of the editor will be changed accordingly using DOM Level 1 methods. The user's input will also be read to move the mimicked caret on the website with JavaScript. The specifics on the implementation of these components and how they interact will be discussed in \refchapter{ch:impl}.
+
+% Ace, CodeMirror and Google's document editor share these concepts. 
 
 %---and the other components discussed in \refsubsec{subsec:concept_native_imitation}---
 

@@ -96,14 +96,14 @@ The \code{Type} class is the base class (see \refsubsec{subsec:modular_and_oop})
 \subsection{Instantiation and usage}
 \label{subsec:instantiation_usage}
 
-To develop an editor with the library, the \code{Type} base class must be instantiated. As discussed in \refsubsec{subsec:api_design_handling_use_cases}, all of the libary's functionality is provided by this class. It exposes its features as high-level instance methods. The \code{Type} class is exposed to the \code{window} namespace and is thereby globally accessible. On instantiation it must be passed an \code{HTMLElement}, which's contents will act as the editor's rich-text content and all rich-text operations will be performed on it. An optional second parameter can be passed to the class to define settings for the editor's instance.
+To develop an editor with the library, the \code{Type} base class must be instantiated. As discussed in \refsubsec{subsec:api_design_handling_use_cases}, all of the libary's functionality is provided by this class. It exposes its features as high-level instance methods. The \code{Type} class is exposed to the \code{window} namespace and is thereby globally accessible. On instantiation it must be passed an \code{HTMLElement}, which's contents will act as the editor's rich-text content and all rich-text operations will be performed on it. Just like with HTML editing APIs, developers can build user interfaces around the editable element. An optional second parameter can be passed to the class to define settings for the editor's instance.
 
 \begin{lstlisting}[language=JavaScript, caption=Type instantiation, label=lst:type_instantiation]
 var element = document.getElementById("myElement");
 var editor = new Type(element, { paste: "text" });
 \end{lstlisting}
 
-The \code{editor} instance variable now offers methods to format, insert and remove text, manipulate the caret and the selection, dynamically change settings and control undo/redo capabilites as well as trigger clipboard commands. The complete API is listed in Figure ABC. For example, to format the characters 10 to 20 as bold and move the caret behind the formatted text, the following methods need to be executed:
+The \code{editor} instance variable now offers methods to format, insert and remove text, manipulate the caret and the selection, dynamically change settings and control undo/redo capabilites as well as trigger clipboard commands. The complete API is listed in Figure ABC. For example, to format the characters 10 to 20 as bold and move the caret behind the formatted text, the following methods can be executed:
 
 \begin{lstlisting}[language=JavaScript, caption=Example commands to format text, label=lst:type_format_example]
 editor.selection(10, 20);
@@ -111,13 +111,13 @@ editor.format("<strong />");
 editor.caret(20);
 \end{lstlisting}
 
-\noindent This is just an example to demonstrate the API. It should be noted that the API allows to specify a text range in the format command as well as chaining and the above code can be simplified to a single line.
+This is just an example to demonstrate the API. It should be noted that the API allows to specify a text range in the format command as well as chaining and the above code can be simplified to a single line.
 
 \begin{lstlisting}[language=JavaScript, caption=Example chaining, label=lst:type_chaining_example]
 editor.format("<strong />", 10, 20).caret(20);
 \end{lstlisting}
 
-With the second optional parameter, settings can be passed to determine the editor's behavior. As for the implementation of this thesis two settings are avaialable: To determine the behavior on paste eventsand to turn off default keyboard shortcuts. A full description can be found in figure ABC. Passing options to the editor can be useful for extensions. Section \refsection{sec:extensions} discusses how extensions of the library can add further options for their own use.
+With the second optional parameter, settings can be passed to the Type class on instantiation to determine the editor's behavior. As for the implementation of this thesis two settings are avaialable: To determine the behavior on paste eventsand to turn off default keyboard shortcuts. A full description can be found in figure ABC. Passing options to the editor can be useful for extensions. Section \refsection{sec:extensions} discusses how extensions of the library can add options for their own use.
 
 \subsection{Namespace and references} 
 \label{subsec:namespace_and_refs}
@@ -139,7 +139,7 @@ The namespace provides a structure for the classes of the library, prevents the 
 
 %Section \refsection{sec:module_architecture} discusses how Type's classes interact to provide its rich-text functionality. 
 
-When instantiated, the \code{Type} class, in turn, will instantiate classes of its namepsace that implement its rich-text editing functionality. The \code{Type} instance will pass a reference to itself to all classes and offers getters for every class instance it created, to provide mutual access.
+On instantiation, the \code{Type} class, in turn, will instantiate classes of its namepsace that implement its rich-text editing functionality. The \code{Type} instance will pass a reference to itself to all classes and offers getters for every class instance it created, to provide mutual access for each class of the library.
 
 %Apart from providing a namespace for all classes, a type instance provides references of all classes it 
 
@@ -154,7 +154,7 @@ When instantiated, the \code{Type} class, in turn, will instantiate classes of i
 \subsection{Exposal of Type's \code{prototype}}
 \label{subsec_fn_exposal}
 
-While Type's functionality is implemented through classes within its namespace, this does not expose its functionality to its instance-API. With the constructor pattern, all methods in the \code{prototype} of the \code{Type} class will be available as instance methods. In a simple approach, the library's API can be implemented directly in the implementation of the \code{Type} class. This contradicts the modular approach of the library. jQuery established an effective principle for extending its API. It exposes the library's \code{prototype} with a shorthand attribute as \code{jQuery.fn}. Other modules can extend the \code{prototype} easily and add methods to the libary's API. Type follows the same principle and exposes its \code{prototype}  as \code{Type.fn}. The \code{prototype} could also be accessed without exposing it with a shorthand attribute, but intends to clearify its purpose and paradigm similar to jQuery and encourage developers to extend it.
+While Type's functionality is implemented through classes within its namespace, this does not expose its functionality to its instance-API. With the constructor pattern, all methods in the \code{prototype} of the \code{Type} class will be available as instance methods. In a simple approach, the library's API can be implemented directly in the implementation of the \code{Type} class. This contradicts the modular approach of the library. jQuery established an effective principle for extending its API. It exposes the library's \code{prototype} with a shorthand attribute as \code{jQuery.fn}. This way, other modules can extend the \code{prototype} easily and add methods to the libary's API. Type follows the same principle and exposes its \code{prototype}  as \code{Type.fn}. The \code{prototype} could also be accessed without exposing it with a shorthand attribute, but this is intended to clearify its purpose similar to jQuery and encourage developers to extend it.
 
   %jQuery's \code{prototype}---as well as Type's \code{prototype}---can be extended even without exposing it as an attribute, but apart from providing a more convenient way to do so, primarily, jQuery established a simple and yet powerful paradigm that encourages other developers to extend the library's API.
 
@@ -180,9 +180,9 @@ While Type's functionality is implemented through classes within its namespace, 
 %As discussed in \refsubsec{subsec_fn_exposal}, Type's public API for implementing editors is not hard-coded to the \code{Type} class. Instead it extends \code{Type}'s \code{prototype} dynamically. This conforms the paradigm of having a base class and implementing all its featues in modules. To still ensure maintanability and a clean software structure, the methods for Type's API will not be added arbitrarily by other classes. Instead, all API methods will be implemented by a single module that in turn calls the required methods of the corresponding classes. This allows for a clean and independent software architecture, a separation of concerns and decouples the API from the structure and the implementation of the library.
 
 
-The methods of Type instances can be added through any of the classes used by the library. However, to achieve a clear separation of concerns, maintainability and to conform the modularized structure, Type's instance API is implemented through a designated module that adds all methods to the API.
+The methods of Type instances can be added by any of the classes of the library. However, to achieve a clear separation of concerns, maintainability and to conform the modularized structure, Type's instance API is implemented through a designated module that adds all methods to the API.
 
-The module for this, called ''CoreApi'', is the only exception in Type's implementation. The module directly extends \code{Type.fn} with all methods listed in XYZ, \textit{without} using a class.
+The module for this, called ''CoreApi'', is the only exception in Type's implementation---it extends \code{Type.fn} directly with all methods listed in XYZ, \textit{without} using a class.
 
 Similar to the principles of MVC in which the controllers should be kept small and the implementation should reside in the model layer, the functionality of the API resides in their designated classes, while the API methods are kept small. The classes are written in a way that allow the API methods to require not more than one function call for their implementation and at most translate their parameters for the class methods.
 
@@ -220,7 +220,7 @@ To enable reading the user's input and writing it to the editor's contents, the 
 %\item Input
 %\end{itemize}
 
-\noindent The \code{Input} class will listen to keyboard input and mouse input. It is responsible for setting the caret and the selection using the \code{Caret} and \code{Selection} classes and determines which part of the text should be changed or formatted with them. It passes the formalized edits to the \code{Contents} class which will emit events for an \code{UndoManager} that enables undo and redo operations. \code{Contents} class uses the \code{Writer} and \code{Formatter} instances to manipulate the visible text on the website. These classes perform the actual DOM operations on the contents of the element passed to Type on instiation (see \refsubsec{subsec:instantiation_usage}).
+\noindent The \code{Input} class will listen to keyboard input and mouse input. It is responsible for setting the caret and the selection using the \code{Caret} and \code{Selection} classes and determines which part of the text should be changed or formatted when the user enters text, uses keyboard shortcuts or uses his or her mouse or touch device. It passes formalized edit operations to the \code{Contents} class which will emit events for an \code{UndoManager} that enables undo and redo operations. The \code{Contents} class uses the \code{Writer} and \code{Formatter} instances to manipulate the visible text on the website. These classes perform the actual DOM operations on the contents of the element passed to Type on instiation (see \refsubsec{subsec:instantiation_usage}).
 
 %class allows adding and removing text and the \code{Formatting} class allows to apply formattings, both using DOM operations. The \code{Changes} class will use these classes to to alter the text according to the change it it should apply.
 
@@ -247,7 +247,7 @@ There are various input methods with which users can interact with native inputs
 \item Remote control input (on smart TVs)
 \end{itemize}
 
-When mimicking a native input, in a best-case scenario, all these input methods should be accounted for. Fetching input includes two scenarios: The user clicks / touches / or selects the input in any way and does so at any position inside the input. If the user touches / clicks / etc in the middle of the text, the caret should move to that position. In environments without hardware keyboards, the libarary must ensure that a virutal keyboards show up. Once the input component is selected, text input must be fetched and written to the editor. There are various options to fetch user input, which will be discussed in the following sections.
+When mimicking a native input, in a best-case scenario, all these input methods should be accounted for. Fetching input includes two scenarios: The user clicks, touches or focuses the input in any way and does so at any position inside the input. If the user points (touches, clicks, etc.) in the middle of the text, the caret should move to that position. In environments without hardware keyboards, the libarary must ensure that a virutal keyboards show up. Once the input is focused, text input must be fetched and written to the contents. There are various options to fetch user input, which will be discussed in the following sections.
 
 \subsection{Events} 
 
