@@ -474,7 +474,7 @@ The \code{Writer} class implements functionality to add and remove contents to a
 
 \subsection{Formatter}
 
-The formatter is one of the key classes of the Type library. As discussed in \refsubsec{subsec:noapi_dis_formatting} it must generate \textit{well-formatted} markup while being able to work on any \textit{ill-formatted} markup it will be given. There is a virtually infinite number of edge-cases for markup that formatting commands can be applied to. Assume we have the following string.
+The \code{Formatter} is one of the key classes of the Type library. As discussed in \refsubsec{subsec:noapi_dis_formatting} it must generate \textit{well-formatted} markup while being able to work on any \textit{ill-formatted} markup it will be given. There is a virtually infinite number of edge-cases for markup that formatting commands can be applied to. Assume we have the following string.
 
 %\begin{quotation}
 %Lorem \tikzmarkin{a}ipsum \textit{dolor \underline{sit\tikzmarkend{a} amet}}
@@ -485,7 +485,7 @@ The formatter is one of the key classes of the Type library. As discussed in \re
  %It does not only need to deal with different markup, these edge cases also include formatting with different tags and on different parts of the same markup. %the number of edge cases is virtually unlimited
 
 \begin{lstlisting}[language=html, caption=Markup with highlighted target for formatting, label=lst:formatter_code_example]
-<p>Lorem §\tikzmarkin{glw}§ipsum <em>dolor<u> sit§\tikzmarkend{glw}§ amet</u></em></p>
+<p>Lorem §\tikzmarkin{glw}§ipsum <em>dolor<u> sit§\tikzmarkend{glw}§ amet</u></em> consec</p>
 \end{lstlisting}
 
 \reflisting{lst:formatter_code_example} represents markup for the formatted string ''Lorem ipsum \textit{dolor \underline{sit amet}}''. The highlighted part (yellow) represents the part of the text that should be formatted using a formatting command.
@@ -497,7 +497,7 @@ The formatter is one of the key classes of the Type library. As discussed in \re
 \label{fig:formatting_dom_tree}
 \end{figure}
 
-\reffigure{fig:formatting_dom_tree} shows the DOM representation of the markup of \reflisting{lst:formatter_code_example}. We can split up the text node ''Lorem ipsum'' into two text nodes ''Lorem'' and '' ipsum'' to create a distinct node in which the formatting (yellow highlight) starts and do the same with the ending text node ''sit amet''. Ths gives us a distinct nodes for both, that start and the end of the selection. When we traverse each node from the start to the end, every traversed node falls on either of the following cases:
+\reffigure{fig:formatting_dom_tree} shows the DOM representation of the markup of \reflisting{lst:formatter_code_example}. We can split up the text node ''Lorem ipsum'' into two text nodes ''Lorem'' and '' ipsum'' to create a distinct node in which the formatting (yellow highlight) starts and do the same with the ending text node ''sit amet''. Ths gives us a distinct nodes for the start and the end of the selection. When we traverse each node from the start to the end, every traversed node falls on either of the following cases:
 
 \begin{enumerate}
 \item It is the start node
@@ -546,7 +546,7 @@ The formatter is one of the key classes of the Type library. As discussed in \re
 
 \item If the end node was found, the algorithm will wrap all all nodes it found with a node that applies the desired formatting.
 
-\item If there are no more siblings, it means it has reached the last sibling inside the node containing the start node. By the validation rules of the W3C, nodes are not allowed to intersect. The algorithm will wrap all nodes it found so far with a node that applies the desired formatting and apply the formatting algorithm recusively with the start node being the next node in the document flow and the end node remaining the same end node.
+\item If there are no more siblings, it means it has reached the last sibling inside the node containing the start node. By the validation rules of the W3C, nodes are not allowed to intersect. The algorithm will wrap all nodes it found so far with a node that applies the desired formatting and recursively applies itself with the start node being the next node in the document flow and the end node remaining the same end node.
 
 \item If an element has been found that contains the end node, the algorithm will wrap all nodes it found so far with a node that applies the desired formatting (to avoid intersecting nodes). It will then apply the formatting algorithm recursively to the first child of the containing node. If this node in return is another container to the end node, the recursion will repeat until a sibling of the end node or the end node itself has been found.
 
