@@ -3,7 +3,7 @@
 
 \section{Overview XX}
 
-As discussed in \refsubsec{subsec:const_pat_and_modules}, Type's implementation relies on a base class that provides a high-level API for implementing rich-text editors. The library's functionality is implemented through various other classes encapsulated in a designated namespace. Section \refsection{sec:impl_technology} will discuss the tool used to develop and build the library. Section \refsection{sec:core} will discuss the base class and the namespace it creates. Sections \refsection{sec:module_architecture} and following discuss the functionality, architecture and the classes involved in Type by explaining how the user's input will be read, processed and written to the website.
+As discussed in \refsubsec{subsec:const_pat_and_modules}, Type's implementation relies on a base class that provides a high-level API for implementing rich-text editors. The library's functionality is implemented through various other classes encapsulated in a designated namespace. Section \refsection{sec:impl_technology} will discuss the tools used to develop and build the library. Section \refsection{sec:core} will discuss the base class and the namespace it creates. Sections \refsection{sec:module_architecture} and following discuss the functionality, architecture and the classes involved in Type by explaining how the user's input will be read, processed and written to the website.
 
 \section{Technology}
 \label{sec:impl_technology}
@@ -22,7 +22,7 @@ Each file is written as a CommonJS module that will be concatenated using Requir
 
 \subsection{Linting}
 
-JSLint is used to lint the source code before any concatenation happens. It will also check if the code conforms the JavaScript code conventions introduced by Douglas Crockford. The code mostly conforms these conventions, differing in the way the constructor pattern is implemented to favour better readability. Classes using the constructor pattern are implemented using the conventions of the Ace library and using the prefix convention\footnote{\url{https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Contributor\_s\_Guide/Private\_Properties\#Using\_Prefixes}} for private members.
+JSLint is used to lint the source code before any concatenation happens. It will also check if the code conforms the JavaScript code conventions introduced by Douglas Crockford. The code mostly conforms these conventions, differing in the way the constructor pattern is implemented to favour better readability. Classes using the constructor pattern are implemented using the conventions of the Ace library and use the prefix convention\footnote{\url{https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Contributor\_s\_Guide/Private\_Properties\#Using\_Prefixes}} for private members.
 
 
 %\section{Coding conventions}
