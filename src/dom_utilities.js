@@ -20,6 +20,14 @@ Type.DomUtilities = function () {
    */
   Type.DomUtilities._containerId = Type.Settings.prefix + 'container';
 
+
+  /**
+   * Matches a single HTML tag
+   * @type {RegExp}
+   * @private
+   */
+  Type.DomUtilities._singleTag = /^<([\w-]+)\s*\/?>(?:<\/\1>|)$/;
+
   /**
    * Todo Use me wherever you find document.createElement or this.elementsContainer
    * @param {string} tagName
@@ -34,7 +42,7 @@ Type.DomUtilities = function () {
   };
 
   /**
-   *
+   * Removes a DOM element
    * @param {Element} el
    * @returns {*}
    */
@@ -85,6 +93,19 @@ Type.DomUtilities = function () {
       this.unwrap(el);
     }
     return this;
+  };
+
+  /**
+   * Converts a string of HTML to a corresponding {NodeList}
+   *
+   * @param {String} htmlString - A string containing HTML
+   * @returns {NodeList} - The elements represented by the string
+   */
+  Type.DomUtilities.parseHTML = function(htmlString) {
+    var fragment = document.createDocumentFragment(),
+      div = fragment.appendChild(document.createElement('div'));
+    div.innerHTML = htmlString;
+    return div.childNodes;
   };
 
   /**
