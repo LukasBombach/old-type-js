@@ -96,7 +96,7 @@ The \code{Type} class is the base class (see \refsubsec{subsec:modular_and_oop})
 \subsection{Instantiation and usage}
 \label{subsec:instantiation_usage}
 
-To develop an editor with the library, the \code{Type} base class must be instantiated. As discussed in \refsubsec{subsec:api_design_handling_use_cases}, all of the libary's functionality is encapsuled this class. It exposes its features as high-level instance methods. The \code{Type} class is exposed to the \code{window} namespace and is thereby globally accessible. On instantiation it must be passed an \code{HTMLElement}, which's contents will act as the editor's rich-text content. An optional second parameter can be passed to the class to define settings for the editor's instance.
+To develop an editor with the library, the \code{Type} base class must be instantiated. As discussed in \refsubsec{subsec:api_design_handling_use_cases}, all of the libary's functionality is provided by this class. It exposes its features as high-level instance methods. The \code{Type} class is exposed to the \code{window} namespace and is thereby globally accessible. On instantiation it must be passed an \code{HTMLElement}, which's contents will act as the editor's rich-text content and all rich-text operations will be performed on it. An optional second parameter can be passed to the class to define settings for the editor's instance.
 
 \begin{lstlisting}[language=JavaScript, caption=Type instantiation, label=lst:type_instantiation]
 var element = document.getElementById("myElement");
