@@ -34,7 +34,7 @@ JSLint is used to lint the source code before any concatenation happens. It will
 
 \subsection{Code formatting}
 
-JSCS is used to check the code to conform specific formatting conventions. for instance the number of spaces used for indentation or a consistend use of CamelCase. Along with JSLint checking for Douglas Crockford's conventions this ensures a consistend coding style across all files and classes.
+JSCS is used to check the code to conform specific formatting conventions---for instance the number of spaces used for indentation or a consistend use of CamelCase. Along with JSLint checking for Douglas Crockford's conventions this ensures a consistend coding style across all files and classes.
 
 \subsection{ECMAScript 6} 
 
@@ -84,13 +84,13 @@ ECMAScript 6 offers many features for JavaScript including classes and modules. 
 
 \subsection{Overview}
 
-The \code{Type} class is the base class (see \refsubsec{subsec:modular_and_oop}) and the starting point for users and developers of the library. It provides 4 purposes:
+The \code{Type} class is the base class (see \refsubsec{subsec:modular_and_oop}) is the starting point for users and developers of the library. It provides 4 purposes:
 
 \begin{enumerate}
-\item It can be instantiated and offer a high-level API to manipulate text and perform other rich-text related functions
-\item It provides a namespace for all of the library's internal classes
-\item An instance provides references to all instances of the internally used classes
-\item It exposes its \code{prototype} as a public shorthand attribute
+\item It can be instantiated to offer a high-level API to manipulate text and perform other rich-text related functions.
+\item It provides a namespace for the library's internal classes.
+\item A Type instance provides mutual access for the instances of the internally used classes.
+\item It exposes its \code{prototype} as a public shorthand attribute.
 \end{enumerate}
 
 \subsection{Instantiation and usage}
