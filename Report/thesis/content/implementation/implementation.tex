@@ -117,7 +117,7 @@ This is just an example to demonstrate the API. It should be noted that the API 
 editor.format("<strong />", 10, 20).caret(20);
 \end{lstlisting}
 
-With the second optional parameter, settings can be passed to the Type class on instantiation to determine the editor's behavior. As for the implementation of this thesis two settings are avaialable: To determine the behavior on paste eventsand to turn off default keyboard shortcuts. A full description can be found in figure ABC. Passing options to the editor can be useful for extensions. Section \refsection{sec:extensions} discusses how extensions of the library can add options for their own use.
+With the second optional parameter, settings can be passed to the Type class on instantiation to determine the editor's behavior. As for the implementation of this thesis two settings are avaialable: To determine the behavior on paste eventsand to turn off default keyboard shortcuts. A full description can be found in figure ABC. Passing options to the editor can be useful for extensions which can access any option passed be accessing the \code{Type} base class.
 
 \subsection{Namespace and references} 
 \label{subsec:namespace_and_refs}
@@ -582,7 +582,7 @@ The \code{UndoManager} class will observe \code{ChangeEvent}s (see \refsubsec{su
 
 In its core the changes observed by the \code{UndoManager} will be kept track of by the \code{ChangeListener}. It will accumulate every change in a data structure and take a ''snapshot'' every 500 milliseconds and store it in a history. The \code{UndoManager} uses this history to implement and offer undo and redo commands.
 
-This functionatlity has been abstracted to be reused by other extensions. The Etherpad extension uses this class to publish local changes every 500 milliseconds to its connected clients independently of the \code{UndoManager}.
+This functionatlity has been abstracted to be reused by other extensions. The Etherpad extension uses this class to accumulate and publish local changes every 500 milliseconds to its connected clients independently of the \code{UndoManager}.
 
 \subsection{Undo / Redo}
 
@@ -606,7 +606,7 @@ Inserting and removing can be undone easily by performing and insertion to undo 
 \label{sec:events}
 \subsection{Overview}
 
-It is possible to trigger custom (native) events using the \code{CustomEvent} interface on modern browsers\footnote{\url{https://developer.mozilla.org/en/docs/Web/API/CustomEvent\#Browser_compatibility}}. Internet Explorer 9 and below allow this through similar interfaces. These interfaces could be used for triggering events for components of Type. However, this would trigger events that that are only relevant within the library in the global namespace. To avoid this, Type implements its own event system that populates events only within the library. Events from within the editor that can be useful to the website or web application Type is used in should still be triggered as native events in the browser's global namespace. During the development of the library no such use case has occured.
+It is possible to trigger custom (native) events using the \code{CustomEvent} interface on modern browsers\footnote{\url{https://developer.mozilla.org/en/docs/Web/API/CustomEvent\#Browser_compatibility}}. Internet Explorer 9 and below allow this through similar interfaces. These interfaces could be used for triggering events for components of Type. However, this would trigger events that that are only relevant within the library in the global namespace. To avoid this, Type implements its own event system that populates events only within the library. Events from within the editor that can be useful to the website or web application should still be triggered as native events in the browser's global namespace. During the development of the library no such use case has occured.
 
 %\textit{todo explain browser support}
 
@@ -717,7 +717,9 @@ The \code{OOP} class extends the contructor pattern with basic classical inherit
 
 \subsection{Range}
 
-The \code{Range} class is an abstraction for the native \code{Range} interface. The native implementation is prone to bugs on many browsers. As discussed in \refsection{sec:interaction_with_browser_apis}, instead of fixing the API by shimming its methods, the \code{Range} class implements all methods related to ranges while trying to interact as little as possible with the native API. On top of the methods of the native \code{Range} interface, this class implements additional methods required for Type.
+The \code{Range} class is an abstraction for the native \code{Range} interface. The native implementation is prone to bugs on many browsers. Instead of fixing the API by shimming its methods, the \code{Range} class implements all methods related to ranges while trying to interact as little as possible with the native API. On top of the methods of the native \code{Range} interface, this class implements additional methods required for Type.
+
+%As discussed in \refsection{sec:interaction_with_browser_apis}, 
 
 %CodeMirror uses (native) \code{Range}s for text
 
@@ -730,7 +732,7 @@ The \code{Range} class is an abstraction for the native \code{Range} interface. 
 
 \subsection{Dom Walker}
 
-Working with text implies having to traverse the DOM, i.e. the nodes inside the text often. The \code{DomWalker} utility class solves this problem. The DOM API offers methods to access a node's siblings, children and parents, but it must always accounted for cases when any of these is \code{null} (there is no parent, sibling or child) or when they overflow the bounds of the editor's contents. But more importantly, for text editing, it is usually necessary to access the next (or previous) node in the document's content flow which can either be the parent, sibling or child. Also, it is often the case that it is not only necessary to fetch the next node, but to apply a filter to only fetch a specfic node, for instance a text node or only a text node that has contents visible to the user\footnote{Any text node consisting of whitespace only will not be displayed by any major browser}. Browsers offer a native API for this, called \code{TreeWalker}, but it is said to be slow\footnote{\url{http://jsperf.com/qsa-vs-node-iterator}}, is only partially supported by Internet Explorer 9\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator\#Browser_compatibility}} and has been critisized for its verbose API\footnote{By John Resig, author of jQuery\url{http://ejohn.org/blog/unimpressed-by-nodeiterator/}}.
+Working with text implies having to traverse the DOM, i.e. the nodes inside the text often. The \code{DomWalker} utility class solves this problem. The DOM API offers methods to access a node's siblings, children and parents, but it must always accounted for cases when any of these is \code{null} (there is no parent, sibling or child) or when they overflow the bounds of the editor's contents. But more importantly, for text editing, it is usually necessary to access the next (or previous) node in the document's content flow which can either be the parent, sibling, child or a node that can only be accessed by traversing mutliple nodes. Also, it is often the case that it is not only necessary to fetch the next node, but to apply a filter to only fetch a specfic node, for instance a text node or only a text node that has contents visible to the user\footnote{Any text node consisting of whitespace only will not be displayed by any major browser}. Browsers offer a native API for this, called \code{TreeWalker}, but it is said to be slow\footnote{\url{http://jsperf.com/qsa-vs-node-iterator}}, only partially supported by Internet Explorer 9\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator\#Browser_compatibility}} and has been critisized for its verbose API\footnote{By John Resig, author of jQuery\url{http://ejohn.org/blog/unimpressed-by-nodeiterator/}}.
 
 The \code{DomWalker} can be instantitated by providing a starting node and the type of nodes it should traverse. The latter argument can either be a string identifying a premade filter of the Type library or a custom filter function. Premade filters include:
 
@@ -740,7 +742,7 @@ The \code{DomWalker} can be instantitated by providing a starting node and the t
 \item ''visible'' - Any visible DOM node
 \end{itemize}
 
-A \code{DomWalker} instance offers the high-level methods \code{next}, \code{prev}, \code{first} and \code{last} amongst others. A full API description can be found in XYZ. All methods can be called statically without having to instantiate a \code{DomWalker}.
+A \code{DomWalker} instance offers the high-level methods \code{next}, \code{prev}, \code{first} and \code{last} (amongst others) for traversal. A full API description can be found in XYZ. All methods can be called statically without having to instantiate a \code{DomWalker}.
 
 %\paragraph{API}
 
