@@ -213,7 +213,7 @@ We can call programmers extending the library ''developers of the library'' and 
 \label{fig:type_uml_excerpt}
 \end{figure}
 
-All of these classes will be used by a globally accessible class called ''Type'' which is the entry point for the users of the library to implement rich-text editors. The Type class provides an API with all of the abovementioned methods and uses the classes inside the namespace for their implementation. It must be instantiated and be passed an element on the website (for example a \code{div} element) which it will then use as its ''editor contents''. The users of the library can build an interface for this editable element and use the instance's API to manipulate it.
+The classes within the namespace will be used by a globally accessible class called ''Type'' which is the entry point for the users of the library to implement rich-text editors. The Type class provides an API with all of the abovementioned methods and uses the classes inside the namespace for their implementation. It must be instantiated and be passed an element on the website (for example a \code{div} element) which it will then use as its ''editor contents''. The users of the library can build an interface for this editable element and use the instance's API to edit its rich-text contents.
 
 %Users of the library can access the globally available ''Type'' class that provides all methods for the implementation of a rich-text editor.
 
@@ -234,7 +234,7 @@ All of these classes will be used by a globally accessible class called ''Type''
 
 \section{Distribution}
 
-The library will be distributed as a single JavaScript file. Extensions by third-party developers will each be distributed as independent and separate (JavaScript) files. By exposing Type and its classes as discussed in section \refsection{sec:api_design} they can be accessed from other files. This provides a modular ''plug and play'' system for distributing and loading extensions. To improve loading times, web developers can concatinate Type and its extensions to a single file in a web project.
+The library will be distributed as a single JavaScript file. Extensions by third-party developers will each be distributed as independent and separate (JavaScript) files. By exposing Type and its classes as discussed in section \refsection{sec:api_design} they can be accessed from other files. This provides a modular ''plug and play'' system for distributing and loading extensions. To improve loading times, web developers can concatenate Type and its extensions to a single file in a web project.
 
 
 
@@ -265,7 +265,7 @@ Model--view--controller (MVC) is a common apprach for implementing user interfac
 
 Following the MVC architecture, the contents of the editor (the text) can be represented in a model (holding the text data and allowing methods to be performed on) and be rendered with a view (displaying the text in the browser). In contrast to the beforementioned components, this would be a a very clean model for implementing the editor's contents. It is even imaginable to implement multiple renderers in the view layer, turning the editor from rich-text into a Markdown editor, for instance.
 
-Unfortunately, this apprach would make the contents of the editor only editable through the API of the ''Type'' library. If any other script on a website would change its contents, the library's renderer would overwrite the changes by rendering the data of the internal model. As discussed in \refsection{sec:api_design}, the library shall leave as much freedom as possible to the developers. This would create a bottleneck and restrict other developers.
+Unfortunately, this apprach would make the contents of the editor only editable through the API of the ''Type'' library. If any other script on a website would change its contents, the library's renderer would overwrite the changes with the next rendering the data of the internal model. As discussed in \refsection{sec:api_design}, the library shall leave as much freedom as possible to the developers. This would create a bottleneck and restrict other developers.
 
 %As discussed in \refsection{sec:api_design}, the library shall leave as much freedom as possible to the developers. In and MVC system like this, the contents of the editor could only be changed though the API, since arbitrarily modifying the HTML of the editor's contents would change the view, but not the model. This would create an artificial bottleneck, which cannot be desired.
 
