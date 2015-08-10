@@ -15,26 +15,23 @@ Type.Contents = function (type) {
 (function () {
 
   /**
+   * Inserts a string in a text node at a given offset
    *
-   * @param textNode
-   * @param offset
-   * @param str
-   * @returns {Type.Contents}
+   * @param {Text} textNode - The text node into which str will be inserted.
+   * @param {Number} offset - The character offset at which str will be inserted.
+   * @param {String} str - The text that will be inserted
+   * @returns {Type.Contents} - This instance
    */
   this.insertText = function (textNode, offset, str) {
-    var newNode, nodeText;
-    if (/^[\n\r]+$/.test(str)) {
-      newNode = textNode.splitText(offset);
-      newNode.parentNode.insertBefore(document.createElement('br'), newNode);
-      this.moveTo(newNode, 0);
+
+    var nodeText = textNode.nodeValue;
+
+    if (offset > 0) {
+      textNode.nodeValue = nodeText.substring(0, offset) + str + nodeText.substring(offset, nodeText.length);
     } else {
-      nodeText = textNode.nodeValue;
-      if (offset > 0) {
-        textNode.nodeValue = nodeText.substring(0, offset) + str + nodeText.substring(offset, nodeText.length);
-      } else {
-        textNode.nodeValue = str + nodeText;
-      }
+      textNode.nodeValue = str + nodeText;
     }
+
     return this;
   };
 
