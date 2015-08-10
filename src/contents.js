@@ -54,26 +54,35 @@ Type.Contents = function (type) {
 
     var i, parent, insertBeforeNode;
 
+    // Parse string (if given) to retrieve DOM nodes
     nodes = typeof nodes === 'string' ? Type.DomUtilities.parseHTML(nodes) : nodes;
+
+    // Make array if single DOM node was given
     nodes = nodes.length ? nodes : [nodes];
 
+    // Split text and prepare insertion
     insertBeforeNode = textNode.splitText(offset);
     parent = insertBeforeNode.parentNode;
 
+    // If last given DOM node is a text, concat it with the text behind insertion
     if (nodes[nodes.length-1].nodeType === Node.TEXT_NODE) {
       insertBeforeNode.nodeValue = nodes.pop().nodeValue + insertBeforeNode.nodeValue;
     }
 
+    // Insert DOM nodes between split texts
     for (i = nodes.length - 1; i >= 1; i -= 1) {
       parent.insertBefore(nodes[i], insertBeforeNode);
       insertBeforeNode = nodes[i];
     }
 
+    // If first given DOM node is a text, concat it with the text before insertion
     if (nodes[0].nodeType === Node.TEXT_NODE) {
       textNode.nodeValue += nodes[0].nodeValue;
     }
 
+    // Chaining
     return this;
+
   };
 
   /**
