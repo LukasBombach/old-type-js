@@ -11,7 +11,7 @@ var Type = require('./core');
  * Creates a new Caret and adds a hidden div (visual representation of the caret) to
  * the DOM
  *
- * @param {Node|{constrainingNode:Node,color:string}} options
+ * @param {Node|{constrainingNode:Node,color:string}|Type} options
  * @class Caret
  * @constructor
  */
@@ -19,9 +19,9 @@ Type.Caret = function (options) {
 
   options = options || {constrainingNode: null, color: null};
 
-  //if (options.typeInstance === true) {
-  //  options = { constrainingNode: options.getRoot(), color: null };
-  //}
+  if (options.typeEditor === true) {
+    options = { constrainingNode: options.getRoot(), color: null };
+  }
 
   if (Type.DomUtilities.isNode(options)) {
     options = { constrainingNode: options, color: null };

@@ -7,7 +7,7 @@ var Type = require('./core');
  * @param {Type} type
  * @constructor
  */
-Type.Formatting = function (type) {
+Type.Formatter = function (type) {
   this._type = type;
 };
 
@@ -47,7 +47,7 @@ Type.Formatting = function (type) {
    *     of the text to format
    * @param {...*} params - Any number of arguments that specify attributes
    *     for the tag
-   * @returns {Type.Formatting}
+   * @returns {Type.Formatter}
    */
   this.format = function (tag, typeRange, params) {
     typeRange.ensureIsInside(this._type.getRoot());
@@ -60,7 +60,7 @@ Type.Formatting = function (type) {
    * @param tag
    * @param typeRange
    * @param params
-   * @returns {Type.Formatting}
+   * @returns {Type.Formatter}
    */
   this.inline = function (tag, typeRange, params) {
 
@@ -93,7 +93,7 @@ Type.Formatting = function (type) {
    * @param {Node} startNode
    * @param {Node} endNode
    * @param {...*} [params]
-   * @returns {Type.Formatting}
+   * @returns {Type.Formatter}
    */
   this.insertInline = function (tag, startNode, endNode, params) {
 
@@ -141,7 +141,7 @@ Type.Formatting = function (type) {
    *
    * @param {Node} enclosingTag
    * @param {Type.Range} typeRange
-   * @returns {Type.Formatting}
+   * @returns {Type.Formatter}
    */
   this.removeInline = function (enclosingTag, typeRange) {
 
@@ -172,7 +172,7 @@ Type.Formatting = function (type) {
    * @param cmd
    * @param typeRange
    * @param params
-   * @returns {Type.Formatting}
+   * @returns {Type.Formatter}
    * @private
    */
   this.block = function (cmd, typeRange, params) {
@@ -224,13 +224,13 @@ Type.Formatting = function (type) {
   /**
    * Multi-purpose no-op handler
    *
-   * @returns {Type.Formatting}
+   * @returns {Type.Formatter}
    * @private
    */
   this._noop = function () {
     return this;
   };
 
-}).call(Type.Formatting.prototype);
+}).call(Type.Formatter.prototype);
 
-module.exports = Type.Formatting;
+module.exports = Type.Formatter;

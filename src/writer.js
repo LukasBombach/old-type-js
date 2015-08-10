@@ -7,7 +7,7 @@ var Type = require('./core');
  * @param {Type} type
  * @constructor
  */
-Type.Contents = function (type) {
+Type.Writer = function (type) {
   this._type = type;
   this._root = type.getRoot();
 };
@@ -20,7 +20,7 @@ Type.Contents = function (type) {
    * @param {Text} textNode - The text node into which str will be inserted.
    * @param {Number} offset - The character offset at which str will be inserted.
    * @param {String} str - The text that will be inserted
-   * @returns {Type.Contents} - This instance
+   * @returns {Type.Writer} - This instance
    */
   this.insertText = function (textNode, offset, str) {
 
@@ -45,7 +45,7 @@ Type.Contents = function (type) {
    * @param {Node|[Node]|NodeList|String} nodes - Either a {Node}, an array
    *     of {Node}s, a {NodeList} or a string containing HTML that will be
    *     inserted at the given offset in  a text node.
-   * @returns {Type.Contents} - This instance
+   * @returns {Type.Writer} - This instance
    */
   this.insertHTML = function (textNode, offset, nodes) {
 
@@ -170,7 +170,7 @@ Type.Contents = function (type) {
   /**
    *
    * @param {number} steps
-   * @returns {Type.Contents}
+   * @returns {Type.Writer}
    */
   this.undo = function (steps) {
     steps = steps === null ? 1 : steps;
@@ -180,7 +180,7 @@ Type.Contents = function (type) {
   /**
    *
    * @param {number} steps
-   * @returns {Type.Contents}
+   * @returns {Type.Writer}
    */
   this.redo = function (steps) {
     steps = steps === null ? 1 : steps;
@@ -190,7 +190,7 @@ Type.Contents = function (type) {
   /**
    *
    * @param {string} changeset
-   * @returns {Type.Contents}
+   * @returns {Type.Writer}
    */
   this.applyChangeset = function (changeset) {
     return this;
@@ -199,7 +199,7 @@ Type.Contents = function (type) {
   /**
    *
    * @param {string} changeset
-   * @returns {Type.Contents}
+   * @returns {Type.Writer}
    */
   this.removeChangeset = function (changeset) {
     this.applyChangeset(this._invertChangeset(changeset));
@@ -209,13 +209,13 @@ Type.Contents = function (type) {
   /**
    *
    * @param {string} changeset
-   * @returns {Type.Contents}
+   * @returns {Type.Writer}
    * @private
    */
   this._invertChangeset = function (changeset) {
 
   };
 
-}).call(Type.Contents.prototype);
+}).call(Type.Writer.prototype);
 
-module.exports = Type.Contents;
+module.exports = Type.Writer;

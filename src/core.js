@@ -34,9 +34,9 @@ function Type(options) {
   this.options(options);
 
   // Set up core modules
-  this._contents   = new Type.Contents(this);
-  this._formatting = new Type.Formatting(this);
-  this._caret      = new Type.Caret(this._root);
+  this._contents   = new Type.Writer(this);
+  this._formatting = new Type.Formatter(this);
+  this._caret      = new Type.Caret(this);
   this._selection  = new Type.Selection(this);
   this._input      = new Type.Input(this);
   //this._caret      = new Type.Caret(this._root);
@@ -47,6 +47,14 @@ function Type(options) {
 }
 
 (function () {
+
+  /**
+   * Allows fast detection if an object is a Type Editor
+   * instance (or class)
+   *
+   * @type {boolean}
+   */
+  this.typeEditor = true;
 
   /**
    * Holds the default options for every editor. These options
@@ -164,7 +172,7 @@ function Type(options) {
 
   /**
    * Getter for this instance's text.
-   * @returns {Type.Contents}
+   * @returns {Type.Writer}
    */
   this.getContents = function () {
     return this._contents;
@@ -172,7 +180,7 @@ function Type(options) {
 
   /**
    * Getter for this instance's formatting class instance.
-   * @returns {Formatting}
+   * @returns {Formatter}
    */
   this.getFormatting = function () {
     return this._formatting;
