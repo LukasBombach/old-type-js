@@ -203,10 +203,16 @@ function Type(options) {
 Type.fn = Type.prototype;
 
 /**
- *
+ * The namespace for Type events
  * @type {{}}
  */
 Type.Events = {};
+
+/**
+ * The namespace for Type actions
+ * @type {{}}
+ */
+Type.Actions = {};
 
 /**
  * Module Exports for CommonJs
