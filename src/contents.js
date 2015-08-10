@@ -41,13 +41,38 @@ Type.Contents = function (type) {
   /**
    * Inserts DOM nodes at the offset of a text node
    *
-   * @param textNode
-   * @param offset
-   * @param {String} htmlString - A string containing HTML
+   * @param {Text} textNode - The text node which will be split and in which
+   *     the DOM will be inserted.
+   * @param {Number} offset - The text offset at which the DOM should be
+   *     inserted.
+   * @param {Node|[Node]|NodeList|String} nodes - Either a {Node}, an array
+   *     of {Node}s, a {NodeList} or a string containing HTML that will be
+   *     inserted at the given offset in  a text node.
    * @returns {Type.Contents} - This instance
    */
-  this.insertHTML = function (textNode, offset, htmlString) {
-    var nodes = Type.DomUtilities.parseHTML(htmlString);
+  this.insertHTML = function (textNode, offset, nodes) {
+
+    var i, parent, insertBeforeNode;
+
+    nodes = typeof nodes === 'string' ? Type.DomUtilities.parseHTML(nodes) : nodes;
+    nodes = nodes.length ? nodes : [nodes];
+
+    insertBeforeNode = textNode.splitText(offset);
+    parent = insertBeforeNode.parentNode;
+
+    if (nodes[nodes.length-1].nodeType === Node.TEXT_NODE) {
+      insertBeforeNode.nodeValue = nodes.pop().nodeValue + insertBeforeNode.nodeValue;
+    }
+
+    for (i = nodes.length - 1; i >= 1; i -= 1) {
+      parent.insertBefore(nodes[i], insertBeforeNode);
+      insertBeforeNode = nodes[i];
+    }
+
+    if (nodes[0].nodeType === Node.TEXT_NODE) {
+      textNode.nodeValue += nodes[0].nodeValue;
+    }
+
     return this;
   };
 
