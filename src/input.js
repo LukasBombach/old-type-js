@@ -38,6 +38,7 @@ Type.Input = function (type) {
     this._filters.cmd = new Type.Input.Filter.Command(this._type, this);
     this._filters.caret = new Type.Input.Filter.Caret(this._type, this);
     this._filters.remove = new Type.Input.Filter.Remove(this._type, this);
+    this._filters.lineBreaks = new Type.Input.Filter.LineBreaks(this._type, this);
     return this;
   };
 
