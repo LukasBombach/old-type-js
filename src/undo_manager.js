@@ -10,6 +10,7 @@ var Type = require('./core');
 Type.UndoManager = function (type) {
   this._type = type;
   this._stack = [];
+  this._pointer = 0;
 };
 
 (function () {
@@ -17,31 +18,47 @@ Type.UndoManager = function (type) {
   /**
    *
    * @param {Type.Actions.Type} action
-   * @returns {*}
+   * @returns {Type.UndoManager}
    */
-  this.execute = function (action) {
+  this.push = function (action) {
+    this._stack.length = this._pointer;
     this._stack.push(action);
-    action.execute();
     return this;
   };
 
   /**
    *
    * @param {number} steps
-   * @returns {Type.Writer}
+   * @returns {Type.UndoManager}
    */
   this.undo = function (steps) {
     steps = steps === null ? 1 : steps;
+    for (steps; steps > 0; steps -= 0) {
+      this._stack[this._pointer].undo();
+      this._pointer--;
+      if (this._pointer < 0) {
+        this._pointer = 0;
+        break;
+      }
+    }
     return this;
   };
 
   /**
    *
    * @param {number} steps
-   * @returns {Type.Writer}
+   * @returns {Type.UndoManager}
    */
   this.redo = function (steps) {
     steps = steps === null ? 1 : steps;
+    for (steps; steps > 0; steps -= 0) {
+      this._stack[this._pointer].execute();
+      this._pointer++;
+      if (this._pointer > this._stack.length) {
+        this._pointer = this._stack.length;
+        break;
+      }
+    }
     return this;
   };
 

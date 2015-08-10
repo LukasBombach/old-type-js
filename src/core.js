@@ -34,12 +34,13 @@ function Type(options) {
   this.options(options);
 
   // Set up core modules
-  this._writer    = new Type.Writer(this);
-  this._formatter = new Type.Formatter(this);
-  this._content   = new Type.Content(this);
-  this._caret     = new Type.Caret(this);
-  this._selection = new Type.Selection(this);
-  this._input     = new Type.Input(this);
+  this._writer       = new Type.Writer(this);
+  this._formatter    = new Type.Formatter(this);
+  this._undoManager  = new Type.UndoManager(this);
+  this._content      = new Type.Content(this);
+  this._caret        = new Type.Caret(this);
+  this._selection    = new Type.Selection(this);
+  this._input        = new Type.Input(this);
 
   // Trigger events
   Type.trigger('ready', this);
@@ -172,7 +173,15 @@ function Type(options) {
 
   /**
    * Getter for this instance's content.
-   * @returns {Type.Writer}
+   * @returns {Type.UndoManager}
+   */
+  this.getUndoManager = function () {
+    return this._undoManager;
+  };
+
+  /**
+   * Getter for this instance's content.
+   * @returns {Type.Content}
    */
   this.getContent = function () {
     return this._content;

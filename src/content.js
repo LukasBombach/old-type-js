@@ -8,8 +8,7 @@ var Type = require('./core');
  * @constructor
  */
 Type.Content = function (type) {
-  this._type = type;
-  this._stack = [];
+  this._undoManager = type.getUndoManager();
 };
 
 (function () {
@@ -20,7 +19,7 @@ Type.Content = function (type) {
    * @returns {*}
    */
   this.execute = function (action) {
-    this._stack.push(action);
+    this._undoManager.push(action);
     action.execute();
     return this;
   };
