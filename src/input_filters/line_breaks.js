@@ -32,6 +32,7 @@ Input.Filter.LineBreaks = function (type, input) {
   this.insertLineBreak = function (e) {
     var br = document.createElement('br');
     this._contents.insertHTML(this._caret.textNode, this._caret.offset, br);
+    this._caret.moveRight();
     e.cancel();
   };
 
