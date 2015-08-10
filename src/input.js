@@ -12,7 +12,8 @@ var Type = require('./core');
 Type.Input = function (type) {
 
   this._type = type;
-  this._contents = type.getContents();
+  this._content = type.getContent();
+  this._writer = type.getWriter();
   this._caret = type.getCaret();
   this._selection = this._type.getSelection();
 
@@ -186,7 +187,9 @@ Type.Input = function (type) {
    * @private
    */
   this._onInput = function () {
-    this._contents.insertText(this._caret.textNode, this._caret.offset, this._el.textContent);
+    //this._writer.insertText(this._caret.textNode, this._caret.offset, this._el.textContent);
+    var insertion = new Type.Actions.Insert(this._type, this._caret.textNode, this._caret.offset, this._el.textContent);
+    this._content.execute(insertion);
     this._caret._setOffset(this._caret.offset + this._el.textContent.length); // todo better api
     this._el.innerHTML = '';
     return this;

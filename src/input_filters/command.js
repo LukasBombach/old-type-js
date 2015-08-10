@@ -14,7 +14,7 @@ var Input = require('../input');
  */
 Input.Filter.Command = function (type) {
   this._selection = type.getSelection();
-  this._formating = type.getFormatting();
+  this._formating = type.getFormatter();
 };
 
 (function () {

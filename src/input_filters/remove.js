@@ -13,7 +13,7 @@ var Input = require('../input');
  */
 Input.Filter.Remove = function (type, input) {
   this._root = type.getRoot();
-  this._contents = type.getContents();
+  this._writer = type.getWriter();
   this._caret = type.getCaret();
   this._selection = type.getSelection();
 };
@@ -46,7 +46,7 @@ Input.Filter.Remove = function (type, input) {
     }
 
     this._caret.setOffset(newOffset);
-    this._contents.remove(range);
+    this._writer.remove(range);
 
     e.cancel();
 

@@ -22,11 +22,16 @@ require('./selection_overlay');
 require('./selection');
 require('./input');
 require('./events/type');
+
 require('./events/input');
 require('./input_filters/caret');
 require('./input_filters/command');
 require('./input_filters/remove');
 require('./input_filters/line_breaks');
+
+require('./content');
+require('./actions/type');
+require('./actions/insert');
 
 // Expose Type
 window.Type = Type;

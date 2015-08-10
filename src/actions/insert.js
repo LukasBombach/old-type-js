@@ -15,7 +15,7 @@ var Type = require('../core');
  * @constructor
  */
 Type.Actions.Insert = function (type, textNode, offset, text) {
-  this._writer = type.getContents();
+  this._writer = type.getWriter();
   this._textNode = textNode;
   this._offset = offset;
   this._text = text;
