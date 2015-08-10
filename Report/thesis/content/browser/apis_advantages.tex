@@ -25,7 +25,7 @@ HTML editing APIs modify and generate HTML. In the context of web development, u
 
 %The WHATWG discussed dedicated rich-text inputs, for instance as an extension of the \texttt{textarea} element. Offering a native input for general rich-text input brings up the question which use cases this input conforms. For a forum software, it might be useful to generate ''BB'' code, while for other purposes other languages might be needed. Offering HTML editing APIs offers a semantically distinct solution, while still enabling a way to implement rich-text editing. %  Conforming the way HTML forms work, offering a native rich-text input, should send the native code that it generates to the server without further processing. That's why it would suck if it sent HTML for BB code editing.
 
-\subsection{Possbile third-party solutions for other languages}
+\subsection{Possible third-party solutions for other languages}
 \label{subsec:edit_api_adv_thir_party_lang}
 
 While HTML editing APIs can be used to generate HTML only, its design offers a way for third-party libraries to build on top of that and implement editors that write ''BB'' code (for instance) and use HTML only for displaying it as rich-text. A dedicated rich-text input might not offer this flexibility.

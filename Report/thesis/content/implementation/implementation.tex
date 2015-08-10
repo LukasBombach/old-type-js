@@ -14,15 +14,15 @@ There are no pre-made solutions or conventions suggesting how to design, structu
 
 \subsection{Gulp}
 
-Gulp is a Node.js-based task runnner that is widely used as a build system for web applications. For this library, Gulp taks are used to lint the source code, check code style rules and to concate and minify the library into a single file, that can be distributed to other developers.
+Gulp is a Node.js-based task runner that is widely used as a build system for web applications. For this library, Gulp tasks are used to lint the source code, check code style rules and to concatenate and minify the library into a single file, that can be distributed to other developers.
 
 \subsection{Building}
 
-Each file is written as a CommonJS module that will be concatenated using RequireJS in a designated Gulp task to a single file. RequireJS generates code structures around each module so that all modules can access one another. This will increase the library's file size. AMDclean is used to remove as much of this supporting code as possbible while maintaining the functionality. When all source code files have been concatinated and cleaned from RequireJS, it will be compressed using UglifyJS2. The resulting file has a low file size and can be distributed for productive use.
+Each file is written as a CommonJS module that will be concatenated using RequireJS in a designated Gulp task to a single file. RequireJS generates code structures around each module so that all modules can access one another. This will increase the library's file size. AMDclean is used to remove as much of this supporting code as possible while maintaining the functionality. When all source code files have been concatenated and cleaned from RequireJS, it will be compressed using UglifyJS2. The resulting file has a low file size and can be distributed for productive use.
 
 \subsection{Linting}
 
-JSLint is used to lint the source code before any concatenation happens. It will also check if the code conforms the JavaScript code conventions introduced by Douglas Crockford. The code mostly conforms these conventions, differing in the way the constructor pattern is implemented to favour better readability. Classes using the constructor pattern are implemented using the conventions of the Ace library and use the prefix convention\footnote{\url{https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Contributor\_s\_Guide/Private\_Properties\#Using\_Prefixes}} for private members.
+JSLint is used to lint the source code before any concatenation happens. It will also check if the code conforms the JavaScript code conventions introduced by Douglas Crockford. The code mostly conforms these conventions, differing in the way the constructor pattern is implemented to favor better readability. Classes using the constructor pattern are implemented using the conventions of the Ace library and use the prefix convention\footnote{\url{https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Contributor\_s\_Guide/Private\_Properties\#Using\_Prefixes}} for private members.
 
 
 %\section{Coding conventions}
@@ -34,7 +34,7 @@ JSLint is used to lint the source code before any concatenation happens. It will
 
 \subsection{Code formatting}
 
-JSCS is used to check the code to conform specific formatting conventions---for instance the number of spaces used for indentation or a consistend use of CamelCase. Along with JSLint checking for Douglas Crockford's conventions this ensures a consistend coding style across all files and classes.
+JSCS is used to check the code to conform specific formatting conventions---for instance the number of spaces used for indentation or a consistent use of CamelCase. Along with JSLint checking for Douglas Crockford's conventions this ensures a consistent coding style across all files and classes.
 
 \subsection{ECMAScript 6} 
 
@@ -96,14 +96,14 @@ The \code{Type} class is the base class (see \refsubsec{subsec:modular_and_oop})
 \subsection{Instantiation and usage}
 \label{subsec:instantiation_usage}
 
-To develop an editor with the library, the \code{Type} base class must be instantiated. As discussed in \refsubsec{subsec:api_design_handling_use_cases}, all of the libary's functionality is provided by this class. It exposes its features as high-level instance methods. The \code{Type} class is exposed to the \code{window} namespace and is thereby globally accessible. On instantiation it must be passed an \code{HTMLElement}, which's contents will act as the editor's rich-text content and all rich-text operations will be performed on it. Just like with HTML editing APIs, developers can build user interfaces around the editable element. An optional second parameter can be passed to the class to define settings for the editor's instance.
+To develop an editor with the library, the \code{Type} base class must be instantiated. As discussed in \refsubsec{subsec:api_design_handling_use_cases}, all of the library's functionality is provided by this class. It exposes its features as high-level instance methods. The \code{Type} class is exposed to the \code{window} namespace and is thereby globally accessible. On instantiation it must be passed an \code{HTMLElement}, which's contents will act as the editor's rich-text content and all rich-text operations will be performed on it. Just like with HTML editing APIs, developers can build user interfaces around the editable element. An optional second parameter can be passed to the class to define settings for the editor's instance.
 
 \begin{lstlisting}[language=JavaScript, caption=Type instantiation, label=lst:type_instantiation]
 var element = document.getElementById("myElement");
 var editor = new Type(element, { paste: "text" });
 \end{lstlisting}
 
-The \code{editor} instance variable now offers methods to format, insert and remove text, manipulate the caret and the selection, dynamically change settings and control undo/redo capabilites as well as trigger clipboard commands. The complete API is listed in Figure ABC. For example, to format the characters 10 to 20 as bold and move the caret behind the formatted text, the following methods can be executed:
+The \code{editor} instance variable now offers methods to format, insert and remove text, manipulate the caret and the selection, dynamically change settings and control undo/redo capabilities as well as trigger clipboard commands. The complete API is listed in Figure ABC. For example, to format the characters 10 to 20 as bold and move the caret behind the formatted text, the following methods can be executed:
 
 \begin{lstlisting}[language=JavaScript, caption=Example commands to format text, label=lst:type_format_example]
 editor.selection(10, 20);
@@ -117,13 +117,13 @@ This is just an example to demonstrate the API. It should be noted that the API 
 editor.format("<strong />", 10, 20).caret(20);
 \end{lstlisting}
 
-With the second optional parameter, settings can be passed to the Type class on instantiation to determine the editor's behavior. As for the implementation of this thesis two settings are avaialable: To determine the behavior on paste eventsand to turn off default keyboard shortcuts. A full description can be found in figure ABC. Passing options to the editor can be useful for extensions which can access any option passed be accessing the \code{Type} base class.
+With the second optional parameter, settings can be passed to the Type class on instantiation to determine the editor's behavior. As for the implementation of this thesis two settings are available: To determine the behavior on paste events and to turn off default keyboard shortcuts. A full description can be found in figure ABC. Passing options to the editor can be useful for extensions which can access any option passed be accessing the \code{Type} base class.
 
 \subsection{Namespace and references} 
 \label{subsec:namespace_and_refs}
 
 %The \code{Type} class creates a namespace providing a structure for other classes used in the library and so that these classes do not pollute the global namespace and avoid possible name conflicts. 
-The \code{Type} class creates a namespace for other classes used in the library. In JavaScript, functions are first-class objects, namespaces are objects and any object is a namespace. This way, the \code{Type} \code{Function} object (the class itself) can act as a valid namespace. CKEditor takes the same apporach and attaches each module to the \code{CKEDITOR} base class. Any of the classes listed in \refsection{sec:modules} are attached to the \code{Type} class this way. As an exmple, listing \ref{lst:type_declaration_example} shows the declaration of the \code{Type} base class as well as the declarations of the classes \code{Caret}, \code{Range} and \code{Environment}:
+The \code{Type} class creates a namespace for other classes used in the library. In JavaScript, functions are first-class objects, namespaces are objects and any object is a namespace. This way, the \code{Type} \code{Function} object (the class itself) can act as a valid namespace. CKEditor takes the same approach and attaches each module to the \code{CKEDITOR} base class. Any of the classes listed in \refsection{sec:modules} are attached to the \code{Type} class this way. As an example, listing \ref{lst:type_declaration_example} shows the declaration of the \code{Type} base class as well as the declarations of the classes \code{Caret}, \code{Range} and \code{Environment}:
 
 \begin{lstlisting}[language=JavaScript, caption={Declaration of Caret, Range and Environment classes}, label=lst:type_declaration_example]
 // Declaration of the Type base class
@@ -139,7 +139,7 @@ The namespace provides a structure for the classes of the library, prevents the 
 
 %Section \refsection{sec:module_architecture} discusses how Type's classes interact to provide its rich-text functionality. 
 
-On instantiation, the \code{Type} class, in turn, will instantiate classes of its namepsace that implement its rich-text editing functionality. The \code{Type} instance will pass a reference to itself to all classes and offers getters for every class instance it created, to provide mutual access for each class of the library.
+On instantiation, the \code{Type} class, in turn, will instantiate classes of its namespace that implement its rich-text editing functionality. The \code{Type} instance will pass a reference to itself to all classes and offers getters for every class instance it created, to provide mutual access for each class of the library.
 
 %Apart from providing a namespace for all classes, a type instance provides references of all classes it 
 
@@ -154,7 +154,7 @@ On instantiation, the \code{Type} class, in turn, will instantiate classes of it
 \subsection{Exposal of Type's \code{prototype}}
 \label{subsec_fn_exposal}
 
-While Type's functionality is implemented through classes within its namespace, this does not expose its functionality to its instance-API. With the constructor pattern, all methods in the \code{prototype} of the \code{Type} class will be available as instance methods. In a simple approach, the library's API can be implemented directly in the implementation of the \code{Type} class. This contradicts the modular approach of the library. jQuery established an effective principle for extending its API. It exposes the library's \code{prototype} with a shorthand attribute as \code{jQuery.fn}. This way, other modules can extend the \code{prototype} easily and add methods to the libary's API. Type follows the same principle and exposes its \code{prototype}  as \code{Type.fn}. The \code{prototype} could also be accessed without exposing it with a shorthand attribute, but this is intended to clearify its purpose similar to jQuery and encourage developers to extend it.
+While Type's functionality is implemented through classes within its namespace, this does not expose its functionality to its instance-API. With the constructor pattern, all methods in the \code{prototype} of the \code{Type} class will be available as instance methods. In a simple approach, the library's API can be implemented directly in the implementation of the \code{Type} class. This contradicts the modular approach of the library. jQuery established an effective principle for extending its API. It exposes the library's \code{prototype} with a shorthand attribute as \code{jQuery.fn}. This way, other modules can extend the \code{prototype} easily and add methods to the library's API. Type follows the same principle and exposes its \code{prototype}  as \code{Type.fn}. The \code{prototype} could also be accessed without exposing it with a shorthand attribute, but this is intended to clarify its purpose similar to jQuery and encourage developers to extend it.
 
   %jQuery's \code{prototype}---as well as Type's \code{prototype}---can be extended even without exposing it as an attribute, but apart from providing a more convenient way to do so, primarily, jQuery established a simple and yet powerful paradigm that encourages other developers to extend the library's API.
 
@@ -202,7 +202,7 @@ Similar to the principles of MVC in which the controllers should be kept small a
 
 %When the \code{Type} base class will be instantiated, it in turn instatiates a number of classes passing each instance a reference to itself. As described in \refsubsec{subsec:namespace_and_refs} the base class provides setters for each class instance to allow the instantiated classes to access one another. For its basic functionality, Type instantiates the classes \code{Contents}, \code{Formatting}, \code{Caret}, \code{Selection} and \code{Input}.
 
-To enable reading the user's input and writing it to the editor's contents, the classes \code{Input}, \code{Contents}, \code{Writer}, \code{Formatter}, \code{Caret} and \code{Selection} will be instantied by the \code{Type} base class.
+To enable reading the user's input and writing it to the editor's contents, the classes \code{Input}, \code{Contents}, \code{Writer}, \code{Formatter}, \code{Caret} and \code{Selection} will be instantiated by the \code{Type} base class.
 
 
 \begin{figure}[!htb]
@@ -220,7 +220,7 @@ To enable reading the user's input and writing it to the editor's contents, the 
 %\item Input
 %\end{itemize}
 
-\noindent The \code{Input} class will listen to keyboard input and mouse input. It is responsible for setting the caret and the selection using the \code{Caret} and \code{Selection} classes and uses them to determine which part of the text should be changed or formatted when the user enters text, uses keyboard shortcuts or uses his or her mouse or touch device. It passes formalized edit operations to the \code{Contents} class which will emit events for an \code{UndoManager} that enables undo and redo operations. The \code{Contents} class uses the \code{Writer} and \code{Formatter} instances to manipulate the visible text on the website. These classes perform the actual DOM operations on the contents of the element passed to Type on instiation (see \refsubsec{subsec:instantiation_usage}).
+\noindent The \code{Input} class will listen to keyboard input and mouse input. It is responsible for setting the caret and the selection using the \code{Caret} and \code{Selection} classes and uses them to determine which part of the text should be changed or formatted when the user enters text, uses keyboard shortcuts or uses his or her mouse or touch device. It passes formalized edit operations to the \code{Contents} class which will emit events for an \code{UndoManager} that enables undo and redo operations. The \code{Contents} class uses the \code{Writer} and \code{Formatter} instances to manipulate the visible text on the website. These classes perform the actual DOM operations on the contents of the element passed to Type on instantiation (see \refsubsec{subsec:instantiation_usage}).
 
 %class allows adding and removing text and the \code{Formatting} class allows to apply formattings, both using DOM operations. The \code{Changes} class will use these classes to to alter the text according to the change it it should apply.
 
@@ -247,19 +247,19 @@ There are various input methods with which users can interact with native inputs
 \item Remote control input (on smart TVs)
 \end{itemize}
 
-When mimicking a native input, in a best-case scenario, all these input methods should be accounted for. Fetching input includes two scenarios: The user clicks, touches or focuses the input in any way and does so at any position inside the input. If the user points (touches, clicks, etc.) in the middle of the text, the caret should move to that position. In environments without hardware keyboards, the libarary must ensure that a virutal keyboards show up. Once the input is focused, text input must be fetched and written to the contents. There are various options to fetch user input, which will be discussed in the following sections.
+When mimicking a native input, in a best-case scenario, all these input methods should be accounted for. Fetching input includes two scenarios: The user clicks, touches or focuses the input in any way and does so at any position inside the input. If the user points (touches, clicks, etc.) in the middle of the text, the caret should move to that position. In environments without hardware keyboards, the library must ensure that a virtutal keyboards show up. Once the input is focused, text input must be fetched and written to the contents. There are various options to fetch user input, which will be discussed in the following sections.
 
 \subsection{Events} 
 
 One way to fetch user input is by listening to events.
 
-\paragraph{Keyboad} Text input can be read through \texttt{KeyboardEvent}s. Keyboard events will be triggered for virtual keyboards and for hardware keyboards. When the user presses a key, the event can be stopped and the according characters can be inserted at the offset of the caret. As a downside, listeners for keyboard events cannot be bound to an element that is not a native text input, that means keyboard events must be listened to on the \texttt{document} level. This does not only have (minor) performance downsides but als requires more logic to decide whether a keyboard input should be processed and ultimatively stopped or ignored and allowed to bubble to other event listeners of a website. In particular, there can be edge cases, where even though a keyboard event should write contents to the editor, the event itself is supposed to trigger other methods that are not part of the editor. Keyboard events are supported by all major browsers across all devices.
+\paragraph{Keyboard} Text input can be read through \texttt{KeyboardEvent}s. Keyboard events will be triggered for virtual keyboards and for hardware keyboards. When the user presses a key, the event can be stopped and the according characters can be inserted at the offset of the caret. As a downside, listeners for keyboard events cannot be bound to an element that is not a native text input, that means keyboard events must be listened to on the \texttt{document} level. This does not only have (minor) performance downsides but als requires more logic to decide whether a keyboard input should be processed and ultimately stopped or ignored and allowed to bubble to other event listeners of a website. In particular, there can be edge cases, where even though a keyboard event should write contents to the editor, the event itself is supposed to trigger other methods that are not part of the editor. Keyboard events are supported by all major browsers across all devices.
 
 \paragraph{Mouse (pointer) and touch} To support clicking or touching inside the editor's contents \texttt{MouseEvent}s and \texttt{TouchEvent}s can be used. Mouse events are supported on all major desktop browsers and all mobile browsers support touch events. Both event types support reading the coordinates indicating where the click or touch has been performed.
 
-\paragraph{Remote controls} Although some smart TVs offer keyboards, mice, pointers similar to Nintendo's Wii remote, input via smartphone apps and many other input devides, button-based remote controls are offered with almost any smart TV and remain a edge case for interacting with a text editor. In such an enviroment, users commonly switch between elements by selecting focusable elements with a directional pad. Only using events would not account for this since there would be no focusable element representing the editor. Recent browsers on Samsung's and LG's smart TVs are based on WebKit\footnote{\url{http://www.samsungdforum.com/Devtools/Sdkdownload}, last checked on 07/22/2015} while Sony's TVs use Opera. Before 2012 Samsung's browser was based on Gecko. All of these browsers and browser engines supprt keyboard events triggered by virtual keyboards to fetch their input.
+\paragraph{Remote controls} Although some smart TVs offer keyboards, mice, pointers similar to Nintendo's Wii remote, input via smartphone apps and many other input divides, button-based remote controls are offered with almost any smart TV and remain a edge case for interacting with a text editor. In such an environment, users commonly switch between elements by selecting focusable elements with a directional pad. Only using events would not account for this since there would be no focusable element representing the editor. Recent browsers on Samsung's and LG's smart TVs are based on WebKit\footnote{\url{http://www.samsungdforum.com/Devtools/Sdkdownload}, last checked on 07/22/2015} while Sony's TVs use Opera. Before 2012 Samsung's browser was based on Gecko. All of these browsers and browser engines support keyboard events triggered by virtual keyboards to fetch their input.
 
-\paragraph{Clipboard} Another problem with relying entirely on events is the lack of native clipboard capabilities. Unless a native text input (including elememts with enabled editing mode) is focused, shortcut keys for pasting will not trigger a paste event and the mouse's context menu will not offer an option for pasting. % \textit{Recent versions of Chrome, Opera and Android Browser\footnote{\url{http://caniuse.com/\#feat=clipboard}, last checked on 07/22/2015} allow triggering arbitrary paste events on elements in editing mode thereby read the cliboard contents. With this, shortcuts could be enabled with JavaScript and instead of the native context menu, a customly build context menu using HTML could be shown that allows the user to paste, but this only works on elements in editing mode and only in these three browsers.}
+\paragraph{Clipboard} Another problem with relying entirely on events is the lack of native clipboard capabilities. Unless a native text input (including elements with enabled editing mode) is focused, shortcut keys for pasting will not trigger a paste event and the mouse's context menu will not offer an option for pasting. % \textit{Recent versions of Chrome, Opera and Android Browser\footnote{\url{http://caniuse.com/\#feat=clipboard}, last checked on 07/22/2015} allow triggering arbitrary paste events on elements in editing mode thereby read the cliboard contents. With this, shortcuts could be enabled with JavaScript and instead of the native context menu, a customly build context menu using HTML could be shown that allows the user to paste, but this only works on elements in editing mode and only in these three browsers.}
 
 \subsection{Hidden native input fields} 
 
@@ -277,22 +277,22 @@ As discussed in \refsection{sec:approaches_for_imitating_native_components}, the
 
 \subsection{Implementation}
 
-The \code{textarea} is created when the editor gets instantiated. Since browsers scroll the \code{textarea} into view when it receives the focus, it is positioned in the visual representation of the editor, scrolling the editor into view\footnote{This does not mean the editor will be scrolled into view on instantiation, but when the user focuses ist, for example with the tab key.}. This perfectly mimicks the browser's native behavior. To maintain the illusion that the user acutally writes inside the visual represenation of the editor the \code{textarea} is hidden.
+The \code{textarea} is created when the editor gets instantiated. Since browsers scroll the \code{textarea} into view when it receives the focus, it is positioned in the visual representation of the editor, scrolling the editor into view\footnote{This does not mean the editor will be scrolled into view on instantiation, but when the user focuses ist, for example with the tab key.}. This perfectly mimics the browser's native behavior. To maintain the illusion that the user actually writes inside the visual representation of the editor the \code{textarea} is hidden.
 
-\subsection{Focus} Whenever the user clicks inside the editors visible contents, the mimicked caret will be moved (see \refsubsec{subsec:caret}) to the according text position. To enable text input, the hidden \code{textarea} will be focused on click or touch events. The \code{textarea} is natively focusable using the tab key or a remote control on a smart TV. It will also trigger focus and blur events. This way, it is possible to display the caret when the \code{textarea} receives the focus and read its input as well as hiding the caret on blur and thereby perfectly mimick the native behavior for input events.
+\subsection{Focus} Whenever the user clicks inside the editors visible contents, the mimicked caret will be moved (see \refsubsec{subsec:caret}) to the according text position. To enable text input, the hidden \code{textarea} will be focused on click or touch events. The \code{textarea} is natively focusable using the tab key or a remote control on a smart TV. It will also trigger focus and blur events. This way, it is possible to display the caret when the \code{textarea} receives the focus and read its input as well as hiding the caret on blur and thereby perfectly mimic the native behavior for input events.
 
 \subsection{Virtual (on screen) keyboard support} The \code{textarea} will be focused when the user clicks or touches inside the editor as well as with the tab key and remote controls. Focusing a text input triggers the display of native virtual keyboards.
 
 \subsection{Pasting} 
 \label{subsec:input_textarea_pasting}
 
-When a the textarea is foucsed, pasting via keyboard shortcuts is natively available. To enable pasting with the context menu, CodeMirror demonstrates a technique where the \code{textarea} will be moved to the pointer's position on a \code{mousedown} event. Following the order of \code{MouseEvent}s, this will be completed before the context menu will be triggerd. This way it will be triggered on the \code{textarea} and contain a paste option. The paste event will insert the contents from the clipboard to the textarea from which the contents can be read.
+When a the textarea is focused, pasting via keyboard shortcuts is natively available. To enable pasting with the context menu, CodeMirror demonstrates a technique where the \code{textarea} will be moved to the pointer's position on a \code{mousedown} event. Following the order of \code{MouseEvent}s, this will be completed before the context menu will be triggered. This way it will be triggered on the \code{textarea} and contain a paste option. The paste event will insert the contents from the clipboard to the textarea from which the contents can be read.
 
 \subsection{Reading input} \code{textarea} elements support \code{input} events which can be used to read the text entered by the user. The input can be processed as discussed in \refsection{sec:module_architecture} and be removed from the textarea. In practice, this means that once a single character has been entered in the \code{textarea} it will be read from the \code{textarea}, inserted into the editor's contents and the \code{textarea} will be cleared again. Input reading requires further processing before it can be passed on to trigger a change in the editor's contents. The specifics on processing the input will be discussed in section \refsection{sec:input_pipeline}.
 
 \subsection{Editing mode} Using a \code{textarea} element allows plain-text input only. This is not a problem for regular keyboard input but rich-text contents pasted from the clipboard will be inserted as plain text and all formattings will be removed. To come around this issue, a \code{div} element in editing mode can be used instead of a \code{textarea} element.
 
-As discussed in \refpart{part:discussion} HTML editing APIs are very problematic and a key factor of this thesis is implementing a rich-text editor without using them. However using an element in editing mode only for input reading is not affected by these issues. Whenever a single character will be entered it will be read and immediately removed from the editable element. Formatting commands will not be used at all. Problematic text input behavior, for instance different markup that will be generated by the entering a line break, will not occur since the the editable area will only be used for reading input, the text that will be inserted in the editor will be generated by the library (see \refsection{sec:input_pipeline}). The only difference between a \code{textarea} and the editable element lies in the diffent contents it accepts for pasting. \refsubsec{subsec:editing_disadvantages_clipboard} discusses the problem that text pasted from the clipboard cannot be processed with native APIs across all browser. In this case, the clipboard contents will be pasted to a designated field from which it can be read, isolated from the editors contents, which solves this problem (see section \refsection{sec:impl_pasting}).
+As discussed in \refpart{part:discussion} HTML editing APIs are very problematic and a key factor of this thesis is implementing a rich-text editor without using them. However using an element in editing mode only for input reading is not affected by these issues. Whenever a single character will be entered it will be read and immediately removed from the editable element. Formatting commands will not be used at all. Problematic text input behavior, for instance different markup that will be generated by the entering a line break, will not occur since the the editable area will only be used for reading input, the text that will be inserted in the editor will be generated by the library (see \refsection{sec:input_pipeline}). The only difference between a \code{textarea} and the editable element lies in the different contents it accepts for pasting. \refsubsec{subsec:editing_disadvantages_clipboard} discusses the problem that text pasted from the clipboard cannot be processed with native APIs across all browser. In this case, the clipboard contents will be pasted to a designated field from which it can be read, isolated from the editors contents, which solves this problem (see section \refsection{sec:impl_pasting}).
 
 
 %This does not cause any of the issues discussed in \refsection{sec:disadvantages_of_html_editing_apis}. Formatting and generating HTML, the related API are implemented though JavaScript and not through HTML editing APIs. The contents of the editor are not directly affected by the editing mode and its restrictions. The (known) bugs of HTML editing APIs do not affect text input or the paste event itself. The issues arise with pasting and HTML editing APIs are related to controlling process of pasting, which happens after the HTML editing API related pasting, by reading from the \code{div} element and is implemented independently of the editing API though the input pipeline (see \refsection{sec:input_pipeline}).
@@ -310,17 +310,17 @@ As discussed in \refpart{part:discussion} HTML editing APIs are very problematic
 \label{fig:type_base_components}
 \end{figure}
 
-Before the text read from the hidden input field will be passed on to the \code{Contents} class, it will be passed though a series of \code{Filter}s, called the ''input pipeline''. The input pipeline has 3 basic responsibilites.
+Before the text read from the hidden input field will be passed on to the \code{Contents} class, it will be passed though a series of \code{Filter}s, called the ''input pipeline''. The input pipeline has 3 basic responsibilities.
 
 \begin{itemize}
-\item Stop and dispatch input that that shoud trigger functions of the library
+\item Stop and dispatch input that that should trigger functions of the library
 \item Implement rich-text editing behavior
 \item Filter and transform text
 \end{itemize}
 
-The input pipeline is part of the \code{Input} class. The pipeline itself is an array of input filters that can be added, removed and orderd with a designated API.
+The input pipeline is part of the \code{Input} class. The pipeline itself is an array of input filters that can be added, removed and ordered with a designated API.
 
-Input filters have a public API that specifies for which input they should be called. For instance, a filter can specify to be called when the user presses the \keystroke{ctrl}\keystroke{s} key combination. A filter can specify a handler for the input. For pressing \keystroke{ctrl}\keystroke{s}, a filter can specifiy to call a ''save'' function. The input is passed to the filters as an event (see \refsubsec{subsec:input_event}) that can be stopped from bubbling. This way it can be prevented that pressing \keystroke{ctrl}\keystroke{s} will also insert an ''s'' character to the editor. The order in which filters will be called is important. Some filters process the input and must cancel the event not only to prevent a character to be inserted, but also to prevent other filters from taking action.
+Input filters have a public API that specifies for which input they should be called. For instance, a filter can specify to be called when the user presses the \keystroke{ctrl}\keystroke{s} key combination. A filter can specify a handler for the input. For pressing \keystroke{ctrl}\keystroke{s}, a filter can specify to call a ''save'' function. The input is passed to the filters as an event (see \refsubsec{subsec:input_event}) that can be stopped from bubbling. This way it can be prevented that pressing \keystroke{ctrl}\keystroke{s} will also insert an ''s'' character to the editor. The order in which filters will be called is important. Some filters process the input and must cancel the event not only to prevent a character to be inserted, but also to prevent other filters from taking action.
 
 
 %JavaScript does not support the concept of \code{Interfaces} and although the constructor pattern allows class-like structures, it does not support classical inheritance. Both can be implemented through supporting constructs and the \code{Utilities} class (see \refsection{sec:utilities_class}) implements a method for the latter. \textit{REWRITE CORRECT} Instead, each input filter registers and specifies for which input should be called. 
@@ -338,7 +338,7 @@ The basic filters implemented for this library will be listed hereinafter, group
 
 \subsection{Triggering functions}
 
-\paragraph{Caret} Commonly, when a user presses one of the arrow keys inside a text, the caret will be moved and of course, in a browser eivironment, this is not different. To mimick this behavior arrow key input will be intercepted by the \code{Caret} input filter class, which will move the caret that has been instantiated by the \code{Type} base class (see \refsection{sec:module_architecture}). It will also account for modifier keys and the operating system used and move the caret accordingly.
+\paragraph{Caret} Commonly, when a user presses one of the arrow keys inside a text, the caret will be moved and of course, in a browser environment, this is not different. To mimic this behavior arrow key input will be intercepted by the \code{Caret} input filter class, which will move the caret that has been instantiated by the \code{Type} base class (see \refsection{sec:module_architecture}). It will also account for modifier keys and the operating system used and move the caret accordingly.
 
 
 \paragraph{Command} The \code{Command} input filter class checks for and intercepts keyboard shortcuts commonly used for text formatting. 
@@ -351,7 +351,7 @@ The basic filters implemented for this library will be listed hereinafter, group
 
 To format the text, by default, the tags \code{strong}, \code{i} and \code{u} will be used. Since in some cases this might not be desired, these default keyboard shortcuts must be opted-in by setting an option on instantiation (see \refsubsec{subsec:instantiation_usage}).
 
-The input event implements an abstraction to either check for the \keystroke{ctrl} key or the \keystroke{cmd} key depending on the operating system of the user (see \refsubsec{subsec:input_event}) so that the abovementioned shortcuts can (only) be triggered with the \keystroke{cmd} key instead of the \keystroke{ctrl} key on the OS X systems.
+The input event implements an abstraction to either check for the \keystroke{ctrl} key or the \keystroke{cmd} key depending on the operating system of the user (see \refsubsec{subsec:input_event}) so that the above-mentioned shortcuts can (only) be triggered with the \keystroke{cmd} key instead of the \keystroke{ctrl} key on the OS X systems.
 
 
 \subsection{Rich-text behavior}
@@ -360,17 +360,17 @@ As discussed in \refsubsec{subsec:concept_native_imitation}, most rich-text edit
 
 \paragraph{Headlines} When a user presses \keystroke{enter} while the caret is located at the end of a headline, a new text paragraph will be created behind the headline and the caret will be placed inside it.
 
-\paragraph{Lists} Pressing \keystroke{enter} inside a list item creates a new list item behind the current one and the caret weill be placed inside it.
+\paragraph{Lists} Pressing \keystroke{enter} inside a list item creates a new list item behind the current item and the caret will be placed inside it.
 
 \subsection{Filterring and transformation}
 
 \paragraph{Line Breaks} To display a line break in the contents of the editor a \code{br} or \code{p} tag must be inserted\footnote{To enforce a line break other tags. like the \code{div} tag can be used, but would not be semantically appropriate in this context}. When the user presses the \keystroke{enter} key it does not suffice to insert a carriage return and/or line feed. This input will be intercepted and instead a \code{br} tag will be inserted to the editor's contents. As discussed in \refsubsec{subsec:input_pipeline_overview}, it is important that this filter will be invoked after the \code{Headlines} and \code{Lists} filters, so they can apply their behavior and prevent this filter's behavior.
 
-\paragraph{Remove} To delete text from the editor the \code{Remove} filter checks for \keystroke{backspace} and \keystroke{del} key inputs. Depending on whether there is a text selection or not, it either deltes the selection's contents or one character left/right of the caret.
+\paragraph{Remove} To delete text from the editor the \code{Remove} filter checks for \keystroke{backspace} and \keystroke{del} key inputs. Depending on whether there is a text selection or not, it either deletes the selection's contents or one character left/right of the caret.
 
-\paragraph{Spaces} Browsers display adjacent spaces as a single space. This is an unusual behavoir for text editing. The \code{Spaces} input filter checks if adjacent spaces are being entered and inserts non-breaking spaces.
+\paragraph{Spaces} Browsers display adjacent spaces as a single space. This is an unusual behavior for text editing. The \code{Spaces} input filter checks if adjacent spaces are being entered and inserts non-breaking spaces.
 
-\subsection{Events} As an alternative apporach input filters could be implemented as input event handlers. With this, the same functionality could be achived without an input pipeline. A designated pipeline however provides a clearer mental model for processing the input as it allows a separation of concerns. An input filter has a specific purpose and context as compared to an arbitrary input event handler. It can also be made sure that filters will be called in the right order and that any input filter will be run before triggering an input event. This way input event handlers only receive actual text input for the editors contents while keyboard shortcuts and other keypresses have been filtered out.
+\subsection{Events} As an alternative approach input filters could be implemented as input event handlers. With this, the same functionality could be achieved without an input pipeline. A designated pipeline however provides a clearer mental model for processing the input as it allows a separation of concerns. An input filter has a specific purpose and context as compared to an arbitrary input event handler. It can also be made sure that filters will be called in the right order and that any input filter will be run before triggering an input event. This way input event handlers only receive actual text input for the editors contents while keyboard shortcuts and other keypresses have been filtered out.
 
 \subsection{Extendability} The input pipeline is intended to be extended. It serves as an entry point for other developers to process input. For this, the \code{Input} class provides an API to add, remove and reorder input filters.
 
@@ -392,9 +392,9 @@ As discussed in \refsubsec{subsec:hidden_native_input_fields}, all text input wi
 \item Process the clipboard contents and make them accessible to developers.
 \end{enumerate}
 
-\paragraph{Paste detection} As discussed in \refsubsec{subsec:editing_disadvantages_clipboard}, modern browsers trigger paste events, which can be listened to. Not all browsers allow reading contents from a paste event, but this is not necessary. The paste paste event will insert its contents into the designated input element from which its contents can be read, after the event has completed. Some older browsers, specifically Opera versions older than 12.1 do not trigger paste events at all. For legacy support, the browser can be tested for an available clipboard API and in case it is missing the regular text input can be checked for its text length. With the system discussed in \refsubsec{subsec:hidden_native_input_fields}, an input will always have the length of a single character. If the input is longer than that, this either means more than one character has been inserted or a single formatted character has been inserted\footnote{The input field will contain markup of more than one character}. These cases can only happen when contents have been pasted from the clipboard. However, if a sinlge unformatted character has been pasted, it cannot be distingushed from a regular text input. According to statcounter.com, 0.08\% of all internet users use Opera version older than 12.1. It is to be noted that the use case this feature is designed for, is to sanitize pasted input, which is not necessary for a single plain text character input, although it must be acknowlegded that there can be use cases requiring to register any paste event for other reasons.
+\paragraph{Paste detection} As discussed in \refsubsec{subsec:editing_disadvantages_clipboard}, modern browsers trigger paste events, which can be listened to. Not all browsers allow reading contents from a paste event, but this is not necessary. The paste paste event will insert its contents into the designated input element from which its contents can be read, after the event has completed. Some older browsers, specifically Opera versions older than 12.1 do not trigger paste events at all. For legacy support, the browser can be tested for an available clipboard API and in case it is missing the regular text input can be checked for its text length. With the system discussed in \refsubsec{subsec:hidden_native_input_fields}, an input will always have the length of a single character. If the input is longer than that, this either means more than one character has been inserted or a single formatted character has been inserted\footnote{The input field will contain markup of more than one character}. These cases can only happen when contents have been pasted from the clipboard. However, if a single unformatted character has been pasted, it cannot be distinguished from a regular text input. According to statcounter.com, 0.08\% of all internet users use Opera version older than 12.1. It is to be noted that the use case this feature is designed for, is to sanitize pasted input, which is not necessary for a single plain text character input, although it must be acknowledged that there can be use cases requiring to register any paste event for other reasons.
 
-\paragraph{Processing} To process the pasted contents and possibly prevent inserting the contents to the editor an \code{InputEvent} will be generated and passed through the input pipeline. Any filter can be implemented to treat or ignore paste events. Users of the library can set an option on instantiation to determine how to treat pasted contents. These options include to allow plain text only, to allow any formatted text or specifiying rules to allow specifc formattings only. A full API desciption can be found at ABC. These options are implemented in the \code{Paste} filter, that will either let any contents pass through (allow any formatting) or filter out specific or all HTML tags.
+\paragraph{Processing} To process the pasted contents and possibly prevent inserting the contents to the editor an \code{InputEvent} will be generated and passed through the input pipeline. Any filter can be implemented to treat or ignore paste events. Users of the library can set an option on instantiation to determine how to treat pasted contents. These options include to allow plain text only, to allow any formatted text or specifying rules to allow specific formattings only. A full API description can be found at ABC. These options are implemented in the \code{Paste} filter, that will either let any contents pass through (allow any formatting) or filter out specific or all HTML tags.
 
 %Damit rich text gepastet werden kann elememt in editing mode anstatt textarea verwedent. Kontrolle durch die Implementierung mit einem versteckten Eingabefeld. Erst mal gibt es ein reliable Paste event, was es in keinem Editor basierend auf contentEditable gibt. 2. Hat man volle Kontrolle über den Inhalt, was gepastet wird und was nicht. Und das ganze mit einer einfachen API. Pasting sollte internes event ausloesen.
 
@@ -405,21 +405,21 @@ As discussed in \refsubsec{subsec:hidden_native_input_fields}, all text input wi
 \section{Caret}
 \label{subsec:caret}
 
-The \code{Caret} class provides all functionality to place and move a caret in a text. It provides methods to be moved left, right, up and down in a text as well as to be placed at at specific position in a text. The visual representaion of the caret is a \code{div} element, styled to imitate a text caret. Using a CSS3 animation, it imitates the ''blinking'' common for native text carets.
+The \code{Caret} class provides all functionality to place and move a caret in a text. It provides methods to be moved left, right, up and down in a text as well as to be placed at at specific position in a text. The visual representation of the caret is a \code{div} element, styled to imitate a text caret. Using a CSS3 animation, it imitates the ''blinking'' common for native text carets.
 
-It is to be noted that the elements for carets as well as for the text selection will not be written to the editor's contents. As discussed in \refsection{sec:concept_markup}, the editor's contents should not contain any markup other than for the text itself. Instead this and all other elements will be stored in a designated \code{div} element at the end of the website's \code{body} and be positionied using CSS.
+It is to be noted that the elements for carets as well as for the text selection will not be written to the editor's contents. As discussed in \refsection{sec:concept_markup}, the editor's contents should not contain any markup other than for the text itself. Instead this and all other elements will be stored in a designated \code{div} element at the end of the website's \code{body} and be positioned using CSS.
 
  The challenge with this class is that it must be able to be moved within text and in any kind of formatting, represented by any combination of DOM nodes. To be moved across letters and text lines, the caret must take into account that:
 
 \begin{enumerate}
 \item Letters have different widths and heights
 \item Different fonts have different letter dimensions
-\item Different formattings like a headline, italicised text or text with a specifically set font size, result in different letter dimensions
+\item Different formattings like a headline, italicized text or text with a specifically set font size, result in different letter dimensions
 \end{enumerate}
 
 \code{CodeMirror} solves these problems by measuring each letter with the use of text ranges. Browsers offer a \code{Range} interface, a construct that has a start- and end-offset in a text. A range has methods to read its x- and y-coordinates on the website. These methods can be used to span a range over a single character, read its offsets and place the caret next to it using CSS and giving it the same height as the character.
 
-To move the caret left or right, the according characters left and right of its current offset will be measured using this method. To move it up and down across text lines, the caret must check the offsets of every character, starting from the character of the current offset, until it reaches the character above or below it that is closest to its horizontal position. As discussed in section \refsection{sec:cache}, a cache to store positions cannot be applied. The complexity of this is method $O(n)$, however in practice, the number if characters this will affect is limited by readability and usability of the text editor. Mobile devices, that generally have less performance than desktop machines, have smallers screens displaying less characters per line. While this is not necessarily the case, it can be expected by good software design.
+To move the caret left or right, the according characters left and right of its current offset will be measured using this method. To move it up and down across text lines, the caret must check the offsets of every character, starting from the character of the current offset, until it reaches the character above or below it that is closest to its horizontal position. As discussed in section \refsection{sec:cache}, a cache to store positions cannot be applied. The complexity of this is method $O(n)$, however in practice, the number if characters this will affect is limited by readability and usability of the text editor. Mobile devices, that generally have less performance than desktop machines, have smaller screens displaying less characters per line. While this is not necessarily the case, it can be expected by good software design.
 
 \subsection{BiDi support}
 
@@ -437,9 +437,9 @@ https://en.wikipedia.org/wiki/Input\_method
 
 Using a designated input element for input reading comes with the cost of having to emulate the text selection. When the input field is focused, any selection on the web site, including that of the editor, will be removed. When text is selected, the input field does not necessarily have to be focused. To read inputs, it can be focused on a ''keydown'' event, which will only remove the text selection when the user enters text. This is not problematic since selections will be removed on native inputs when a user enters text too. However, if the user right-clicks in the editor, the input element will be focused to enable pasting from the context menu (see \refsubsec{subsec:input_textarea_pasting}). This will remove the text selection on any right click.
 
-The W3C specifies an API to add multiple ranges to a selection, which should appear as multiple selections to the user. This way the element for input reading could be focused while other parts of the website, i.e. the editor's contents, could display a selection at the same time. However, while the API is available across all major browsers, it is disfunctional and documented to not be working.
+The W3C specifies an API to add multiple ranges to a selection, which should appear as multiple selections to the user. This way the element for input reading could be focused while other parts of the website, i.e. the editor's contents, could display a selection at the same time. However, while the API is available across all major browsers, it is dysfunctional and documented to not be working.
 
-CodeMirror, ACE and Google's document editor each implement text selections by displaying \code{div} elements that mimick the look of a native selection. Type uses the same technique to show a text selection while the input element is focused. This mimicked selection replaces native selections entirely and will be created dynamically when the user clicks in the text and drags his or her mouse across the text.
+CodeMirror, ACE and Google's document editor each implement text selections by displaying \code{div} elements that mimic the look of a native selection. Type uses the same technique to show a text selection while the input element is focused. This mimicked selection replaces native selections entirely and will be created dynamically when the user clicks in the text and drags his or her mouse across the text.
 %In contrast to the mentioned editors, the selection's DOM elements stored within the editor's contents to keep the content's markup clean at all times. Instead they will be written to the end of the document's body, positioned absolutely and repositioned when the browser will be resized.
 
 The downside of this technique is that copy commands will not work anymore due to the fact that there is no actual text selection that can be copied, even though it appears to the users there is one. To treat this issue, CodeMirror adds the contents of the imitated selection to the input field and selects these contents with a native selection. This allows the user to use keyboard shortcuts at any time and to copy text with the context menu. When the user types, the selected contents in the input field will be overwritten by the browser, so this does not affect input reading.
@@ -497,7 +497,7 @@ The \code{Formatter} is one of the key classes of the Type library. As discussed
 \label{fig:formatting_dom_tree}
 \end{figure}
 
-\reffigure{fig:formatting_dom_tree} shows the DOM representation of the markup of \reflisting{lst:formatter_code_example}. We can split up the text node ''Lorem ipsum'' into two text nodes ''Lorem'' and '' ipsum'' to create a distinct node in which the formatting (yellow highlight) starts and do the same with the ending text node ''sit amet''. Ths gives us a distinct nodes for the start and the end of the selection. When we traverse each node from the start to the end, every traversed node falls on either of the following cases:
+\reffigure{fig:formatting_dom_tree} shows the DOM representation of the markup of \reflisting{lst:formatter_code_example}. We can split up the text node ''Lorem ipsum'' into two text nodes ''Lorem'' and '' ipsum'' to create a distinct node in which the formatting (yellow highlight) starts and do the same with the ending text node ''sit amet''. This gives us a distinct nodes for the start and the end of the selection. When we traverse each node from the start to the end, every traversed node falls on either of the following cases:
 
 \begin{enumerate}
 \item It is the start node
@@ -552,9 +552,9 @@ The \code{Formatter} is one of the key classes of the Type library. As discussed
 
 \end{itemize}
 
-Each rule perfoms the minimally necessary steps to format contents while conforming the HTML validation rules of not intersecting DOM nodes. By adding only the minimum of nodes, this will ensure simple (and valid) markup.
+Each rule performs the minimally necessary steps to format contents while conforming the HTML validation rules of not intersecting DOM nodes. By adding only the minimum of nodes, this will ensure simple (and valid) markup.
 
-To format the nodes that have been collected by the algorithm, they will be wrapped by a DOM node that applies the desired formatting. The wrapping function will also remove any nodes between the start and end node that have the same tag as the node used for the formatting to clean up the markup. If the start or the end node has been contained by a node of the same tag as the node the text should be formatted with, the containing nodes will be used as start or end node. As a last step to improve the markup, the nodes left and right of the formatting node will be unified with the formatting node, if they have the same tag. These steps will simplify potentially \textit{ill-formatted} markup that the formatting command affects. All DOM manipulations will be perfomed at the end of the algorithm, when all nodes have been read to improve performance.
+To format the nodes that have been collected by the algorithm, they will be wrapped by a DOM node that applies the desired formatting. The wrapping function will also remove any nodes between the start and end node that have the same tag as the node used for the formatting to clean up the markup. If the start or the end node has been contained by a node of the same tag as the node the text should be formatted with, the containing nodes will be used as start or end node. As a last step to improve the markup, the nodes left and right of the formatting node will be unified with the formatting node, if they have the same tag. These steps will simplify potentially \textit{ill-formatted} markup that the formatting command affects. All DOM manipulations will be performed at the end of the algorithm, when all nodes have been read to improve performance.
 
 %    \State Split start end end text nodes to generate distinct start end end nodes
 %\andnext does not contain end node
@@ -582,7 +582,7 @@ The \code{UndoManager} class will observe \code{ChangeEvent}s (see \refsubsec{su
 
 In its core the changes observed by the \code{UndoManager} will be kept track of by the \code{ChangeListener}. It will accumulate every change in a data structure and take a ''snapshot'' every 500 milliseconds and store it in a history. The \code{UndoManager} uses this history to implement and offer undo and redo commands.
 
-This functionatlity has been abstracted to be reused by other extensions. The Etherpad extension uses this class to accumulate and publish local changes every 500 milliseconds to its connected clients independently of the \code{UndoManager}.
+This functionality has been abstracted to be reused by other extensions. The Etherpad extension uses this class to accumulate and publish local changes every 500 milliseconds to its connected clients independently of the \code{UndoManager}.
 
 \subsection{Undo / Redo}
 
@@ -606,7 +606,7 @@ Inserting and removing can be undone easily by performing and insertion to undo 
 \label{sec:events}
 \subsection{Overview}
 
-It is possible to trigger custom (native) events using the \code{CustomEvent} interface on modern browsers\footnote{\url{https://developer.mozilla.org/en/docs/Web/API/CustomEvent\#Browser_compatibility}}. Internet Explorer 9 and below allow this through similar interfaces. These interfaces could be used for triggering events for components of Type. However, this would trigger events that that are only relevant within the library in the global namespace. To avoid this, Type implements its own event system that populates events only within the library. Events from within the editor that can be useful to the website or web application should still be triggered as native events in the browser's global namespace. During the development of the library no such use case has occured.
+It is possible to trigger custom (native) events using the \code{CustomEvent} interface on modern browsers\footnote{\url{https://developer.mozilla.org/en/docs/Web/API/CustomEvent\#Browser_compatibility}}. Internet Explorer 9 and below allow this through similar interfaces. These interfaces could be used for triggering events for components of Type. However, this would trigger events that that are only relevant within the library in the global namespace. To avoid this, Type implements its own event system that populates events only within the library. Events from within the editor that can be useful to the website or web application should still be triggered as native events in the browser's global namespace. During the development of the library no such use case has occurred.
 
 %\textit{todo explain browser support}
 
@@ -634,7 +634,7 @@ EventApi.prototype.trigger(eventName, eventObject);
 %\item \code{off} 
 %\end{itemize}
 
-Using the \code{Oop} class (see \refsection{sec:oop_class}), these methods will be inherited by the \code{Type} class. This way, using the \code{trigger} method, events can be triggered within the scope of a \code{Type} instance and be observed using the  the \code{on} method. Event handlers can be removed using \code{off} method.
+Using the \code{OOP} class (see \refsection{sec:oop_class}), these methods will be inherited by the \code{Type} class. This way, using the \code{trigger} method, events can be triggered within the scope of a \code{Type} instance and be observed using the  the \code{on} method. Event handlers can be removed using \code{off} method.
 
 The static methods will also be inherited by the \code{Type} class. This is necessary to trigger events that are \textit{Type} specific but not \textit{instance} specific. Most importantly a ''ready'' event will be triggered on every instantiation of the \code{Type} class. This way plugins and other third-party scripts can run initialization routines.
 
@@ -708,7 +708,7 @@ These data structures contain the information to undo user input and to redo the
 \subsection{OOP}
 \label{sec:oop_class}
 
-The \code{OOP} class extends the contructor pattern with basic classical inheritance. It provides the method \code{inherits} that will duplicate and copy the \code{prototype} from one \code{Function} object to another. It also copys attributes and methods defined on the \code{Function} object itself to implement inheritance of static definitions. It adds the attribute \code{\_super} to the inheriting \code{Function} object referencing its parent class to enable child classes to access their respective superclasses.
+The \code{OOP} class extends the constructor pattern with basic classical inheritance. It provides the method \code{inherits} that will duplicate and copy the \code{prototype} from one \code{Function} object to another. It also copies attributes and methods defined on the \code{Function} object itself to implement inheritance of static definitions. It adds the attribute \code{\_super} to the inheriting \code{Function} object referencing its parent class to enable child classes to access their respective superclasses.
 
 %The \code{OOP} class implements a simple approach to extend the contructor pattern with basic classical inheritance. It does so by providing an \code{inherits} method, that copies all methods and attributes from one prototype of a class to another. In this simplified apporach, parent methods cannot be called from child classes with a unique keyword (like ''super'') as it is the case with Java or other languages using classical inheritance.
 
@@ -732,9 +732,9 @@ The \code{Range} class is an abstraction for the native \code{Range} interface. 
 
 \subsection{Dom Walker}
 
-Working with text implies having to traverse the DOM, i.e. the nodes inside the text often. The \code{DomWalker} utility class solves this problem. The DOM API offers methods to access a node's siblings, children and parents, but it must always accounted for cases when any of these is \code{null} (there is no parent, sibling or child) or when they overflow the bounds of the editor's contents. But more importantly, for text editing, it is usually necessary to access the next (or previous) node in the document's content flow which can either be the parent, sibling, child or a node that can only be accessed by traversing mutliple nodes. Also, it is often the case that it is not only necessary to fetch the next node, but to apply a filter to only fetch a specfic node, for instance a text node or only a text node that has contents visible to the user\footnote{Any text node consisting of whitespace only will not be displayed by any major browser}. Browsers offer a native API for this, called \code{TreeWalker}, but it is said to be slow\footnote{\url{http://jsperf.com/qsa-vs-node-iterator}}, only partially supported by Internet Explorer 9\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator\#Browser_compatibility}} and has been critisized for its verbose API\footnote{By John Resig, author of jQuery\url{http://ejohn.org/blog/unimpressed-by-nodeiterator/}}.
+Working with text implies having to traverse the DOM, i.e. the nodes inside the text often. The \code{DomWalker} utility class solves this problem. The DOM API offers methods to access a node's siblings, children and parents, but it must always accounted for cases when any of these is \code{null} (there is no parent, sibling or child) or when they overflow the bounds of the editor's contents. But more importantly, for text editing, it is usually necessary to access the next (or previous) node in the document's content flow which can either be the parent, sibling, child or a node that can only be accessed by traversing multiple nodes. Also, it is often the case that it is not only necessary to fetch the next node, but to apply a filter to only fetch a specific node, for instance a text node or only a text node that has contents visible to the user\footnote{Any text node consisting of whitespace only will not be displayed by any major browser}. Browsers offer a native API for this, called \code{TreeWalker}, but it is said to be slow\footnote{\url{http://jsperf.com/qsa-vs-node-iterator}}, only partially supported by Internet Explorer 9\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/NodeIterator\#Browser_compatibility}} and has been criticized for its verbose API\footnote{By John Resig, author of jQuery\url{http://ejohn.org/blog/unimpressed-by-nodeiterator/}}.
 
-The \code{DomWalker} can be instantitated by providing a starting node and the type of nodes it should traverse. The latter argument can either be a string identifying a premade filter of the Type library or a custom filter function. Premade filters include:
+The \code{DomWalker} can be instantiated by providing a starting node and the type of nodes it should traverse. The latter argument can either be a string identifying a pre-made filter of the Type library or a custom filter function. Pre-made filters include:
 
 \begin{itemize}
 \item ''text'' - A text node with visible contents
@@ -742,7 +742,7 @@ The \code{DomWalker} can be instantitated by providing a starting node and the t
 \item ''visible'' - Any visible DOM node
 \end{itemize}
 
-A \code{DomWalker} instance offers the high-level methods \code{next}, \code{prev}, \code{first} and \code{last} (amongst others) for traversal. A full API description can be found in XYZ. All methods can be called statically without having to instantiate a \code{DomWalker}.
+A \code{DomWalker} instance offers the high-level methods \code{next}, \code{previous}, \code{first} and \code{last} (amongst others) for traversal. A full API description can be found in XYZ. All methods can be called statically without having to instantiate a \code{DomWalker}.
 
 %\paragraph{API}
 
@@ -767,7 +767,7 @@ A \code{DomWalker} instance offers the high-level methods \code{next}, \code{pre
 
 \subsection{Text Walker}
 
-The \code{TextWalker} class acts as a container for all functions related to measuring text offsets. It provides utility methods to determine the character offset from one text node to another or, vice versa, which text node can be found at a text offset, starting from another given node. Both methods are required by various classes and are thus, centralised. 
+The \code{TextWalker} class acts as a container for all functions related to measuring text offsets. It provides utility methods to determine the character offset from one text node to another or, vice versa, which text node can be found at a text offset, starting from another given node. Both methods are required by various classes and are thus, centralized. 
 
 \subsection{Dom Utilities}
 
@@ -779,7 +779,7 @@ The \code{Utilities} class is a general-purpose class that contains methods to e
 
 \subsection{Environment}
 
-The \code{Environment} class checks and provides informations on the current browser environment and its features. This class is especially important to mimick native behavior for user interaction. For instance, as discussed before, either the control key or the command key should be used to implemnt keyboard shortcuts depending on the operating system. To check for specific feature support, it is favourable to use duck typing within each class.
+The \code{Environment} class checks and provides informations on the current browser environment and its features. This class is especially important to mimic native behavior for user interaction. For instance, as discussed before, either the control key or the command key should be used to implement keyboard shortcuts depending on the operating system. To check for specific feature support, it is favorable to use duck typing within each class.
 
 %\section{Plugin Api}
 %plugin api
@@ -795,7 +795,7 @@ The \code{Development} class is intended to contain utility methods to support t
 \section{Cache}
 \label{sec:cache}
 
-For traversing the text, for example when the caret moves, the text will need to be measured. All measurements can be stored to a cache to only perform the same measurement operations once. When the user edits the contents of the editor, these texts will change and the cache must be updated. A cache must also account for external changes. The DOM3 Events specification\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/}, last checked on 07/21/2015} offers \texttt{MutationObserver}s to check for DOM changes. This feature is not supported by Internet Explorer version 10 or less\footnote{\url{http://caniuse.com/\#search=mutation}, last checked on 07/21/2015}. Internet Explorer 9 and 10 offer an implementation for \texttt{MutationEvent}s\footnote{\url{http://help.dottoro.com/ljfvvdnm.php\#additionalEvents }, last checked on 07/21/2015}. The W3C states that ''The MutationEvent interface [...] has not yet been completely and interoperably implemented across user agents. In addition, there have been critiques that the interface, as designed, introduces a performance and implementation challenge.''\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/\#legacy-mutationevent-events}, last checked on 07/21/2015}. Apart from that, the benefits of a cache may not signifcantly increase the library's performance. The actions that can be supported by a cache, most importantly moving the caret in the text, are not very complex and do not noticably affect the CPU. For this reason, the editor does nut use any caching. Implementing an editor that is stateless in regards of its contents can also improve stability.
+For traversing the text, for example when the caret moves, the text will need to be measured. All measurements can be stored to a cache to only perform the same measurement operations once. When the user edits the contents of the editor, these texts will change and the cache must be updated. A cache must also account for external changes. The DOM3 Events specification\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/}, last checked on 07/21/2015} offers \texttt{MutationObserver}s to check for DOM changes. This feature is not supported by Internet Explorer version 10 or less\footnote{\url{http://caniuse.com/\#search=mutation}, last checked on 07/21/2015}. Internet Explorer 9 and 10 offer an implementation for \texttt{MutationEvent}s\footnote{\url{http://help.dottoro.com/ljfvvdnm.php\#additionalEvents }, last checked on 07/21/2015}. The W3C states that ''The MutationEvent interface [...] has not yet been completely and interoperably implemented across user agents. In addition, there have been critiques that the interface, as designed, introduces a performance and implementation challenge.''\footnote{\url{http://www.w3.org/TR/DOM-Level-3-Events/\#legacy-mutationevent-events}, last checked on 07/21/2015}. Apart from that, the benefits of a cache may not significantly increase the library's performance. The actions that can be supported by a cache, most importantly moving the caret in the text, are not very complex and do not noticeably affect the CPU. For this reason, the editor does nut use any caching. Implementing an editor that is stateless in regards of its contents can also improve stability.
 
 % It should be agnostic to the editor's contents at all times to give other developers the freedom to change the contents in any way needed without breaking the editor.
 % On the other hand, the library should be a ''good citizen'' on a website, which means it should be as unobtrusive and leave the developers as much freedom as possible. 
@@ -805,13 +805,13 @@ For traversing the text, for example when the caret moves, the text will need to
 
 \subsection{Overview}
 
-To achieve real-time collaboration with multiple Type editors, Etherpad\footnote{Etherpad has been completely rewritten under the name Etherpad Lite. However, its official website no longer links to its former source code. For simplicity, the name Etherpad will be used, referring to its rewrite as Etherpad Lite} can be used. Etherpad is a web-based collaborative real-time text editor with rich-text capabilites. It provides a server, written in JavaScript using Node.js as well as a web-based rich-text editor. Both components are distributed in one package and are meant to be used together.
+To achieve real-time collaboration with multiple Type editors, Etherpad\footnote{Etherpad has been completely rewritten under the name Etherpad Lite. However, its official website no longer links to its former source code. For simplicity, the name Etherpad will be used, referring to its rewrite as Etherpad Lite} can be used. Etherpad is a web-based collaborative real-time text editor with rich-text capabilities. It provides a server, written in JavaScript using Node.js as well as a web-based rich-text editor. Both components are distributed in one package and are meant to be used together.
 
 To achieve real-time rich-text collaboration, multiple web-based clients communicate with a server via WebSockets using socket.io. Each client owns a local version of the document that it needs to sync with the server. The server uses an operational transformation algorithm to merge each change to the document accounting for all changes and then urges each client to update their local contents according to the final document.
 
 \subsection{Changesets}
 
-For this, Etherpad uses the concept of so-called ''changesets''. Each client sends its local changes, debounced to an interval of 500 milliseconds, as a serialized string---the changeset---to the server. The changeset includes all text insertions, removals and formattings of the last time frame. Along with the changeset, it sends a document revision number that the changeset is based on to the server. The document revision number increases with every changeset that has been accepted and applied to the document on the server side. The document on ther server side is saved as a stack of changesets, which ultimatively form the current document. For performance reasons, snapshots can be taken that save the document as formatted text. 
+For this, Etherpad uses the concept of so-called ''changesets''. Each client sends its local changes, debounced to an interval of 500 milliseconds, as a serialized string---the changeset---to the server. The changeset includes all text insertions, removals and formattings of the last time frame. Along with the changeset, it sends a document revision number that the changeset is based on to the server. The document revision number increases with every changeset that has been accepted and applied to the document on the server side. The document on the server side is saved as a stack of changesets, which ultimately form the current document. For performance reasons, snapshots can be taken that save the document as formatted text. 
 
 Based on the revision number that the client provides with the changeset, the server can apply it to the version of the document the client was working on. The server will apply the resulting changes to all newer revisions of the document (if present) and send a changeset and the latest revision number back to the client. The changeset sent to the client includes all operations it needs to perform to update its local version to the newest version on the server.
 
@@ -844,11 +844,11 @@ Clients interact with the server via WebSockets using socket.io. To sync their o
 \item Receive a changeset from the server submitted by another client
 \end{itemize}
 
-\noindent When Etherpad's client connects to the server it receives an initial snapshot of the entire document as a string. To submit changes, the client uses a three-step architecture. The client stores any local changes that have not been sent to the server yet in a changeset $Y$. Any changeset sent to the server must be acknowledged by the server as it has applied  the changeset to its document. Any changeset that has been sent and not been acknowledged yet will be stored in a as the changeset $X$. The document as it is acknowledged by the server is stored in a changeset $A$. The document visible to the users can be expressed by the represention of $Y \cdot X \cdot A$, i.e. applying each changeset to the next.
+\noindent When Etherpad's client connects to the server it receives an initial snapshot of the entire document as a string. To submit changes, the client uses a three-step architecture. The client stores any local changes that have not been sent to the server yet in a changeset $Y$. Any changeset sent to the server must be acknowledged by the server as it has applied  the changeset to its document. Any changeset that has been sent and not been acknowledged yet will be stored in a as the changeset $X$. The document as it is acknowledged by the server is stored in a changeset $A$. The document visible to the users can be expressed by the representation of $Y \cdot X \cdot A$, i.e. applying each changeset to the next.
 
 Whenever a user applies a local change, the changeset $Y$ will be updated. Every 500 milliseconds, but not before a changeset submitted to the server as been acknowledged, the changeset $Y$ will be sent to the server and $Y$ will be assigned to $X$. $Y$ will be set to a changeset that contains no changes. When the client hears the acknowledgement for $X$ from the server, $X$ will be applied the changeset $A$ and $X$ will be set to contain no changes.
 
-This architecture supports receiving changesets from other clients as they must be applied to a client's local changes (committed and uncommited) as well as the document version as acknowledged by the server. When a client receives another client's changeset $B$ it will perform 4 steps.
+This architecture supports receiving changesets from other clients as they must be applied to a client's local changes (committed and uncommitted) as well as the document version as acknowledged by the server. When a client receives another client's changeset $B$ it will perform 4 steps.
 
 \begin{enumerate}
 \item Compute a new changeset by merging $Y (X \cdot B)$ and apply it to the document visible to the user.
@@ -872,7 +872,7 @@ Etherpad's technology can be used to enable real-time collaboration for Type. Wh
 
 Etherpad does not provide a documentation on its client--server protocol, but it can be reverse engineered. It is possible for third-party libraries to communicate with an Etherpad server alongside Etherpad's ''native'' clients, as long as a third-party library (like Type) conforms the protocol.
 
-Etherpad's collaboartion functionality comes with a cost in file size for Type and may only be used in specific use cases. This is why this feature is implemented as an optional extemsion (compare \refsection{sec:extensions}) in a separate file. To enable collaboration the designated JavaScript file needs to be added to the website.
+Etherpad's collaboration functionality comes with a cost in file size for Type and may only be used in specific use cases. This is why this feature is implemented as an optional extensions (compare \refsection{sec:extensions}) in a separate file. To enable collaboration the designated JavaScript file needs to be added to the website.
 
 \begin{lstlisting}[language=html, caption=Enabling real-time collaboration to Type, label=lst:add_etherpad_html]
 <script src="type.js"></script>
@@ -901,9 +901,9 @@ This architecture provides an unobtrusive way to integrate real-time collaborati
 
 \subsection{Overview}
 
-Type's modular structure is designed for extension. Type's \code{prototype} has been exposed as \code{Type.fn} and all its classes in the \code{Type} namespace. This provides other developers with all of Type's functionality in a sctructured and accessible manner. Type is designed to lower the barrier for and encourage developers to extend Type by giving freedom and possiblities in how to implement an extension and trying to avoid compulsorily use of interfaces or configurations.
+Type's modular structure is designed for extension. Type's \code{prototype} has been exposed as \code{Type.fn} and all its classes in the \code{Type} namespace. This provides other developers with all of Type's functionality in a structured and accessible manner. Type is designed to lower the barrier for and encourage developers to extend Type by giving freedom and possibilities in how to implement an extension and trying to avoid compulsorily use of interfaces or configurations.
 
-jQuery demonstrates a similarly liberal apporach for writing extensions and experience shows that name conflicts are minimal and ''good'' extensions are naturally favored over ''bad'' extensions by the community of web developers.
+jQuery demonstrates a similarly liberal approach for writing extensions and experience shows that name conflicts are minimal and ''good'' extensions are naturally favored over ''bad'' extensions by the community of web developers.
 
 \subsection{API extension}
 
@@ -911,7 +911,7 @@ jQuery demonstrates a similarly liberal apporach for writing extensions and expe
 Type.fn.myMethod = function () {};
 \end{lstlisting}
 
-As discussed in \refsubsec{subsec_fn_exposal}, to add a method to Type's public API, its base class' prototye can be extended with a function using the \code{Type.fn} shorthand attribute. Static constructors can be added by extending the \code{Type} \code{Function} object.
+As discussed in \refsubsec{subsec_fn_exposal}, to add a method to Type's public API, its base class' prototype can be extended with a function using the \code{Type.fn} shorthand attribute. Static constructors can be added by extending the \code{Type} \code{Function} object.
 
 \begin{lstlisting}[language=JavaScript, caption=Example custom static constructor, label=lst:example_static_constructor_extension]
 Type.myConstructor = function () {

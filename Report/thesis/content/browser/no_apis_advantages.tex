@@ -9,7 +9,7 @@ With a pure JavaScript implementation, many of the problems that HTML editing AP
 
  % an editor can be implemented to allow developers using the editor to \textit{choose} the output
 
-The generated markup, if implemented through JavaScript and DOM Level 1 methods, can be chosen with the implementation of the editor. Furthermore, the decision of the generated output can be given to the developers working with the editor. Section \refsection{sec:disadvantages_of_html_editing_apis} describes the inconsistent output across various browsers as well as the restrictions of the API design of \texttt{execCommand}. Both issues can be adressed by offering a method to wrap the current selection in arbitrary markup. jQuery's \texttt{htmlString} implementation\footnote{\url{http://api.jquery.com/Types/\#htmlString}, last checked on 07/19/2015} demonstrates a simple and stable way to define markup as a string and pass it as an argument to JavaScript methods. A sample call could read as follows.
+The generated markup, if implemented through JavaScript and DOM Level 1 methods, can be chosen with the implementation of the editor. Furthermore, the decision of the generated output can be given to the developers working with the editor. Section \refsection{sec:disadvantages_of_html_editing_apis} describes the inconsistent output across various browsers as well as the restrictions of the API design of \texttt{execCommand}. Both issues can be addressed by offering a method to wrap the current selection in arbitrary markup. jQuery's \texttt{htmlString} implementation\footnote{\url{http://api.jquery.com/Types/\#htmlString}, last checked on 07/19/2015} demonstrates a simple and stable way to define markup as a string and pass it as an argument to JavaScript methods. A sample call could read as follows.
 
 \begin{lstlisting}[language=JavaScript, caption=Example calls to format text, label=lst:format-examples-api-alternative]
 // Mimicking document.execCommand('italic', false, null);
@@ -19,7 +19,7 @@ editor.format('<em />');
 editor.format('<span class="highlight" />');
 \end{lstlisting}
 
-This will allow developers to choose which markup should be generated for italicising text. The markup will be consistent in the scope of their project. Since the DOM manipulation is implemented in JavaScript and not by high-level browser methods, this will also ensure the same output across all systems and solve cross-browser issues. The second example function call in listing \ref{lst:format-examples-api-alternative} demonstrates that custom formatting, fitting the needs of a specific project, can be achieved with the same API, giving developers a wider functionality.
+This will allow developers to choose which markup should be generated for italicizing text. The markup will be consistent in the scope of their project. Since the DOM manipulation is implemented in JavaScript and not by high-level browser methods, this will also ensure the same output across all systems and solve cross-browser issues. The second example function call in listing \ref{lst:format-examples-api-alternative} demonstrates that custom formatting, fitting the needs of a specific project, can be achieved with the same API, giving developers a wider functionality.
 
 \refsubsec{subsec:disadv_mimic_native} discusses the disadvantage, that when not using HTML editing APIs, native components like the caret or the text input must be implemented with JavaScript as they are not provided without using HTML editing APIs. On the flip side, this allows full control over these components that can be exposed via an API to other developers.
 
@@ -35,7 +35,7 @@ Without a native text input or an element switched to editing mode with HTML edi
 
 \subsection{Bugs} %No software can be guaranteed to be bug free. However, 
 
-By refraining from using HTML editing APIs, all of its numerous bugs will be avoided. An the implementation can be aimed to minimize interaction with browser APIs, especially unstable or experimental interfaces. DOM manipulation APIs have been standardized for more than 15 years and tend to be well-proven and stable. Bugs that occur will mostly be part of the libary and can be fixed and not only worked around. Bug fixes can be rolled out to users when they are fixed. This will free development from being dependent on browser development, update cycles and user adoption. 
+By refraining from using HTML editing APIs, all of its numerous bugs will be avoided. An the implementation can be aimed to minimize interaction with browser APIs, especially unstable or experimental interfaces. DOM manipulation APIs have been standardized for more than 15 years and tend to be well-proven and stable. Bugs that occur will mostly be part of the library and can be fixed and not only worked around. Bug fixes can be rolled out to users when they are fixed. This will free development from being dependent on browser development, update cycles and user adoption. 
 
 %  minimize the number of ''unfixable'' bugs and ultimately
 

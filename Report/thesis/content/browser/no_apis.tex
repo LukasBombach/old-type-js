@@ -9,9 +9,9 @@ HTML editing APIs are the recommended way for implementing a web-based rich-text
 
 \subsection{Native input elements} Native text inputs are hard-wired to plain-text editing. No major browser offers an API for formatting. There is also no option to write HTML to an input and have it display it as rich-text. \texttt{input} fields and \texttt{textarea} elements will simply display the HTML as source code. Rich-text can only be implemented as an editable part of the website.
 
-\subsection{Image elements} In February 2015, Flipboard Inc. demonstrated an unprecedented technique to achieve fluid full-screen animations with 60 frames per second on their mobile website\footnote{\url{http://engineering.flipboard.com/2015/02/mobile-web/}, last checked on 07/24/2015}. Instead of using the DOM to display their contents, the entire website was rendered to a \texttt{canvas} element. When a user swiped over the website the canvas element was re-rendered, essentially imitating the browser's rendering engine. \texttt{canvas} elements allow rendering rich-text too. A rich-text editor can be implemented using this technique. This however has two major downsides. On the one hand it would require implementing a text-layouting engine. The \texttt{canvas} API is only capable of displaying unlayouted text with specifically set line breaks. On the other hand, making the editor accessible to other developers would be much more complex since the text only exists in an internal representaion inside the editor and would not be exposed as DOM component to other developers.
+\subsection{Image elements} In February 2015, Flipboard Inc. demonstrated an unprecedented technique to achieve fluid full-screen animations with 60 frames per second on their mobile website\footnote{\url{http://engineering.flipboard.com/2015/02/mobile-web/}, last checked on 07/24/2015}. Instead of using the DOM to display their contents, the entire website was rendered to a \texttt{canvas} element. When a user swiped over the website the canvas element was re-rendered, essentially imitating the browser's rendering engine. \texttt{canvas} elements allow rendering rich-text too. A rich-text editor can be implemented using this technique. This however has two major downsides. On the one hand it would require implementing a text-layouting engine. The \texttt{canvas} API is not capable of layouting text. On the other hand, making the editor accessible to other developers would be much more complex since the text only exists in an internal representation inside the editor and would not be exposed as DOM component to other developers.
 
-An approach related to rendering the text on a \texttt{canvas} element is to render the text inside a Scalable Vector Graphic (SVG). In contrast to \texttt{canvas} elements, SVGs contain DOM nodes that can be accesed from the outside. However this has no benefit over using HTML DOM nodes with the downside that SVG too has no native implementation for controlling the text layout.
+An approach related to rendering the text on a \texttt{canvas} element is to render the text inside a Scalable Vector Graphic (SVG). In contrast to \texttt{canvas} elements, SVGs contain DOM nodes that can be accessed from the outside. However this has no benefit over using HTML DOM nodes with the downside that SVG too has no native implementation for controlling the text layout.
 
 Furthermore, while both alternatives can display rich-text, neither provides an dedicated API to manipulate rich-text, which gives neither alternative an advantage over using regular DOM structures to display rich-text.
 
@@ -25,7 +25,7 @@ Another way to display and edit rich-text inside a browser is through third-part
 The only way to natively display rich-text on a website is through the Document Object Model (DOM). Editors based on HTML editing APIs utilize the DOM to display their rich-text contents too. Only the editing (of the DOM), commonly phrased ''DOM manipulation'', is implemented with HTML editing APIs.
 
 
-Manipulating the DOM has been possible since the first implementations of JavaScript and JScript. It has been standardised in 1998 with the W3C's ''Document Object Model (Core) Level 1'' specification\footnote{\url{http://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html}, last checked on 07/10/2015} as part of the ''Document Object Model (DOM) Level 1 Specification''.
+Manipulating the DOM has been possible since the first implementations of JavaScript and JScript. It has been standardized in 1998 with the W3C's ''Document Object Model (Core) Level 1'' specification\footnote{\url{http://www.w3.org/TR/REC-DOM-Level-1/level-one-core.html}, last checked on 07/10/2015} as part of the ''Document Object Model (DOM) Level 1 Specification''.
 
 Other than for rich-text editing, the DOM and its API is the recommended\footnote{recommended by the W3C and WHATWG} way to change a website's contents and---apart from HTML editing APIs---the only option \textit{natively} implemented in any major browser. Popular libraries like jQuery, React or AngularJS are based on it. The API has been developed for 17 years and proven to be stable across browsers. 
 
@@ -36,7 +36,7 @@ MDN lists 44 commands for the \code{execCommand} interface\footnote{\url{https:/
 \item 6 commands insert HTML elements.
 \item 2 commands remove contents.
 \item 2 commands remove formatting.
-\item The other commands enable control over the clipboard, implemend undo/redo commands, set settings for the editing mode and one command can select all text of the editable element.
+\item The other commands enable control over the clipboard, implement undo/redo commands, set settings for the editing mode and one command can select all text of the editable element.
 \end{itemize}
 
 Algorithms \ref{alg:format_pseudocode_dom} through \ref{alg:unwrap_pseudocode} demonstrate alternatives to commands of the \code{execCommand} interface related to text formatting, insertion and deletion implemented with methods of the ''Document Object Model (Core) Level 1'' specification.
@@ -68,7 +68,7 @@ Algorithms \ref{alg:format_pseudocode_dom} through \ref{alg:unwrap_pseudocode} d
 % \State Move all nodes until end text node inside new tag
 % \State Move end text node inside new tag
 
-Algorithm~\ref{alg:format_pseudocode_dom} demonstrates a simplified procedure to wrap a text selection in a tag. To implement the \texttt{bold} commmand of \texttt{execCommand}, this procedure can be implemented using the \texttt{strong} tag. The text selection can be read with the browser's selection API\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/Selection}, last checked on 07/18/2015}\footnote{Internet Explorer prior version 9 uses a non-standard API \url{https://msdn.microsoft.com/en-us/library/ms535869(v=VS.85).aspx}, last checked on 07/18/2015}.
+Algorithm~\ref{alg:format_pseudocode_dom} demonstrates a simplified procedure to wrap a text selection in a tag. To implement the \texttt{bold} command of \texttt{execCommand}, this procedure can be implemented using the \texttt{strong} tag. The text selection can be read with the browser's selection API\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/Selection}, last checked on 07/18/2015}\footnote{Internet Explorer prior version 9 uses a non-standard API \url{https://msdn.microsoft.com/en-us/library/ms535869(v=VS.85).aspx}, last checked on 07/18/2015}.
 
 % To implement formatting commands, the currently selected text can be wrapped in newly created tags, depending on what formatting shall be achieved. For instance, to implement the \texttt{bold} commmand of \texttt{execCommand}, the selected text can be read with the browser's selection API\footnote{\url{https://developer.mozilla.org/en-US/docs/Web/API/Selection}, last checked on 07/18/2015}\footnote{Internet Explorer prior version 9 uses a non-standard API \url{https://msdn.microsoft.com/en-us/library/ms535869(v=VS.85).aspx}, last checked on 07/18/2015} and wrapped in \texttt{strong} tags using basic DOM Level 1 methods. 
 
@@ -90,7 +90,7 @@ Algorithm~\ref{alg:format_pseudocode_dom} demonstrates a simplified procedure to
 \end{algorithmic}
 \end{algorithm}
 
-Algorithm~\ref{alg:insert_pseudocode} demostrates a simplified procedure to insert a new tag and possibly overwrite the current text selection and thereby mimicking \texttt{execCommand}'s insertion commands.
+Algorithm~\ref{alg:insert_pseudocode} demonstrates a simplified procedure to insert a new tag and possibly overwrite the current text selection and thereby mimicking \texttt{execCommand}'s insertion commands.
 
 \begin{algorithm}
 \caption{Simplified text removal pseudocode}
@@ -111,7 +111,7 @@ Algorithm~\ref{alg:insert_pseudocode} demostrates a simplified procedure to inse
 \end{algorithmic}
 \end{algorithm}
 
-Algorithm~\ref{alg:remove_pseudocode} demonstrates a procedure to mimick the deletion commands of \texttt{execCommand}.
+Algorithm~\ref{alg:remove_pseudocode} demonstrates a procedure to mimic the deletion commands of \texttt{execCommand}.
 
 \begin{algorithm}
 \caption{Simplified element unwrapping pseudocode}
@@ -128,7 +128,7 @@ Algorithm~\ref{alg:remove_pseudocode} demonstrates a procedure to mimick the del
 
 Algorithm~\ref{alg:unwrap_pseudocode} demonstrates a procedure to unwrap an element, mimicking the commands of \texttt{execCommand} to remove formatting.
 
-With formatting and removing text as well as inserting and unwrapping elements, we can find equivalents for all commands of the HTML editing APIs related to manipulating rich-text using only methods specified by the ''Document Object Model (Core) Level 1''. This shows, that HTML editing APis are not a necessity for rich-text editing. Chapter \refchapter{ch:impl} demonstrates ways to implement clipboard, undo/redo and selection capabilites.
+With formatting and removing text as well as inserting and unwrapping elements, we can find equivalents for all commands of the HTML editing APIs related to manipulating rich-text using only methods specified by the ''Document Object Model (Core) Level 1''. This shows, that HTML editing APIs are not a necessity for rich-text editing. Chapter \refchapter{ch:impl} demonstrates ways to implement clipboard, undo/redo and selection capabilities.
 
 %Aside from this, editing APIs offer commands for undo/redo and clipboard capabilites as well as a command for selecting the entire contents of the editable elements. The latter can easily be implemented with the designated selection API, whereas chapter \refchapter{ch:impl} demonstrates an implementation for undo, redo and clipboard capabilities. Table \ref{tab:execCommand_equivalents} lists all commands available for \texttt{execCommand} and possible equivilents with DOM Level 1 methods. However, these are just simplified examples. A specific implementation accounting for all commands and all edge-cases will be discussed in chapters {ch:concept} and {ch:implementation}.
 

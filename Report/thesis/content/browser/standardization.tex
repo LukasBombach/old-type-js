@@ -7,7 +7,7 @@
 
 HTML editing APIs, although not standardized, have been the de-facto standard for implementing rich-text editors on the web. Microsoft's demos, that have been published with the release of these APIs, suggested this application. Mozilla mimicked this API and called their implementation ''rich-text editing API''. Other browsers followed with APIs based on Microsoft's idea of editable elements. However, it would have been possible to offer a native user interface component, a dedicated rich-text input field, instead of this API.
 
-HTML editing APIs have only been standardized with HTML5, which itself introduces 13 new types of input fields\footnote{\url{https://developer.mozilla.org/en/docs/Web/HTML/Element/Input}, last checked on 07/16/2015}, but none with rich-text capabilites. The WHATWG discussed various ways to specify rich-text editing for the upcoming HTML5 standard, including dedicated input fields. The issues that have been faced with that idea are as follows:
+HTML editing APIs have only been standardized with HTML5, which itself introduces 13 new types of input fields\footnote{\url{https://developer.mozilla.org/en/docs/Web/HTML/Element/Input}, last checked on 07/16/2015}, but none with rich-text capabilities. The WHATWG discussed various ways to specify rich-text editing for the upcoming HTML5 standard, including dedicated input fields. The issues that have been faced with that idea are as follows:
 
 \begin{enumerate} 
 \item Finding a way to tell the browser which language the rich-text input should generate. E.g. should it output (the then popular) ''bb'' code, (X)HTML, Textile or something else?
@@ -16,7 +16,7 @@ HTML editing APIs have only been standardized with HTML5, which itself introduce
 
 %% Den browser support teil kann ich später gut aufgreifen, damit dass meine library immer 100% browser support hat
 
-Ian Hickson, editor of WHATWG and author of the HTML5 specification adresses these main issues in a message from November 2004\footnote{\url{https://lists.w3.org/Archives/Public/public-whatwg-archive/2004Nov/0014.html}, last checked on 07/16/2015}. He states
+Ian Hickson, editor of WHATWG and author of the HTML5 specification addresses these main issues in a message from November 2004\footnote{\url{https://lists.w3.org/Archives/Public/public-whatwg-archive/2004Nov/0014.html}, last checked on 07/16/2015}. He states
 
 \begin{quotation}
 \textit{Realistically, I just can't see something of this scoped[sic] [the ability to specify a language for a rich-text input and possibly to specify a subset of language elements allowed] getting implemented and shipped in the default install of browsers.}
@@ -36,7 +36,7 @@ as being realistic would be to do something similar to (and ideally
 compatible with) IE's "contentEditable" and "designMode" attributes.}
 \end{quotation}
 
-Mark Pilgrim lists this as a milestone of the decision to integrate Microsoft's HTML editing APIs in the standard of the WHATWG.\footnote{\url{https://blog.whatwg.org/the-road-to-html-5-contenteditable}, last checked on 07/16/2015}. In coorporation with the W3C, the work by the WHATWG, including the standardization of the editing APIs, have been incorporated in the HTML5 standard and released in October 2014. When the coorporation ended in Juli 2012\footnote{todo confirm: \url{http://lists.w3.org/Archives/Public/public-whatwg-archive/2012Jul/0119.html}}, the WHATWG kept this work, including the HTML editing APIs in the HTML Living Standard.
+Mark Pilgrim lists this as a milestone of the decision to integrate Microsoft's HTML editing APIs in the standard of the WHATWG.\footnote{\url{https://blog.whatwg.org/the-road-to-html-5-contenteditable}, last checked on 07/16/2015}. In cooperation with the W3C, the work by the WHATWG, including the standardization of the editing APIs, have been incorporated in the HTML5 standard and released in October 2014. When the cooperation ended in Juli 2012\footnote{todo confirm: \url{http://lists.w3.org/Archives/Public/public-whatwg-archive/2012Jul/0119.html}}, the WHATWG kept this work, including the HTML editing APIs in the HTML Living Standard.
 
 % The WHATWG incorporated these APIs. 
 
