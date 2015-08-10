@@ -49,6 +49,7 @@ Type.Contents = function (type) {
    */
   this.insertHTML = function (textNode, offset, nodes) {
 
+    // Required variables
     var i, parent, insertBeforeNode;
 
     // Parse string (if given) to retrieve DOM nodes
