@@ -76,6 +76,8 @@ Type.Contents = function (type) {
     // If first given DOM node is a text, concat it with the text before insertion
     if (nodes[0].nodeType === Node.TEXT_NODE) {
       textNode.nodeValue += nodes[0].nodeValue;
+    } else {
+      parent.insertBefore(nodes[0], insertBeforeNode);
     }
 
     // Chaining
