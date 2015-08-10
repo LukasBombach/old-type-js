@@ -6,6 +6,7 @@ var Type = require('./core');
 // Load core modules
 require('./development');
 require('./settings');
+require('./oop');
 require('./event_api');
 require('./plugin_api');
 require('./environment');
@@ -20,6 +21,7 @@ require('./caret');
 require('./selection_overlay');
 require('./selection');
 require('./input');
+require('./events/type');
 require('./events/input');
 require('./input_filters/caret');
 require('./input_filters/command');
