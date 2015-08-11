@@ -187,9 +187,14 @@ Type.Input = function (type) {
    * @private
    */
   this._onInput = function () {
+
     //this._writer.insertText(this._caret.textNode, this._caret.offset, this._el.textContent);
-    var insertion = new Type.Actions.Insert(this._type, this._caret.textNode, this._caret.offset, this._el.textContent);
-    this._content.execute(insertion);
+
+    //var insertion = new Type.Actions.Insert(this._type, this._caret.textNode, this._caret.offset, this._el.textContent);
+    //this._content.execute(insertion);
+
+    this._content.insert(this._caret.textNode, this._caret.offset, this._el.textContent);
+
     this._caret._setOffset(this._caret.offset + this._el.textContent.length); // todo better api
     this._el.innerHTML = '';
     return this;

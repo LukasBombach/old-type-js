@@ -29,7 +29,7 @@ Type.Actions.Insert = function (type, offset, text) {
 
   /**
    * Inserts text in the editor
-   * @returns {Type.Actions.Type} - This instance
+   * @returns {Type.Actions.Insert} - This instance
    */
   this.execute = function () {
     this._writer.insertText(this._textNode, this._offset, this._text);
@@ -39,9 +39,38 @@ Type.Actions.Insert = function (type, offset, text) {
 
   /**
    * Revokes this action
-   * @returns {Type.Actions.Type} - This instance
+   * @returns {Type.Actions.Insert} - This instance
    */
   this.undo = function () {
+    return this;
+  };
+
+
+  /**
+   * Returns if a given action can be merged with this
+   * action
+   * @param {*} that
+   * @returns {boolean}
+   */
+  this.mergeable = function (that) {
+    return that instanceof Type.Actions.Type;
+  };
+
+  /**
+   * Merges a given action with this action
+   * @param {Type.Actions.Insert|*} that
+   * @returns {Type.Actions.Insert} - This instance
+   */
+  this.merge = function (that) {
+
+    var stack = that.getStack(),
+      length = stack.length,
+      i;
+
+    for (i = 0; i < length; i += 1) {
+      this.add(stack[i].start, stack[i].text);
+    }
+
     return this;
   };
 
@@ -49,7 +78,7 @@ Type.Actions.Insert = function (type, offset, text) {
    *
    * @param {Number} start
    * @param {String} text
-   * @returns {*}
+   * @returns {Type.Actions.Insert} - This instance
    */
   this.add = function (start, text) {
 
@@ -109,11 +138,19 @@ Type.Actions.Insert = function (type, offset, text) {
    *
    * @param {Number} offset
    * @param {Number} numChars
-   * @returns {*}
+   * @returns {Type.Actions.Insert} - This instance
    */
   this.remove = function (offset, numChars) {
     return this;
   };
+
+  /**
+   * Getter for this instance's stack
+   * @returns {Array}
+   */
+  this.getStack = function () {
+    return this._stack || [];
+  }
 
 }).call(Type.Actions.Insert.prototype);
 

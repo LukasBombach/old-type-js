@@ -17,12 +17,16 @@ Type.UndoManager = function (type) {
 
   /**
    *
-   * @param {Type.Actions.Type} action
+   * @param {Type.Actions.Type|Type.Actions.Insert|*} action
    * @returns {Type.UndoManager}
    */
   this.push = function (action) {
     this._stack.length = this._pointer;
-    this._stack.push(action);
+    if (this._stack.length && this._stack[this._pointer].mergeable(action)) {
+      this._stack[this._pointer].merge(action)
+    } else {
+      this._stack.push(action);
+    }
     return this;
   };
 
