@@ -61,12 +61,12 @@ Type.UndoManager = function (type) {
   this.undo = function (steps) {
     steps = !arguments.length ? 1 : steps;
     for (steps; steps > 0; steps -= 1) {
-      this._stack[this._pointer].undo();
-      this._pointer--;
       if (this._pointer < 0) {
-        this._pointer = 0;
+        this._pointer = -1;
         break;
       }
+      this._stack[this._pointer].undo();
+      this._pointer--;
     }
     return this;
   };
@@ -80,8 +80,8 @@ Type.UndoManager = function (type) {
     steps = !arguments.length ? 1 : steps;
     for (steps; steps > 0; steps -= 1) {
       this._pointer++;
-      if (this._pointer > this._stack.length) {
-        this._pointer = this._stack.length;
+      if (this._pointer > this._stack.length - 1) {
+        this._pointer = this._stack.length - 1;
         break;
       }
       this._stack[this._pointer].execute();
