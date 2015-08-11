@@ -25,6 +25,7 @@ require('./events/type');
 
 require('./events/input');
 require('./input_filters/caret');
+require('./input_filters/undo');
 require('./input_filters/command');
 require('./input_filters/remove');
 require('./input_filters/line_breaks');

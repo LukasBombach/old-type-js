@@ -55,7 +55,7 @@ Type.UndoManager = function (type) {
 
   /**
    *
-   * @param {number} steps
+   * @param {number} [steps]
    * @returns {Type.UndoManager}
    */
   this.undo = function (steps) {
@@ -73,7 +73,7 @@ Type.UndoManager = function (type) {
 
   /**
    *
-   * @param {number} steps
+   * @param {number} [steps]
    * @returns {Type.UndoManager}
    */
   this.redo = function (steps) {

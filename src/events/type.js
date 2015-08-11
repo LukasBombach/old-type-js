@@ -70,7 +70,7 @@ Type.Events.Type = function () {
   /**
    * Sets this event instance to be cancelled
    *
-   * @param {boolean} doCancel - Set to false to uncancel
+   * @param {boolean} [doCancel] - Set to false to uncancel
    *     the event. All other values or no value at all
    *     will set the event to be cancelled
    * @returns {Type.Events.Type} - This instance
