@@ -72,6 +72,7 @@ Type.Actions.Insert = function (type, offset, text) {
     }
 
     return this;
+
   };
 
   /**

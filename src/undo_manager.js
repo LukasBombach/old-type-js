@@ -11,6 +11,8 @@ Type.UndoManager = function (type) {
   this._type = type;
   this._stack = [];
   this._pointer = 0;
+  this.lastActionReceived = null;
+  this.mergeDebounce = 500;
 };
 
 (function () {
@@ -28,6 +30,25 @@ Type.UndoManager = function (type) {
       this._stack.push(action);
     }
     return this;
+  };
+
+  /**
+   *
+   * @param action
+   * @returns {boolean}
+   */
+  this.shouldBeMerged = function (action) {
+
+    if (this.lastActionReceived === null) {
+      return false;
+    }
+
+    if (Date.now() < this.lastActionReceived + this.mergeDebounce) {
+      return false;
+    }
+
+    return !!(this._stack.length && this._stack[this._pointer].mergeable(action));
+
   };
 
   /**
