@@ -16,6 +16,7 @@ var Type = require('../core');
  */
 Type.Actions.Insert = function (type, offset, text) {
   this._writer = type.getWriter();
+  this._root = type.getRoot();
   this.add(offset, text);
 };
 //Type.Actions.Insert = function (type, textNode, offset, text) {
@@ -32,7 +33,15 @@ Type.Actions.Insert = function (type, offset, text) {
    * @returns {Type.Actions.Insert} - This instance
    */
   this.execute = function () {
-    this._writer.insertText(this._textNode, this._offset, this._text);
+    //this._writer.insertText(this._textNode, this._offset, this._text);
+    //return this;
+    var len = this._stack.length,
+      nodeInfo,
+      i;
+    for (i = 0; i < len; i += 1) {
+      nodeInfo = Type.TextWalker.nodeAt(this._root, this._stack[i].start);
+      this._writer.insertText(nodeInfo.node, nodeInfo.offset, this._stack[i].text);
+    }
     return this;
   };
 
@@ -42,6 +51,11 @@ Type.Actions.Insert = function (type, offset, text) {
    * @returns {Type.Actions.Insert} - This instance
    */
   this.undo = function () {
+    var len = this._stack.length,
+      i;
+    for (i = 0; i < len; i += 1) {
+      this._writer.remove(Type.Range.fromPositions(this._root, this._stack[i].start, this._stack[i].end));
+    }
     return this;
   };
 
