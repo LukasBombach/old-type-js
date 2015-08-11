@@ -59,8 +59,8 @@ Type.UndoManager = function (type) {
    * @returns {Type.UndoManager}
    */
   this.undo = function (steps) {
-    steps = steps === null ? 1 : steps;
-    for (steps; steps > 0; steps -= 0) {
+    steps = !arguments.length ? 1 : steps;
+    for (steps; steps > 0; steps -= 1) {
       this._stack[this._pointer].undo();
       this._pointer--;
       if (this._pointer < 0) {
@@ -77,8 +77,8 @@ Type.UndoManager = function (type) {
    * @returns {Type.UndoManager}
    */
   this.redo = function (steps) {
-    steps = steps === null ? 1 : steps;
-    for (steps; steps > 0; steps -= 0) {
+    steps = !arguments.length ? 1 : steps;
+    for (steps; steps > 0; steps -= 1) {
       this._stack[this._pointer].execute();
       this._pointer++;
       if (this._pointer > this._stack.length) {

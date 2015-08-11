@@ -36,7 +36,7 @@ Type.Input = function (type) {
    */
   this._loadFilters = function () {
     this._filters = this._filters || {};
-    this._filters.cmd = new Type.Input.Filter.Undo(this._type, this);
+    this._filters.undo = new Type.Input.Filter.Undo(this._type, this);
     this._filters.cmd = new Type.Input.Filter.Command(this._type, this);
     this._filters.caret = new Type.Input.Filter.Caret(this._type, this);
     this._filters.remove = new Type.Input.Filter.Remove(this._type, this);
@@ -150,6 +150,8 @@ Type.Input = function (type) {
 
     var inputEvent = Type.Events.Input.fromKeyDown(e),
       name;
+
+    console.log(inputEvent);
 
     for (name in this._filters) {
       if (this._filters.hasOwnProperty(name)) {
