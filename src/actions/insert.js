@@ -53,7 +53,7 @@ Type.Actions.Insert = function (type, offset, text) {
    * @returns {boolean}
    */
   this.mergeable = function (that) {
-    return that instanceof Type.Actions.Type;
+    return that instanceof Type.Actions.Insert;
   };
 
   /**
@@ -109,7 +109,7 @@ Type.Actions.Insert = function (type, offset, text) {
       }
 
       // Add to insertion if it overlaps with another instertion
-      if (this._stack[i].start >= start && this._stack[i].end <= end) {
+      if (start >= this._stack[i].start && start <= this._stack[i].end) {
         stackText = this._stack[i].text;
         insertPosition = start - this._stack[i].start;
         this._stack[i].text = stackText.substr(0, insertPosition) + text + stackText.substr(insertPosition);
