@@ -26,8 +26,6 @@ Type.Actions.Insert = function (type, offset, text) {
    * @returns {Type.Actions.Insert} - This instance
    */
   this.execute = function () {
-    //this._writer.insertText(this._textNode, this._offset, this._text);
-    //return this;
     var len = this._stack.length,
       nodeInfo,
       i;
@@ -35,9 +33,7 @@ Type.Actions.Insert = function (type, offset, text) {
       nodeInfo = Type.TextWalker.nodeAt(this._root, this._stack[i].start);
       this._writer.insertText(nodeInfo.node, nodeInfo.offset, this._stack[i].text);
     }
-
     this._caret.setOffset(this._stack[len-1].end);
-
     return this;
   };
 

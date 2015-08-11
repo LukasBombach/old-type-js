@@ -79,12 +79,12 @@ Type.UndoManager = function (type) {
   this.redo = function (steps) {
     steps = !arguments.length ? 1 : steps;
     for (steps; steps > 0; steps -= 1) {
-      this._stack[this._pointer].execute();
       this._pointer++;
       if (this._pointer > this._stack.length) {
         this._pointer = this._stack.length;
         break;
       }
+      this._stack[this._pointer].execute();
     }
     return this;
   };
