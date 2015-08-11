@@ -6,25 +6,18 @@ var Type = require('../core');
  * Creates a new Type action
  * @param {Type} type - A type instance on which the action
  *     should be executed
- * @param {Text} textNode - The text node in which the text
- *     should be inserted
- * @param {Number} offset - The character offset in the text
- *     at which the text should be inserted
+ * @param {Number} offset - The character offset at which the
+ *     text should be inserted
  * @param {String} text - The text (containing HTML) that
  *     should be inserted
  * @constructor
  */
 Type.Actions.Insert = function (type, offset, text) {
   this._writer = type.getWriter();
+  this._caret = type.getCaret();
   this._root = type.getRoot();
   this.add(offset, text);
 };
-//Type.Actions.Insert = function (type, textNode, offset, text) {
-//  this._writer = type.getWriter();
-//  this._textNode = textNode;
-//  this._offset = offset;
-//  this._text = text;
-//};
 
 (function () {
 
@@ -42,6 +35,9 @@ Type.Actions.Insert = function (type, offset, text) {
       nodeInfo = Type.TextWalker.nodeAt(this._root, this._stack[i].start);
       this._writer.insertText(nodeInfo.node, nodeInfo.offset, this._stack[i].text);
     }
+
+    this._caret.setOffset(this._stack[i].end);
+
     return this;
   };
 
@@ -56,6 +52,7 @@ Type.Actions.Insert = function (type, offset, text) {
     for (i = 0; i < len; i += 1) {
       this._writer.remove(Type.Range.fromPositions(this._root, this._stack[i].start, this._stack[i].end));
     }
+    this._caret.setOffset(this._stack[i].end);
     return this;
   };
 
