@@ -319,6 +319,36 @@ Type.Range = function (startContainer, startOffset, endContainer, endOffset) {
   };
 
   /**
+   * Merges another range with this range and returns this range.
+   *
+   * @param {Type.Range} that - The range that should be added to
+   *     this range.
+   * @returns {Type.Range} - This instance
+   */
+  this.mergeWith = function (that) {
+
+    var startOrder, endOrder;
+
+    startOrder = Type.DomUtilities.order(this.startContainer, that.startContainer);
+    endOrder = Type.DomUtilities.order(this.endContainer, that.endContainer);
+
+    if (startOrder === 0) {
+      this.startOffset = Math.min(this.startOffset, that.startOffset);
+    } else if (startOrder === 1) {
+      this.startContainer = that.startContainer;
+    }
+
+    if (endOrder === 0) {
+      this.endOffset = Math.max(this.endOffset, that.endOffset);
+    } else if (startOrder === -1) {
+      this.endContainer = that.endContainer;
+    }
+
+    return this;
+
+  };
+
+  /**
    * Internal method to swap the start and end containers as well
    * as their offsets when it is initialized with the endContainer
    * preceding the startContainer.

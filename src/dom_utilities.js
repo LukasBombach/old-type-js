@@ -300,6 +300,23 @@ Type.DomUtilities = function () {
     return !!el.offsetHeight;
   };
 
+  /**
+   * Compares the document positions of two DOM nodes
+   *
+   * @param {Node} a - A DOM node to compare with the given other node
+   * @param {Node} b - A DOM node to compare with the given other node
+   * @returns {number} - Returns -1 if a precedes b, 1 if it is the
+   *     other way around and 0 if they are equal.
+   */
+  Type.DomUtilities.order = function (a, b) {
+    if (a === b) {
+      return 0;
+    }
+    if (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING) {
+      return -1;
+    }
+    return 1;
+  };
 
 }).call(Type.DomUtilities);
 

@@ -143,16 +143,6 @@ Type.Actions.Insert = function (type, offset, text) {
   };
 
   /**
-   *
-   * @param {Number} offset
-   * @param {Number} numChars
-   * @returns {Type.Actions.Insert} - This instance
-   */
-  this.remove = function (offset, numChars) {
-    return this;
-  };
-
-  /**
    * Getter for this instance's stack
    * @returns {Array}
    */
