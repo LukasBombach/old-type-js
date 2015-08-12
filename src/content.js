@@ -17,20 +17,51 @@ Type.Content = function (type) {
 
 (function () {
 
+  /**
+   * Inserts text to the editor's contents and pushes an
+   * action to the undo manager{}
+   *
+   * @param {Text} textNode - The text node in which the
+   *     contents should be inserted
+   * @param {Number} offset - The character offset in the
+   *     text node at which the contents should be inserted
+   * @param {String} content - The text that should be
+   *     inserted
+   * @returns {Type.Content} - This instance
+   */
   this.insert = function (textNode, offset, content) {
+
+    // Change contents
     this._writer.insertText(textNode, offset, content);
 
-
+    // Undo capabilities
     var absOffset = Type.TextWalker.offset(this._root, textNode, 0, offset);
     var insertion = new Type.Actions.Insert(this._type, absOffset, content);
     this._undoManager.push(insertion);
 
-    //var insertion = new Type.Actions.Insert(textNode, offset, content);
-    //this._content.execute(insertion);
+    // Chaining
+    return this;
 
   };
 
-  this.delete = function () {
+  /**
+   * Removes the text inside a given range from the contents
+   *
+   * @param {Type.Range} range - The text range that should
+   *     be removed from the contents.
+   * @returns {Type.Content} - This instance
+   */
+  this.remove = function (range) {
+
+    // Change contents
+    this._writer.remove(range);
+
+    // Undo capabilities
+    var removal = Type.Actions.Remove.fromRange(this._type, range);
+    this._undoManager.push(removal);
+
+    // Chaining
+    return this;
 
   };
 

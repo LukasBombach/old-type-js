@@ -79,4 +79,18 @@ Type.Actions.Remove = function (type, start, end) {
 
 }).call(Type.Actions.Remove.prototype);
 
+
+/**
+ * Creates a new Type action
+ * @param {Type} type - A type instance on which the action
+ *     should be executed
+ * @param {Type.Range} range - The text range that should
+ *     be removed from the contents.
+ * @constructor
+ */
+Type.Actions.Remove.fromRange = function (type, range) {
+  var bookmark = range.save(this._root);
+  return new Type.Actions.Remove(type, bookmark.start, bookmark.end);
+};
+
 module.exports = Type.Actions.Remove;

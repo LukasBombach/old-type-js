@@ -35,6 +35,7 @@ require('./undo_manager');
 require('./content');
 require('./actions/type');
 require('./actions/insert');
+require('./actions/remove');
 
 // Expose Type
 window.Type = Type;
