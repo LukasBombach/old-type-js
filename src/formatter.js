@@ -113,12 +113,13 @@ Type.Formatter = function (type) {
    * @param {Node} startNode
    * @param {Node} endNode
    * @param {...*} [params]
-   * @returns {Type.Formatter}
+   * @returns {Element[]}
    */
   this.insertInline = function (tag, startNode, endNode, params) {
 
     // Required variables
     var currentNode = startNode,
+      createdNodes  = [],
       nodesToWrap   = [],
       nextNode;
 
@@ -138,7 +139,7 @@ Type.Formatter = function (type) {
     // If the node where we stopped contains the endNode,
     // apply this algorithm on it recursively
     if (currentNode && Type.DomUtilities.containsButIsnt(currentNode, endNode)) {
-      this.insertInline(tag, currentNode.firstChild, endNode);
+      createdNodes.concat(this.insertInline(tag, currentNode.firstChild, endNode));
     }
 
     // If we did not find the endNode but there are no more
@@ -146,14 +147,14 @@ Type.Formatter = function (type) {
     // apply this algorithm on it recursively
     if (currentNode === null) {
       nextNode = Type.DomWalker.next(startNode.parentNode.lastChild, this._type.getRoot());
-      this.insertInline(tag, nextNode, endNode);
+      createdNodes.concat(this.insertInline(tag, nextNode, endNode));
     }
 
     // Wrap the nodes we got so far in the provided tag
-    Type.DomUtilities.wrap(tag, nodesToWrap);
+    createdNodes.concat.push(Type.DomUtilities.wrap(tag, nodesToWrap));
 
-    // Chaining
-    return this;
+    // Return all nodes that have been created
+    return createdNodes;
 
   };
 

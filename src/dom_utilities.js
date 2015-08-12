@@ -117,7 +117,7 @@ Type.DomUtilities = function () {
    *
    * @param tag
    * @param elms
-   * @returns {Type.DomUtilities}
+   * @returns {Element}
    */
   Type.DomUtilities.wrap = function (tag, elms) {
 
@@ -154,8 +154,8 @@ Type.DomUtilities = function () {
       this.removeTag(elms[i], tag, true);
     }
 
-    // Chaining
-    return this;
+    // Return newly created element
+    return wrapper;
   };
 
   /**

@@ -14,13 +14,14 @@ var Type = require('../core');
  *     with
  * @constructor
  */
-Type.Actions.Format = function (type, start, end, tag) {
+Type.Actions.Format = function (type, start, end, tag, nodes) {
   this._formatter = type.getFormatter();
   this._caret = type.getCaret();
   this._root = type.getRoot();
-  this.start = start;
-  this.end = end;
-  this.tag = tag;
+  this._start = start;
+  this._end = end;
+  this._tag = tag;
+  this._nodes = nodes;
 };
 
 (function () {
@@ -30,8 +31,10 @@ Type.Actions.Format = function (type, start, end, tag) {
    * @returns {Type.Actions.Format} - This instance
    */
   this.execute = function () {
-    var range = Type.Range.fromPositions(this._root, this.start, this.end);
-    this._formatter.format(this.tag, range);
+    //var end = Math.max(this._end - 1, this._start),
+    //  range = Type.Range.fromPositions(this._root, this._start, end);
+    var range = Type.Range.fromPositions(this._root, this._start, this._end);
+    this._nodes = this._formatter.format(this._tag, range);
     return this;
   };
 
@@ -40,9 +43,19 @@ Type.Actions.Format = function (type, start, end, tag) {
    * @returns {Type.Actions.Format} - This instance
    */
   this.undo = function () {
-    var range = Type.Range.fromPositions(this._root, this.start, this.end);
-    this._formatter.removeFormat(this.tag, range);
+
+    //var range = Type.Range.fromPositions(this._root, this._start, this._end);
+    //this._formatter.removeFormat(this._tag, range);
+
+    var len = this._nodes.length,
+      i;
+
+    for (i = 0; i < len; i += 1) {
+      Type.DomUtilities.unwrap(this._nodes[i]);
+    }
+
     return this;
+
   };
 
 }).call(Type.Actions.Format.prototype);
@@ -58,9 +71,9 @@ Type.Actions.Format = function (type, start, end, tag) {
  *     with
  * @constructor
  */
-Type.Actions.Format.fromRange = function (type, range, tag) {
+Type.Actions.Format.fromRange = function (type, range, tag, nodes) {
   var bookmark = range.save(type.getRoot());
-  return new Type.Actions.Format(type, bookmark.start, bookmark.end, tag);
+  return new Type.Actions.Format(type, bookmark.start, bookmark.end, tag, nodes);
 };
 
 module.exports = Type.Actions.Format;

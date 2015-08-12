@@ -81,12 +81,12 @@ Type.Content = function (type) {
    */
   this.format = function (tag, range) {
 
-    // Undo capabilities
-    var formatting = new Type.Actions.Format.fromRange(this._type, range, tag);
-    this._undoManager.push(formatting);
-
     // Change contents
-    this._formatter.format(tag, range);
+    var nodes = this._formatter.format(tag, range);
+
+    // Undo capabilities
+    var formatting = new Type.Actions.Format.fromRange(this._type, range, tag, nodes);
+    this._undoManager.push(formatting);
 
     // Chaining
     return this;
