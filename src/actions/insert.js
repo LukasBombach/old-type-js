@@ -44,9 +44,11 @@ Type.Actions.Insert = function (type, offset, text) {
    */
   this.undo = function () {
     var len = this._stack.length,
+      range,
       i;
     for (i = len - 1; i >= 0; i -= 1) {
-      this._writer.remove(Type.Range.fromPositions(this._root, this._stack[i].start, this._stack[i].end));
+      range = Type.Range.fromPositions(this._root, this._stack[i].start, this._stack[i].end);
+      this._writer.remove(range);
     }
     this._caret.setOffset(this._stack[0].start);
     return this;

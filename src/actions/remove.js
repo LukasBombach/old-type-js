@@ -6,49 +6,41 @@ var Type = require('../core');
  * Creates a new Type action
  * @param {Type} type - A type instance on which the action
  *     should be executed
- * @param {Number} offset - The character offset at which the
- *     text should be inserted
- * @param {String} text - The text (containing HTML) that
- *     should be inserted
+ * @param {Number} start - The character offset from which the
+ *     text should be removed
+ * @param {Number} end - The character offset to which the
+ *     text should be removed
  * @constructor
  */
-Type.Actions.Insert = function (type, offset, text) {
+Type.Actions.Remove = function (type, start, end) {
   this._writer = type.getWriter();
   this._caret = type.getCaret();
   this._root = type.getRoot();
-  this.add(offset, text);
+  this.start = start;
+  this.end = end;
+  this._contents = this._getContents();
 };
 
 (function () {
 
   /**
-   * Inserts text in the editor
-   * @returns {Type.Actions.Insert} - This instance
+   * Removes text from the editor
+   * @returns {Type.Actions.Remove} - This instance
    */
   this.execute = function () {
-    var len = this._stack.length,
-      nodeInfo,
-      i;
-    for (i = 0; i < len; i += 1) {
-      nodeInfo = Type.TextWalker.nodeAt(this._root, this._stack[i].start);
-      this._writer.insertText(nodeInfo.node, nodeInfo.offset, this._stack[i].text);
-    }
-    this._caret.setOffset(this._stack[len-1].end);
+    var range = Type.Range.fromPositions(this._root, this.start, this.end);
+    this._writer.remove(range);
     return this;
   };
 
 
   /**
-   * Revokes this action
-   * @returns {Type.Actions.Insert} - This instance
+   * Inserts the removed text again
+   * @returns {Type.Actions.Remove} - This instance
    */
   this.undo = function () {
-    var len = this._stack.length,
-      i;
-    for (i = len - 1; i >= 0; i -= 1) {
-      this._writer.remove(Type.Range.fromPositions(this._root, this._stack[i].start, this._stack[i].end));
-    }
-    this._caret.setOffset(this._stack[0].start);
+    var nodeInfo = Type.TextWalker.nodeAt(this._root, this.start);
+    this._writer.insertText(nodeInfo.node, nodeInfo.offset, this._contents);
     return this;
   };
 
@@ -60,97 +52,33 @@ Type.Actions.Insert = function (type, offset, text) {
    * @returns {boolean}
    */
   this.mergeable = function (that) {
-    return that instanceof Type.Actions.Insert;
+    return false; // Deactivated
+    return (that instanceof Type.Actions.Remove) &&
+      ((that.end == this.start) || (that.start == this.end));
   };
 
   /**
-   * Merges a given action with this action
-   * @param {Type.Actions.Insert|*} that
-   * @returns {Type.Actions.Insert} - This instance
+   * Merges another remove action with this remove action
+   * @param {Type.Actions.Remove|*} that
+   * @returns {Type.Actions.Remove} - This instance
    */
   this.merge = function (that) {
-
-    var stack = that.getStack(),
-      length = stack.length,
-      i;
-
-    for (i = 0; i < length; i += 1) {
-      this.add(stack[i].start, stack[i].text);
-    }
-
-    return this;
-
-  };
-
-  /**
-   *
-   * @param {Number} start
-   * @param {String} text
-   * @returns {Type.Actions.Insert} - This instance
-   */
-  this.add = function (start, text) {
-
-    // Required vars
-    var length = text.length,
-      end = start + length,
-      stackText,
-      insertPosition,
-      i;
-
-    // Create stack if not exists
-    this._stack = this._stack || [];
-
-    // Add to stack if stack is empty
-    if (this._stack.length === 0) {
-      this._stack.push({start:start, end:end, text:text});
-      return this;
-    }
-
-    // Iterate over stack and insert maintaining order
-    for (i = 0; i < this._stack.length; i++) {
-
-      // Insert at beginning
-      if (this._stack[i].start > end) {
-        this._stack.splice(i, 0, {start:start, end:end, text:text});
-        break;
-      }
-
-      // Add to insertion if it overlaps with another instertion
-      if (start >= this._stack[i].start && start <= this._stack[i].end) {
-        stackText = this._stack[i].text;
-        insertPosition = start - this._stack[i].start;
-        this._stack[i].text = stackText.substr(0, insertPosition) + text + stackText.substr(insertPosition);
-        this._stack[i].end += length;
-        break;
-      }
-
-      // Add to end
-      if (i+1 >= this._stack.length) {
-        this._stack.push({start:start, end:end, text:text});
-        break;
-      }
-
-      // Insert between other insertions
-      if (this._stack[i].end < start && (this._stack[i+1].start < end)) {
-        this._stack.splice(i, 0, {start:start, end:end, text:text});
-        break;
-      }
-
-    }
-
-    // Chaining
+    this.start = Math.min(this.start, that.start);
+    this.end = Math.max(this.end, that.end);
+    this._contents = this._getContents();
     return this;
   };
 
-
   /**
-   * Getter for this instance's stack
-   * @returns {Array}
+   * Returns the contents between the text offsets of
+   * this action.
+   * @private
    */
-  this.getStack = function () {
-    return this._stack || [];
-  }
+  this._getContents = function () {
+    var range = Type.Range.fromPositions(this._root, this.start, this.end);
+    return range.getNativeRange().cloneContents();
+  };
 
-}).call(Type.Actions.Insert.prototype);
+}).call(Type.Actions.Remove.prototype);
 
-module.exports = Type.Actions.Insert;
+module.exports = Type.Actions.Remove;
