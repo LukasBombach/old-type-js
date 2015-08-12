@@ -58,6 +58,24 @@ Type.Formatter = function (type) {
   /**
    *
    * @param tag
+   * @param range
+   * @returns {*}
+   */
+  this.removeFormat = function (tag, range) {
+
+    var dom = new Type.DomWalker(range.startContainer);
+
+    do {
+      Type.DomUtilities.removeTag(dom.getNode(), tag, false);
+    } while(dom.next() !== range.endContainer);
+
+    return this;
+
+  };
+
+  /**
+   *
+   * @param tag
    * @param typeRange
    * @param params
    * @returns {Type.Formatter}
