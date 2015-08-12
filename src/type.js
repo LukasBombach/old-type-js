@@ -36,6 +36,7 @@ require('./content');
 require('./actions/type');
 require('./actions/insert');
 require('./actions/remove');
+require('./actions/format');
 
 // Expose Type
 window.Type = Type;

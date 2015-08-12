@@ -14,7 +14,8 @@ var Input = require('../input');
  */
 Input.Filter.Command = function (type) {
   this._selection = type.getSelection();
-  this._formating = type.getFormatter();
+  //this._formating = type.getFormatter();
+  this._content = type.getContent();
 };
 
 (function () {
@@ -43,7 +44,7 @@ Input.Filter.Command = function (type) {
 
     if (e.cmd) {
       sel = this._selection.save();
-      this._formating.format(this.tags[e.key], this._selection.getRange());
+      this._content.format(this.tags[e.key], this._selection.getRange());
       this._selection.restore(sel);
       e.cancel();
     }

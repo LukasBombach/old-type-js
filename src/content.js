@@ -10,6 +10,7 @@ var Type = require('./core');
 Type.Content = function (type) {
   this._undoManager = type.getUndoManager();
   this._writer = type.getWriter();
+  this._formatter = type.getFormatter();
   this._root = type.getRoot();
   this._type = type;
   //this._bindEvents(type);
@@ -65,7 +66,14 @@ Type.Content = function (type) {
 
   };
 
-  this.format = function () {
+  this.format = function (tag, range) {
+
+    var formatting = new Type.Actions.Format.fromRange (this._type, range, tag);
+    this._undoManager.push(formatting);
+
+    this._formatter.format(tag, range);
+
+
 
   };
 
