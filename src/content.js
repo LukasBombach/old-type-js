@@ -3,6 +3,11 @@
 var Type = require('./core');
 
 /**
+ * Creates a new Content class
+ *
+ * This class can be used to manipulate the editor's
+ * contents and will make sure any action performed
+ * is undoable and re-doable.
  *
  * @param {Type} type
  * @constructor
@@ -13,7 +18,6 @@ Type.Content = function (type) {
   this._formatter = type.getFormatter();
   this._root = type.getRoot();
   this._type = type;
-  //this._bindEvents(type);
 };
 
 (function () {
@@ -66,30 +70,27 @@ Type.Content = function (type) {
 
   };
 
+  /**
+   * Formats a given text range
+   *
+   * @param {String} tag - The HTML tag the text should
+   *     be formatted with
+   * @param {Type.Range} range - The range of text that
+   *     should be formatted
+   * @returns {Type.Content} - This instance
+   */
   this.format = function (tag, range) {
 
-    var formatting = new Type.Actions.Format.fromRange (this._type, range, tag);
+    // Undo capabilities
+    var formatting = new Type.Actions.Format.fromRange(this._type, range, tag);
     this._undoManager.push(formatting);
 
+    // Change contents
     this._formatter.format(tag, range);
 
-
-
-  };
-
-  //this._bindEvents = function (type) {
-  //  type.on('input')
-  //};
-
-  /**
-   *
-   * @param {Type.Actions.Type} action
-   * @returns {*}
-   */
-  this.execute = function (action) {
-    this._undoManager.push(action);
-    action.execute();
+    // Chaining
     return this;
+
   };
 
 }).call(Type.Content.prototype);
