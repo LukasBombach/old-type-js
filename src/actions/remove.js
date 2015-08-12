@@ -33,7 +33,6 @@ Type.Actions.Remove = function (type, start, end) {
     return this;
   };
 
-
   /**
    * Inserts the removed text again
    * @returns {Type.Actions.Remove} - This instance
@@ -43,7 +42,6 @@ Type.Actions.Remove = function (type, start, end) {
     this._writer.insertText(nodeInfo.node, nodeInfo.offset, this._contents);
     return this;
   };
-
 
   /**
    * Returns if a given action can be merged with this

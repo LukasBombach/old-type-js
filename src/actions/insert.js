@@ -37,7 +37,6 @@ Type.Actions.Insert = function (type, offset, text) {
     return this;
   };
 
-
   /**
    * Revokes this action
    * @returns {Type.Actions.Insert} - This instance
@@ -53,7 +52,6 @@ Type.Actions.Insert = function (type, offset, text) {
     this._caret.setOffset(this._stack[0].start);
     return this;
   };
-
 
   /**
    * Returns if a given action can be merged with this
