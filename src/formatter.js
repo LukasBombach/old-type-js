@@ -47,12 +47,11 @@ Type.Formatter = function (type) {
    *     of the text to format
    * @param {...*} params - Any number of arguments that specify attributes
    *     for the tag
-   * @returns {Type.Formatter}
+   * @returns {Element[]} - The elements created by the formatting function
    */
   this.format = function (tag, typeRange, params) {
     typeRange.ensureIsInside(this._type.getRoot());
-    this._handlerFor(tag).apply(this, arguments);
-    return this;
+    return this._handlerFor(tag).apply(this, arguments);
   };
 
   /**
@@ -80,7 +79,7 @@ Type.Formatter = function (type) {
    * @param tag
    * @param typeRange
    * @param params
-   * @returns {Type.Formatter}
+   * @returns {Type.Formatter|Element[]}
    */
   this.inline = function (tag, typeRange, params) {
 
@@ -89,7 +88,7 @@ Type.Formatter = function (type) {
     // If the selection is enclosed the tag we want to format with
     // remove formatting from selected area
     if (enclosingTag = typeRange.elementEnclosingStartAndEnd(tag)) {
-      this.removeInline(enclosingTag, typeRange);
+      return this.removeInline(enclosingTag, typeRange);
 
       // Otherwise add formatting to selected area
     } else {
@@ -97,10 +96,9 @@ Type.Formatter = function (type) {
       endNode   = this._getEndNode(tag, typeRange);
       params    = Array.prototype.slice.call(arguments, 2);
       args      = [tag, startNode, endNode].concat(params);
-      this.insertInline.apply(this, args);
+      return this.insertInline.apply(this, args);
     }
 
-    return this;
   };
 
   /**
@@ -113,7 +111,7 @@ Type.Formatter = function (type) {
    * @param {Node} startNode
    * @param {Node} endNode
    * @param {...*} [params]
-   * @returns {Element[]}
+   * @returns {Element[]} - The elements created by the formatting function
    */
   this.insertInline = function (tag, startNode, endNode, params) {
 
@@ -151,7 +149,7 @@ Type.Formatter = function (type) {
     }
 
     // Wrap the nodes we got so far in the provided tag
-    createdNodes.concat.push(Type.DomUtilities.wrap(tag, nodesToWrap));
+    createdNodes.push(Type.DomUtilities.wrap(tag, nodesToWrap));
 
     // Return all nodes that have been created
     return createdNodes;
