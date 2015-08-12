@@ -63,11 +63,13 @@ Type.Formatter = function (type) {
    */
   this.removeFormat = function (tag, range) {
 
-    var dom = new Type.DomWalker(range.startContainer);
+    var dom = this._type.createDomWalker(range.startContainer),
+      next;
 
     do {
       Type.DomUtilities.removeTag(dom.getNode(), tag, false);
-    } while(dom.next() !== range.endContainer);
+      next = dom.next();
+    } while(next && next !== range.endContainer);
 
     return this;
 

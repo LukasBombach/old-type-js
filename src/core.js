@@ -136,7 +136,7 @@ function Type(options) {
    *
    * @param {Node} node - Any DOM {Node} to be set as starting
    *     node for the DomWalker
-   * @param {Node|string|Function|{constrainingNode: Node, filter: string|Function}} options
+   * @param {Node|string|Function|{constrainingNode: Node, filter: string|Function}} [options]
    *     See {Type.DomWalker} for a description of possible arguments
    * @returns {Type.DomWalker}
    */
