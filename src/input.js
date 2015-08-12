@@ -151,8 +151,6 @@ Type.Input = function (type) {
     var inputEvent = Type.Events.Input.fromKeyDown(e),
       name;
 
-    console.log(inputEvent);
-
     for (name in this._filters) {
       if (this._filters.hasOwnProperty(name)) {
         this._processFilter(this._filters[name], inputEvent);

@@ -30,6 +30,7 @@ Type.Actions.Remove = function (type, start, end) {
   this.execute = function () {
     var range = Type.Range.fromPositions(this._root, this.start, this.end);
     this._writer.remove(range);
+    this._caret.setOffset(this.start);
     return this;
   };
 
@@ -39,7 +40,8 @@ Type.Actions.Remove = function (type, start, end) {
    */
   this.undo = function () {
     var nodeInfo = Type.TextWalker.nodeAt(this._root, this.start);
-    this._writer.insertText(nodeInfo.node, nodeInfo.offset, this._contents);
+    this._writer.insertHTML(nodeInfo.node, nodeInfo.offset, this._contents);
+    this._caret.setOffset(this.end);
     return this;
   };
 
@@ -74,7 +76,7 @@ Type.Actions.Remove = function (type, start, end) {
    */
   this._getContents = function () {
     var range = Type.Range.fromPositions(this._root, this.start, this.end);
-    return range.getNativeRange().cloneContents();
+    return range.getNativeRange().cloneContents().childNodes;
   };
 
 }).call(Type.Actions.Remove.prototype);
@@ -89,7 +91,7 @@ Type.Actions.Remove = function (type, start, end) {
  * @constructor
  */
 Type.Actions.Remove.fromRange = function (type, range) {
-  var bookmark = range.save(this._root);
+  var bookmark = range.save(type.getRoot());
   return new Type.Actions.Remove(type, bookmark.start, bookmark.end);
 };
 

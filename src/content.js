@@ -53,12 +53,12 @@ Type.Content = function (type) {
    */
   this.remove = function (range) {
 
-    // Change contents
-    this._writer.remove(range);
-
     // Undo capabilities
     var removal = Type.Actions.Remove.fromRange(this._type, range);
     this._undoManager.push(removal);
+
+    // Change contents
+    this._writer.remove(range);
 
     // Chaining
     return this;

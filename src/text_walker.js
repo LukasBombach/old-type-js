@@ -84,6 +84,18 @@ Type.TextWalker = function () {
 
   };
 
+  /**
+   *
+   * @param a
+   * @param b
+   */
+  //this.mergeTexts = function (a, b) {
+  //if (a.nodeType === Node.TEXT_NODE) {
+  //
+  //  }
+  //  }
+  //};
+
 }).call(Type.TextWalker);
 
 

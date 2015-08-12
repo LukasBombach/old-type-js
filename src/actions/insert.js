@@ -140,6 +140,7 @@ Type.Actions.Insert = function (type, offset, text) {
 
     // Chaining
     return this;
+
   };
 
   /**

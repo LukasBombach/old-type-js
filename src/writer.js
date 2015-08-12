@@ -58,6 +58,9 @@ Type.Writer = function (type) {
     // Make array if single DOM node was given
     nodes = nodes.length ? nodes : [nodes];
 
+    // Make nodes an array (in case it is a NodeList)
+    nodes = Array.prototype.slice.call(nodes);
+
     // Split text and prepare insertion
     insertBeforeNode = textNode.splitText(offset);
     parent = insertBeforeNode.parentNode;
@@ -65,6 +68,10 @@ Type.Writer = function (type) {
     // If last given DOM node is a text, concat it with the text behind insertion
     if (nodes[nodes.length-1].nodeType === Node.TEXT_NODE) {
       insertBeforeNode.nodeValue = nodes.pop().nodeValue + insertBeforeNode.nodeValue;
+      if (!nodes.length) {
+        textNode.nodeValue += insertBeforeNode.nodeValue;
+        Type.DomUtilities.removeElement(insertBeforeNode);
+      }
     }
 
     // Insert DOM nodes between split texts
@@ -74,9 +81,9 @@ Type.Writer = function (type) {
     }
 
     // If first given DOM node is a text, concat it with the text before insertion
-    if (nodes[0].nodeType === Node.TEXT_NODE) {
+    if (nodes.length && nodes[0].nodeType === Node.TEXT_NODE) {
       textNode.nodeValue += nodes[0].nodeValue;
-    } else {
+    } else if(nodes.length) {
       parent.insertBefore(nodes[0], insertBeforeNode);
     }
 
