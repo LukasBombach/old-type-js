@@ -94,14 +94,50 @@ Type.Etherpad = function (type) {
 /**
  * Creates a new Type instance connected to an Etherpad server
  *
- * @param {Object} options - The options you would pass to instantiate a Type instance
- * @param {Object} options.etherpad - The options for the Type.Etherpad constructor
+ * @param {{}} options - The options you would pass to instantiate a
+ *     Type instance
+ * @param {{}} options.etherpad - The options for the Type.Etherpad
+ *     constructor
+ * @param {{}|string} [etherpadOpts] - Either the parameters for the
+ *     Type.Etherpad constructor or a pad name as a string
+ * @param {string} [server] - The URL for the Etherpad server
  * @constructor
  */
-Type.fromEtherpad = function(options) {
+Type.fromEtherpad = function(options, etherpadOpts, server) {
+  options = Type.Etherpad.prepareOptions(options, etherpadOpts, server);
   var type = new Type(options);
   new Type.Etherpad(type);
   return type;
+};
+
+/**
+ * Used for the Type.fromEtherpad constructor to process its parameters
+ *
+ * @param {{}} options - The options you would pass to instantiate a
+ *     Type instance
+ * @param {{}} options.etherpad - The options for the Type.Etherpad
+ *     constructor
+ * @param {{}|string} [etherpadOpts] - Either the parameters for the
+ *     Type.Etherpad constructor or a pad name as a string
+ * @param {string} [server] - The URL for the Etherpad server
+ * @returns {{}}
+ */
+Type.Etherpad.prepareOptions = function (options, etherpadOpts, server) {
+
+  options = options || {};
+  etherpadOpts = etherpadOpts || {};
+
+  if (arguments.length === 3) {
+    etherpadOpts = { pad:etherpadOpts, server:server };
+  }
+
+  if (typeof etherpadOpts === 'string') {
+    etherpadOpts = { pad:etherpadOpts };
+  }
+
+  options.etherpad = etherpadOpts;
+  return options;
+
 };
 
 module.exports = Type.Etherpad;
