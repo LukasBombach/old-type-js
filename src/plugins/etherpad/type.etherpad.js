@@ -12,12 +12,11 @@ Type.Etherpad = function (type) {
   this.options(type.options('etherpad') || {});
 
   this._type = type;
-  this._revision = -1;
 
   this._client = new Type.Etherpad.Client(this);
   this._client.onInit(this._initEditor.bind(this));
   this._client.connect();
-  
+
 };
 
 (function () {
@@ -75,6 +74,20 @@ Type.Etherpad = function (type) {
     return arguments.length ? this : this._options;
 
   };
+
+  /**
+   * Will load the pad contents from an Etherpad connection message
+   * to the Type editor contents.
+   *
+   * @param {Object} data - The data field of a CLIENT_VARS message
+   *     from the Etherpad server
+   * @returns {Type.Etherpad} - This instance
+   * @private
+   */
+  this._initEditor = function (data) {
+
+    return this;
+  }
 
 }).call(Type.Etherpad.prototype);
 

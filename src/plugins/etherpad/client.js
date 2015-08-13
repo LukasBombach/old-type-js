@@ -32,6 +32,18 @@ Type.Etherpad.Client = function (etherpad) {
   };
 
   /**
+   * Sets a function that will be called when this client connects to
+   * a server. The pad contents from the server will be passed to the
+   * handler.
+   * @param {Function} handler - The function that will be called
+   * @returns {Type.Etherpad.Client} - This instance
+   */
+  this.onInit = function (handler) {
+    this._onInitHandler = handler;
+    return this;
+  };
+
+  /**
    * Registers a handler that will be called for a given message
    * @param {string} msg - The message on which the handler should be called
    * @param {Function} handler - The handler that should be called
@@ -77,7 +89,7 @@ Type.Etherpad.Client = function (etherpad) {
 
     // This message will be received when connecting to the server
     if(response.type === 'CLIENT_VARS') {
-      this.initEditor(response.data);
+      this._init(response.data);
       return this;
     }
 
@@ -96,6 +108,22 @@ Type.Etherpad.Client = function (etherpad) {
     // Chaining
     return this;
 
+  };
+
+  /**
+   * Will be called when this client successfully connected to an
+   * Etherpad server.
+   * @param {Object} data - The data that ther server sent
+   * @returns {Type.Etherpad.Client} - This instance
+   * @private
+   */
+  this._init = function(data) {
+    this._revision = data.collab_client_vars.rev;
+    this._userId = data.userId;
+    if (this._onInitHandler) {
+      this._onInitHandler(data.collab_client_vars.initialAttributedText.text);
+    }
+    return this;
   };
 
   /**
