@@ -25,7 +25,7 @@ var Type = require('./core');
  */
 Type.DomWalker = function (node, options) {
   this.setNode(node);
-  this.setOptions(options);
+  this.options(options);
 };
 
 (function () {
@@ -105,7 +105,7 @@ Type.DomWalker = function (node, options) {
    * @param options
    * @returns {*}
    */
-  this.setOptions = function (options) {
+  this.options = function (options) {
     this._options = Type.DomWalker.loadOptions(options);
     return this;
   };
