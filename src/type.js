@@ -42,6 +42,7 @@ require('./actions/format');
 require('./plugins/etherpad/type.etherpad');
 require('./plugins/etherpad/util');
 require('./plugins/etherpad/client');
+require('./plugins/etherpad/content');
 
 // Expose Type
 window.Type = Type;

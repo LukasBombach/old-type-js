@@ -12,6 +12,7 @@ var Type = require('../../core');
 Type.Etherpad.Content = function (etherpad) {
   this._client = etherpad.getClient();
   this._typeContent = etherpad.getType().getContent();
+  this._client.registerMessageHandler('NEW_CHANGES', this.updateContent.bind(this));
 };
 
 (function () {
@@ -60,7 +61,8 @@ Type.Etherpad.Content = function (etherpad) {
 
           case '-':
             if(caretAtPosZero) charoffset = 0;
-            this.caret.removeCharacter(parseInt(value, 36));
+            //this.caret.removeCharacter(parseInt(value, 36));
+            this._typeContent.remove(charoffset, parseInt(value, 36));
             console.log('removing', parseInt(value, 36));
             break;
         }

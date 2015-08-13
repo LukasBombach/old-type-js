@@ -60,11 +60,22 @@ Type.Content = function (type) {
   /**
    * Removes the text inside a given range from the contents
    *
-   * @param {Type.Range} range - The text range that should
-   *     be removed from the contents.
+   * @param {Type.Range|Number} range - The text range that should
+   *     be removed from the contents. This parameter can also be
+   *     the start offset
+   * @param {Number} numCharacters - If this parameter is set the
+   *     first parameter will be interpreted as a number and is the
+   *     start offset in the text. This parameter will be the number
+   *     of character to be removed beginning from the start offset.
    * @returns {Type.Content} - This instance
    */
-  this.remove = function (range) {
+  this.remove = function (range, numCharacters) {
+
+    // If only an offset numCharacters were given
+    if (arguments.length === 2) {
+      range = Type.Range.fromPositions(this._root, range, range + numCharacters);
+    }
+
 
     // Undo capabilities
     var removal = Type.Actions.Remove.fromRange(this._type, range);
