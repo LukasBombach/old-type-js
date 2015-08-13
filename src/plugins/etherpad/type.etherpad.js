@@ -3,14 +3,21 @@
 /**
  * Creates a new Type.Etherpad instance
  *
- * @param {Object} [options] - Settings for connecting to an
- *     Etherpad server
+ * @param {Type} type - A Type instance Etherpad should
+ *     use for collaboration
  * @constructor
  */
-Type.Etherpad = function (options) {
-  this.options(options || {});
+Type.Etherpad = function (type) {
+
+  this.options(type.options('etherpad') || {});
+
+  this._type = type;
   this._revision = -1;
+
   this._client = new Type.Etherpad.Client(this);
+  this._client.onInit(this._initEditor.bind(this));
+  this._client.connect();
+  
 };
 
 (function () {
@@ -78,7 +85,10 @@ Type.Etherpad = function (options) {
  */
 Type.fromEtherpad = function(options) {
 
+  var type = new Type(options),
+    etherpad = new Type.Etherpad(type);
 
+  return type;
 
 };
 
