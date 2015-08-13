@@ -92,17 +92,16 @@ Type.Etherpad = function (type) {
 }).call(Type.Etherpad.prototype);
 
 /**
- *
- * @param options
+ * Creates a new Type instance connected to an Etherpad server
+ * 
+ * @param {Object} options - The options you would pass to instantiate a Type instance
+ * @param {Object} options.etherpad - The options for the Type.Etherpad constructor
  * @constructor
  */
 Type.fromEtherpad = function(options) {
-
-  var type = new Type(options),
-    etherpad = new Type.Etherpad(type);
-
+  var type = new Type(options);
+  new Type.Etherpad(type);
   return type;
-
 };
 
 module.exports = Type.Etherpad;
