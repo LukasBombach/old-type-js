@@ -8,6 +8,7 @@
  */
 Type.Etherpad.Client = function (etherpad) {
   this._etherpad = etherpad;
+  this._msgHandlers = {};
 };
 
 (function () {
@@ -26,17 +27,84 @@ Type.Etherpad.Client = function (etherpad) {
   this.connect = function () {
     this._socket = io.connect(this._url(), this._socketIoOptions());
     this._socket.once('connect', function () {
-      this.sendClientReady();
+      this._sendClientReady();
     }.bind(this));
-    this._socket.on('message', this.handleMessage.bind(this));
+    this._socket.on('message', this._handleMessage.bind(this));
     return this;
+  };
+
+  /**
+   * Registers a handler that will be called for a given message
+   * @param {string} msg - The message on which the handler should be called
+   * @param {Function} handler - The handler that should be called
+   * @returns {Type.Etherpad.Client} - This instance
+   */
+  this.registerMessageHandler = function (msg, handler) {
+    this._msgHandlers[msg] = this._msgHandlers[msg] || [];
+    this._msgHandlers[msg].push(handler);
+    return this;
+  };
+
+  /**
+   * Removes a handler for a given message
+   * @param {string} msg - The message on which the handler is called
+   * @param {Function} handler - The handler that should be removed
+   * @returns {Type.Etherpad.Client} - This instance
+   */
+  this.unregisterMessageHandler = function (msg, handler) {
+    var index;
+    if (this._msgHandlers[msg]) {
+      index = this._msgHandlers[msg].indexOf(handler);
+      if (index > -1) {
+        this._msgHandlers[msg].splice(index, 1);
+      }
+    }
+    return this;
+  };
+
+  /**
+   * Will call the message handlers registered for Etherpad messages
+   * @param {Object} response - The message from the server
+   * @returns {Type.Etherpad.Client} - This instance
+   * @private
+   */
+  this._handleMessage = function(response) {
+
+    // Required variables
+    var msg = response.data.type,
+      len, i;
+
+    // Dev code
+    Type.Development.debug('message', response);
+
+    // This message will be received when connecting to the server
+    if(response.type === 'CLIENT_VARS') {
+      this.initEditor(response.data);
+      return this;
+    }
+
+    // Notify developers on unhandled messages from the server
+    if (!this._msgHandlers[msg]) {
+      Type.Development.debug('Unhandled etherpad message', response);
+      return this;
+    }
+
+    // For all other messsages call the according message handlers
+    len = this._msgHandlers[msg].length;
+    for (i = 0; i < len; i += 1) {
+      this._msgHandlers[msg][i](response.data);
+    }
+
+    // Chaining
+    return this;
+
   };
 
   /**
    * Sends a 'CLIENT_READY' message to an Etherpad server
    * @returns {Type.Etherpad.Client} - This instance
    */
-  this.sendClientReady = function() {
+  this._sendClientReady = function() {
     var msg = {
       "component" : 'pad',
       "type"      : 'CLIENT_READY',
