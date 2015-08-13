@@ -79,7 +79,7 @@ Type.Etherpad = function (type) {
    * Will load the pad contents from an Etherpad connection message
    * to the Type editor contents.
    *
-   * @param {Object} contents - The contents of the editor sent by
+   * @param {string} contents - The contents of the editor sent by
    *     the server
    * @returns {Type.Etherpad} - This instance
    * @private
@@ -93,7 +93,7 @@ Type.Etherpad = function (type) {
 
 /**
  * Creates a new Type instance connected to an Etherpad server
- * 
+ *
  * @param {Object} options - The options you would pass to instantiate a Type instance
  * @param {Object} options.etherpad - The options for the Type.Etherpad constructor
  * @constructor
