@@ -139,8 +139,8 @@ Type.Etherpad.Client = function (etherpad) {
       "type"        : 'CLIENT_READY',
       "token"       : Type.Etherpad.Util.getRandomToken(),
       "padId"       : this._etherpad.options('pad'),
-      "sessionID"   : "null", //decodeURIComponent(Type.Etherpad.Util.readCookie("sessionID")),
-      "password"    : null, //Type.Etherpad.Util.readCookie("password"),
+      "sessionID"   : "null",
+      "password"    : null,
       "protocolVersion": 2
     };
     this._socket.json.send(msg);

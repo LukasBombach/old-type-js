@@ -19,6 +19,8 @@ Type.Etherpad = function (type) {
   this._client.onInit(this._initEditor.bind(this));
   this._client.connect();
 
+  this._content = new Type.Etherpad.Content(this);
+
 };
 
 (function () {
@@ -75,6 +77,22 @@ Type.Etherpad = function (type) {
     // Chaining / Returning data
     return arguments.length ? this : this._options;
 
+  };
+
+  /**
+   * Getter for the Type instance
+   * @returns {Type}
+   */
+  this.getType = function () {
+    return this._type;
+  };
+
+  /**
+   * Getter for the Etherpad client
+   * @returns {Type.Etherpad.Client}
+   */
+  this.getClient = function () {
+    return this._client;
   };
 
   /**

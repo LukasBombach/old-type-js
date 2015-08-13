@@ -26,15 +26,23 @@ Type.Content = function (type) {
    * Inserts text to the editor's contents and pushes an
    * action to the undo manager{}
    *
-   * @param {Text} textNode - The text node in which the
+   * @param {Text|Number} textNode - The text node in which the
    *     contents should be inserted
-   * @param {Number} offset - The character offset in the
+   * @param {Number|String} offset - The character offset in the
    *     text node at which the contents should be inserted
-   * @param {String} content - The text that should be
+   * @param {String} [content] - The text that should be
    *     inserted
    * @returns {Type.Content} - This instance
    */
   this.insert = function (textNode, offset, content) {
+
+    // If only an offset and contents were given
+    if (arguments.length === 2) {
+      var nodeInfo = Type.TextWalker.nodeAt(this._root, textNode);
+      content = offset;
+      offset = nodeInfo.offset;
+      textNode = nodeInfo.node;
+    }
 
     // Change contents
     this._writer.insertText(textNode, offset, content);
