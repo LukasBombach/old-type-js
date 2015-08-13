@@ -26,9 +26,7 @@ Type.Etherpad.Client = function (etherpad) {
    */
   this.connect = function () {
     this._socket = io.connect(this._url(), this._socketIoOptions());
-    this._socket.once('connect', function () {
-      this._sendClientReady();
-    }.bind(this));
+    this._socket.once('connect', this._sendClientReady.bind(this));
     this._socket.on('message', this._handleMessage.bind(this));
     return this;
   };
