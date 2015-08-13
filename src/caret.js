@@ -31,8 +31,8 @@ Type.Caret = function (options) {
 
   this._constrainingNode = options.constrainingNode || document.body;
   this.caretEl = this._createElement(options.color);
-  this.moveTo(this._constrainingNode);
-  this._hide();
+  //this.moveTo(this._constrainingNode);
+  //this._hide();
 
 };
 

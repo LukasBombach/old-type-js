@@ -1,5 +1,7 @@
 'use strict';
 
+var Type = require('../../core');
+
 /**
  * Creates a new Type.Etherpad instance
  *
@@ -94,7 +96,7 @@ Type.Etherpad = function (type) {
 /**
  * Creates a new Type instance connected to an Etherpad server
  *
- * @param {{}} options - The options you would pass to instantiate a
+ * @param {{}|Element} options - The options you would pass to instantiate a
  *     Type instance
  * @param {{}} options.etherpad - The options for the Type.Etherpad
  *     constructor
@@ -126,6 +128,10 @@ Type.Etherpad.prepareOptions = function (options, etherpadOpts, server) {
 
   options = options || {};
   etherpadOpts = etherpadOpts || {};
+
+  if (Type.DomUtilities.isNode(options)) {
+    options = { el: options };
+  }
 
   if (arguments.length === 3) {
     etherpadOpts = { pad:etherpadOpts, server:server };

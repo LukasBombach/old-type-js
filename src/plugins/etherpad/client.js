@@ -1,5 +1,7 @@
 'use strict';
 
+var Type = require('../../core');
+
 /**
  * Creates a new Type.Etherpad.Client instance
  *

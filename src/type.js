@@ -38,5 +38,10 @@ require('./actions/insert');
 require('./actions/remove');
 require('./actions/format');
 
+// Packaging Etherpad for development and demo
+require('./plugins/etherpad/type.etherpad');
+require('./plugins/etherpad/util');
+require('./plugins/etherpad/client');
+
 // Expose Type
 window.Type = Type;

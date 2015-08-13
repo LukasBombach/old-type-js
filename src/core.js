@@ -7,7 +7,7 @@
  * options as well getters and setters for instances
  * of core modules.
  *
- * @param {Object|Element} options - Either pass
+ * @param {{}|Element} options - Either pass
  *     an associative array with options for this
  *     editor or the root element that should be
  *     used to modify its contents for WYSIWYG

@@ -1,9 +1,10 @@
 'use strict';
 
+var Type = require('../../core');
+
 /**
  * Creates a new Type.Etherpad.Util instance
- *
- * @param etherpad
+ * Contains utility methods for Type.Etherpad
  * @constructor
  */
 Type.Etherpad.Util = function () {
