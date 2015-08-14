@@ -199,6 +199,17 @@ Type.Caret = function (options) {
   };
 
   /**
+   * Moves the charet by the number of chars passed to as numChars
+   * @param {number} numChars - The number of chars the caret should be moved by.
+   *     Accepts negative values.
+   * @returns {*}
+   */
+  this.moveBy = function (numChars) {
+    this.setOffset(Math.max(0, this.getOffset() + numChars));
+    return this;
+  };
+
+  /**
    * Places the caret in a text node at a given position
    *
    * @param {Node} node - The (text) {Node} in which the caret should be placed

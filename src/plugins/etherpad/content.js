@@ -11,7 +11,7 @@ var Type = require('../../core');
  */
 Type.Etherpad.Content = function (etherpad) {
   this._client = etherpad.getClient();
-  //this._typeContent = etherpad.getType().getContent();
+  this._localCaret = etherpad.getType().getCaret();
   this._typeContent = new Type.Content(etherpad.getType());
   this._client.registerMessageHandler('NEW_CHANGES', this.updateContent.bind(this));
 };
@@ -57,6 +57,7 @@ Type.Etherpad.Content = function (etherpad) {
             if(caretAtPosZero) charoffset = 0;
             //this.caret.insertText(charBank);
             this._typeContent.insert(charoffset, charBank);
+            this._localCaret.moveBy(charBank.length);
             console.log('writing', charBank);
             break;
 
@@ -64,6 +65,7 @@ Type.Etherpad.Content = function (etherpad) {
             if(caretAtPosZero) charoffset = 0;
             //this.caret.removeCharacter(parseInt(value, 36));
             this._typeContent.remove(charoffset, parseInt(value, 36));
+            this._localCaret.moveBy(parseInt(value, 36) * -1);
             console.log('removing', parseInt(value, 36));
             break;
         }

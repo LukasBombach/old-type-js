@@ -157,7 +157,7 @@ function Type(options) {
 
   /**
    * Getter for this instance's caret.
-   * @returns {Caret}
+   * @returns {Type.Caret}
    */
   this.getCaret = function () {
     return this._caret;
