@@ -51,37 +51,67 @@ Type.UndoManager = function (type) {
 
   /**
    *
+   * @param {*} [sourceId]
    * @param {number} [steps]
    * @returns {Type.UndoManager}
    */
-  this.undo = function (steps) {
+  this.undo = function (sourceId, steps) {
+
     steps = !arguments.length ? 1 : steps;
-    for (steps; steps > 0; steps -= 1) {
-      if (this._pointer < 0) {
-        this._pointer = -1;
-        break;
+
+    //for (steps; steps > 0; steps -= 1) {
+    //  if (this._pointer < 0) {
+    //    this._pointer = -1;
+    //    break;
+    //  }
+    //  this._stack[this._pointer].undo(this._getCharacterShift());
+    //  this._pointer--;
+    //}
+
+    while (steps > 0 && this._pointer > -1) {
+      if (this._stack[this._pointer].sourceId === sourceId || sourceId === undefined) {
+        this._stack[this._pointer].undo(this._getCharacterShift());
+        this._pointer -= 1;
+        steps -= 1;
       }
-      this._stack[this._pointer].undo(this._getCharacterShift());
-      this._pointer--;
     }
+
     return this;
   };
 
   /**
    *
-   * @param {number} [steps]
+   * @param {*} [sourceId]
+   * @param {number} [steps]1
    * @returns {Type.UndoManager}
    */
-  this.redo = function (steps) {
+  this.redo = function (sourceId, steps) {
+
+    var stackLen = this._stack.length;
+
     steps = !arguments.length ? 1 : steps;
-    for (steps; steps > 0; steps -= 1) {
-      this._pointer++;
-      if (this._pointer > this._stack.length - 1) {
-        this._pointer = this._stack.length - 1;
-        break;
+
+
+    //for (steps; steps > 0; steps -= 1) {
+    //  this._pointer++;
+    //  if (this._pointer > this._stack.length - 1) {
+    //    this._pointer = this._stack.length - 1;
+    //    break;
+    //  }
+    //  this._stack[this._pointer].execute(this._getCharacterShift());
+    //}
+
+    while (steps > 0 && this._pointer < stackLen) {
+      if (this._stack[this._pointer].sourceId === sourceId || sourceId === undefined) {
+        this._pointer++;
+        if (this._pointer > this._stack.length - 1) {
+          this._pointer = this._stack.length - 1;
+          break;
+        }
+        this._stack[this._pointer].execute(this._getCharacterShift());
       }
-      this._stack[this._pointer].execute(this._getCharacterShift());
     }
+
     return this;
   };
 
