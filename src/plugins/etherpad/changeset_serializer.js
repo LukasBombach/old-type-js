@@ -26,10 +26,16 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
    */
   this.getString = function (base) {
 
-    var changeset;
+    var changeset, len, i;
 
-    changeset  = this._baseLength(base);
-    changeset += this._lengthChange();
+    len = this._operations.length;
+
+    changeset  = this._baseLengthString(base);
+    changeset += this._lengthChangeString();
+
+    for (i = 0; i < len; i += 1) {
+      changeset += this._operationString(this._operations[i]);
+    }
 
     return changeset;
   };
@@ -44,7 +50,7 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
    * @returns {string} - The 36 base encoded number
    * @private
    */
-  this._baseLength = function (base) {
+  this._baseLengthString = function (base) {
     return 'Z:' + this._lengthFor(base).toString(36);
   };
 
@@ -55,9 +61,21 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
    * @returns {string}
    * @private
    */
-  this._lengthChange = function () {
+  this._lengthChangeString = function () {
     var count = this._countLengthChange();
     return (count > 0 ? '>' : '<') + count;
+  };
+
+  /**
+   * Returns a serialized operation as a string
+   *
+   * @param {{start: number, end: number, text: string}|{start: number, numChars: number}} operation
+   *     An insertion or removal object
+   * @returns {string} - The serialized string for the operation
+   * @private
+   */
+  this._operationString = function (operation) {
+    return '';
   };
 
   /**
