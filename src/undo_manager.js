@@ -80,7 +80,7 @@ Type.UndoManager = function (type) {
         this._pointer = this._stack.length - 1;
         break;
       }
-      this._stack[this._pointer].execute();
+      this._stack[this._pointer].execute(this._getCharacterShift());
     }
     return this;
   };
@@ -91,7 +91,7 @@ Type.UndoManager = function (type) {
    * return them. This can be used bei actions to shift the
    * their character offset to which they apply their changes.
    *
-   * @param {number} targetPointer - The stack pointer
+   * @param {number} [targetPointer] - The stack pointer
    *     to which all character shifts shall be collected
    * @returns {number[][]} - A map of insertions and removals
    *     First dimensions is at which offsets characters have
@@ -102,7 +102,7 @@ Type.UndoManager = function (type) {
   this._getCharacterShift = function (targetPointer) {
 
     targetPointer = targetPointer === undefined ? this._pointer : targetPointer;
-    
+
     var len = this._stack.length - 1,
       shifts = [],
       i;
