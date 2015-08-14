@@ -13,7 +13,7 @@ var Type = require('./core');
  * @constructor
  */
 Type.Content = function (type) {
-  this._sourceId = this._getUniqueSourceId();
+  this._sourceId = this._createUniqueSourceId();
   this._undoManager = type.getUndoManager();
   this._writer = type.getWriter();
   this._formatter = type.getFormatter();
@@ -114,11 +114,19 @@ Type.Content = function (type) {
   };
 
   /**
+   * Getter for this content's source id
+   * @returns {number}
+   */
+  this.getSourceId = function () {
+    return this._sourceId;
+  };
+
+  /**
    *
    * @returns {*|number}
    * @private
    */
-  this._getUniqueSourceId = function () {
+  this._createUniqueSourceId = function () {
     Type.Content._lastSourceId = Type.Content._lastSourceId || 0;
     Type.Content._lastSourceId += 1;
     return Type.Content._lastSourceId;

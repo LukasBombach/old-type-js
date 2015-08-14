@@ -12,6 +12,7 @@ var Input = require('../input');
  */
 Input.Filter.Undo = function (type, input) {
   this._undoManager = type.getUndoManager();
+  this._sourceId = input.getContent().getSourceId();
 };
 
 (function () {
@@ -28,10 +29,10 @@ Input.Filter.Undo = function (type, input) {
   this.undoRedo = function (e) {
 
     if (e.cmd && e.shift) {
-      this._undoManager.redo();
+      this._undoManager.redo(this._sourceId);
       e.cancel();
     } else if (e.cmd) {
-      this._undoManager.undo();
+      this._undoManager.undo(this._sourceId);
       e.cancel();
     }
 
