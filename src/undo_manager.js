@@ -101,6 +101,15 @@ Type.UndoManager = function (type) {
    */
   this._getCharacterShift = function (targetPointer) {
 
+    var len = this._stack.length - 1,
+      shifts = [],
+      i;
+
+    for (i = len; i <= this._pointer; i -= 1) {
+      shifts.concat(this._stack[i].getCharacterShift())
+    }
+
+    return shifts;
   }
 
 }).call(Type.UndoManager.prototype);
