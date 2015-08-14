@@ -137,7 +137,7 @@ Type.Etherpad.Changeset = function (str) {
    * @private
    */
   this._createRemoval = function (offset, numChars) {
-    return { start:offset, numChars:numChars*-1 }
+    return { op:'-', start:offset, numChars:numChars*-1 }
   };
 
   /**
@@ -150,7 +150,7 @@ Type.Etherpad.Changeset = function (str) {
    * @private
    */
   this._createInsertion = function (offset, text) {
-    return { start:offset, end:offset+text.length, numChars:text.length, text:text }
+    return { op:'+', start:offset, end:offset+text.length, numChars:text.length, text:text }
   };
 
   /**
