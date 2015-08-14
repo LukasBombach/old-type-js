@@ -92,7 +92,7 @@ Type.OOP.inherits(Type.Actions.Remove, Type.Actions.Type);
    */
   this.getCharacterShift = function () {
     var len = this.start - this.end;
-    return this.undone ? [[0,0]] : [[this.start, len * -1]];
+    return this.undone ? [[0,0]] : [[this.start, len]];
   };
 
   /**
