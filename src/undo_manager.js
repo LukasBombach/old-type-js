@@ -107,7 +107,7 @@ Type.UndoManager = function (type) {
       shifts = [],
       i;
 
-    for (i = len; i <= targetPointer; i -= 1) {
+    for (i = len; i >= targetPointer; i -= 1) {
       shifts.concat(this._stack[i].getCharacterShift())
     }
 

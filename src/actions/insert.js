@@ -24,6 +24,11 @@ Type.Actions.Insert = function (sourceId, type, offset, text, undone) {
   this.add(offset, text);
 };
 
+/**
+ * Inherit from general Type action
+ */
+Type.OOP.inherits(Type.Actions.Insert, Type.Actions.Type);
+
 (function () {
 
   /**

@@ -31,6 +31,11 @@ Type.Actions.Format = function (sourceId, type, start, end, tag, nodes, undone) 
   this._nodes = nodes;
 };
 
+/**
+ * Inherit from general Type action
+ */
+Type.OOP.inherits(Type.Actions.Format, Type.Actions.Type);
+
 (function () {
 
   /**

@@ -26,6 +26,11 @@ Type.Actions.Remove = function (sourceId, type, start, end, undone) {
   this._contents = this._getContents();
 };
 
+/**
+ * Inherit from general Type action
+ */
+Type.OOP.inherits(Type.Actions.Remove, Type.Actions.Type);
+
 (function () {
 
   /**
