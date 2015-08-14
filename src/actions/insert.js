@@ -90,6 +90,32 @@ Type.Actions.Insert = function (sourceId, type, offset, text, undone) {
   };
 
   /**
+   * Returns the offsets and number of characters
+   * this actions inserts
+   * @returns {number[][]}
+   */
+  this.getCharacterShift = function () {
+
+    var shifts, shift, len, stck, i;
+
+    if (this.undone) {
+      return [[0,0]];
+    }
+
+    shifts = [];
+    len = this._stack.length;
+
+    for (i = 0; i < len; i += 1) {
+      stck = this._stack[i];
+      shift = [stck.start, stck.start - stck.end];
+      shifts.push(shift)
+    }
+
+    return shifts;
+
+  };
+
+  /**
    *
    * @param {Number} start
    * @param {String} text
