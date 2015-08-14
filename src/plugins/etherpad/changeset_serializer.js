@@ -13,6 +13,7 @@ var Type = require('../../core');
  */
 Type.Etherpad.ChangesetSerializer = function (changeset) {
   this._changeset = changeset;
+  this._operations = this._getOperations();
 };
 
 (function () {
@@ -25,18 +26,28 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
    */
   this.getString = function (base) {
 
-    var operations = this._getOperations(),
-      len = operations.length,
-      changeset, i, length, lengthDiff;
+    var changeset;
 
-    //changeset =
+    changeset  = this._baseLength(base);
 
     return changeset;
   };
 
   /**
    * Returns the length of a string or the text inside an element
-   * 
+   * as a 36 base encoded number (returned as a string)
+   *
+   * @param {string|Element} base - Either a string or an element
+   * @returns {string} - The 36 base encoded number
+   * @private
+   */
+  this._baseLength = function (base) {
+    return 'Z:' + this._lengthFor(base).toString(36);
+  };
+
+  /**
+   * Returns the length of a string or the text inside an element
+   *
    * @param {string|Element} base - Either a string or an element
    * @returns {number|null} - Will return the text length or null
    *     if the argument passed is not a string or an element
