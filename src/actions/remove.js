@@ -42,7 +42,7 @@ Type.OOP.inherits(Type.Actions.Remove, Type.Actions.Type);
     var adj = this._getShiftTo(this.start, shifts),
       range = Type.Range.fromPositions(this._root, this.start + adj, this.end + adj);
     this._writer.remove(range);
-    this._caret.setOffset(this.start);
+    this._caret.setOffset(this.start + adj);
     this.undone = false;
     return this;
   };
@@ -56,7 +56,7 @@ Type.OOP.inherits(Type.Actions.Remove, Type.Actions.Type);
     var adj = this._getShiftTo(this.start, shifts),
       nodeInfo = Type.TextWalker.nodeAt(this._root, this.start + adj);
     this._writer.insertHTML(nodeInfo.node, nodeInfo.offset, this._contents);
-    this._caret.setOffset(this.end);
+    this._caret.setOffset(this.end + adj);
     this.undone = true;
     return this;
   };

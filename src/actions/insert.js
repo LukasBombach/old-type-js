@@ -44,7 +44,7 @@ Type.OOP.inherits(Type.Actions.Insert, Type.Actions.Type);
       nodeInfo = Type.TextWalker.nodeAt(this._root, this._stack[i].start + adj);
       this._writer.insertText(nodeInfo.node, nodeInfo.offset, this._stack[i].text);
     }
-    this._caret.setOffset(this._stack[len-1].end);
+    this._caret.setOffset(this._stack[len-1].end + adj);
     this.undone = false;
     return this;
   };
@@ -63,7 +63,7 @@ Type.OOP.inherits(Type.Actions.Insert, Type.Actions.Type);
       range = Type.Range.fromPositions(this._root, this._stack[i].start+adj, this._stack[i].end+adj);
       this._writer.remove(range);
     }
-    this._caret.setOffset(this._stack[0].start);
+    this._caret.setOffset(this._stack[0].start + adj);
     this.undone = true;
     return this;
   };
