@@ -66,6 +66,15 @@ Type.Etherpad.Changeset = function (str) {
 
   };
 
+  /**
+   * Creates a changeset string representing this instance
+   *
+   * @returns {string} - The changeset string
+   */
+  this.serialize = function () {
+    this._insertions.sort(this._compareInsertions);
+    return '';
+  };
 
   /**
    * Will add a command to insert text to this changeset
@@ -191,6 +200,7 @@ Type.Etherpad.Changeset = function (str) {
 
   /**
    * Reads the charbank from a changeset string
+   *
    * @param {string} str - A serialized changeset
    * @returns {string|null} - The charbank or null
    *     if there is no charbank
@@ -199,7 +209,25 @@ Type.Etherpad.Changeset = function (str) {
   this._getCharbank = function (str) {
     var opsEnd = str.indexOf('$')+1;,
     return opsEnd >= 0 ? str.substring(opsEnd) : null;
-  }
+  };
+
+
+  /**
+   * Compares the offsets of two insertions. This method can be
+   * used with Array.prototype.sort
+   *
+   * @param {{start: number, end: number, text: string}} a - An
+   *     insertion object
+   * @param {{start: number, end: number, text: string}} b - An
+   *     insertion object
+   * @returns {number}
+   * @private
+   */
+  this._compareInsertions = function (a, b) {
+    if (a.start < b.start) return -1;
+    if (a.start > b.start) return 1;
+    return 0;
+  };
 
 }).call(Type.Etherpad.Changeset.prototype);
 
