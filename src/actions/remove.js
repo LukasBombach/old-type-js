@@ -75,6 +75,16 @@ Type.Actions.Remove = function (sourceId, type, start, end, undone) {
   };
 
   /**
+   * Returns the offsets and number of characters
+   * this actions inserts or removes
+   * @returns {number[][]}
+   */
+  this.getCharacterShift = function () {
+    var len = this.start - this.end;
+    return this.undone ? [[0,0]] : [[this.start, len]];
+  };
+
+  /**
    * Returns the contents between the text offsets of
    * this action.
    * @private
