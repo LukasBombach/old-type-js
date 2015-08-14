@@ -28,35 +28,38 @@ Type.Actions.Insert = function (sourceId, type, offset, text, undone) {
 
   /**
    * Inserts text in the editor
+   * @param {Number[][]} shifts
    * @returns {Type.Actions.Insert} - This instance
    */
-  this.execute = function () {
+  this.execute = function (shifts) {
     var len = this._stack.length,
-      nodeInfo,
-      i;
+      nodeInfo, i, adj;
     for (i = 0; i < len; i += 1) {
-      nodeInfo = Type.TextWalker.nodeAt(this._root, this._stack[i].start);
+      adj = this._getShiftTo(this._stack[i].start, shifts);
+      nodeInfo = Type.TextWalker.nodeAt(this._root, this._stack[i].start + adj);
       this._writer.insertText(nodeInfo.node, nodeInfo.offset, this._stack[i].text);
     }
     this._caret.setOffset(this._stack[len-1].end);
+    this.undone = false;
     return this;
   };
 
   /**
    * Revokes this action
-   * @param {Number[][]} characterShift
+   * @param {Number[][]} shifts
    * @returns {Type.Actions.Insert} - This instance
    */
 
-  this.undo = function (characterShift) {
+  this.undo = function (shifts) {
     var len = this._stack.length,
-      range,
-      i;
+      range, i, adj;
     for (i = len - 1; i >= 0; i -= 1) {
-      range = Type.Range.fromPositions(this._root, this._stack[i].start, this._stack[i].end);
+      adj = this._getShiftTo(this._stack[i].start, shifts);
+      range = Type.Range.fromPositions(this._root, this._stack[i].start+adj, this._stack[i].end+adj);
       this._writer.remove(range);
     }
     this._caret.setOffset(this._stack[0].start);
+    this.undone = true;
     return this;
   };
 

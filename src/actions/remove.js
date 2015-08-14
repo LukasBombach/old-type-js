@@ -30,23 +30,29 @@ Type.Actions.Remove = function (sourceId, type, start, end, undone) {
 
   /**
    * Removes text from the editor
+   * @param {Number[][]} shifts
    * @returns {Type.Actions.Remove} - This instance
    */
-  this.execute = function () {
-    var range = Type.Range.fromPositions(this._root, this.start, this.end);
+  this.execute = function (shifts) {
+    var adj = this._getShiftTo(this.start, shifts),
+      range = Type.Range.fromPositions(this._root, this.start + adj, this.end + adj);
     this._writer.remove(range);
     this._caret.setOffset(this.start);
+    this.undone = false;
     return this;
   };
 
   /**
    * Inserts the removed text again
+   * @param {Number[][]} shifts
    * @returns {Type.Actions.Remove} - This instance
    */
-  this.undo = function () {
-    var nodeInfo = Type.TextWalker.nodeAt(this._root, this.start);
+  this.undo = function (shifts) {
+    var adj = this._getShiftTo(this.start, shifts),
+      nodeInfo = Type.TextWalker.nodeAt(this._root, this.start + adj);
     this._writer.insertHTML(nodeInfo.node, nodeInfo.offset, this._contents);
     this._caret.setOffset(this.end);
+    this.undone = true;
     return this;
   };
 

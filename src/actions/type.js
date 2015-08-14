@@ -22,6 +22,7 @@ Type.Actions.Type = function (sourceId, undone) {
    * @returns {Type.Actions.Type} - This instance
    */
   this.execute = function () {
+    this.undone = false;
     return this;
   };
 
@@ -32,6 +33,7 @@ Type.Actions.Type = function (sourceId, undone) {
    * @returns {Type.Actions.Type} - This instance
    */
   this.undo = function () {
+    this.undone = true;
     return this;
   };
 
@@ -84,19 +86,10 @@ Type.Actions.Type = function (sourceId, undone) {
    * @private
    */
   this._getShiftTo = function (offset, shifts) {
-
-    var adjustment = 0,
-      len = shifts.length,
-      i;
-
-    for (i = 0; i < len; i += 1) {
-      if (shifts[i][0] <= offset) {
-        adjustment += shifts[i][1];
-      }
-    }
-
+    var adjustment = 0,  len = shifts.length, i;
+    for (i = 0; i < len; i += 1)
+      if (shifts[i][0] <= offset) adjustment += shifts[i][1];
     return adjustment;
-
   };
 
 }).call(Type.Actions.Type.prototype);

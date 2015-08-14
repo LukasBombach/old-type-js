@@ -35,32 +35,30 @@ Type.Actions.Format = function (sourceId, type, start, end, tag, nodes, undone) 
 
   /**
    * Removes text from the editor
+   * @param {Number[][]} shifts
    * @returns {Type.Actions.Format} - This instance
    */
-  this.execute = function () {
-    //var end = Math.max(this._end - 1, this._start),
-    //  range = Type.Range.fromPositions(this._root, this._start, end);
-    var range = Type.Range.fromPositions(this._root, this._start, this._end);
+  this.execute = function (shifts) {
+    var adjStart = this._getShiftTo(this._start, shifts),
+      adjEnd = this._getShiftTo(this._end, shifts),
+      range = Type.Range.fromPositions(this._root, this._start+adjStart, this._end+adjEnd);
     this._nodes = this._formatter.format(this._tag, range);
+    this.undone = false;
     return this;
   };
 
   /**
    * Inserts the removed text again
+   * @param {Number[][]} shifts
    * @returns {Type.Actions.Format} - This instance
    */
-  this.undo = function () {
-
-    //var range = Type.Range.fromPositions(this._root, this._start, this._end);
-    //this._formatter.removeFormat(this._tag, range);
-
+  this.undo = function (shifts) {
     var len = this._nodes.length,
       i;
-
     for (i = 0; i < len; i += 1) {
       Type.DomUtilities.unwrap(this._nodes[i]);
     }
-
+    this.undone = true;
     return this;
 
   };
