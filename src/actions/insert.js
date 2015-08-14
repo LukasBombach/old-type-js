@@ -115,7 +115,7 @@ Type.OOP.inherits(Type.Actions.Insert, Type.Actions.Type);
 
     for (i = 0; i < len; i += 1) {
       stck = this._stack[i];
-      shift = [stck.start, stck.start - stck.end];
+      shift = [stck.start, stck.end - stck.start];
       shifts.push(shift)
     }
 

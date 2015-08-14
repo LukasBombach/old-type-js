@@ -57,7 +57,7 @@ Type.UndoManager = function (type) {
    */
   this.undo = function (sourceId, steps) {
 
-    steps = !arguments.length ? 1 : steps;
+    steps = steps === undefined ? 1 : steps;
 
     //for (steps; steps > 0; steps -= 1) {
     //  if (this._pointer < 0) {
@@ -71,9 +71,9 @@ Type.UndoManager = function (type) {
     while (steps > 0 && this._pointer > -1) {
       if (this._stack[this._pointer].sourceId === sourceId || sourceId === undefined) {
         this._stack[this._pointer].undo(this._getCharacterShift());
-        this._pointer -= 1;
         steps -= 1;
       }
+      this._pointer -= 1;
     }
 
     return this;
@@ -88,9 +88,7 @@ Type.UndoManager = function (type) {
   this.redo = function (sourceId, steps) {
 
     var stackLen = this._stack.length;
-
-    steps = !arguments.length ? 1 : steps;
-
+    steps = steps === undefined ? 1 : steps;
 
     //for (steps; steps > 0; steps -= 1) {
     //  this._pointer++;
@@ -102,8 +100,8 @@ Type.UndoManager = function (type) {
     //}
 
     while (steps > 0 && this._pointer < stackLen) {
+      this._pointer++;
       if (this._stack[this._pointer].sourceId === sourceId || sourceId === undefined) {
-        this._pointer++;
         if (this._pointer > this._stack.length - 1) {
           this._pointer = this._stack.length - 1;
           break;
