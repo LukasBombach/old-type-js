@@ -45,6 +45,11 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
     return 'Z:' + this._lengthFor(base).toString(36);
   };
 
+  this._lengthChange = function () {
+    var count = this._countLengthChange();
+    return (count > 0 ? '>' : '<') + count;
+  };
+
   /**
    * Returns the length of a string or the text inside an element
    *
@@ -61,6 +66,23 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
       return base.textContent.length;
     }
     return null;
+  };
+
+  /**
+   * Returns if the sum of all characters added and removed in this
+   * changeset
+   *
+   * @returns {number} - The sum of all characters added and removed
+   *     in this changeset
+   * @private
+   */
+  this._countLengthChange = function () {
+    var change = 0, len, i;
+    len = this._operations.length;
+    for (i=0; i < len; i += 1) {
+      change += this._operations[i].numChars;
+    }
+    return change;
   };
 
   /**
