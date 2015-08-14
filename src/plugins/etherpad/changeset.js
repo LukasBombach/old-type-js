@@ -67,16 +67,6 @@ Type.Etherpad.Changeset = function (str) {
   };
 
   /**
-   * Creates a changeset string representing this instance
-   *
-   * @returns {string} - The changeset string
-   */
-  this.serialize = function () {
-    this._insertions.sort(this._compareInsertions);
-    return '';
-  };
-
-  /**
    * Will add a command to insert text to this changeset
    *
    * @param {number} offset - The character offset at which the
@@ -118,6 +108,22 @@ Type.Etherpad.Changeset = function (str) {
     this._removals = this._removals || [];
     this._removals.push(this._createRemoval(offset, numChars));
     return this;
+  };
+
+  /**
+   * Getter for this instance's insertions
+   * @returns {{start: number, end: number, text: string}[]}
+   */
+  this.getInsertions = function () {
+    return this._insertions;
+  };
+
+  /**
+   * Getter for this instance's insertions
+   * @returns {{start: number, numChars: number}[]}
+   */
+  this.getRemovals = function () {
+    return this._removals;
   };
 
   /**
@@ -207,26 +213,8 @@ Type.Etherpad.Changeset = function (str) {
    * @private
    */
   this._getCharbank = function (str) {
-    var opsEnd = str.indexOf('$')+1;,
+    var opsEnd = str.indexOf('$')+1;
     return opsEnd >= 0 ? str.substring(opsEnd) : null;
-  };
-
-
-  /**
-   * Compares the offsets of two insertions. This method can be
-   * used with Array.prototype.sort
-   *
-   * @param {{start: number, end: number, text: string}} a - An
-   *     insertion object
-   * @param {{start: number, end: number, text: string}} b - An
-   *     insertion object
-   * @returns {number}
-   * @private
-   */
-  this._compareInsertions = function (a, b) {
-    if (a.start < b.start) return -1;
-    if (a.start > b.start) return 1;
-    return 0;
   };
 
 }).call(Type.Etherpad.Changeset.prototype);
