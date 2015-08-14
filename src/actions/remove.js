@@ -12,10 +12,12 @@ var Type = require('../core');
  *     text should be removed
  * @param {Number} end - The character offset to which the
  *     text should be removed
+ * @param {boolean} [undone] - The state of this action
  * @constructor
  */
-Type.Actions.Remove = function (sourceId, type, start, end) {
+Type.Actions.Remove = function (sourceId, type, start, end, undone) {
   this.sourceId = sourceId;
+  this.undone = undone || false;
   this._writer = type.getWriter();
   this._caret = type.getCaret();
   this._root = type.getRoot();

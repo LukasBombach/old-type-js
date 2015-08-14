@@ -12,12 +12,16 @@ var Type = require('../core');
  *     text should be formatted
  * @param {Number} end - The character offset to which the
  *     text should be formatted
+ * @param {Element[]} nodes - The initial elements that have been
+ *     affected by performing this action
  * @param {Number} tag - The tag the text should be formatted
  *     with
+ * @param {boolean} [undone] - The state of this action
  * @constructor
  */
-Type.Actions.Format = function (sourceId, type, start, end, tag, nodes) {
+Type.Actions.Format = function (sourceId, type, start, end, tag, nodes, undone) {
   this.sourceId = sourceId;
+  this.undone = undone || false;
   this._formatter = type.getFormatter();
   this._caret = type.getCaret();
   this._root = type.getRoot();

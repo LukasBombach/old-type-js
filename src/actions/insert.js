@@ -12,10 +12,12 @@ var Type = require('../core');
  *     text should be inserted
  * @param {String} text - The text (containing HTML) that
  *     should be inserted
+ * @param {boolean} [undone] - The state of this action
  * @constructor
  */
-Type.Actions.Insert = function (sourceId, type, offset, text) {
+Type.Actions.Insert = function (sourceId, type, offset, text, undone) {
   this.sourceId = sourceId;
+  this.undone = undone || false;
   this._writer = type.getWriter();
   this._caret = type.getCaret();
   this._root = type.getRoot();
