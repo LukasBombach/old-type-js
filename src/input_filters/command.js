@@ -10,12 +10,13 @@ var Input = require('../input');
  * todo should listen for key codes and not keys
  *
  * @param type
+ * @param {Type.Input} input
  * @constructor
  */
-Input.Filter.Command = function (type) {
+Input.Filter.Command = function (type, input) {
   this._selection = type.getSelection();
   //this._formating = type.getFormatter();
-  this._content = type.getContent();
+  this._content = input.getContent();
 };
 
 (function () {

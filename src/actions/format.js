@@ -4,6 +4,8 @@ var Type = require('../core');
 
 /**
  * Creates a new Type action
+ * @param {*} sourceId - An arbitrary key identifying the author
+ *     of this action
  * @param {Type} type - A type instance on which the action
  *     should be executed
  * @param {Number} start - The character offset from which the
@@ -14,7 +16,8 @@ var Type = require('../core');
  *     with
  * @constructor
  */
-Type.Actions.Format = function (type, start, end, tag, nodes) {
+Type.Actions.Format = function (sourceId, type, start, end, tag, nodes) {
+  this.sourceId = sourceId;
   this._formatter = type.getFormatter();
   this._caret = type.getCaret();
   this._root = type.getRoot();
@@ -63,6 +66,8 @@ Type.Actions.Format = function (type, start, end, tag, nodes) {
 
 /**
  * Creates a new Type action
+ * @param {*} sourceId - An arbitrary key identifying the author
+ *     of this action
  * @param {Type} type - A type instance on which the action
  *     should be executed
  * @param {Type.Range} range - The text range that should be
@@ -71,9 +76,9 @@ Type.Actions.Format = function (type, start, end, tag, nodes) {
  *     with
  * @constructor
  */
-Type.Actions.Format.fromRange = function (type, range, tag, nodes) {
+Type.Actions.Format.fromRange = function (sourceId, type, range, tag, nodes) {
   var bookmark = range.save(type.getRoot());
-  return new Type.Actions.Format(type, bookmark.start, bookmark.end, tag, nodes);
+  return new Type.Actions.Format(sourceId, type, bookmark.start, bookmark.end, tag, nodes);
 };
 
 module.exports = Type.Actions.Format;

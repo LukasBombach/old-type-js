@@ -4,6 +4,8 @@ var Type = require('../core');
 
 /**
  * Creates a new Type action
+ * @param {*} sourceId - An arbitrary key identifying the author
+ *     of this action
  * @param {Type} type - A type instance on which the action
  *     should be executed
  * @param {Number} start - The character offset from which the
@@ -12,7 +14,8 @@ var Type = require('../core');
  *     text should be removed
  * @constructor
  */
-Type.Actions.Remove = function (type, start, end) {
+Type.Actions.Remove = function (sourceId, type, start, end) {
+  this.sourceId = sourceId;
   this._writer = type.getWriter();
   this._caret = type.getCaret();
   this._root = type.getRoot();
@@ -84,15 +87,17 @@ Type.Actions.Remove = function (type, start, end) {
 
 /**
  * Creates a new Type action
+ * @param {*} sourceId - An arbitrary key identifying the author
+ *     of this action
  * @param {Type} type - A type instance on which the action
  *     should be executed
  * @param {Type.Range} range - The text range that should
  *     be removed from the contents.
  * @constructor
  */
-Type.Actions.Remove.fromRange = function (type, range) {
+Type.Actions.Remove.fromRange = function (sourceId, type, range) {
   var bookmark = range.save(type.getRoot());
-  return new Type.Actions.Remove(type, bookmark.start, bookmark.end);
+  return new Type.Actions.Remove(sourceId, type, bookmark.start, bookmark.end);
 };
 
 module.exports = Type.Actions.Remove;

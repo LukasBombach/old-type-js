@@ -11,7 +11,8 @@ var Type = require('../../core');
  */
 Type.Etherpad.Content = function (etherpad) {
   this._client = etherpad.getClient();
-  this._typeContent = etherpad.getType().getContent();
+  //this._typeContent = etherpad.getType().getContent();
+  this._typeContent = new Type.Content(etherpad.getType());
   this._client.registerMessageHandler('NEW_CHANGES', this.updateContent.bind(this));
 };
 

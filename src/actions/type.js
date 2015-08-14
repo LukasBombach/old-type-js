@@ -4,9 +4,12 @@ var Type = require('../core');
 
 /**
  * Creates a new Type action
+ * @param {*} sourceId - An arbitrary key identifying the author
+ *     of this action
  * @constructor
  */
-Type.Actions.Type = function () {
+Type.Actions.Type = function (sourceId) {
+  this.sourceId = sourceId;
 };
 
 (function () {

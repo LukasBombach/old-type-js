@@ -12,7 +12,8 @@ var Type = require('./core');
 Type.Input = function (type) {
 
   this._type = type;
-  this._content = type.getContent();
+  //this._content = type.getContent();
+  this._content = new Type.Content(type);
   this._writer = type.getWriter();
   this._caret = type.getCaret();
   this._selection = this._type.getSelection();
@@ -28,6 +29,15 @@ Type.Input = function (type) {
 };
 
 (function () {
+
+
+  /**
+   * Getter for this instance's content.
+   * @returns {Type.Content}
+   */
+  this.getContent = function () {
+    return this._content;
+  };
 
   /**
    *

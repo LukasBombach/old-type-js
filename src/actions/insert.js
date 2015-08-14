@@ -4,6 +4,8 @@ var Type = require('../core');
 
 /**
  * Creates a new Type action
+ * @param {*} sourceId - An arbitrary key identifying the author
+ *     of this action
  * @param {Type} type - A type instance on which the action
  *     should be executed
  * @param {Number} offset - The character offset at which the
@@ -12,7 +14,8 @@ var Type = require('../core');
  *     should be inserted
  * @constructor
  */
-Type.Actions.Insert = function (type, offset, text) {
+Type.Actions.Insert = function (sourceId, type, offset, text) {
+  this.sourceId = sourceId;
   this._writer = type.getWriter();
   this._caret = type.getCaret();
   this._root = type.getRoot();

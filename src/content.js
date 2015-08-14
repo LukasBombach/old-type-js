@@ -50,7 +50,7 @@ Type.Content = function (type) {
 
     // Undo capabilities
     var absOffset = Type.TextWalker.offset(this._root, textNode, 0, offset);
-    var insertion = new Type.Actions.Insert(this._type, absOffset, content);
+    var insertion = new Type.Actions.Insert(this._sourceId, this._type, absOffset, content);
     this._undoManager.push(insertion);
 
     // Chaining
@@ -79,7 +79,7 @@ Type.Content = function (type) {
 
 
     // Undo capabilities
-    var removal = Type.Actions.Remove.fromRange(this._type, range);
+    var removal = Type.Actions.Remove.fromRange(this._sourceId, this._type, range);
     this._undoManager.push(removal);
 
     // Change contents
@@ -105,7 +105,7 @@ Type.Content = function (type) {
     var nodes = this._formatter.format(tag, range);
 
     // Undo capabilities
-    var formatting = new Type.Actions.Format.fromRange(this._type, range, tag, nodes);
+    var formatting = new Type.Actions.Format.fromRange(this._sourceId, this._type, range, tag, nodes);
     this._undoManager.push(formatting);
 
     // Chaining

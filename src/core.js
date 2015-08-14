@@ -37,7 +37,7 @@ function Type(options) {
   this._writer       = new Type.Writer(this);
   this._formatter    = new Type.Formatter(this);
   this._undoManager  = new Type.UndoManager(this);
-  this._content      = new Type.Content(this);
+  //this._content      = new Type.Content(this);
   this._caret        = new Type.Caret(this);
   this._selection    = new Type.Selection(this);
   this._input        = new Type.Input(this);
@@ -183,9 +183,9 @@ function Type(options) {
    * Getter for this instance's content.
    * @returns {Type.Content}
    */
-  this.getContent = function () {
-    return this._content;
-  };
+  //this.getContent = function () {
+  //  return this._content;
+  //};
 
   /**
    * Getter for this instance's writer.
