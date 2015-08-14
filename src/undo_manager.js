@@ -101,12 +101,13 @@ Type.UndoManager = function (type) {
 
     while (steps > 0 && this._pointer < stackLen) {
       this._pointer++;
+      if (this._pointer > this._stack.length - 1) {
+        this._pointer = this._stack.length - 1;
+        break;
+      }
       if (this._stack[this._pointer].sourceId === sourceId || sourceId === undefined) {
-        if (this._pointer > this._stack.length - 1) {
-          this._pointer = this._stack.length - 1;
-          break;
-        }
         this._stack[this._pointer].execute(this._getCharacterShift());
+        steps--;
       }
     }
 
