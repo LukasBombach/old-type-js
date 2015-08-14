@@ -42,9 +42,11 @@ Type.Actions.Insert = function (sourceId, type, offset, text) {
 
   /**
    * Revokes this action
+   * @param {Number[][]} characterShift
    * @returns {Type.Actions.Insert} - This instance
    */
-  this.undo = function () {
+
+  this.undo = function (characterShift) {
     var len = this._stack.length,
       range,
       i;
