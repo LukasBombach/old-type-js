@@ -23,7 +23,7 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
    *
    * @returns {string} - The changeset string
    */
-  this.serialize = function () {
+  this.getString = function (base) {
 
     var operations = this._getOperations(),
       len = operations.length,
@@ -32,6 +32,24 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
     //changeset =
 
     return changeset;
+  };
+
+  /**
+   * Returns the length of a string or the text inside an element
+   * 
+   * @param {string|Element} base - Either a string or an element
+   * @returns {number|null} - Will return the text length or null
+   *     if the argument passed is not a string or an element
+   * @private
+   */
+  this._lengthFor = function (base) {
+    if (typeof base === 'string') {
+      return base.length;
+    }
+    if (base.textContent) {
+      return base.textContent.length;
+    }
+    return null;
   };
 
   /**
