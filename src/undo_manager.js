@@ -61,7 +61,7 @@ Type.UndoManager = function (type) {
         this._pointer = -1;
         break;
       }
-      this._stack[this._pointer].undo();
+      this._stack[this._pointer].undo(this._getCharacterShift());
       this._pointer--;
     }
     return this;
@@ -101,11 +101,13 @@ Type.UndoManager = function (type) {
    */
   this._getCharacterShift = function (targetPointer) {
 
+    targetPointer = targetPointer === undefined ? this._pointer : targetPointer;
+    
     var len = this._stack.length - 1,
       shifts = [],
       i;
 
-    for (i = len; i <= this._pointer; i -= 1) {
+    for (i = len; i <= targetPointer; i -= 1) {
       shifts.concat(this._stack[i].getCharacterShift())
     }
 
