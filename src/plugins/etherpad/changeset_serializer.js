@@ -34,8 +34,10 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
   };
 
   /**
-   * Returns the length of a string or the text inside an element
-   * as a 36 base encoded number (returned as a string)
+   * Returns the length parameter for the changeset string
+   *
+   * Returns the length of either a string or the text inside
+   * an element as a 36 base encoded number, prepended by 'Z:'
    *
    * @param {string|Element} base - Either a string or an element
    * @returns {string} - The 36 base encoded number
@@ -45,6 +47,11 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
     return 'Z:' + this._lengthFor(base).toString(36);
   };
 
+  /**
+   *
+   * @returns {string}
+   * @private
+   */
   this._lengthChange = function () {
     var count = this._countLengthChange();
     return (count > 0 ? '>' : '<') + count;
