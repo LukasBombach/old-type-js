@@ -106,7 +106,23 @@ Type.Etherpad.Changeset = function (str) {
    * @returns {*}
    */
   this.addRemoval = function (offset, numChars) {
+    this._removals = this._removals || [];
+    this._removals.push(this._createRemoval(offset, numChars));
     return this;
+  };
+
+  /**
+   * Creates an object representing an insertion
+   *
+   * @param {number} offset - The character offset from which the
+   *     text will be removed
+   * @param {number} numChars - The number of character that will
+   *     be removed
+   * @returns {{start: number, numChars: number}}
+   * @private
+   */
+  this._createRemoval = function (offset, numChars) {
+    return { start:offset, numChars:numChars }
   };
 
   /**
