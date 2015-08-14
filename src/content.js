@@ -13,6 +13,7 @@ var Type = require('./core');
  * @constructor
  */
 Type.Content = function (type) {
+  this._sourceId = this._getUniqueSourceId();
   this._undoManager = type.getUndoManager();
   this._writer = type.getWriter();
   this._formatter = type.getFormatter();
@@ -111,6 +112,17 @@ Type.Content = function (type) {
     return this;
 
   };
+
+  /**
+   *
+   * @returns {*|number}
+   * @private
+   */
+  this._getUniqueSourceId = function () {
+    Type.Content._lastSourceId = Type.Content._lastSourceId || 0;
+    Type.Content._lastSourceId += 1;
+    return Type.Content._lastSourceId;
+  }
 
 }).call(Type.Content.prototype);
 
