@@ -29,6 +29,7 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
     var changeset;
 
     changeset  = this._baseLength(base);
+    changeset += this._lengthChange();
 
     return changeset;
   };
@@ -48,6 +49,8 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
   };
 
   /**
+   * Returns the parameter for the changeset string that determines
+   * the change in the length of the text.
    *
    * @returns {string}
    * @private
