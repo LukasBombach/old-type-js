@@ -30,11 +30,7 @@ Type.UndoManager = function (type) {
       this._stack.push(action);
       this._pointer = this._stack.length - 1;
     }
-
     this.lastActionReceived = Date.now();
-
-    console.log(this._stack);
-
     return this;
   };
 
@@ -88,6 +84,24 @@ Type.UndoManager = function (type) {
     }
     return this;
   };
+
+  /**
+   * Will iterate through the stack (beginning from its end)
+   * and collect all character insertions and removals and
+   * return them. This can be used bei actions to shift the
+   * their character offset to which they apply their changes.
+   *
+   * @param {number} targetPointer - The stack pointer
+   *     to which all character shifts shall be collected
+   * @returns {number[][]} - A map of insertions and removals
+   *     First dimensions is at which offsets characters have
+   *     changed. Second dimension is the number of characters
+   *     that have been added or removed.
+   * @private
+   */
+  this._getCharacterShift = function (targetPointer) {
+
+  }
 
 }).call(Type.UndoManager.prototype);
 
