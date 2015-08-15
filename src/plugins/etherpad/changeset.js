@@ -23,7 +23,6 @@ Type.Etherpad.Changeset = function () {
    */
   this._changesetRegex = /((?:\*[0-9a-z]+)*)(?:\|([0-9a-z]+))?([-+=])([0-9a-z]+)|\?|/g;
 
-
   /**
    * Returns a serialized changeset string based on the length of
    * a given string or the text contents of a given element
@@ -34,6 +33,24 @@ Type.Etherpad.Changeset = function () {
   this.getString = function (base) {
     var serializer = new Type.Etherpad.ChangesetSerializer(this);
     return serializer.getString(base);
+  };
+
+
+  /**
+   * Applies this changeset to a given content
+   *
+   * Todo Insertions and removals must be executed in order
+   * Todo not after one another
+   *
+   * @param {Type.Content} content - The content this changeset
+   *     should be applied to
+   * @param {Type.Caret} localCaret - The local user's caret
+   * @returns {Type.Etherpad.Changeset} - This instance
+   */
+  this.apply = function (content, localCaret) {
+    this._applyInsertions(content, localCaret);
+    this._applyRemovals(content, localCaret);
+    return this;
   };
 
   /**
@@ -54,7 +71,6 @@ Type.Etherpad.Changeset = function () {
     }
 
     return this;
-
   };
 
  /**
@@ -104,6 +120,44 @@ Type.Etherpad.Changeset = function () {
   };
 
   /**
+   * Applies this changeset's insertions to a given content
+   *
+   * @param {Type.Content} content - The content this changeset
+   *     should be applied to
+   * @param {Type.Caret} localCaret - The local user's caret
+   * @returns {Type.Etherpad.Changeset} - This instance
+   * @private
+   */
+  this._applyInsertions = function (content, localCaret) {
+    var len, i;
+    len = this._insertions.length;
+    for (i = 0; i < len; i += 1) {
+      content.insert(this._insertions[i].start, this._insertions[i].text);
+      localCaret.moveBy(this._insertions[i].numChars);
+    }
+    return this;
+  };
+
+  /**
+   * Applies this changeset's removals to a given content
+   *
+   * @param {Type.Content} content - The content this changeset
+   *     should be applied to
+   * @param {Type.Caret} localCaret - The local user's caret
+   * @returns {Type.Etherpad.Changeset} - This instance
+   * @private
+   */
+  this._applyRemovals = function (content, localCaret) {
+    var len, i;
+    len = this._removals.length;
+    for (i = 0; i < len; i += 1) {
+      content.remove(this._insertions[i].numChars.start, this._insertions[i].numChars);
+      localCaret.moveBy(this._insertions[i].numChars * -1);
+    }
+    return this;
+  };
+
+  /**
    * Parses a regex match and returns a readable object
    * @param {Array|{index: number, input: string}} match - A
    *     RegEx match
@@ -123,7 +177,6 @@ Type.Etherpad.Changeset = function () {
       operator : match[3],
       value    : match[4]
     }
-
   };
 
   /**
