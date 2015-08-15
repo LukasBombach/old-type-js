@@ -205,6 +205,8 @@ Type.Caret = function (options) {
    * @returns {*}
    */
   this.moveBy = function (numChars) {
+    var offset = this.getOffset();
+    if (offset === null) return this;
     this.setOffset(Math.max(0, this.getOffset() + numChars));
     return this;
   };
@@ -365,6 +367,7 @@ Type.Caret = function (options) {
    * @returns {number|null}
    */
   this.getOffset = function () {
+    if (!this.textNode) return null;
     return Type.TextWalker.offset(this._constrainingNode, this.textNode, 0, this.offset);
   };
 
