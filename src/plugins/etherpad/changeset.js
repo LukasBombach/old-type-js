@@ -23,6 +23,19 @@ Type.Etherpad.Changeset = function () {
    */
   this._changesetRegex = /((?:\*[0-9a-z]+)*)(?:\|([0-9a-z]+))?([-+=])([0-9a-z]+)|\?|/g;
 
+
+  /**
+   * Returns a serialized changeset string based on the length of
+   * a given string or the text contents of a given element
+   *
+   * @param {string|Element} base - Either a string or an element
+   * @returns {string}
+   */
+  this.getString = function (base) {
+    var serializer = new Type.Etherpad.ChangesetSerializer(this);
+    return serializer.getString(base);
+  };
+
   /**
    * Adds a serialized changeset (as a string) to this
    * changeset instance

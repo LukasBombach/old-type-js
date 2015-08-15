@@ -20,8 +20,10 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
 
 
   /**
-   * Creates a changeset string representing this instance
+   * Returns a serialized changeset string based on the length of
+   * a given string or the text contents of a given element
    *
+   * @param {string|Element} base - Either a string or an element
    * @returns {string} - The changeset string
    */
   this.getString = function (base) {
