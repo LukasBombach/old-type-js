@@ -18,60 +18,17 @@ Type.Etherpad.Content = function (etherpad) {
 
 (function () {
 
+  /**
+   * Applies a change to the editor's contents
+   * 
+   * @param {{}} data - The data received from a NEW_CHANGES message
+   * @returns {Type.Etherpad.Content} - This instance
+   */
   this.updateContent = function(data) {
-
     this.revision = data.newRev;
-
-    var changeSet = data.changeset,
-      attributes, operator, value, match,
-      caretAtPosZero = true;
-
-    var charoffset;
-
-    // Matches an array of results for each operation
-    var regex = /((?:\*[0-9a-z]+)*)(?:\|([0-9a-z]+))?([-+=])([0-9a-z]+)|\?|/g,
-      opsEnd = changeSet.indexOf('$') + 1,
-      charBank = opsEnd >= 0 ? changeSet.substring(opsEnd) : null;
-
-    while ((match = regex.exec(changeSet)) !== null) {
-
-      if (match.index === regex.lastIndex) {
-        regex.lastIndex++;
-      }
-
-      if(match[0] != '') {
-
-        attributes = match[1];
-        operator = match[3];
-        value = match[4];
-
-        switch(operator) {
-          case '=':
-            //this.caret._setOffset(parseInt(value, 36));
-            charoffset = parseInt(value, 36);
-            caretAtPosZero = false;
-            console.log('setting offset', parseInt(value, 36));
-            break;
-
-          case '+':
-            if(caretAtPosZero) charoffset = 0;
-            //this.caret.insertText(charBank);
-            this._typeContent.insert(charoffset, charBank);
-            this._localCaret.moveBy(charBank.length);
-            console.log('writing', charBank);
-            break;
-
-          case '-':
-            if(caretAtPosZero) charoffset = 0;
-            //this.caret.removeCharacter(parseInt(value, 36));
-            this._typeContent.remove(charoffset, parseInt(value, 36));
-            this._localCaret.moveBy(parseInt(value, 36) * -1);
-            console.log('removing', parseInt(value, 36));
-            break;
-        }
-      }
-
-    }
+    var changeset = new Type.Etherpad.Changeset.fromString(data.changeset);
+    changeset.apply(this._typeContent, this._localCaret);
+    return this;
   };
 
 }).call(Type.Etherpad.Content.prototype);
