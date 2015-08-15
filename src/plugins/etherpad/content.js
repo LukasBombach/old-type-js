@@ -20,7 +20,7 @@ Type.Etherpad.Content = function (etherpad) {
 
   /**
    * Applies a change to the editor's contents
-   * 
+   *
    * @param {{}} data - The data received from a NEW_CHANGES message
    * @returns {Type.Etherpad.Content} - This instance
    */

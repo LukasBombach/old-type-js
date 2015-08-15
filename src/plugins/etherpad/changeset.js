@@ -141,6 +141,8 @@ Type.Etherpad.Changeset = function () {
   /**
    * Applies this changeset's removals to a given content
    *
+   * Todo I should not reverse the numChars here
+   *
    * @param {Type.Content} content - The content this changeset
    *     should be applied to
    * @param {Type.Caret} localCaret - The local user's caret
@@ -151,8 +153,8 @@ Type.Etherpad.Changeset = function () {
     var len, i;
     len = this._removals.length;
     for (i = 0; i < len; i += 1) {
-      content.remove(this._insertions[i].numChars.start, this._insertions[i].numChars);
-      localCaret.moveBy(this._insertions[i].numChars * -1);
+      content.remove(this._removals[i].start, this._removals[i].numChars * -1);
+      localCaret.moveBy(this._removals[i].numChars * -1);
     }
     return this;
   };
