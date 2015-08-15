@@ -33,24 +33,12 @@ Type.Etherpad.Changeset = function () {
   this.addString = function (str) {
 
     var charbank = this._getCharbank(str),
-      offset = 0,
-      rawMatch, match;
+      rawMatch, match,
+      offset = 0;
 
     while ((rawMatch = this._changesetRegex.exec(str)) !== null) {
-
       match = this._parseMatch(rawMatch);
-
-      switch(match.operator) {
-        case '=':
-          offset = parseInt(match.value, 36);
-          break;
-        case '+':
-          this.addInsertion(offset, charbank);
-          break;
-        case '-':
-          this.addRemoval(offset, parseInt(match.value, 36));
-          break;
-      }
+      offset += this._processMatch(offset, charbank, match);
     }
 
     return this;
@@ -123,6 +111,32 @@ Type.Etherpad.Changeset = function () {
       value    : match[4]
     }
 
+  };
+
+  /**
+   * Calls insertion / removal / format operations for a give match
+   * as returned by _parseMatch
+   *
+   * @param {number} offset - The offset for insert and del operations
+   * @param {string} charbank - The charbank of a string changset
+   * @param {{attrs: string, operator: string, value: string}} match
+   *     A match as returned by _parseMatch
+   * @returns {*}
+   * @private
+   */
+  this._processMatch = function (offset, charbank, match) {
+    switch(match.operator) {
+      case '=':
+        return parseInt(match.value, 36);
+        break;
+      case '+':
+        this.addInsertion(offset, charbank);
+        break;
+      case '-':
+        this.addRemoval(offset, parseInt(match.value, 36));
+        break;
+    }
+    return 0;
   };
 
   /**
