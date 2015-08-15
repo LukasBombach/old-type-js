@@ -9,11 +9,11 @@ var Type = require('../../core');
  * This class can be used to serialize a Type.Etherpad.Changeset
  * to a string for an Etherpad server
  *
+ * @param {Type.Etherpad.Changeset} changeset
  * @constructor
  */
 Type.Etherpad.ChangesetSerializer = function (changeset) {
-  this._changeset = changeset;
-  this._operations = this._getOperations();
+  this._operations = this._getOperations(changeset);
 };
 
 (function () {
@@ -184,13 +184,14 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
    * Returns an array of all insert and remove operations
    * ordered by the start offset
    *
+   * @param {Type.Etherpad.Changeset} changeset
    * @returns {Array}
    * @private
    */
-  this._getOperations = function () {
+  this._getOperations = function (changeset) {
     var operations = [];
-    operations.concat(this._changeset.getInsertions().slice(0));
-    operations.concat(this._changeset.getRemovals().slice(0));
+    operations.concat(changeset.getInsertions().slice(0));
+    operations.concat(changeset.getRemovals().slice(0));
     operations.sort(this._compareOperations);
     return operations;
   };
