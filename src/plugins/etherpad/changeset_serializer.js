@@ -190,8 +190,8 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
    */
   this._getOperations = function (changeset) {
     var operations = [];
-    operations.concat(changeset.getInsertions().slice(0));
-    operations.concat(changeset.getRemovals().slice(0));
+    operations = operations.concat(changeset.getInsertions().slice(0));
+    operations = operations.concat(changeset.getRemovals().slice(0));
     operations.sort(this._compareOperations);
     return operations;
   };
