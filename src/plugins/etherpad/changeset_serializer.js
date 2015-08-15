@@ -32,9 +32,10 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
 
     changeset  = this._baseLengthString(base);
     changeset += this._lengthChangeString();
+    changeset += this._operationString(this._operations[0]);
 
-    for (i = 0; i < len; i += 1) {
-      changeset += this._operationString(this._operations[i]);
+    for (i = 1; i < len; i += 1) {
+      changeset += this._operationString(this._operations[i], this._operations[i-1]);
     }
 
     return changeset;
@@ -69,13 +70,45 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
   /**
    * Returns a serialized operation as a string
    *
-   * @param {{start: number, end: number, text: string}|{start: number, numChars: number}} operation
+   * @param {{op: string, start: number, end: number, text: string}|{op: string, start: number, numChars: number}} operation
    *     An insertion or removal object
+   * @param {{op: string, start: number, end: number, text: string}|{op: string, start: number, numChars: number}} prev
+   *     The operation before this operation
    * @returns {string} - The serialized string for the operation
    * @private
    */
-  this._operationString = function (operation) {
-    return '';
+  this._operationString = function (operation, prev) {
+
+    var offset, hack, operatorSnd;
+
+    offset = this._offsetString(operation, prev);
+    hack = operation.op == '+' ? '*0' : '';
+
+    if(/^[\n\r]+$/.test(operation.text || '')) {
+      operatorSnd = '|1+1'; // todo Only works if charbank === a single newline
+    } else {
+      operatorSnd = operation.op + operation.text.length;
+    }
+
+    return offset + hack + operatorSnd;
+    
+  };
+
+  /**
+   * Returns a serialized string calculating the delta
+   * offset of 2 operations.
+   *
+   * @param {{op: string, start: number, end: number, text: string}|{op: string, start: number, numChars: number}} operation
+   *     An insertion or removal object
+   * @param {{op: string, start: number, end: number, text: string}|{op: string, start: number, numChars: number}} prev
+   *     The operation before this operation
+   * @returns {string} - The serialized offset string for the operation
+   *     relative to is prev operation
+   * @private
+   */
+  this._offsetString = function (operation, prev) {
+    var offset = operation.start - prev.start;
+    return offset > 0 ? '=' + offset.toString(36) : '';
   };
 
   /**

@@ -133,7 +133,7 @@ Type.Etherpad.Changeset = function (str) {
    *     text will be removed
    * @param {number} numChars - The number of character that will
    *     be removed
-   * @returns {{start: number, numChars: number}}
+   * @returns {{op: string, start: number, numChars: number}}
    * @private
    */
   this._createRemoval = function (offset, numChars) {
@@ -146,7 +146,7 @@ Type.Etherpad.Changeset = function (str) {
    * @param {number} offset - The character offset where the text
    *     will be inserted
    * @param {string} text - The text that will be inserted
-   * @returns {{start: number, end: number, text: string}}
+   * @returns {{op: string, start: number, end: number, text: string}}
    * @private
    */
   this._createInsertion = function (offset, text) {
@@ -157,9 +157,9 @@ Type.Etherpad.Changeset = function (str) {
    * Tries to merge 2 insertions and will return true or false
    * whether or not the insertions could be merged.
    *
-   * @param {{start: number, end: number, text: string}} a - An
+   * @param {{op: string, start: number, end: number, text: string}} a - An
    *     insertion object
-   * @param {{start: number, end: number, text: string}} b - An
+   * @param {{op: string, start: number, end: number, text: string}} b - An
    *     insertion object
    * @returns {boolean} - Returns if the insertions have been
    *     merged
