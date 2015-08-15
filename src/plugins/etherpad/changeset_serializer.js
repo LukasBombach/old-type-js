@@ -38,9 +38,7 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
       changeset += this._operationString(this._operations[i], this._operations[i-1]);
     }
 
-    for (i = 0; i < len; i += 1) {
-      changeset += this._charbankString(this._operations[i]);
-    }
+    changeset += this._charbankString();
 
     return changeset;
 
@@ -100,6 +98,23 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
   };
 
   /**
+   * Returns the serialized charbank string from all
+   * operations
+   *
+   * @returns {string}
+   * @private
+   */
+  this._charbankString = function () {
+    var charbank, len, i;
+    charbank = '$';
+    len = this._operations.length;
+    for (i = 0; i < len; i += 1) {
+      charbank += this._operationCharbankString(this._operations[i]);
+    }
+    return charbank;
+  };
+
+  /**
    * Return the text of an operation or an empty string
    *
    * @param {{op: string, start: number, end: number, text: string}|{op: string, start: number, numChars: number}} operation
@@ -107,7 +122,7 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
    * @returns {string} - The text of the operation or an empty string
    * @private
    */
-  this._charbankString = function (operation) {
+  this._operationCharbankString = function (operation) {
     return operation.text ? operation.text : '';
   };
 
