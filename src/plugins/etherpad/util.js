@@ -13,8 +13,20 @@ Type.Etherpad.Util = function () {
 (function () {
 
   /**
+   * Replaces newlines with <br /> tags
+   *
+   * @param {string} str - The original string containing newlines
+   * @returns {string} - The altered string containing <br /> tags
+   */
+  Type.Etherpad.Util.nl2br = function(str)
+  {
+    return (str + '').replace(/([^>\r\n]?)(\r\n|\n\r|\r|\n)/g, '<br ' + '/>');
+  };
+
+  /**
    * Returns a random string starting with 't.' that can be used as a token for
    * connecting to an Etherpad server.
+   *
    * @returns {string}
    */
   Type.Etherpad.Util.getRandomToken = function()
