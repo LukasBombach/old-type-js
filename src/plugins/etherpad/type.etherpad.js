@@ -99,13 +99,14 @@ Type.Etherpad = function (type) {
    * Will load the pad contents from an Etherpad connection message
    * to the Type editor contents.
    *
-   * @param {string} contents - The contents of the editor sent by
-   *     the server
+   * @param {{attribs: string, text: string}} contents - The contents
+   *     of the editor sent by the server
    * @returns {Type.Etherpad} - This instance
    * @private
    */
   this._initEditor = function (contents) {
-    this._type.getRoot().innerHTML = contents;
+    this._type.getRoot().innerHTML = contents.text;
+    this._content.applyChangeset(contents.attribs);
     return this;
   }
 

@@ -26,10 +26,21 @@ Type.Etherpad.Content = function (etherpad) {
    */
   this.updateContent = function(data) {
     this.revision = data.newRev;
-    var changeset = new Type.Etherpad.Changeset.fromString(data.changeset);
-    changeset.apply(this._typeContent, this._localCaret);
+    this.applyChangeset(data.changeset);
     return this;
   };
+
+  /**
+   * Applies a serialized changeset to the editor's contents
+   *
+   * @param {string} changesetString - A serialized Changeset
+   * @returns {*}
+   */
+  this.applyChangeset = function (changesetString) {
+    var changeset = new Type.Etherpad.Changeset.fromString(changesetString);
+    changeset.apply(this._typeContent, this._localCaret);
+    return this;
+  }
 
 }).call(Type.Etherpad.Content.prototype);
 
