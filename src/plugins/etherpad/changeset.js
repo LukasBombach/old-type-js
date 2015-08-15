@@ -32,42 +32,31 @@ Type.Etherpad.Changeset = function () {
    */
   this.addString = function (str) {
 
-    var match, attrs, operator, value,
-      charbank = this._getCharbank(str),
-      offset = 0;
+    var charbank = this._getCharbank(str),
+      offset = 0,
+      rawMatch, match;
 
+    while ((rawMatch = this._changesetRegex.exec(str)) !== null) {
 
-    while ((match = this._changesetRegex.exec(str)) !== null) {
+      match = this._parseMatch(rawMatch);
 
-      if (match.index === regex.lastIndex)
-        regex.lastIndex++;
-
-      if(match[0] === '')
-        continue;
-
-      attrs    = match[1];
-      operator = match[3];
-      value    = match[4];
-
-      switch(operator) {
+      switch(match.operator) {
         case '=':
-          offset = parseInt(value, 36);
+          offset = parseInt(match.value, 36);
           break;
         case '+':
           this.addInsertion(offset, charbank);
           break;
         case '-':
-          this.addRemoval(offset, parseInt(value, 36));
+          this.addRemoval(offset, parseInt(match.value, 36));
           break;
       }
-
     }
 
     return this;
-
   };
 
-  /**
+ /**
    * Will add a command to insert text to this changeset
    *
    * @param {number} offset - The character offset at which the
@@ -111,6 +100,29 @@ Type.Etherpad.Changeset = function () {
    */
   this.getRemovals = function () {
     return this._removals;
+  };
+
+  /**
+   * Parses a regex match and returns a readable object
+   * @param {Array|{index: number, input: string}} match - A
+   *     RegEx match
+   * @returns {{attrs: string, operator: string, value: string}}
+   * @private
+   */
+  this._parseMatch = function (match) {
+
+    if (match.index === this._changesetRegex.lastIndex)
+      this._changesetRegex.lastIndex++;
+
+    if(match[0] === '')
+      return {};
+
+    return {
+      attrs    : match[1],
+      operator : match[3],
+      value    : match[4]
+    }
+
   };
 
   /**
