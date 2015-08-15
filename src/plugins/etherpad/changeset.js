@@ -7,8 +7,9 @@ var Type = require('../../core');
  *
  * @constructor
  */
-Type.Etherpad.Changeset = function (str) {
-  this.addString(str);
+Type.Etherpad.Changeset = function () {
+  this._insertions = [];
+  this._removals = [];
 };
 
 (function () {
@@ -75,23 +76,10 @@ Type.Etherpad.Changeset = function (str) {
    * @returns {*}
    */
   this.addInsertion = function (offset, text) {
-
     var insertion = this._createInsertion(offset, text),
-      merged = false,
-      i, len;
-
-    this._insertions = this._insertions || [];
-    len = this._insertions.length;
-
-    for (i = 0; i < len; i += 1) {
-      if (merged = this._tryMerge(this._insertions[i], insertion))
-        break;
-    }
-
-    if (!merged) {
+      merged = this._mergeInsertionIfPossible(insertion);
+    if (!merged)
       this._insertions.push(insertion);
-    }
-
     return this;
   };
 
@@ -105,7 +93,6 @@ Type.Etherpad.Changeset = function (str) {
    * @returns {*}
    */
   this.addRemoval = function (offset, numChars) {
-    this._removals = this._removals || [];
     this._removals.push(this._createRemoval(offset, numChars));
     return this;
   };
@@ -154,6 +141,23 @@ Type.Etherpad.Changeset = function (str) {
   };
 
   /**
+   *
+   * @param {{op: string, start: number, end: number, text: string}} insertion
+   *     An insertion object
+   * @returns {boolean}
+   * @private
+   */
+  this._mergeInsertionIfPossible = function (insertion) {
+    var i, len;
+    len = this._insertions.length;
+    for (i = 0; i < len; i += 1) {
+      if (this._tryMergeTwoInsertions(this._insertions[i], insertion))
+        return true;
+    }
+    return false;
+  };
+
+  /**
    * Tries to merge 2 insertions and will return true or false
    * whether or not the insertions could be merged.
    *
@@ -165,7 +169,7 @@ Type.Etherpad.Changeset = function (str) {
    *     merged
    * @private
    */
-  this._tryMerge = function (a, b) {
+  this._tryMergeTwoInsertions = function (a, b) {
     if (this._insertionIntersects(a, b)) {
       this._mergeInsertion(a, b);
       return true;
@@ -219,6 +223,19 @@ Type.Etherpad.Changeset = function (str) {
 
 }).call(Type.Etherpad.Changeset.prototype);
 
+
+/**
+ * Creates a new {Type.Etherpad.Changeset} from a serialized
+ * changeset string
+ *
+ * @param {string} str - A serialized changeset string
+ * @returns {Type.Etherpad.Changeset}
+ */
+Type.Etherpad.Changeset.fromString = function (str) {
+  var changeset = new Type.Etherpad.Changeset();
+  changeset.addString(str);
+  return changeset;
+};
 
 
 module.exports = Type.Etherpad.Changeset;
