@@ -103,9 +103,9 @@ Type.Etherpad.Changeset = function () {
       delta = parseInt(match.value, 36);
       offset.absolute += delta;
       offset.stack.push(offset);
-    } else {
-      this._mergeOrPush(this._createFromMatch(offset, charbank, match));
     }
+
+    this._mergeOrPush(this._createFromMatch(offset, charbank, match));
 
     return this;
 
@@ -124,7 +124,7 @@ Type.Etherpad.Changeset = function () {
 
     if (last.mergable(change)) {
       last.merge(change);
-    } else {
+    } else if (!(change instanceof Type.Etherpad.Changeset.Changes.Movement)) {
       this._stack.push(change);
     }
 
@@ -144,9 +144,9 @@ Type.Etherpad.Changeset = function () {
       case '=':
         return Type.Etherpad.Changeset.Changes.Movement.fromOffsetObject(offset);
       case '+':
-        return Type.Etherpad.Changeset.Changes.Insertion(offset.absolute, charbank);
+        return new Type.Etherpad.Changeset.Changes.Insertion(offset.absolute, charbank);
       case '-':
-        return Type.Etherpad.Changeset.Changes.Removal.fromMatch(match);
+        return Type.Etherpad.Changeset.Changes.Removal.fromMatch(offset, match);
       default:
         Type.Development.debug('Cannot match operator ' + match.operator, match);
         return null;

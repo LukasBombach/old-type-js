@@ -23,7 +23,7 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Insertion, Type.Etherpad.Chang
 (function () {
 
   /**
-   *
+   * Etherpad's serialized string for this operation
    * @type {string}
    */
   this.op = '+';

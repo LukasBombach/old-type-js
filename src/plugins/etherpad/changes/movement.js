@@ -21,7 +21,7 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Movement, Type.Etherpad.Change
 (function () {
 
   /**
-   *
+   * Etherpad's serialized string for this operation
    * @type {string}
    */
   this.op = '=';

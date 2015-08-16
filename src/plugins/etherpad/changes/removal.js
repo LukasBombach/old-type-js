@@ -7,7 +7,7 @@ var Type = require('../../../core');
  *
  * @constructor
  */
-Type.Etherpad.Changeset.Changes.Removal = function (/*offset, */length) {
+Type.Etherpad.Changeset.Changes.Removal = function (offset, length) {
   this.start  = offset;
   this.length = length;
   this.end    = offset + length;
@@ -22,7 +22,7 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Removal, Type.Etherpad.Changes
 (function () {
 
   /**
-   *
+   * Etherpad's serialized string for this operation
    * @type {string}
    */
   this.op = '-';
@@ -31,11 +31,13 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Removal, Type.Etherpad.Changes
 
 /**
  *
- * @param match
+ * @param {{ absolute: number, stack: number[] }} offset - An object
+ *     containing offset information
+ * @param {{attrs: string, operator: string, value: string}} match
  * @returns {Type.Etherpad.Changeset.Changes.Removal}
  */
-Type.Etherpad.Changeset.Changes.Removal.fromMatch = function (match) {
-  return new Type.Etherpad.Changeset.Changes.Removal(parseInt(match.value, 36));
+Type.Etherpad.Changeset.Changes.Removal.fromMatch = function (offset, match) {
+  return new Type.Etherpad.Changeset.Changes.Removal(offset.absolute, parseInt(match.value, 36));
 };
 
 module.exports = Type.Etherpad.Changeset.Changes.Removal;
