@@ -27,6 +27,16 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Formatting, Type.Etherpad.Chan
    */
   this.op = '-';
 
+  /**
+   * Maps Etherpad's formatting codes to readable formattings
+   *
+   * @type {{0: string}}
+   * @private
+   */
+  this._formattingCodes = {
+    0 : 'strong'
+  };
+
 }).call(Type.Etherpad.Changeset.Changes.Formatting);
 
 module.exports = Type.Etherpad.Changeset.Changes.Formatting;
