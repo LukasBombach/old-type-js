@@ -91,7 +91,7 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
     if(/^[\n\r]+$/.test(operation.text || '')) {
       operatorSnd = '|1+1'; // todo Only works if charbank === a single newline
     } else {
-      operatorSnd = operation.op + operation.text.length;
+      operatorSnd = operation.getOperation();
     }
 
     return offset + hack + operatorSnd;

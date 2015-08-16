@@ -29,6 +29,14 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Insertion, Type.Etherpad.Chang
   this.op = '+';
 
   /**
+   *
+   * @returns {string}
+   */
+  this.getOperation = function () {
+    return this.op + this.text.length;
+  };
+
+  /**
    * @param {Type.Content} content - The content this changeset
    *     should be applied to
    * @param {Type.Caret} localCaret - The local user's caret
