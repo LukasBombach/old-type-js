@@ -37,6 +37,6 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Formatting, Type.Etherpad.Chan
     0 : 'strong'
   };
 
-}).call(Type.Etherpad.Changeset.Changes.Formatting);
+}).call(Type.Etherpad.Changeset.Changes.Formatting.prototype);
 
 module.exports = Type.Etherpad.Changeset.Changes.Formatting;

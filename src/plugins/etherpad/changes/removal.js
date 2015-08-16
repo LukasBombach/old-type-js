@@ -40,7 +40,7 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Removal, Type.Etherpad.Changes
     return this;
   };
 
-}).call(Type.Etherpad.Changeset.Changes.Removal);
+}).call(Type.Etherpad.Changeset.Changes.Removal.prototype);
 
 /**
  *

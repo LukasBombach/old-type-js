@@ -28,7 +28,7 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Movement, Type.Etherpad.Change
    */
   this.op = '=';
 
-}).call(Type.Etherpad.Changeset.Changes.Movement);
+}).call(Type.Etherpad.Changeset.Changes.Movement.prototype);
 
 /**
  *

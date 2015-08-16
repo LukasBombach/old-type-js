@@ -63,6 +63,6 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Insertion, Type.Etherpad.Chang
     return this;
   }
 
-}).call(Type.Etherpad.Changeset.Changes.Insertion);
+}).call(Type.Etherpad.Changeset.Changes.Insertion.prototype);
 
 module.exports = Type.Etherpad.Changeset.Changes.Insertion;

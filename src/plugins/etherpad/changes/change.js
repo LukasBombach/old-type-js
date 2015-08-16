@@ -29,7 +29,7 @@ Type.Etherpad.Changeset.Changes.Change = function () {
     return '';
   };
 
-}).call(Type.Etherpad.Changeset.Changes.Change);
+}).call(Type.Etherpad.Changeset.Changes.Change.prototype);
 
 Type.Etherpad.Changeset.Changes.Change.fromMatch = function (match) {
   return new Type.Etherpad.Changeset.Changes.Change();
