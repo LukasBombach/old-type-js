@@ -9,8 +9,6 @@ var Type = require('../../core');
  */
 Type.Etherpad.Changeset = function () {
   this._stack = [];
-  this._insertions = [];
-  this._removals = [];
 };
 
 (function () {
@@ -71,6 +69,15 @@ Type.Etherpad.Changeset = function () {
     }
 
     return this;
+
+  };
+
+  /**
+   * Getter for the operation stack
+   * @returns {Array}
+   */
+  this.getStack = function () {
+    return this._stack;
   };
 
   /**

@@ -18,7 +18,6 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
 
 (function () {
 
-
   /**
    * Returns a serialized changeset string based on the length of
    * a given string or the text contents of a given element
@@ -175,13 +174,13 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
     var change = 0, len, i;
     len = this._operations.length;
     for (i=0; i < len; i += 1) {
-      change += this._operations[i].numChars;
+      change += this._operations[i].length || 0;
     }
     return change;
   };
 
   /**
-   * Returns an array of all insert and remove operations
+   * Returns an array of all operations of a changeset
    * ordered by the start offset
    *
    * @param {Type.Etherpad.Changeset} changeset
@@ -189,9 +188,7 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
    * @private
    */
   this._getOperations = function (changeset) {
-    var operations = [];
-    operations = operations.concat(changeset.getInsertions().slice(0));
-    operations = operations.concat(changeset.getRemovals().slice(0));
+    var operations = changeset.getStack().slice(0);
     operations.sort(this._compareOperations);
     return operations;
   };
