@@ -44,6 +44,11 @@ require('./plugins/etherpad/util');
 require('./plugins/etherpad/client');
 require('./plugins/etherpad/content');
 require('./plugins/etherpad/changeset');
+require('./plugins/etherpad/changes/change');
+require('./plugins/etherpad/changes/movement');
+require('./plugins/etherpad/changes/insertion');
+require('./plugins/etherpad/changes/removal');
+require('./plugins/etherpad/changes/formatting');
 require('./plugins/etherpad/changeset_serializer');
 
 // Expose Type

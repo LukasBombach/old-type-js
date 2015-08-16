@@ -8,6 +8,7 @@ var Type = require('../../core');
  * @constructor
  */
 Type.Etherpad.Changeset = function () {
+  this._stack = [];
   this._insertions = [];
   this._removals = [];
 };
@@ -24,6 +25,16 @@ Type.Etherpad.Changeset = function () {
   this._changesetRegex = /((?:\*[0-9a-z]+)*)(?:\|([0-9a-z]+))?([-+=])([0-9a-z]+)|\?|/g;
 
   /**
+   * Maps Etherpad's formatting codes to readable formattings
+   *
+   * @type {{0: string}}
+   * @private
+   */
+  this._formattingCodes = {
+    0 : 'strong'
+  };
+
+  /**
    * Returns a serialized changeset string based on the length of
    * a given string or the text contents of a given element
    *
@@ -34,7 +45,6 @@ Type.Etherpad.Changeset = function () {
     var serializer = new Type.Etherpad.ChangesetSerializer(this);
     return serializer.getString(base);
   };
-
 
   /**
    * Applies this changeset to a given content
@@ -63,14 +73,84 @@ Type.Etherpad.Changeset = function () {
   this.addString = function (str) {
 
     var charbank = this._getCharbank(str),
-      rawMatch, match, offset = 0;
+      rawMatch, match, offsets;
+
+    offsets = { absolute: 0, stack: [] };
 
     while ((rawMatch = this._changesetRegex.exec(str)) !== null) {
       match = this._parseMatch(rawMatch);
-      offset += this._processMatch(offset, charbank, match);
+      this._addMatchToStack(offsets, charbank, match);
+      //offset += this._processMatch(offset, charbank, match);
     }
 
     return this;
+  };
+
+  /**
+   *
+   * @param {{ absolute: number, stack: number[] }} offset - An object
+   *     containing offset information
+   * @param {string} charbank - The charbank of a string changeset
+   * @param {{attrs: string, operator: string, value: string}} match
+   *     A match as returned by _parseMatch
+   * @private
+   */
+  this._addMatchToStack = function (offset, charbank, match) {
+
+    var delta;
+
+    if (match.operator === '=') {
+      delta = parseInt(match.value, 36);
+      offset.absolute += delta;
+      offset.stack.push(offset);
+    } else {
+      this._mergeOrPush(this._createFromMatch(offset, charbank, match));
+    }
+
+    return this;
+
+  };
+
+  /**
+   *
+   * @param {Type.Etherpad.Changeset.Changes.Change} change - A change
+   *     instance or an inheriting class
+   * @returns {Type.Etherpad.Changeset} - This instance
+   * @private
+   */
+  this._mergeOrPush = function (change) {
+
+    var last = this._stack[this._stack.length - 1];
+
+    if (last.mergable(change)) {
+      last.merge(change);
+    } else {
+      this._stack.push(change);
+    }
+
+    return this;
+  };
+
+  /**
+   *
+   * @param offset
+   * @param charbank
+   * @param match
+   * @returns {*}
+   * @private
+   */
+  this._createFromMatch = function (offset, charbank, match) {
+    switch(match.operator) {
+      case '=':
+        return Type.Etherpad.Changeset.Changes.Movement.fromOffsetObject(offset);
+      case '+':
+        return Type.Etherpad.Changeset.Changes.Insertion(offset.absolute, charbank);
+      case '-':
+        return Type.Etherpad.Changeset.Changes.Removal.fromMatch(match);
+      default:
+        Type.Development.debug('Cannot match operator ' + match.operator, match);
+        return null;
+    }
   };
 
  /**
@@ -101,6 +181,10 @@ Type.Etherpad.Changeset = function () {
   this.addRemoval = function (offset, numChars) {
     this._removals.push(this._createRemoval(offset, numChars));
     return this;
+  };
+
+  this.addFormatting = function () {
+
   };
 
   /**
@@ -330,6 +414,13 @@ Type.Etherpad.Changeset.fromString = function (str) {
   changeset.addString(str);
   return changeset;
 };
+
+
+/**
+ * Namespace for changes
+ * @type {{}}
+ */
+Type.Etherpad.Changeset.Changes = {};
 
 
 module.exports = Type.Etherpad.Changeset;
