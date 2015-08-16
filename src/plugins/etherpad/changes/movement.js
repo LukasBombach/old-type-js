@@ -5,11 +5,13 @@ var Type = require('../../../core');
 /**
  * Creates a new Type.Etherpad.Changeset instance
  *
+ * @param {number} delta - The relative movement
+ * @param {number} [absolute] - The absolute text position
  * @constructor
  */
 Type.Etherpad.Changeset.Changes.Movement = function (delta, absolute) {
   this.delta = delta;
-  this.absolute = absolute;
+  this.absolute = absolute || null;
 };
 
 /**
