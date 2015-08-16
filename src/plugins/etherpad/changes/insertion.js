@@ -29,8 +29,21 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Insertion, Type.Etherpad.Chang
   this.op = '+';
 
   /**
+   * @param {Type.Content} content - The content this changeset
+   *     should be applied to
+   * @param {Type.Caret} localCaret - The local user's caret
+   * @returns {Type.Etherpad.Changeset.Changes.Insertion} - This instance
+   */
+  this.apply = function (content, localCaret) {
+    content.insert(this.start, this.text);
+    localCaret.moveBy(this.length);
+    return this;
+  };
+
+  /**
    *
-   * @param that
+   * @param {Type.Etherpad.Changeset.Changes.Insertion} that - Another Insertion
+   *     instance
    * @returns {boolean}
    */
   this.mergable = function (that) {
@@ -40,8 +53,9 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Insertion, Type.Etherpad.Chang
 
   /**
    *
-   * @param that
-   * @returns {*}
+   * @param {Type.Etherpad.Changeset.Changes.Insertion} that - Another Insertion
+   *     instance
+   * @returns {Type.Etherpad.Changeset.Changes.Insertion} - This instance
    */
   this.merge = function (that) {
     var offset = that.start - this.start;

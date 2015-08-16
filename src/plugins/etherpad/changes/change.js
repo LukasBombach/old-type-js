@@ -13,6 +13,10 @@ Type.Etherpad.Changeset.Changes.Change = function () {
 
 (function () {
 
+  this.apply = function (content, localCaret) {
+    return this;
+  };
+
   this.mergable = function (that) {
     return false;
   };

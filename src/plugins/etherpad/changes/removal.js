@@ -27,6 +27,19 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Removal, Type.Etherpad.Changes
    */
   this.op = '-';
 
+  /**
+   * @param {Type.Content} content - The content this changeset
+   *     should be applied to
+   * @param {Type.Caret} localCaret - The local user's caret
+   * @returns {Type.Etherpad.Changeset.Changes.Insertion} - This instance
+   */
+  this.apply = function (content, localCaret) {
+    content.remove(this.start, this.length);
+    if (this.end <= localCaret.getOffset())
+      localCaret.moveBy(this.length * -1);
+    return this;
+  };
+
 }).call(Type.Etherpad.Changeset.Changes.Removal);
 
 /**

@@ -46,8 +46,10 @@ Type.Etherpad.Changeset = function () {
    * @returns {Type.Etherpad.Changeset} - This instance
    */
   this.apply = function (content, localCaret) {
-    this._applyInsertions(content, localCaret);
-    this._applyRemovals(content, localCaret);
+    var i, len = this._stack.length;
+    for (i = 0; i < len; i += 1) {
+      this._stack[i].apply(content, localCaret);
+    }
     return this;
   };
 
@@ -62,10 +64,11 @@ Type.Etherpad.Changeset = function () {
 
     var charbank = this._getCharbank(str),
       offsets = { absolute: 0, stack: []},
-      rawMatch;
+      rawMatch, match;
 
     while ((rawMatch = this._changesetRegex.exec(str)) !== null) {
-      this._addMatchToStack(offsets, charbank, this._parseMatch(rawMatch));
+      if (match = this._parseMatch(rawMatch))
+        this._addMatchToStack(offsets, charbank, match);
     }
 
     return this;
@@ -116,7 +119,7 @@ Type.Etherpad.Changeset = function () {
 
     var last = this._stack[this._stack.length - 1];
 
-    if (last.mergable(change)) {
+    if (!!last && last.mergable(change)) {
       last.merge(change);
     } else if (!(change instanceof Type.Etherpad.Changeset.Changes.Movement)) {
       this._stack.push(change);
@@ -160,53 +163,13 @@ Type.Etherpad.Changeset = function () {
       this._changesetRegex.lastIndex++;
 
     if(match[0] === '')
-      return {};
+      return false;
 
     return {
       attrs    : match[1],
       operator : match[3],
       value    : match[4]
     }
-  };
-
-  /**
-   * Applies this changeset's insertions to a given content
-   *
-   * @param {Type.Content} content - The content this changeset
-   *     should be applied to
-   * @param {Type.Caret} localCaret - The local user's caret
-   * @returns {Type.Etherpad.Changeset} - This instance
-   * @private
-   */
-  this._applyInsertions = function (content, localCaret) {
-    var len, i;
-    len = this._insertions.length;
-    for (i = 0; i < len; i += 1) {
-      content.insert(this._insertions[i].start, this._insertions[i].text);
-      localCaret.moveBy(this._insertions[i].numChars);
-    }
-    return this;
-  };
-
-  /**
-   * Applies this changeset's removals to a given content
-   *
-   * Todo I should not reverse the numChars here
-   *
-   * @param {Type.Content} content - The content this changeset
-   *     should be applied to
-   * @param {Type.Caret} localCaret - The local user's caret
-   * @returns {Type.Etherpad.Changeset} - This instance
-   * @private
-   */
-  this._applyRemovals = function (content, localCaret) {
-    var len, i;
-    len = this._removals.length;
-    for (i = 0; i < len; i += 1) {
-      content.remove(this._removals[i].start, this._removals[i].numChars * -1);
-      localCaret.moveBy(this._removals[i].numChars * -1);
-    }
-    return this;
   };
 
   /**
