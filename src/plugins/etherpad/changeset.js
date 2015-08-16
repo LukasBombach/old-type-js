@@ -73,14 +73,11 @@ Type.Etherpad.Changeset = function () {
   this.addString = function (str) {
 
     var charbank = this._getCharbank(str),
-      rawMatch, match, offsets;
-
-    offsets = { absolute: 0, stack: [] };
+      offsets = { absolute: 0, stack: []},
+      rawMatch;
 
     while ((rawMatch = this._changesetRegex.exec(str)) !== null) {
-      match = this._parseMatch(rawMatch);
-      this._addMatchToStack(offsets, charbank, match);
-      //offset += this._processMatch(offset, charbank, match);
+      this._addMatchToStack(offsets, charbank, this._parseMatch(rawMatch));
     }
 
     return this;
