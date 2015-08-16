@@ -105,6 +105,7 @@ Type.Etherpad = function (type) {
    * @private
    */
   this._initEditor = function (contents) {
+    //this._type.getRoot().innerHTML = contents.text;
     this._type.getRoot().innerHTML = Type.Etherpad.Util.nl2br(contents.text);
     //this._content.applyChangeset(contents.attribs);
     return this;

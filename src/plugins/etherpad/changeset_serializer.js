@@ -157,7 +157,7 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
       return base.length;
     }
     if (base.textContent) {
-      return base.textContent.length;
+      return base.textContent.length - 1;
     }
     return null;
   };
