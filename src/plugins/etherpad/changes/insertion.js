@@ -37,6 +37,14 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Insertion, Type.Etherpad.Chang
   };
 
   /**
+   *
+   * @returns {number}
+   */
+  this.getLength = function () {
+    return this.length;
+  };
+
+  /**
    * @param {Type.Content} content - The content this changeset
    *     should be applied to
    * @param {Type.Caret} localCaret - The local user's caret

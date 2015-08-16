@@ -68,7 +68,7 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
    */
   this._lengthChangeString = function () {
     var count = this._countLengthChange();
-    return (count > 0 ? '>' : '<') + count;
+    return (count > 0 ? '>' : '<') + Math.abs(count).toString();
   };
 
   /**
@@ -174,7 +174,7 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
     var change = 0, len, i;
     len = this._operations.length;
     for (i=0; i < len; i += 1) {
-      change += this._operations[i].length || 0;
+      change += this._operations[i].getLength() || 0;
     }
     return change;
   };

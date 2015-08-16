@@ -36,6 +36,14 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Removal, Type.Etherpad.Changes
   };
 
   /**
+   *
+   * @returns {number}
+   */
+  this.getLength = function () {
+    return this.length * -1;
+  };
+
+  /**
    * @param {Type.Content} content - The content this changeset
    *     should be applied to
    * @param {Type.Caret} localCaret - The local user's caret
@@ -47,6 +55,8 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Removal, Type.Etherpad.Changes
       localCaret.moveBy(this.length * -1);
     return this;
   };
+
+
 
 }).call(Type.Etherpad.Changeset.Changes.Removal.prototype);
 

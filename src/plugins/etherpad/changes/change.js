@@ -30,8 +30,12 @@ Type.Etherpad.Changeset.Changes.Change = function () {
   };
 
   this.getOperation = function () {
-    return ''
-  }
+    return '';
+  };
+
+  this.getLength = function () {
+    return 0;
+  };
 
 }).call(Type.Etherpad.Changeset.Changes.Change.prototype);
 
