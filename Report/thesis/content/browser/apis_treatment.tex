@@ -50,7 +50,7 @@ On the downside, the paste event cannot be proxied to the \code{textarea} if the
 
 Generally, bugs cannot be fixed. The only way to treat bugs in browsers is by avoiding them, shimming them with JavaScript methods or ''cleaning up'' after they have occurred.
 
-\subsection{Not extendable}
+\subsection{Restrictions}
 \label{subsec:treating_issues_last}
 
 The restrictions the HTML editing API imposed on the contents of the editor is an even bigger problem. Taking the example of layouting with tab stops\footnote{\url{http://googledrive.blogspot.fr/2010/05/whats-different-about-new-google-docs.html}}, the only solution is not making the entire contents of the editor editable, but implementing a layouting engine in JavaScript and enabling the editing mode only on parts of the layout.
