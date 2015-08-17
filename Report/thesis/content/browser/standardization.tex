@@ -5,9 +5,17 @@
 
 % It makes sense to use HTML editing APIs for rich-text editing. 
 
-HTML editing APIs, although not standardized, have been the de-facto standard for implementing rich-text editors on the web. Microsoft's demos, that have been published with the release of these APIs, suggested this application. Mozilla mimicked this API and called their implementation ''rich-text editing API''. Other browsers followed with APIs based on Microsoft's idea of editable elements. However, it would have been possible to offer a native user interface component, a dedicated rich-text input field, instead of this API.
+% Microsoft's demos, that have been published with the release of these APIs, suggested this application. Mozilla mimicked this API and called their implementation ''rich-text editing API''. Other browsers followed with APIs based on Microsoft's idea of editable elements. 
 
-HTML editing APIs have only been standardized with HTML5, which itself introduces 13 new types of input fields\footnote{\url{https://developer.mozilla.org/en/docs/Web/HTML/Element/Input}, last checked on 07/16/2015}, but none with rich-text capabilities. The WHATWG discussed various ways to specify rich-text editing for the upcoming HTML5 standard, including dedicated input fields. The issues that have been faced with that idea are as follows:
+%HTML editing APIs, although not standardized, have been the \textit{de facto} standard for implementing rich-text editors on the web. It can be imagined, that browsers could have implemented a different API or even dedicated rich-text input elements. Such an element could also have been introduced with new standards.
+
+%It would have been possible to offer a native user interface component, a dedicated rich-text input field, instead of this API.
+
+HTML editing APIs have been the \textit{de facto} standard for implementing rich-text editors on the web, but have only been standardized in October 2014 with HTML5. 
+
+HTML5 introduces 13 new types of input fields\footnote{\url{https://developer.mozilla.org/en/docs/Web/HTML/Element/Input}, last checked on 07/16/2015}. It can be imagined that along with these elements, the standard could have introduced a native rich-text input element as well, but none of the elements comprises such capabilities. The WHATWG, the working group that developed the HTML5 standard, discussed this issue publicly. The problems that have been faced with that idea are as follows:
+
+%The WHATWG discussed various ways to specify rich-text editing for the upcoming HTML5 standard, including dedicated input fields. The issues that have been faced with that idea are as follows:
 
 \begin{enumerate} 
 \item Finding a way to tell the browser which language the rich-text input should generate. E.g. should it output (the then popular) ''bb'' code, (X)HTML, Textile or something else?
