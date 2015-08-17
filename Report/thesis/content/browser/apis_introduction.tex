@@ -78,12 +78,31 @@ The \textit{third} parameter will be passed on to the internal command\footnote{
 \section{Usage of HTML Editing APIs for rich-text editors}
 \label{sec:useage-of-html-editing-apis}
 
-\begin{figure}[!htb]
+%\begin{figure}[!htb]
+%\centering
+%\makebox[\textwidth]{\includegraphics[width=0.5\textwidth]{images/editingmode_usage.pdf}}
+%\caption{Usage of HTML editing APIs to implement rich-text editors}
+%\label{fig:formatting_dom_tree}
+%\end{figure}
+
+\begin{figure}
 \centering
-\makebox[\textwidth]{\includegraphics[width=0.5\textwidth]{images/editingmode_usage.pdf}}
+%\begin{subfigure}{.5\textwidth}
+%  \centering
+  \includegraphics[width=.4\linewidth]{images/ckeditor-demo-overlayed.png}
+%  \caption{A subfigure}
+%  \label{fig:sub1}
+%\end{subfigure}%
+%\begin{subfigure}{.5\textwidth}
+%  \centering
+  \includegraphics[width=.4\linewidth]{images/tinymce-demo-overlayed.png}
+%  \caption{A subfigure}
+%  \label{fig:sub2}
+%\end{subfigure}
 \caption{Usage of HTML editing APIs to implement rich-text editors}
-\label{fig:formatting_dom_tree}
+\label{fig:usage_contenteditable_screenshots}
 \end{figure}
+
 
 Most web-based rich-text editors use HTML editing APIs as their basis. The popular editors ''CKEditor'' and ''TinyMCE'' dynamically create an \texttt{iframe} on instantiation and set its \texttt{body} to editing mode using the \texttt{contenteditable}-attribute. This way, users can type inside the \code{iFrame} which acts as a text input field. Both libraries wrap the \texttt{iframe} in a user interface with buttons to format the \texttt{iframe}'s contents. Using the interface, the commands of \texttt{document.execCommand} will be called on the \texttt{iframe}'s \texttt{document} and the selected text will be formatted. While using an \texttt{iframe} is still in practice, many newer editors use a  \texttt{div} element instead. The user interfaces vary between different editors. %Some editors do not show any chrome unless text will be selected
 
