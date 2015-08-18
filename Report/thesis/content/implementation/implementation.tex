@@ -26,7 +26,7 @@ CommonJS specifies a system to define a so-called module in a JavaScript file th
 
 \subsection{Linting}
 
-JSLint is used to lint the source code before any concatenation happens. It will also check if the code conforms the JavaScript code conventions introduced by Douglas Crockford\cite{crockf}. The code mostly conforms these conventions, differing in the way the constructor pattern is implemented to favor better readability. Classes using the constructor pattern are implemented using the conventions of the Ace library and use the prefix convention\footnote{\url{https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Contributor\_s\_Guide/Private\_Properties\#Using\_Prefixes}} for private members.
+JSLint is used to lint the source code before any concatenation happens. It will also check if the code conforms the widely acclaimed JavaScript code conventions introduced by Douglas Crockford in his book ''JavaScript: The Good Parts''\cite{crockf}. The code mostly conforms these conventions, differing in the way the constructor pattern is implemented to favor better readability. Classes using the constructor pattern are implemented using the conventions of the Ace library and use the prefix convention\footnote{\url{https://developer.mozilla.org/en-US/Add-ons/SDK/Guides/Contributor\_s\_Guide/Private\_Properties\#Using\_Prefixes}} for private members.
 
 
 %\section{Coding conventions}
@@ -40,9 +40,9 @@ JSLint is used to lint the source code before any concatenation happens. It will
 
 JSCS is used to check the code to conform specific formatting conventions---for instance the number of spaces used for indentation or a consistent use of CamelCase. Along with JSLint checking for Douglas Crockford's conventions this ensures a consistent coding style across all files and classes.
 
-\subsection{ECMAScript 6} 
+%\subsection{ECMAScript 6} 
 
-ECMAScript 6 offers many features for JavaScript including classes and modules. It is not supported by most browsers yet, however tools like ''Babel'' can transpile ECMAScript 6 to ECMAScript 5. ECMAScript 6 and Babel are used by popular websites like ''Netflix'' and JavaScript libraries like ''React''. However, Type will not use this. Even though its features can support the development with syntactic sugar, most of its features can be approached using ECMAScript 5 design patterns. The benefits of \textit{not} using ECMAScript 6 and transpilers like Babel are a smaller file size, better performance and independence from third-party tools.
+%ECMAScript 6 offers many features for JavaScript including classes and modules. It is not supported by most browsers yet, however tools like ''Babel'' can transpile ECMAScript 6 to ECMAScript 5. ECMAScript 6 and Babel are used by popular websites like ''Netflix'' and JavaScript libraries like ''React''. However, Type will not use this. Even though its features can support the development with syntactic sugar, most of its features can be approached using ECMAScript 5 design patterns. The benefits of \textit{not} using ECMAScript 6 and transpilers like Babel are a smaller file size, better performance and independence from third-party tools.
 
 
 % There are many popular frameworks and libraries that provide a structure, rules and conventions for implementing websites and web applications. 
@@ -251,7 +251,7 @@ There are various input methods with which users can interact with native inputs
 \item Remote control input (on smart TVs)
 \end{itemize}
 
-When mimicking a native input, in a best-case scenario, all these input methods should be accounted for. Fetching input includes two scenarios: The user clicks, touches or focuses the input in any way and does so at any position inside the input. If the user points (touches, clicks, etc.) in the middle of the text, the caret should move to that position. In environments without hardware keyboards, the library must ensure that a virtutal keyboards show up. Once the input is focused, text input must be fetched and written to the contents. There are various options to fetch user input, which will be discussed in the following sections.
+When mimicking a native input, in a best-case scenario, all these input methods should be accounted for. Fetching input includes two scenarios: The user clicks, touches or focuses the input in any way and does so at any position inside the input. If the user points (touches, clicks, etc.) in the middle of the text, the caret should move to that position. In environments without hardware keyboards, the library must ensure that a virtual keyboard shows up. Once the input is focused, text input must be fetched and written to the contents. There are various options to fetch user input, which will be discussed in the following sections.
 
 \subsection{Events} 
 
