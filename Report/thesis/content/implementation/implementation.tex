@@ -245,7 +245,7 @@ There are various input methods with which users can interact with native inputs
 \begin{itemize} 
 \item Hardware keyboard input
 \item Virtual keyboard input
-\item Mouse (pointer) input
+\item Mouse input
 \item Touch input
 \item Game controller input (on game consoles)
 \item Remote control input (on smart TVs)
@@ -259,7 +259,7 @@ One way to fetch user input is by listening to events.
 
 \paragraph{Keyboard} Text input can be read through \texttt{KeyboardEvent}s. Keyboard events will be triggered for virtual keyboards and for hardware keyboards. When the user presses a key, the event can be stopped and the according characters can be inserted at the offset of the caret. As a downside, listeners for keyboard events cannot be bound to an element that is not a native text input, that means keyboard events must be listened to on the \texttt{document} level. This does not only have (minor) performance downsides but als requires more logic to decide whether a keyboard input should be processed and ultimately stopped or ignored and allowed to bubble to other event listeners of a website. In particular, there can be edge cases, where even though a keyboard event should write contents to the editor, the event itself is supposed to trigger other methods that are not part of the editor. Keyboard events are supported by all major browsers across all devices.
 
-\paragraph{Mouse (pointer) and touch} To support clicking or touching inside the editor's contents \texttt{MouseEvent}s and \texttt{TouchEvent}s can be used. Mouse events are supported on all major desktop browsers and all mobile browsers support touch events. Both event types support reading the coordinates indicating where the click or touch has been performed.
+\paragraph{Mouse and touch} To support clicking or touching inside the editor's contents \texttt{MouseEvent}s and \texttt{TouchEvent}s can be used. Mouse events are supported on all major desktop browsers and all mobile browsers support touch events. Both event types support reading the coordinates indicating where the click or touch has been performed.
 
 \paragraph{Remote controls} Although some smart TVs offer keyboards, mice, pointers similar to Nintendo's Wii remote, input via smartphone apps and many other input divides, button-based remote controls are offered with almost any smart TV and remain a edge case for interacting with a text editor. In such an environment, users commonly switch between elements by selecting focusable elements with a directional pad. Only using events would not account for this since there would be no focusable element representing the editor. Recent browsers on Samsung's and LG's smart TVs are based on WebKit\footnote{\url{http://www.samsungdforum.com/Devtools/Sdkdownload}, last checked on 07/22/2015} while Sony's TVs use Opera. Before 2012 Samsung's browser was based on Gecko. All of these browsers and browser engines support keyboard events triggered by virtual keyboards to fetch their input.
 
