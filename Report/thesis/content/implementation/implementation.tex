@@ -464,9 +464,11 @@ The downside of this technique is that copy commands will not work anymore due t
 \section{Contents}
 \label{sec:contents_impl}
 
-The \code{Contents} class provides an API to add, remove and format text. This functionality is implemented through the \code{Writer} and \code{Formatter} classes. Its central responsibility is to proxy commands to these classes and to trigger \code{ChangeEvent}s (see \refsubsec{subsec:change_event}) that contain a formalized description of the edit operation. \code{ChangeEvent}s will be observed by the \code{UndoManager} (see \refsection{sec:undo_manager}) to implement undo / redo functionality.
+The \code{Contents} class provides an API to add, remove and format text. This functionality is implemented through the \code{Writer} and \code{Formatter} classes. Its central responsibility is to proxy commands to these classes and to create ''actions'' to pass them on to the \code{UndoManager}. An action describes the formatting, change or deletion of contents in a formalized way that can be undone by the \code{UndoManager} (see \refsection{sec:undo_manager}).
 
-This architecture has been chosen not only to achieve a decoupled software architecture with a clear separation of concerns, but to allow extensions to observe content changes. % For instance, the Etherpad extension uses this to populate changes to other clients (see \refsubsec{subsec:etherpad_type_client_implementation}).
+%The \code{Contents} class provides an API to add, remove and format text. This functionality is implemented through the \code{Writer} and \code{Formatter} classes. Its central responsibility is to proxy commands to these classes and to trigger \code{ChangeEvent}s (see \refsubsec{subsec:change_event}) that contain a formalized description of the edit operation. \code{ChangeEvent}s will be observed by the \code{UndoManager} (see \refsection{sec:undo_manager}) to implement undo / redo functionality.
+
+%This architecture has been chosen not only to achieve a decoupled software architecture with a clear separation of concerns, but to allow extensions to observe content changes. % For instance, the Etherpad extension uses this to populate changes to other clients (see \refsubsec{subsec:etherpad_type_client_implementation}).
 
 %Apart from a separation of concerns, this architecture allows for extensions and possible future internal use cases to perform edit operations either directly, by using the \code{Writer} and \code{Formatter} independently of the \code{Contents} class
 
@@ -584,24 +586,49 @@ To format the nodes that have been collected by the algorithm, they will be wrap
 \section{Undo Manager}
 \label{sec:undo_manager}
 
-The \code{UndoManager} class will observe \code{ChangeEvent}s (see \refsubsec{subsec:change_event}) and keep a history of the performed changes. Every change must include an identifier of the source of the change. The \code{Contents} class will declare the \code{Input} class as the source for the change. This is to enable extensions to work with the \code{UndoManager}. The Etherpad extension (see \refsection{sec:etherpad}) will change the editor's contents too. If, at a given time, the local user added some text and after that another connected client would add some text a few characters before the local user's change, the \code{UndoManager} must account for both changes to undo the local user's change.
+The \code{UndoManager} implements the undo and redo functionality of the editor. It can receive ''actions'', which are instances of classes inheriting from the \code{Type} action base class. Each instance has the methods \code{execute} and \code{undo} to apply and revoke its particular functionality. There are 3 types of actions.
 
-\subsection{Change Listener}
+\subsection{Insert}
 
-In its core the changes observed by the \code{UndoManager} will be kept track of by the \code{ChangeListener}. It will accumulate every change in a data structure and take a ''snapshot'' every 500 milliseconds and store it in a history. The \code{UndoManager} uses this history to implement and offer undo and redo commands.
+The \code{Insert} action will insert text on execution and delete the text when its \code{undo} method will be called. It utilizes the \code{Writer} class for these operations. It must be instantiated with the according text so it can be executed and undone at any time.
 
-This functionality has been abstracted to be reused by other extensions. The Etherpad extension uses this class to accumulate and publish local changes every 500 milliseconds to its connected clients independently of the \code{UndoManager}.
+\subsection{Remove}
 
-\subsection{Undo / Redo}
+The \code{Remove} action will remove text on execution and store it to insert it again when it is being undone. Just like the \code{Insert} action it uses the \code{Writer} class for this.
 
-The \code{Change} event can contain operations to
+\subsection{Format}
 
-\begin{itemize}
-\item Insert or remove text
-\item Format text
-\end{itemize}
+The \code{Format} action applies formattings using the \code{Formatter} class. It will store references to the nodes the \code{Formatter} created to remove them when the action will be undone.
 
-Inserting and removing can be undone easily by performing and insertion to undo a remove operation and vice versa. Formatting text is more difficult since Type allows formatting with arbitrary markup. This can be solved by keeping track of the offsets and characters affected by the formatting command and removing the HTML tags at the corresponding positions.
+\subsection{Stack}
+
+The \code{UndoManager} stores each action to an array (the undo stack) so that each action can be undone and redone in order. In some cases, consecutive actions, like multiple insertions, should be undone in a single undo command invoked by the user. For this, each action must implement the methods \code{mergable} and \code{merge}. When an action get added to the \code{UndoManger} the \code{mergable} of the highest element in the undo stack will return if it accepts the new action to be merged with it. The \code{Insert} action will accept other instances of the \code{Insert} action class so that consecutive character input can be undone in chunks and not only in characters. Each action will implement merging with other instances in its \code{merge} method to which a new action will be passed if \code{mergable} returned \code{true}. Otherwise the new action will be added to the undo stack. The \code{UndoManager} will only merge actions that have been passed within a time frame of 500 milliseconds, to generate a distinct undo history.
+
+%When an action get added to the \code{UndoManger} it passes the action to the \code{mergable} method of the highest element in the undo stack, which then returns if it accepts the action should be merged with itself. The \code{Insert} action will return true if will be passed another instance of the \code{Insert} action and false for all other actions. The \code{UndoManager} will pass the new action to the \code{merge} method 
+
+\subsection{Action sources}
+
+The Etherpad extension (see \refsection{sec:etherpad}) allows multiple users to modify the same text. The undo methods must only undo changes from the user that initiated the action. Furthermore, undoing and redoing an action must account for changes that affect the action, for instance, when the offset at which a text has been inserted has shifted, because another user has inserted text before that offset. To manage this, each action contains a source identifier that will be generated by the \code{UndoManager}. With this identifier the \code{UndoManager} can choose to undo actions of a particular user and account for changes of actions from other users.
+
+
+%The \code{UndoManager} class will observe \code{ChangeEvent}s (see \refsubsec{subsec:change_event}) and keep a history of the performed changes. Every change must include an identifier of the source of the change. The \code{Contents} class will declare the \code{Input} class as the source for the change. This is to enable extensions to work with the \code{UndoManager}. The Etherpad extension (see \refsection{sec:etherpad}) will change the editor's contents too. If, at a given time, the local user added some text and after that another connected client would add some text a few characters before the local user's change, the \code{UndoManager} must account for both changes to undo the local user's change.
+
+%\subsection{Change Listener}
+
+%In its core the changes observed by the \code{UndoManager} will be kept track of by the \code{ChangeListener}. It will accumulate every change in a data structure and take a ''snapshot'' every 500 milliseconds and store it in a history. The \code{UndoManager} uses this history to implement and offer undo and redo commands.
+
+%This functionality has been abstracted to be reused by other extensions. The Etherpad extension uses this class to accumulate and publish local changes every 500 milliseconds to its connected clients independently of the \code{UndoManager}.
+
+%\subsection{Undo / Redo}
+
+%The \code{Change} event can contain operations to
+
+%\begin{itemize}
+%\item Insert or remove text
+%\item Format text
+%\end{itemize}
+
+%Inserting and removing can be undone easily by performing and insertion to undo a remove operation and vice versa. Formatting text is more difficult since Type allows formatting with arbitrary markup. This can be solved by keeping track of the offsets and characters affected by the formatting command and removing the HTML tags at the corresponding positions.
 
 
 
@@ -666,49 +693,49 @@ The \code{TypeEvent} is a generic, general-purpose event. It can store arbitrary
 \subsection{InputEvent}
 \label{subsec:input_event}
 
-The Input \code{InputEvent} will be triggered by the \code{Input} class after a keyboard input has passed the input pipeline. It inherits all methods from the \code{TypeEvent} to conform the event system and contains information on the key and the modifier keys pressed. The key is represented with its key code and a key name. They key name will be mapped from the key code and is implemented with a list of readable names including ''backspace'', ''enter'', ''space'', all letters and many others. The list not complete but can be extended during further development. The modifier keys include ''shift'', ''alt'', ''ctrl'' and ''meta''. ''meta'' is the browser's name for the \keystroke{cmd} key on OS X systems. OS X uses the \keystroke{cmd} key as modifier the same way Windows and Linux use the \keystroke{ctrl} key. To support developing an editor for both platforms the ''cmd'' modifier will be set when a user holds the \keystroke{cmd} key on OS X \textit{or} the \keystroke{ctrl} key on other platforms.
+The Input \code{InputEvent} will be triggered by the \code{Input} class after a keyboard input has passed the input pipeline. It inherits all methods from the \code{TypeEvent} to conform the event system and contains information on the key and the modifier keys pressed. The key is represented with its key code and a key name. They key name will be mapped from the key code and is implemented with a list of readable names including ''backspace'', ''enter'', ''space'' and others. The list not complete but can be extended during further development. The modifier keys include ''shift'', ''alt'', ''ctrl'' and ''meta''. ''meta'' is the browser's name for the \keystroke{cmd} key on OS X systems. OS X uses the \keystroke{cmd} key as modifier the same way Windows and Linux use the \keystroke{ctrl} key. To support developing an editor for both platforms the ''cmd'' modifier will be set when a user holds the \keystroke{cmd} key on OS X \textit{or} the \keystroke{ctrl} key on other platforms.
 
 \subsection{PasteEvent}
 \label{subsec:paste_event}
 
 The \code{PasteEvent} will be triggered when the user pastes contents from the clipboard \textit{before} it will be inserted to the editor's contents. It contains the clipboard's contents and can be cancelled so that other developers are free to manipulate and stop a paste event.
 
-\subsection{ChangeEvent}
-\label{subsec:change_event}
+%\subsection{ChangeEvent}
+%\label{subsec:change_event}
 
-As discussed in section \refsection{sec:contents_impl}, a \code{ChangeEvent} will be triggered when changes have been made to the editor's contents. It contains an array of formalized data structures describing the changes that have been made. There are two types of data structures, one for text insertion and removal and one for text formatting.
+%As discussed in section \refsection{sec:contents_impl}, a \code{ChangeEvent} will be triggered when changes have been made to the editor's contents. It contains an array of formalized data structures describing the changes that have been made. There are two types of data structures, one for text insertion and removal and one for text formatting.
+%
+%\begin{lstlisting}[language=JavaScript, caption={Data structure for insert and remove operations}, label=lst:add_remove_structure]
+%{
+%    "offset": 10,
+%    "operation": "insert",
+%    "contents": "Lorem ipsum",
+%}
+%{
+%    "offset": 10,
+%    "operation": "remove",
+%    "contents": "Lorem ipsum",
+%}
+%\end{lstlisting}
 
-\begin{lstlisting}[language=JavaScript, caption={Data structure for insert and remove operations}, label=lst:add_remove_structure]
-{
-    "offset": 10,
-    "operation": "insert",
-    "contents": "Lorem ipsum",
-}
-{
-    "offset": 10,
-    "operation": "remove",
-    "contents": "Lorem ipsum",
-}
-\end{lstlisting}
+%Lines 1--5 in \reflisting{lst:add_remove_structure} show the data structure for an insert operation.
 
-Lines 1--5 in \reflisting{lst:add_remove_structure} show the data structure for an insert operation.
+%\begin{lstlisting}[language=JavaScript, caption={Change data structure}, label=lst:format_structure]
+%{
+%    "offset": 10,
+%    "characters": 5,
+%    "operation": "format",
+%    "parameters": "<strong />",
+%}
+%{
+%    "offset": 10,
+%    "characters": 5,
+%    "operation": "removeformat",
+%    "parameters": "<strong class='important' />",
+%}
+%\end{lstlisting}
 
-\begin{lstlisting}[language=JavaScript, caption={Change data structure}, label=lst:format_structure]
-{
-    "offset": 10,
-    "characters": 5,
-    "operation": "format",
-    "parameters": "<strong />",
-}
-{
-    "offset": 10,
-    "characters": 5,
-    "operation": "removeformat",
-    "parameters": "<strong class='important' />",
-}
-\end{lstlisting}
-
-These data structures contain the information to undo user input and to redo the same input again.
+%These data structures contain the information to undo user input and to redo the same input again.
 
 
 \section{Utility classes}
