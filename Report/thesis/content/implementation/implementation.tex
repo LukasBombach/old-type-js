@@ -429,18 +429,6 @@ It is to be noted that the elements for carets as well as for the text selection
 
 To move the caret left or right, the according characters left and right of its current offset will be measured using this method. To move it up and down across text lines, the caret must check the offsets of every character, starting from the character of the current offset, until it reaches the character above or below it that is closest to its horizontal position. As discussed in section \refsection{sec:cache}, a cache to store positions cannot be applied. The complexity of this is method $O(n)$, however in practice, the number if characters this will affect is limited by readability and usability of the text editor. Mobile devices, that generally have less performance than desktop machines, have smaller screens displaying less characters per line. While this is not necessarily the case, it can be expected by good software design.
 
-\subsection{BiDi support}
-
-\textit{todo}
-
-\subsection{IME} 
-
-\textit{todo}
-
-http://marijnhaverbeke.nl/blog/browser-input-reading.html 
-
-https://en.wikipedia.org/wiki/Input\_method
-
 \section{Selection}
 
 Using a designated input element for input reading comes with the cost of having to emulate the text selection. When the input field is focused, any selection on the web site, including that of the editor, will be removed. When text is selected, the input field does not necessarily have to be focused. To read inputs, it can be focused on a ''keydown'' event, which will only remove the text selection when the user enters text. This is not problematic since selections will be removed on native inputs when a user enters text too. However, if the user right-clicks in the editor, the input element will be focused to enable pasting from the context menu (see \refsubsec{subsec:input_textarea_pasting}). This will remove the text selection on any right click.
