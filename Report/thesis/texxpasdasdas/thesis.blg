@@ -1,0 +1,132 @@
+This is BibTeX, Version 0.99d (TeX Live 2015)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: thesis.aux
+A level-1 auxiliary file: content/title.aux
+A level-1 auxiliary file: content/abstract.aux
+A level-1 auxiliary file: content/acknowledgements.aux
+A level-1 auxiliary file: content/tableofcontents.aux
+The style file: ../apalike-url.bst
+Database file #1: ../bibliography.bib
+Warning--entry type for "br" isn't style-file defined
+--line 60 of file ../bibliography.bib
+Warning--entry type for "bi" isn't style-file defined
+--line 123 of file ../bibliography.bib
+Warning--entry type for "bh" isn't style-file defined
+--line 130 of file ../bibliography.bib
+Warning--entry type for "bg" isn't style-file defined
+--line 137 of file ../bibliography.bib
+Warning--entry type for "bf" isn't style-file defined
+--line 144 of file ../bibliography.bib
+Warning--entry type for "medium_blocked" isn't style-file defined
+--line 151 of file ../bibliography.bib
+Warning--entry type for "caniuse_contenteditable" isn't style-file defined
+--line 179 of file ../bibliography.bib
+Warning--entry type for "aw" isn't style-file defined
+--line 200 of file ../bibliography.bib
+Warning--entry type for "av" isn't style-file defined
+--line 207 of file ../bibliography.bib
+Warning--entry type for "ai" isn't style-file defined
+--line 228 of file ../bibliography.bib
+Warning--entry type for "at" isn't style-file defined
+--line 235 of file ../bibliography.bib
+Warning--entry type for "as" isn't style-file defined
+--line 242 of file ../bibliography.bib
+Warning--entry type for "ar" isn't style-file defined
+--line 249 of file ../bibliography.bib
+Warning--entry type for "aq" isn't style-file defined
+--line 256 of file ../bibliography.bib
+Warning--entry type for "ap" isn't style-file defined
+--line 263 of file ../bibliography.bib
+Warning--entry type for "am" isn't style-file defined
+--line 277 of file ../bibliography.bib
+Warning--entry type for "ah" isn't style-file defined
+--line 291 of file ../bibliography.bib
+Warning--entry type for "ad" isn't style-file defined
+--line 298 of file ../bibliography.bib
+Warning--entry type for "ag" isn't style-file defined
+--line 312 of file ../bibliography.bib
+Warning--entry type for "sopp" isn't style-file defined
+--line 347 of file ../bibliography.bib
+Warning--I didn't find a database entry for "so_paste_plain"
+Warning--to sort, need author or key in sopp
+Warning--to sort, need author or key in ag
+Warning--to sort, need author or key in ad
+Warning--to sort, need author or key in am
+Warning--to sort, need author or key in ai
+Warning--to sort, need author or key in ap
+Warning--to sort, need author or key in aq
+Warning--to sort, need author or key in ar
+Warning--to sort, need author or key in caniuse_contenteditable
+Warning--to sort, need author or key in as
+Warning--to sort, need author or key in at
+Warning--to sort, need author or key in ah
+Warning--to sort, need author or key in aw
+Warning--to sort, need author or key in av
+Warning--to sort, need author or key in bi
+Warning--to sort, need author or key in bh
+Warning--to sort, need author or key in bg
+Warning--to sort, need author or key in bf
+Warning--to sort, need author or key in medium_blocked
+Warning--to sort, need author or key in br
+Warning--empty year in bf
+Warning--empty year in aw
+Warning--empty year in ar
+Warning--empty year in bi
+Warning--empty year in bg
+Warning--empty year in medium_blocked
+Warning--empty year in caniuse_contenteditable
+Warning--empty year in at
+Warning--empty year in as
+Warning--empty year in av
+Warning--empty year in bh
+Warning--empty year in ad
+Warning--empty year in am
+Warning--empty year in br
+Warning--empty year in aq
+Warning--empty year in ap
+Warning--empty year in sopp
+Warning--empty year in ai
+Warning--empty year in ag
+Warning--empty year in ah
+You've used 20 entries,
+            2006 wiz_defined-function locations,
+            525 strings with 4754 characters,
+and the built_in function-call counts, 4005 in all, are:
+= -- 420
+> -- 0
+< -- 0
++ -- 4
+- -- 0
+* -- 260
+:= -- 587
+add.period$ -- 20
+call.type$ -- 20
+change.case$ -- 100
+chr.to.int$ -- 20
+cite$ -- 80
+duplicate$ -- 220
+empty$ -- 421
+format.name$ -- 0
+if$ -- 841
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 0
+newline$ -- 63
+num.names$ -- 0
+pop$ -- 160
+preamble$ -- 1
+purify$ -- 100
+quote$ -- 0
+skip$ -- 121
+stack$ -- 0
+substring$ -- 264
+swap$ -- 0
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 120
+warning$ -- 40
+while$ -- 0
+width$ -- 0
+write$ -- 142
+(There were 61 warnings)

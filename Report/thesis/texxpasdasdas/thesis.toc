@@ -1,0 +1,187 @@
+\contentsline {chapter}{Contents}{4}{section*.1}
+\contentsline {chapter}{\chapternumberline {1}Introduction}{7}{chapter.1}
+\contentsline {section}{\numberline {1.1}Motivation}{7}{section.1.1}
+\contentsline {paragraph}{Detlev}{7}{section*.2}
+\contentsline {paragraph}{detlev}{9}{section*.3}
+\contentsline {section}{\numberline {1.2}Terminology}{9}{section.1.2}
+\contentsline {section}{\numberline {1.3}Structure}{9}{section.1.3}
+\contentsline {part}{\partnumberline {I}Theory}{11}{part.1}
+\contentsline {chapter}{\chapternumberline {2}Principles of rich-text editing}{12}{chapter.2}
+\contentsline {section}{\numberline {2.1}Overview}{12}{section.2.1}
+\contentsline {section}{\numberline {2.2}Formatting}{12}{section.2.2}
+\contentsline {section}{\numberline {2.3}Behavior}{12}{section.2.3}
+\contentsline {chapter}{\chapternumberline {3}Text editing in desktop environments}{13}{chapter.3}
+\contentsline {section}{\numberline {3.1}Basics of plain-text editing}{13}{section.3.1}
+\contentsline {section}{\numberline {3.2}Basics of rich-text editing}{13}{section.3.2}
+\contentsline {section}{\numberline {3.3}Libraries for desktop environments}{13}{section.3.3}
+\contentsline {chapter}{\chapternumberline {4}Text editing in browser environments}{15}{chapter.4}
+\contentsline {section}{\numberline {4.1}Overview}{15}{section.4.1}
+\contentsline {section}{\numberline {4.2}Plain-text editing}{15}{section.4.2}
+\contentsline {section}{\numberline {4.3}Rich-text editing}{16}{section.4.3}
+\contentsline {section}{\numberline {4.4}HTML Editing APIs}{16}{section.4.4}
+\contentsline {section}{\numberline {4.5}Usage of HTML Editing APIs for rich-text editors}{18}{section.4.5}
+\contentsline {part}{\partnumberline {II}Discussion}{20}{part.2}
+\contentsline {chapter}{\chapternumberline {5}Overview}{21}{chapter.5}
+\contentsline {chapter}{\chapternumberline {6}History of HTML editing APIs}{22}{chapter.6}
+\contentsline {section}{\numberline {6.1}Browser support}{22}{section.6.1}
+\contentsline {section}{\numberline {6.2}Emergence of HTML editing JavaScript libraries}{23}{section.6.2}
+\contentsline {section}{\numberline {6.3}Standardization of HTML Editing APIs}{23}{section.6.3}
+\contentsline {chapter}{\chapternumberline {7}Advantages and disadvantages}{26}{chapter.7}
+\contentsline {section}{\numberline {7.1}Discussion}{26}{section.7.1}
+\contentsline {section}{\numberline {7.2}Advantages of HTML Editing APIs}{27}{section.7.2}
+\contentsline {subsection}{Browser support}{27}{section*.10}
+\contentsline {subsection}{High-level API}{27}{section*.11}
+\contentsline {subsection}{HTML output}{28}{section*.12}
+\contentsline {subsection}{Possible third-party solutions for other languages}{28}{section*.13}
+\contentsline {section}{\numberline {7.3}Disadvantages of HTML Editing APIs}{28}{section.7.3}
+\contentsline {subsection}{No specification on the generated output}{28}{section*.14}
+\contentsline {subsection}{Flawed API}{29}{section*.15}
+\contentsline {subsection}{Restrictions}{30}{section*.16}
+\contentsline {subsection}{Clipboard}{30}{section*.17}
+\contentsline {subsection}{Bugs}{31}{section*.18}
+\contentsline {section}{\numberline {7.4}Treating HTML editing API related issues}{32}{section.7.4}
+\contentsline {subsection}{HTML output}{33}{section*.19}
+\contentsline {subsection}{Flawed API}{33}{section*.20}
+\contentsline {subsection}{Clipboard}{33}{section*.21}
+\contentsline {subsection}{Bugs}{35}{section*.22}
+\contentsline {subsection}{Restrictions}{35}{section*.23}
+\contentsline {chapter}{\chapternumberline {8}Rich-text editing without editing APIs}{36}{chapter.8}
+\contentsline {section}{\numberline {8.1}Alternatives to HTML editing APIs}{36}{section.8.1}
+\contentsline {subsection}{Overview}{36}{section*.24}
+\contentsline {subsection}{Native input elements}{36}{section*.25}
+\contentsline {subsection}{Image elements}{36}{section*.26}
+\contentsline {subsection}{Third-party plugins}{37}{section*.27}
+\contentsline {subsection}{Manipulation via the DOM APIs}{37}{section*.28}
+\contentsline {section}{\numberline {8.2}Rich-text without HTML editing APIs in practice}{40}{section.8.2}
+\contentsline {section}{\numberline {8.3}Advantages of rich-text editing without editing APIs}{41}{section.8.3}
+\contentsline {subsection}{Generated output and flawed API}{41}{section*.29}
+\contentsline {subsection}{Restrictions}{42}{section*.30}
+\contentsline {subsection}{Clipboard}{43}{section*.31}
+\contentsline {subsection}{Bugs}{43}{section*.32}
+\contentsline {section}{\numberline {8.4}Disadvantages of rich-text editing without editing APIs}{43}{section.8.4}
+\contentsline {subsection}{Formatting}{43}{section*.33}
+\contentsline {subsection}{Native components}{44}{section*.34}
+\contentsline {subsection}{Possible performance disadvantages}{45}{section*.35}
+\contentsline {subsection}{File size}{45}{section*.36}
+\contentsline {chapter}{\chapternumberline {9}Conclusion}{46}{chapter.9}
+\contentsline {section}{\numberline {9.1}Conclusion}{46}{section.9.1}
+\contentsline {part}{\partnumberline {III}Concept}{47}{part.3}
+\contentsline {chapter}{\chapternumberline {10}Approaches for enabling rich-text editing}{48}{chapter.10}
+\contentsline {section}{\numberline {10.1}Overview}{48}{section.10.1}
+\contentsline {section}{\numberline {10.2}Native inputs, images and third-party plugins}{48}{section.10.2}
+\contentsline {section}{\numberline {10.3}Enabling editing mode without using its API}{48}{section.10.3}
+\contentsline {section}{\numberline {10.4}Native text input imitation}{49}{section.10.4}
+\contentsline {subsection}{Caret}{49}{section*.38}
+\contentsline {subsection}{Selection}{49}{section*.39}
+\contentsline {subsection}{Context menu}{50}{section*.40}
+\contentsline {subsection}{Keyboard shortcuts}{50}{section*.41}
+\contentsline {subsection}{Undo / Redo}{50}{section*.42}
+\contentsline {subsection}{Behavior}{50}{section*.43}
+\contentsline {section}{\numberline {10.5}Approaches for imitating native components}{50}{section.10.5}
+\contentsline {section}{\numberline {10.6}Implementation}{51}{section.10.6}
+\contentsline {chapter}{\chapternumberline {11}Software design}{53}{chapter.11}
+\contentsline {section}{\numberline {11.1}Implementation as pure library}{53}{section.11.1}
+\contentsline {section}{\numberline {11.2}API}{54}{section.11.2}
+\contentsline {subsection}{API Design}{54}{section*.45}
+\contentsline {paragraph}{Extension}{54}{section*.46}
+\contentsline {paragraph}{Editor implementation}{55}{section*.47}
+\contentsline {subsection}{Handling use cases}{56}{section*.48}
+\contentsline {section}{\numberline {11.3}Distribution}{57}{section.11.3}
+\contentsline {chapter}{\chapternumberline {12}Architecture}{58}{chapter.12}
+\contentsline {section}{\numberline {12.1}Model--view--controller}{58}{section.12.1}
+\contentsline {section}{\numberline {12.2}Modular and object-oriented programming}{59}{section.12.2}
+\contentsline {subsection}{Constructor Pattern \& modularized structure}{60}{section*.50}
+\contentsline {part}{\partnumberline {IV}\ Implementation}{61}{part.4}
+\contentsline {chapter}{\chapternumberline {13}Implementation}{62}{chapter.13}
+\contentsline {section}{\numberline {13.1}Overview XX}{62}{section.13.1}
+\contentsline {section}{\numberline {13.2}Technology}{62}{section.13.2}
+\contentsline {subsection}{Overview}{62}{section*.52}
+\contentsline {subsection}{Gulp}{63}{section*.53}
+\contentsline {subsection}{Building}{63}{section*.54}
+\contentsline {subsection}{Linting}{63}{section*.55}
+\contentsline {subsection}{Code formatting}{64}{section*.56}
+\contentsline {section}{\numberline {13.3}Base class}{64}{section.13.3}
+\contentsline {subsection}{Overview}{64}{section*.57}
+\contentsline {subsection}{Instantiation and usage}{64}{section*.58}
+\contentsline {subsection}{Namespace and references}{66}{section*.59}
+\contentsline {subsection}{Exposal of Type's \texttt {prototype}}{67}{section*.60}
+\contentsline {section}{\numberline {13.4}Api}{67}{section.13.4}
+\contentsline {section}{\numberline {13.5}Input flow}{67}{section.13.5}
+\contentsline {section}{\numberline {13.6}Input reading}{69}{section.13.6}
+\contentsline {subsection}{Events}{69}{section*.62}
+\contentsline {paragraph}{Keyboard}{70}{section*.63}
+\contentsline {paragraph}{Mouse and touch}{70}{section*.64}
+\contentsline {paragraph}{Remote controls}{70}{section*.65}
+\contentsline {paragraph}{Clipboard}{71}{section*.66}
+\contentsline {subsection}{Hidden native input fields}{71}{section*.67}
+\contentsline {subsection}{Implementation}{71}{section*.68}
+\contentsline {subsection}{Focus}{72}{section*.69}
+\contentsline {subsection}{Virtual (on screen) keyboard support}{72}{section*.70}
+\contentsline {subsection}{Pasting}{72}{section*.71}
+\contentsline {subsection}{Reading input}{72}{section*.72}
+\contentsline {subsection}{Editing mode}{73}{section*.73}
+\contentsline {section}{\numberline {13.7}Input Pipeline}{73}{section.13.7}
+\contentsline {subsection}{Overview}{73}{section*.74}
+\contentsline {subsection}{Triggering functions}{74}{section*.76}
+\contentsline {paragraph}{Caret}{74}{section*.77}
+\contentsline {paragraph}{Command}{74}{section*.78}
+\contentsline {subsection}{Rich-text behavior}{75}{section*.79}
+\contentsline {paragraph}{Headlines}{75}{section*.80}
+\contentsline {paragraph}{Lists}{75}{section*.81}
+\contentsline {subsection}{Filterring and transformation}{75}{section*.82}
+\contentsline {paragraph}{Line Breaks}{75}{section*.83}
+\contentsline {paragraph}{Remove}{76}{section*.84}
+\contentsline {paragraph}{Spaces}{76}{section*.85}
+\contentsline {subsection}{Events}{76}{section*.86}
+\contentsline {subsection}{Extendability}{76}{section*.87}
+\contentsline {section}{\numberline {13.8}Pasting}{76}{section.13.8}
+\contentsline {paragraph}{Paste detection}{77}{section*.88}
+\contentsline {paragraph}{Processing}{77}{section*.89}
+\contentsline {section}{\numberline {13.9}Caret}{78}{section.13.9}
+\contentsline {section}{\numberline {13.10}Selection}{79}{section.13.10}
+\contentsline {section}{\numberline {13.11}Contents}{80}{section.13.11}
+\contentsline {subsection}{Writer}{80}{section*.90}
+\contentsline {subsection}{Formatter}{80}{section*.91}
+\contentsline {section}{\numberline {13.12}Undo Manager}{83}{section.13.12}
+\contentsline {subsection}{Insert}{83}{section*.93}
+\contentsline {subsection}{Remove}{84}{section*.94}
+\contentsline {subsection}{Format}{84}{section*.95}
+\contentsline {subsection}{Stack}{84}{section*.96}
+\contentsline {subsection}{Action sources}{84}{section*.97}
+\contentsline {section}{\numberline {13.13}Events}{85}{section.13.13}
+\contentsline {subsection}{Overview}{85}{section*.98}
+\contentsline {subsection}{Event Api}{85}{section*.99}
+\contentsline {subsection}{TypeEvent}{86}{section*.100}
+\contentsline {subsection}{InputEvent}{86}{section*.101}
+\contentsline {subsection}{PasteEvent}{87}{section*.102}
+\contentsline {section}{\numberline {13.14}Utility classes}{87}{section.13.14}
+\contentsline {subsection}{OOP}{87}{section*.103}
+\contentsline {subsection}{Range}{87}{section*.104}
+\contentsline {subsection}{Dom Walker}{87}{section*.105}
+\contentsline {subsection}{Text Walker}{88}{section*.106}
+\contentsline {subsection}{Dom Utilities}{89}{section*.107}
+\contentsline {subsection}{Utilities}{89}{section*.108}
+\contentsline {subsection}{Environment}{89}{section*.109}
+\contentsline {subsection}{Settings}{89}{section*.110}
+\contentsline {subsection}{Development}{89}{section*.111}
+\contentsline {section}{\numberline {13.15}Cache}{90}{section.13.15}
+\contentsline {section}{\numberline {13.16}Real-time collaboration with Etherpad}{90}{section.13.16}
+\contentsline {subsection}{Overview}{90}{section*.112}
+\contentsline {subsection}{Changesets}{91}{section*.113}
+\contentsline {subsection}{Merging}{91}{section*.114}
+\contentsline {subsection}{Etherpad Client implementation}{92}{section*.115}
+\contentsline {subsection}{Type Client implementation}{93}{section*.116}
+\contentsline {section}{\numberline {13.17}Extending}{94}{section.13.17}
+\contentsline {subsection}{Overview}{94}{section*.117}
+\contentsline {subsection}{API extension}{95}{section*.118}
+\contentsline {subsection}{Namespace extension}{95}{section*.119}
+\contentsline {subsection}{Plugin API}{96}{section*.120}
+\contentsline {part}{\partnumberline {V}Evaluation}{97}{part.5}
+\contentsline {section}{\numberline {13.18}Mobile Support}{98}{section.13.18}
+\contentsline {subsection}{BiDi \& IME support}{98}{section*.122}
+\contentsline {section}{\numberline {13.19}Development / Meta}{98}{section.13.19}
+\contentsline {section}{\numberline {13.20}Outlook}{98}{section.13.20}
+\contentsline {chapter}{List of Figures}{100}{section*.123}
+\contentsline {chapter}{Listings}{101}{section*.124}
+\contentsline {chapter}{Bibliography}{102}{section*.126}
+\contentsline {part}{\partnumberline {VI}Appendix}{104}{part.6}
