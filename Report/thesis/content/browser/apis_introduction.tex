@@ -2,8 +2,11 @@
 \section{HTML Editing APIs}
 \label{sec:html-editing-apis}
 
-In July 2000, with the release of Internet Explorer 5.5, Microsoft introduced the IDL attributes\footnote{IDL attributes can only be set to DOM objects via JavaScript, whereas content attributes can be set to tags in the HTML source code. See \url{http://www.w3.org/TR/WebIDL/}, last checked on 08/17/2015} \texttt{contentEditable} and \texttt{designMode} along with the content attribute \texttt{contenteditable}\footnote{\url{https://msdn.microsoft.com/en-us/library/ms533720(v=vs.85).aspx}, last checked on 07/10/2015}\footnote{\url{https://msdn.microsoft.com/en-us/library/ms537837(VS.85).aspx}, last checked on 07/10/2015}. These attributes were neither part of the W3C's HTML 4.01 specification\cite{HTML401} nor the ISO/IEC 15445:2000\cite{ISO15445}, the defining standards of that time. Table \ref{table:editing-api-attributes} lists these attributes and possible values.
+In July 2000, with the release of Internet Explorer 5.5, Microsoft introduced the IDL attributes\footnote{IDL attributes can only be set to DOM objects via JavaScript, whereas content attributes can be set to tags in the HTML source code\cite{WebIDL}.} \texttt{contentEditable} and \texttt{designMode} along with the content attribute \texttt{contenteditable}\cite{ac,ac2}. These attributes were neither part of the W3C's HTML 4.01 specification\cite{HTML401} nor the ISO/IEC 15445:2000\cite{ISO15445}, the defining standards of that time. Table \ref{table:editing-api-attributes} lists these attributes and possible values.
 
+% See \url{http://www.w3.org/TR/WebIDL/}, last checked on 08/17/2015
+% \footnote{\url{https://msdn.microsoft.com/en-us/library/ms533720(v=vs.85).aspx}, last checked on 07/10/2015}
+% \footnote{\url{https://msdn.microsoft.com/en-us/library/ms537837(VS.85).aspx}, last checked on 07/10/2015}
 % \footnote{\url{http://www.w3.org/TR/html401/}, last checked on 07/14/2015} 
 % \footnote{\url{http://www.iso.org/iso/iso\_catalogue/catalogue\_tc/catalogue\_detail.htm?csnumber=27688}, last checked on 07/14/2015}
 
@@ -30,7 +33,9 @@ contenteditable & content attribute & Specific HTMLElements & empty string, "tru
 </div>
 \end{lstlisting}
 
-By setting \texttt{contenteditable} or \texttt{contentEditable} to ''true'' or \texttt{designMode} to ''on'', Internet Explorer 5.5 switches the affected elements and their children to an editing mode. The \texttt{designMode}-attribute can only be applied to the entire document and the \texttt{contentEditable} and \texttt{contenteditable} attributes can be applied to specific HTML elements as described on Microsoft's Developer Network (MSDN) online documentation\footnote{\url{https://msdn.microsoft.com/en-us/library/ms537837(VS.85).aspx}, last checked on 07/10/2015}. These elements include ''divs'', ''paragraphs'' and the document's ''body'' element amongst others. Other than that, there is no difference in these attributes. In editing mode
+By setting \texttt{contenteditable} or \texttt{contentEditable} to ''true'' or \texttt{designMode} to ''on'', Internet Explorer 5.5 switches the affected elements and their children to an editing mode. The \texttt{designMode}-attribute can only be applied to the entire document and the \texttt{contentEditable} and \texttt{contenteditable} attributes can be applied to specific HTML elements as described on Microsoft's Developer Network (MSDN) online documentation\cite{ac2}. These elements include ''divs'', ''paragraphs'' and the document's ''body'' element amongst others. Other than that, there is no difference in these attributes. In editing mode
+
+%\footnote{\url{https://msdn.microsoft.com/en-us/library/ms537837(VS.85).aspx}, last checked on 07/10/2015}
 
 \begin{enumerate}
 \item Users can interactively click on and type inside texts
