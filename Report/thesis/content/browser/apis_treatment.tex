@@ -23,7 +23,7 @@ Subsections \refsubsec{subsec:treating_issues_first} through \refsubsec{subsec:t
 
 Editors like CKEditor offer some configuration on the generated HTML output\footnote{\begin{sloppypar}\burl{http://docs.ckeditor.com/\#!/guide/dev\_output\_format-section-adjusting-output-formatting-through-configuration}, last checked on 08/19/2015\end{sloppypar}}, but in the case of CKEditor this is very limited. The underlying issue is that HTML editing APIs cannot be configured. The only way to work around this issue is to implement custom methods to apply formatting in JavaScript and not using the \code{execCommand} interface\footnote{HTML editing APIs can still be used for text input and other functionality}. The proprietary ''Redactor Text Editor'' demonstrates such an implementation.
 
-Medium.com takes a different approach and implements an extensive framework that will compare the markup of the editor with a model of the visual representation that the markup generates and corrects the DOM on each change\footnote{\url{https://medium.com/medium-eng/why-contenteditable-is-terrible-122d8a40e480}} to conform a defined norm.
+Medium.com takes a different approach and implements an extensive framework that will compare the markup of the editor with a model of the visual representation that the markup generates and corrects the DOM on each change\footnote{\url{https://medium.com/medium-eng/why-contenteditable-is-terrible-122d8a40e480}, last checked 08/19/2015} to conform a defined norm.
 
 \subsection{Flawed API}
 
@@ -55,7 +55,7 @@ Generally, bugs cannot be fixed. The only way to treat bugs in browsers is by av
 \subsection{Restrictions}
 \label{subsec:treating_issues_last}
 
-The restrictions the HTML editing API imposed on the contents of the editor is an even bigger problem. Taking the example of layouting with tab stops\footnote{\url{http://googledrive.blogspot.fr/2010/05/whats-different-about-new-google-docs.html}}, the only solution is not making the entire contents of the editor editable, but implementing a layouting engine in JavaScript and enabling the editing mode only on parts of the layout.
+The restrictions the HTML editing API imposed on the contents of the editor is an even bigger problem. Taking the example of layouting with tab stops\footnote{\url{http://googledrive.blogspot.fr/2010/05/whats-different-about-new-google-docs.html}, last checked 08/19/2015}, the only solution is not making the entire contents of the editor editable, but implementing a layouting engine in JavaScript and enabling the editing mode only on parts of the layout.
 
 %The issues arising with HTML editing APIs cannot be fixed. Many libraries find workarounds to treat them. CKEditor, TinyMCE, that framework. Google Docs finds another way and does not use HTML editing APIs.
 
