@@ -3,7 +3,9 @@
 \section{Treating HTML editing API related issues}
 \label{sec:ed_api_treating}
 
-Since the issues arising with HTML editing APIs are part of the browser's implementation, they cannot be fixed by JavaScript developers. The common approach for most rich-text editors is to use HTML editing APIs and wrap it in a library while using workarounds for its issues and bugs internally. It is to be noted, as Piotrek Koszuli\'{n}ski points out, that the majority of rich-text editors ''really do not work''\footnote{\url{http://stackoverflow.com/questions/10162540/contenteditable-div-vs-iframe-in-making-a-rich-text-wysiwyg-editor/11479435\#11479435}}. This is usually the case when the problems discussed in \refsection{sec:disadvantages_of_html_editing_apis} have not been addressed and the library solely consists of a user interface wrapping an element in editing mode.
+Since the issues arising with HTML editing APIs are part of the browser's implementation, they cannot be fixed by JavaScript developers. The common approach for most rich-text editors is to use HTML editing APIs and wrap it in a library while using workarounds for its issues and bugs internally. It is to be noted, as Piotrek Koszuli\'{n}ski points out, that the majority of rich-text editors ''really do not work''\cite{bj}. This is usually the case when the problems discussed in \refsection{sec:disadvantages_of_html_editing_apis} have not been addressed and the library solely consists of a user interface wrapping an element in editing mode.
+
+% \footnote{\url{http://stackoverflow.com/questions/10162540/contenteditable-div-vs-iframe-in-making-a-rich-text-wysiwyg-editor/11479435\#11479435}}
 
 Having to account for multiple browser implementations, working around bugs can result in a big file size and a complex architecture. Most edge cases can only be learned from experience, not be foreseen or analyzed by debugging source code. %Piotrek Koszuli\'{n}ski writes ''We [...] are working on this for years and we still have full bugs lists''\cite{sopp}.
 
@@ -19,7 +21,7 @@ Subsections \refsubsec{subsec:treating_issues_first} through \refsubsec{subsec:t
 \subsection{HTML output} 
 \label{subsec:treating_issues_first}
 
-Editors like CKEditor offer some configuration on the generated HTML output\footnote{\url{http://docs.ckeditor.com/\#!/guide/dev\_output\_format-section-adjusting-output-formatting-through-configuration}}, but in the case of CKEditor this is very limited. The underlying issue is that HTML editing APIs cannot be configured. The only way to work around this issue is to implement custom methods to apply formatting in JavaScript and not using the \code{execCommand} interface\footnote{HTML editing APIs can still be used for text input and other functionality}. The proprietary ''Redactor Text Editor'' demonstrates such an implementation.
+Editors like CKEditor offer some configuration on the generated HTML output\footnote{\begin{sloppypar}\burl{http://docs.ckeditor.com/\#!/guide/dev\_output\_format-section-adjusting-output-formatting-through-configuration}, last checked on 08/19/2015\end{sloppypar}}, but in the case of CKEditor this is very limited. The underlying issue is that HTML editing APIs cannot be configured. The only way to work around this issue is to implement custom methods to apply formatting in JavaScript and not using the \code{execCommand} interface\footnote{HTML editing APIs can still be used for text input and other functionality}. The proprietary ''Redactor Text Editor'' demonstrates such an implementation.
 
 Medium.com takes a different approach and implements an extensive framework that will compare the markup of the editor with a model of the visual representation that the markup generates and corrects the DOM on each change\footnote{\url{https://medium.com/medium-eng/why-contenteditable-is-terrible-122d8a40e480}} to conform a defined norm.
 
