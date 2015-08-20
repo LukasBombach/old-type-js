@@ -1,96 +1,96 @@
 %!TEX root = ../../thesis.tex
 
-\chapter{Evaluation}
+\chapter{Evaluation \& Outlook}
 \label{ch:evaluation}
-
 
 \section{Features}
 
-It can be integrated in any website to allow other developers
+The resulting editor of this thesis demonstrates a way to implement a rich-text editor on the web without using HTML editing APIs. With Type, web developers can turn any elements into an editable sections providing essential functionality for the user to write, remove and format the text. Developers using the library are provided with an API to implement an own editor and are able to control the caret, selection and undo/redo functions above editing the text contents. Using the Etherpad extension, developers can connect to an Etherpad server to allow for real-time collaboration in their own editor. The library provides an ecosystem for extensions that allows developers to add functionality.
 
-The resulting editor of this thesis demonstrates a way to implement a rich-text editor on the web without using HTML editing APIs. With \textit{Type}, web developers can turn any elements into an editable sections in which:
+%The library can be extended and improved by third-party developers. Type
+
+%It can be integrated in any website to allow other developers
+
 
 %The resulting editor of this thesis is capable of basic rich-text editing including real-time collaboration. 
 
-\begin{itemize}
-\item Text can be written and removed.
-\item Text can be formatted.
-\item The caret can be controlled.
-\item The text selection can be read and controlled.
-\item An editor can be connected to an Etherpad server for real-time collaboration alongside Etherpad's own clients.
-\item Changes can be undone and redone accounting for multiple input sources (like Etherpad).
-\item An editor can be interacted with like a native input field.
-\end{itemize}
+%\begin{itemize}
+%\item Text can be written and removed.
+%\item Text can be formatted.
+%\item The caret can be controlled.
+%\item The text selection can be read and controlled.
+%\item An editor can be connected to an Etherpad server for real-time collaboration alongside Etherpad's own clients.
+%\item Changes can be undone and redone accounting for multiple input sources (like Etherpad).
+%\item An editor can be interacted with like a native input field.
+%\end{itemize}
 
 
  
-The library can be extended and improved by third-party developers.
- 
-Third-party developers can extend
- - ecosystem for extension
- - control input
- - control pasting
  
 \section{MVC \& Document model}
 
-Towards the end of this thesis, Marijn Haverbeke, author of CodeMirror, started a crowd-funding campaign for supporting him to build a rich-text editor that does not rely on HTML editing APIs---called ProseMirror---just like library of this thesis. As discussed in \refsection{sec:mvc_architecture}, \textit{Type} does not rely on an architecture that abstracts the contents of the editor from the DOM. ProseMirror, by contrast, takes this approach. This restricts working with the editor to the capabilities of the internal model of the document and might make extending the editor complicated. On the other hand, it allows for a very stable rendering of the contents and (as discussed) switching between HTML or Markdown output. It is good to see both approaches being realized. By contrasting both approaches in a practical manner it might be easier to decide which approach is better for which purposes.
+Towards the end of this thesis, Marijn Haverbeke, author of CodeMirror, started a crowd-funding campaign for supporting him to build a rich-text editor that does not rely on HTML editing APIs---called ProseMirror---just like library of this thesis. As discussed in \refsection{sec:mvc_architecture}, Type does not rely on an architecture that abstracts the contents of the editor from the DOM. ProseMirror, by contrast, takes this approach. This restricts working with the editor to the capabilities of the internal model of the document and might make extending the editor complicated. On the other hand, it allows for a very stable rendering of the contents and (as discussed) switching between HTML or Markdown output. It is good to see both approaches being realized. By contrasting both approaches in a practical manner it might be easier to decide which approach is better for which purposes.
 
-\chapter{Outlook}
-\label{ch:outlook}
-
-
-
-
-
-
-\section{Evaluation notizen}
-
-There are some things that need to be done
- - Bugs, tests
- - Mobile support
- - BiDi \& IME support
- - A more profound model to sync with etherpad
- - trigger more events
- - images, tables, lists
-
-
-
-
-\section{Mobile Support}
-
-It's technically there, it must be tested properly
-
-
-\subsection{BiDi \& IME support}
-
-http://marijnhaverbeke.nl/blog/cursor-in-bidi-text.html
-
-http://marijnhaverbeke.nl/blog/browser-input-reading.html 
-
-https://en.wikipedia.org/wiki/Input\_method
-
-
-\section{Development / Meta}
-Crockford style is a bad idea. 
-I will change it to Standard or Airbnb 
-\url{https://github.com/airbnb/javascript/tree/master/es5}
-
+%\chapter{Outlook}
+%\label{ch:outlook}
 
 \section{Outlook}
 
-Over time, the bugs of HTML editing APIs will decrease. Its clipboard capabilities are on the way to be expanded. The API still is still limited and needs a revision. It is even imaginable to rethink the way \code{contenteditable} works. Editors that, for instance, implement layouting, like Google's document editor, still cannot be implemented with the way HTML Editing APIs are designed.
+Type's features are not complete yet. Common behavior for rich-text editing as well as input method (IME) support must be implemented though input filters. The caret needs bi-directional text support. Type requires thorough testing across browsers and mobile devices. To support developers Type can trigger events, for instance when the caret moves or the selection changes.
 
-To allow a transition from current HTML editing APIs and an interface with a cleaner and richer functionality, it is thinkable to introduce a new ''class'' alongside the old API. This has been done with other functionality, for example mal aus MDN raussuchen. This way the old API can die gracefully while web developers slowly adopt. It can be hoped that if the API is much better, the adoption will happen quickly.
-
-
-As discussed in \refsubsec{subsec:edit_api_adv_thir_party_lang} my design as a library with a super duper api allows implementing highlighting for other languages like bb code or markdown. \textit{There should be a part in CONCEPT that explains this idea, either explaining its made for extensibility or in how cool my api is i mean the design as a lib and not as an editor is}
+Editing images and tables is, to the biggest part, a matter of implementing a user interface, but Type can support the development with utility methods. This can possibly provided as extensions, distributed as own files.
 
 
-besseres undo durch erkennen von ganzen worten (wenn man leerzeichen und so drückt)
+%Over time, the bugs of HTML editing APIs will decrease. Its clipboard capabilities are on the way to be expanded. The API still is still limited and needs a revision. It is even imaginable to rethink the way \code{contenteditable} works. Editors that, for instance, implement layouting, like Google's document editor, still cannot be implemented with the way HTML Editing APIs are designed.
 
-Events zu allen gelegenheuten triggern für andere developer
+%To allow a transition from current HTML editing APIs and an interface with a cleaner and richer functionality, it is thinkable to introduce a new ''class'' alongside the old API. This has been done with other functionality, for example mal aus MDN raussuchen. This way the old API can die gracefully while web developers slowly adopt. It can be hoped that if the API is much better, the adoption will happen quickly.
 
 
-DOCH document model benutzen weil der shit von prosemirror einfach so geil ist.
+%As discussed in \refsubsec{subsec:edit_api_adv_thir_party_lang} my design as a library with a super duper api allows implementing highlighting for other languages like bb code or markdown. \textit{There should be a part in CONCEPT that explains this idea, either explaining its made for extensibility or in how cool my api is i mean the design as a lib and not as an editor is}
 
-Auf der anderen Seite ist so was wie der Medium editor mit meiner Version viel besser
+
+%besseres undo durch erkennen von ganzen worten (wenn man leerzeichen und so drückt)
+
+%Events zu allen gelegenheuten triggern für andere developer
+
+
+%DOCH document model benutzen weil der shit von prosemirror einfach so geil ist.
+
+%Auf der anderen Seite ist so was wie der Medium editor mit meiner Version viel besser
+
+%\section{Evaluation notizen}
+
+%There are some things that need to be done
+% - Bugs, tests
+% - Mobile support
+% - BiDi \& IME support
+% - A more profound model to sync with etherpad
+% - trigger more events
+% - images, tables, lists
+
+
+
+
+
+%\section{Mobile Support}
+
+%It's technically there, it must be tested properly
+
+
+%\subsection{BiDi \& IME support}
+
+%http://marijnhaverbeke.nl/blog/cursor-in-bidi-text.html
+
+%http://marijnhaverbeke.nl/blog/browser-input-reading.html 
+
+%https://en.wikipedia.org/wiki/Input\_method
+
+
+%\section{Development / Meta}
+%Crockford style is a bad idea. 
+%I will change it to Standard or Airbnb 
+%\url{https://github.com/airbnb/javascript/tree/master/es5}
+
+
+%\section{Outlook}
+
