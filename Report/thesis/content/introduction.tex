@@ -13,19 +13,20 @@ Dies hat viele Vorteile:
  - Auf die Programme kann von überall aus zugegriffen werden.
  - Inhalte können zusammen geteilt und bearbeitet werden.
 Dennoch ist rich text editing im Internet nicht wirklich einfach möglich.
-Dabei gibt es 2 Kernprobleme:
- - Die APIs die die Browser für rich text anbieten sind sehr limitiert, inkonsistent und verbuggt.
- - Man muss auf fertige Editoren dritter zurückgreifen, die nicht unbedingt zu den eigenen Ansprüchen passen.
-Ich möchte beide Probleme lösen indem:
+Browser bieten APIs an, die dafür gemacht sind rich-text Editoren zu implementieren
+Diese APIs sind sehr limitiert, inkonsistent und verbuggt.
+Das führt dazu dass Web Entwickler nicht einfach einen Editor programmieren können, sondern auf fertige Editoren dritter zurückgreifen müssen. Diese passen nicht unbedingt zu den eigenen Ansprüchen.
+Die limitierten Features erlauben es nur einfache Editoren zu implementieren. Ein komplexer Editor wie Google's document Editor lässt sich mit diesen APIs nicht umsetzen, weswegen Google diese API auch nicht verwendet hat. 
+Es gibt aber keine Library und so gut wie keine Editoren die rich-text editing ohne editing APIs möglich machen.
  - Ich möchte eine rich text library implementieren die ohne diese Browser APIs auskommt, was ein konsistentes verhalten über verschiedene Browser erlaubt, mehr Möglichkeiten/Features bietet und die unzähligen Bugs und Probleme umschifft.
  - Ich möchte das ganze als reine Software-Bibliothek anbiete, die alle Methoden mit einer high-level API einfach zugänglich macht und die Implementierung des editors, also user interfaces, in die Hand des Web Entwicklers gebe.
-Somit soll Web-Entwicklern erstmalig die Möglichkeit gegeben werden, schnell und einfach selber Feature-reiche Editoren zu implementieren, was jetzt einfach nicht möglich ist.
+= Somit soll Web-Entwicklern erstmalig die Möglichkeit gegeben werden, schnell und einfach selber Feature-reiche Editoren zu implementieren, so wie sie sie selber in ihrem Projekt brauchem, was jetzt einfach nicht möglich ist.
 
 
 % - Ich rich text editing durch direkte manipulation der Webseite mit DOM Level 1 APIs realisiere ohne die 
 % - Ich andere APIs verwende, als die, die die Browser für rich text editing vorsehen um die selbe Funktionalität zu erreichen.
 % Browser bieten nur eine sehr verbugte und limitierte Möglichkeit an einen rich text editor zu implementieren.
-Als Webentwickler muss ich auf fertige Editoren dritter zurück greifen und mich den Grenzen dieser Editoren beugen.
+%Als Webentwickler muss ich auf fertige Editoren dritter zurück greifen und mich den Grenzen dieser Editoren beugen.
 
 
 
