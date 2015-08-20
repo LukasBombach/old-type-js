@@ -1,5 +1,60 @@
 %!TEX root = ../../thesis.tex
 
+\chapter{Evaluation}
+\label{ch:evaluation}
+
+
+\section{Features}
+
+It can be integrated in any website to allow other developers
+
+The resulting editor of this thesis demonstrates a way to implement a rich-text editor on the web without using HTML editing APIs. With \textit{Type}, web developers can turn any elements into an editable sections in which:
+
+%The resulting editor of this thesis is capable of basic rich-text editing including real-time collaboration. 
+
+\begin{itemize}
+\item Text can be written and removed.
+\item Text can be formatted.
+\item The caret can be controlled.
+\item The text selection can be read and controlled.
+\item An editor can be connected to an Etherpad server for real-time collaboration alongside Etherpad's own clients
+\item Changes can be undone and redone accounting for multiple input sources (like Etherpad)
+\item An editor can be interacted with like a native input field
+\end{itemize}
+
+
+ 
+The library can be extended and improved by third-party developers.
+ 
+Third-party developers can extend
+ - ecosystem for extension
+ - control input
+ - control pasting
+ 
+\section{MVC \& Document model}
+
+Towards the end of this thesis, Marijn Haverbeke, author of CodeMirror, started a crowd-funding campaign for supporting him to build a rich-text editor that does not rely on HTML editing APIs---called ProseMirror---just like library of this thesis. As discussed in \refsection{sec:mvc_architecture}, \textit{Type} does not rely on an architecture that abstracts the contents of the editor from the DOM. ProseMirror, by contrast, takes this approach. This restricts working with the editor to the capabilities of the internal model of the document and might make extending the editor complicated. On the other hand, it allows for a very stable rendering of the contents and (as discussed) switching between HTML or Markdown output. It is good to see both approaches being realized. By contrasting both approaches in a practical manner it might be easier to decide which approach is better for which purposes.
+
+\chapter{Outlook}
+\label{ch:outlook}
+
+
+
+
+
+
+\section{Evaluation notizen}
+
+There are some things that need to be done
+ - Bugs, tests
+ - Mobile support
+ - BiDi \& IME support
+ - A more profound model to sync with etherpad
+ - trigger more events
+ - images, tables, lists
+
+
+
 
 \section{Mobile Support}
 
