@@ -1,18 +1,22 @@
 \section{Rich text in browser environments}
 
-One of the primary functions of web browsers is to load HyperText Markup Language (HTML) formatted documents from remote sources and render it as visually formatted text to the user. Browsers must therefore parse the HTML document, which uses tags to specify which parts of the document should be rendered in a particular formatting. Tags can either encapsulate parts of the text with a start and an end tag or, in some cases, be used as standalone entities. 
-The latter is used to insert ''void elements'', which are either visible elements that cannot have nested contents like line breaks, images and horizontal rules or elements that act as attributes of other elements. Furthermore, standalone tags can be ''foreign elements'' for which nested contents are omitted \cite[Elements]{HTML5}. 
+One of the primary functions of web browsers is to display rich text. Browsers load documents formatted with the HyperText Markup Language (HTML) from remote sources and display them as visually formatted text to the user. Therefore the HTML source code must be parsed and rendered accordingly. HTML is a markup language, that means it uses tags to specify which parts of the document should be rendered in a particular formatting. Tags can either encapsulate parts of the text with a start and an end tag or, in some cases, be used as standalone entities. 
+The latter is used to insert ''void elements'', which are either visible elements that cannot have nested contents like line breaks, images and horizontal rules or elements that act as attributes of other elements. Furthermore, standalone tags can be ''foreign elements'' for which nested contents are omitted, like a Scalable Vector Graphics (SVG) \cite[Elements]{HTML5}. 
 To format a string of characters, it must be encapsulated in a start and end tag that describe which formatting to apply. Tags are strings inside the document's text that itself are delimited by the ''<'' and ''>'' characters. To render the following text: 
 
 \begin{quotation}
 In a hole in the ground there lived a \textbf{hobbit}
 \end{quotation}
 
-The word hobbit must be enclosed with a ''strong'' start and end tag. Start and end tags are distinguished by adding a solidus to the end tag.
+The word ''hobbit'' must be enclosed with a ''strong'' start and end tag. Start and end tags are distinguished by adding a solidus to the end tag.
 
-\begin{lstlisting}[language=html, caption=Text formatted as bold, label=lst:div-contenteditable]
+\begin{lstlisting}[language=html, caption=Text formatted as bold with the ''strong'' tag, label=lst:div-contenteditable]
 In a hole in the ground there lived a <strong>hobbit</strong>
 \end{lstlisting}
+
+HTML defines 127 tags to format document contents and to add metadata about the document itself \cite{mozel}.
+%, and consists of ''generic markup'' as well as  ''specific markup''.
+%Specific markup describes
 
 %To format a word in a strong font, it must be encapsulated in a start tag and an end tag
 %parse and view 
@@ -21,4 +25,4 @@ In a hole in the ground there lived a <strong>hobbit</strong>
 
 \section{History of markup languages}
 
-HTML is an implementation of the Standard Generalized Markup Language (SGML).
+HTML is an implementation of the Standard Generalized Markup Language (SGML) \cite{ISO8879}.
