@@ -110,6 +110,30 @@ Type.Etherpad.Changeset = function () {
 
   /**
    *
+   * @param offset
+   * @param charbank
+   * @param match
+   * @returns {*}
+   * @private
+   */
+  this._createFromMatch = function (offset, charbank, match) {
+    switch(match.operator) {
+      case '*':
+        return Type.Etherpad.Changeset.Changes.Command.fromAPool();
+      case '=':
+        return Type.Etherpad.Changeset.Changes.Movement.fromOffsetObject(offset);
+      case '+':
+        return new Type.Etherpad.Changeset.Changes.Insertion(offset.absolute, charbank);
+      case '-':
+        return Type.Etherpad.Changeset.Changes.Removal.fromMatch(offset, match);
+      default:
+        Type.Development.debug('Cannot match operator ' + match.operator, match);
+        return null;
+    }
+  };
+
+  /**
+   *
    * @param {Type.Etherpad.Changeset.Changes.Change} change - A change
    *     instance or an inheriting class
    * @returns {Type.Etherpad.Changeset} - This instance
@@ -128,27 +152,6 @@ Type.Etherpad.Changeset = function () {
     return this;
   };
 
-  /**
-   *
-   * @param offset
-   * @param charbank
-   * @param match
-   * @returns {*}
-   * @private
-   */
-  this._createFromMatch = function (offset, charbank, match) {
-    switch(match.operator) {
-      case '=':
-        return Type.Etherpad.Changeset.Changes.Movement.fromOffsetObject(offset);
-      case '+':
-        return new Type.Etherpad.Changeset.Changes.Insertion(offset.absolute, charbank);
-      case '-':
-        return Type.Etherpad.Changeset.Changes.Removal.fromMatch(offset, match);
-      default:
-        Type.Development.debug('Cannot match operator ' + match.operator, match);
-        return null;
-    }
-  };
 
   /**
    * Parses a regex match and returns a readable object
