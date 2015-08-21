@@ -1,8 +1,8 @@
 \section{Rich text in browser environments}
 
 One of the primary functions of web browsers is to load HyperText Markup Language (HTML) formatted documents from remote sources and render it as visually formatted text to the user. Browsers must therefore parse the HTML document, which uses tags to specify which parts of the document should be rendered in a particular formatting. Tags can either encapsulate parts of the text with a start and an end tag or, in some cases, be used as standalone entities. 
-The latter is used to insert ''void elements'', which are either visible elements that cannot have nested contents like line breaks, images and horizontal rules or that elements that act as attributes of other elements. Furthermore, standalone tags can be ''foreign elements'' for which nested contents are omitted \cite[Elements]{HTML5}. 
-To format a string of characters, it must be encapsulated in a start and end tag that describe which formatting to apply. Tags are strings inside the document's text that itself are encapsulated and delimited by the ''<'' and ''>'' characters. To render the following text: 
+The latter is used to insert ''void elements'', which are either visible elements that cannot have nested contents like line breaks, images and horizontal rules or elements that act as attributes of other elements. Furthermore, standalone tags can be ''foreign elements'' for which nested contents are omitted \cite[Elements]{HTML5}. 
+To format a string of characters, it must be encapsulated in a start and end tag that describe which formatting to apply. Tags are strings inside the document's text that itself are delimited by the ''<'' and ''>'' characters. To render the following text: 
 
 \begin{quotation}
 In a hole in the ground there lived a \textbf{hobbit}
