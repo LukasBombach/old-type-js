@@ -3,11 +3,11 @@
 \section{Treating HTML editing API related issues}
 \label{sec:ed_api_treating}
 
-Since the issues arising with HTML editing APIs are part of the browser's implementation, they cannot be fixed by JavaScript developers. The common approach for most rich-text editors is to use HTML editing APIs and wrap it in a library while using workarounds for its issues and bugs internally. It is to be noted, as Piotrek Koszuli\'{n}ski points out, that the majority of rich-text editors ''really do not work''\cite{bj}. This is usually the case when the problems discussed in \refsection{sec:disadvantages_of_html_editing_apis} have not been addressed and the library solely consists of a user interface wrapping an element in editing mode.
+Since the issues arising with HTML editing APIs are part of the browser's implementation, they cannot be fixed by JavaScript developers. The common approach for most rich-text editors is to use HTML editing APIs and wrap it in a library while using workarounds for its issues and bugs internally. It is to be noted, as Piotrek Koszuli\'{n}ski points out, that the majority of rich-text editors ''really do not work'' \cite{bj}. This is usually the case when the problems discussed in \refsection{sec:disadvantages_of_html_editing_apis} have not been addressed and the library solely consists of a user interface wrapping an element in editing mode.
 
 % \footnote{\url{http://stackoverflow.com/questions/10162540/contenteditable-div-vs-iframe-in-making-a-rich-text-wysiwyg-editor/11479435\#11479435}}
 
-Having to account for multiple browser implementations, working around bugs can result in a big file size and a complex architecture. Most edge cases can only be learned from experience, not be foreseen or analyzed by debugging source code. %Piotrek Koszuli\'{n}ski writes ''We [...] are working on this for years and we still have full bugs lists''\cite{sopp}.
+Having to account for multiple browser implementations, working around bugs can result in a big file size and a complex architecture. Most edge cases can only be learned from experience, not be foreseen or analyzed by debugging source code. %Piotrek Koszuli\'{n}ski writes ''We [...] are working on this for years and we still have full bugs lists'' \cite{sopp}.
 
 In practice, there are a few attempts to implement pure wrappers that will take care of the beforementioned issues, to support other developers with a working api. This approach is generally not well-adopted though. In general, most libraries are distributed as independent editors implementing their own solutions for addressing these issues---or are forks of other editors implemented with a different user interface.
 
