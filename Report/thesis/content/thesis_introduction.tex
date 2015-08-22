@@ -9,3 +9,8 @@ Still, rich-text editing, i.e. editing text that uses formattings and layouting,
 This makes it hard for web developers to create rich-text editors. Usually, a third-party editor must be used and customized, which does not necessarily fit the specific needs of a project. The limited features of the browsers' rich-text APIs only allow for basic editors. A fully featured word-processing application like Google's document editor cannot be implemented with these APIs. For this reason Google omitted these APIs entirely. Unfortunately, there is no library and hardly any editor that implements rich-text editing without these APIs. Google did not publish their solution to the public domain.
 
 The purpose of this thesis is to implement rich-text editing without using the browsers' rich-text editing APIs. This allows more features, a consistent behavior and avoids the bugs of these APIs. The implementation will be distributed as GUI-less software library with a high-level API, to enable web developers to implement rich-text editors specific to their needs, which is currently not possible.
+
+
+\section{Terminology}
+
+In web development, the term \textit{WYSIWYG} editor is commonly used to describe editors that allow text-formatting. WYSIWYG is an abbreviation for \textbf{W}hat \textbf{Y}ou \textbf{S}ee \textbf{I}s \textbf{W}hat \textbf{Y}ou \textbf{G}et and describes a text editor's capability to display formatted text as it is being edited. This stands out to plain-text editors that can neither display nor edit formattings. The term rich-text editor has often been used for this feature and is more precise. For this reason, the term \textit{rich-text editor} and \textit{rich-text editing} will be used in this thesis.
