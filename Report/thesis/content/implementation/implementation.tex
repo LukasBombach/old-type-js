@@ -186,7 +186,7 @@ While Type's functionality is implemented through classes within its namespace, 
 
 The methods of Type instances can be added by any of the classes of the library. However, to achieve a clear separation of concerns, maintainability and to conform the modularized structure, Type's instance API is implemented through a designated module that adds all methods to the API.
 
-The module for this, called ''CoreApi'', is the only exception in Type's implementation---it extends \code{Type.fn} directly with all methods listed in XYZ, \textit{without} using a class.
+The module for this, called ''CoreApi'', is the only exception in Type's implementation---it extends \code{Type.fn} directly with all methods listed in tables \ref{table:instance_api_caret_command} through \ref{table:instance_api_options_command}, \textit{without} using a class.
 
 Similar to the principles of MVC in which the controllers should be kept small and the implementation should reside in the model layer, the functionality of the API resides in their designated classes, while the API methods are kept small. The classes are written in a way that allow the API methods to require not more than one function call for their implementation and at most translate their parameters for the class methods.
 
@@ -678,7 +678,7 @@ TypeEvent.data([options]);
 TypeEvent.cancel();
 \end{lstlisting}
 
-The \code{TypeEvent} is a generic, general-purpose event. It can store arbitrary data and offers an API to be stopped from bubbling. A full API description can be found in Listing XY.
+The \code{TypeEvent} is a generic, general-purpose event. It can store arbitrary data and offers an API to be stopped from bubbling. %A full API description can be found in Listing XY.
 
 \subsection{InputEvent}
 \label{subsec:input_event}
@@ -769,7 +769,7 @@ The \code{DomWalker} can be instantiated by providing a starting node and the ty
 \item ''visible'' - Any visible DOM node
 \end{itemize}
 
-A \code{DomWalker} instance offers the high-level methods \code{next}, \code{previous}, \code{first} and \code{last} (amongst others) for traversal. A full API description can be found in XYZ. All methods can be called statically without having to instantiate a \code{DomWalker}.
+A \code{DomWalker} instance offers the high-level methods \code{next}, \code{previous}, \code{first} and \code{last} (amongst others) for traversal. % A full API description can be found in XYZ. All methods can be called statically without having to instantiate a \code{DomWalker}.
 
 %\paragraph{API}
 
