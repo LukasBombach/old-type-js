@@ -197,7 +197,7 @@ editor.undo();
 editor.redo();
 \end{lstlisting}
 
-\noindent The functions in lines 1 through 6 can take various overloaded parameters to determine the specific action. The selection command, for instance, can be called with two numbers to draw a selection from one character offset to another. To draw a selection from characters 10 to 20 \code{editor.selection(10, 20)} can be called. The function can also be called without passing parameters, to read the selection. \code{editor.selection()} will return the currently selected text as a string. A full API description can be found at table TODO.
+\noindent The functions in lines 1 through 6 can take various overloaded parameters to determine the specific action. The selection command, for instance, can be called with two numbers to draw a selection from one character offset to another. To draw a selection from characters 10 to 20 \code{editor.selection(10, 20)} can be called. The function can also be called without passing parameters, to read the selection. \code{editor.selection()} will return the currently selected text as a string. A full API description can be found in tables \ref{table:instance_api_caret_command} through \ref{table:instance_api_options_command}.
 
 %Applied to Type, this means
 

@@ -44,7 +44,7 @@ By setting \texttt{contenteditable} or \texttt{contentEditable} to ''true'' or \
 
 When an element is switched to editing mode, the browser handles setting the caret if a user clicks inside the text, accepting keyboard input and modifying text nodes entirely by itself. No further scripting is necessary.
 
-The API enabled by the editing mode must be called globally on the \texttt{document} object, but will only execute when the user's selection or caret is contained within an element in editing mode. Table \ref{table:editing-mode-api} lists the full HTML editing API. To format text, the method \texttt{document.execCommand} must be used.
+The API enabled by the editing mode must be called globally on the \texttt{document} object, but will only execute when the user's selection or caret is contained within an element in editing mode. \reftable{table:editing_mode_api} lists the full HTML editing API. To format text, the method \texttt{document.execCommand} must be used.
 
 \begin{lstlisting}[language=JavaScript, caption=Emphasizing text using the HTML editing API, label=lst:execcommand-italics]
 document.execCommand('italic', false, null);
