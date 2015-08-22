@@ -4,4 +4,11 @@ Written texts are the most important cultural tool to pass on knowledge from one
 With the computerization of printing, PCs have been the tool to generate and design texts for decades. There are software solutions for professional and personal use on Desktop PCs.
 In recent years, many desktop applications have been migrated to browser-based solutions. This has many advantages. Applications can be maintained in a centralized manner and any computer using the software will be updated automatically. Browser-based applications can be accessed from anywhere in the world, without requiring to install further applications. Contents can be shared and edited collaboratively with others.
 
-Still, editing rich-text in a browser, i.e. text that uses formattings and layouting, is not easily implementable for web developer.
+Still, rich-text editing, i.e. editing text that uses formattings and layouting, cannot be implemented easily in a browser. Browsers offer APIs for rich-text editing, but these APIs are very limited in its functionality, inconsistent across different browsers and known to contain numerous bugs.
+
+This makes it hard for web developers to create rich-text editors. Usually, a third-party editor must be used and customized, which does not necessarily fit the specific needs of a project. The limited features of the browsers' rich-text APIs only allow for basic editors. A fully featured word-processing application like Google's document editor cannot be implemented with these APIs. For this reason Google omitted these APIs entirely. Unfortunately, there is no library and hardly any editor that implements rich-text editing without these APIs. Google did not publish their solution to the public domain.
+
+The purpose of this thesis is to implement rich-text editing without using the browsers' rich-text editing APIs. This shall allow more features, a consistent behavior and avoid the bugs of these APIs. The implementation shall be distributed as GUI-less software library with a high-level API, to enable web developers to implement rich-text editors specific to their needs, which is currently not possible.
+
+
+%The purpose of this thesis is to build a library that enables web developers to implement rich-text editors without using the browsers' rich-text editing APIs to allow more features, a consistent behavior and avoid the bugs of these APIs. It shall be distributed as gui-less software library
