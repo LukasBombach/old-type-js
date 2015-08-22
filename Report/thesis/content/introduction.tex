@@ -52,7 +52,7 @@ The libraries available still have downsides. Most importantly, only a few of th
 
 A lot of the bugs CKEditor and other editors are facing are due to the fact that they rely on so-called ''HTML Editing APIs'' that have been implemented in browsers for years, but only been standardized with HTML5. Still, to this present day, the implementations are prone to numerous bugs and behave inconsistently across different browsers. And even though these APIs are the de-facto standard for implementing rich-text editing, with their introduction in Internet Explorer 5.5, it has never been stated they have been created to be used as such.
 
-It's a fact, that especially on older browsers, rich-text editors have to cope with bugs and inconsistencies, that can only be worked around, but not fixed, as they are native to the browser. On the upside, these APIs offer a high-level API to call so-called ''commands'' to format the current text-selection. 
+It is a fact, that especially on older browsers, rich-text editors have to cope with bugs and inconsistencies, that can only be worked around, but not fixed, as they are native to the browser. On the upside, these APIs offer a high-level API to call so-called ''commands'' to format the current text-selection. 
 
 However, calling commands will only manipulate the document's DOM tree, in order to format the text. This can also be achieved without using editing APIs, effectively avoiding unfixable bugs and enabling a consistent behavior across all browsers.
 
