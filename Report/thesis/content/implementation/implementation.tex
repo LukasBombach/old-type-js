@@ -415,7 +415,7 @@ As discussed in \refsubsec{subsec:hidden_native_input_fields}, all text input wi
 
 The \code{Caret} class provides all functionality to place and move a caret in a text. It provides methods to be moved left, right, up and down in a text as well as to be placed at at specific position in a text. The visual representation of the caret is a \code{div} element, styled to imitate a text caret. Using a CSS3 animation, it imitates the ''blinking'' common for native text carets.
 
-It is to be noted that the elements for carets as well as for the text selection will not be written to the editor's contents. As discussed in \refsection{sec:concept_markup}, the editor's contents should not contain any markup other than for the text itself. Instead this and all other elements will be stored in a designated \code{div} element at the end of the website's \code{body} and be positioned using CSS.
+The elements for carets as well as for the text selection will not be written to the editor's contents. The editor's contents should not contain any markup other than for the text itself. Instead this and all other elements will be stored in a designated \code{div} element at the end of the website's \code{body} and be positioned using CSS.
 
  The challenge with this class is that it must be able to be moved within text and in any kind of formatting, represented by any combination of DOM nodes. To be moved across letters and text lines, the caret must take into account that:
 
