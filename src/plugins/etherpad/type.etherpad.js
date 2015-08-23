@@ -104,10 +104,13 @@ Type.Etherpad = function (type) {
    * @returns {Type.Etherpad} - This instance
    * @private
    */
-  this._initEditor = function (contents) {
-    //this._type.getRoot().innerHTML = contents.text;
+  this._initEditor = function (contents, apool) {
+    var prefix = 'Z:' + contents.text.length.toString(36) + '>0',
+      appendix = '$',
+      changeset = prefix + contents.attribs + appendix;
+    console.log(changeset);
     this._type.getRoot().innerHTML = Type.Etherpad.Util.nl2br(contents.text);
-    //this._content.applyChangeset(contents.attribs);
+    this._content.applyChangeset(changeset, apool);
     return this;
   }
 

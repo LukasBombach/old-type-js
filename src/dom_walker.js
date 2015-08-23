@@ -151,6 +151,7 @@ Type.DomWalker = function (node, options) {
   Type.DomWalker._filterFunctions = {
     text     : '_isTextNodeWithContents',
     textNode : '_isTextNode',
+    textual  : '_resemblesText',
     visible  : '_isVisible'
   };
 
@@ -402,6 +403,17 @@ Type.DomWalker = function (node, options) {
    */
   Type.DomWalker._isTextNodeWithContents = function (node) {
     return node.nodeType === Node.TEXT_NODE && /[^\t\n\r ]/.test(node.textContent);
+  };
+
+  /**
+   * Returns true if a given node is displayed as text on the screen
+   *
+   * @param {Node} node The node to be checked.
+   * @returns {boolean}
+   * @private
+   */
+  Type.DomWalker._resemblesText = function (node) {
+    return node.nodeName.toLocaleLowerCase() === 'br' || Type.DomWalker._isTextNodeWithContents(node);
   };
 
   /**

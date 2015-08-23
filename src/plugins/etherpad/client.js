@@ -123,7 +123,7 @@ Type.Etherpad.Client = function (etherpad) {
     this._revision = data.collab_client_vars.rev;
     this._userId = data.userId;
     if (this._onInitHandler) {
-      this._onInitHandler(data.collab_client_vars.initialAttributedText);
+      this._onInitHandler(data.collab_client_vars.initialAttributedText, data.collab_client_vars.apool);
     }
     return this;
   };

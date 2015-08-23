@@ -58,21 +58,39 @@ Type.Etherpad.Changeset = function () {
    * changeset instance
    *
    * @param {string} str - A serialized changeset
+   * @param {Object} apool - An Etherpad attribute pool
+   * @param {string} base - Text contents
    * @returns {Type.Etherpad.Changeset} - This instance
    */
-  this.addString = function (str, apool) {
+  this.addString = function (str, apool, base) {
 
     var charbank = this._getCharbank(str),
+      nlIndices = this._getNlIndices(base),
       offsets = { absolute: 0, stack: []},
       rawMatch, match;
 
     while ((rawMatch = this._changesetRegex.exec(str)) !== null) {
       if (match = this._parseMatch(rawMatch))
-        this._addMatchToStack(offsets, charbank, match, apool);
+        this._addMatchToStack(offsets, charbank, match, apool, nlIndices);
     }
 
     return this;
 
+  };
+
+  /**
+   * Returns the indices of newlines in a string
+   *
+   * @param {string} str - The string to return the indexes of newlines for
+   * @returns {number[]} - An array in indexes of the newlines in the text
+   * @private
+   */
+  this._getNlIndices = function (str) {
+    var regex = /[\n]/gi, result, indices = [];
+    while ( (result = regex.exec(str)) ) {
+      indices.push(result.index);
+    }
+    return indices;
   };
 
   /**
@@ -88,18 +106,21 @@ Type.Etherpad.Changeset = function () {
    * @param {{ absolute: number, stack: number[] }} offset - An object
    *     containing offset information
    * @param {string} charbank - The charbank of a string changeset
-   * @param {{attrs: string, operator: string, value: string}} match
+   * @param {{attrs: string, operator: string, value: string, nl: number}} match
    *     A match as returned by _parseMatch
+   * @param {Object} apool - An Etherpad attribute pool
+   * @param {number[]} nlIndices -
    * @private
    */
-  this._addMatchToStack = function (offset, charbank, match, apool) {
+  this._addMatchToStack = function (offset, charbank, match, apool, nlIndices) {
 
     var delta;
 
     this._mergeOrPush(this._createFromMatch(offset, charbank, match, apool));
 
     if (match.operator === '=') {
-      delta = parseInt(match.value, 36);
+      delta  = parseInt(match.value, 36);
+      delta += match.nl ? 1 : 0;
       offset.absolute += delta;
       offset.stack.push(offset);
     }
@@ -191,6 +212,7 @@ Type.Etherpad.Changeset = function () {
 
     return {
       attrs    : match[1],
+      nl       : match[2],
       operator : match[3],
       value    : match[4]
     }
@@ -236,9 +258,9 @@ Type.Etherpad.Changeset = function () {
  * @param {string} str - A serialized changeset string
  * @returns {Type.Etherpad.Changeset}
  */
-Type.Etherpad.Changeset.fromString = function (str, apool) {
+Type.Etherpad.Changeset.fromString = function (str, apool, base) {
   var changeset = new Type.Etherpad.Changeset();
-  changeset.addString(str, apool);
+  changeset.addString(str, apool, base);
   return changeset;
 };
 

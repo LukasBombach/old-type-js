@@ -13,6 +13,7 @@ Type.Etherpad.Content = function (etherpad) {
   this._client = etherpad.getClient();
   this._localCaret = etherpad.getType().getCaret();
   this._typeContent = new Type.Content(etherpad.getType());
+  this._root = this._typeContent.getRoot();
   this._client.registerMessageHandler('NEW_CHANGES', this.updateContent.bind(this));
 };
 
@@ -37,7 +38,7 @@ Type.Etherpad.Content = function (etherpad) {
    * @returns {*}
    */
   this.applyChangeset = function (changesetString, apool) {
-    var changeset = new Type.Etherpad.Changeset.fromString(changesetString, apool);
+    var changeset = new Type.Etherpad.Changeset.fromString(changesetString, apool, this._root.textContent);
     changeset.apply(this._typeContent, this._localCaret);
     return this;
   }

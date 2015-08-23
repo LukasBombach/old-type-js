@@ -142,11 +142,7 @@ Type.Content = function (type) {
     }
 
     // Change contents
-    var nodes = this._formatter.removeFormat(tag, range);
-
-    // Undo capabilities
-    //var formatting = new Type.Actions.Format.fromRange(this._sourceId, this._type, range, tag, nodes);
-    //this._undoManager.push(formatting);
+    this._formatter.removeFormat(tag, range);
 
     // Chaining
     return this;
@@ -159,6 +155,15 @@ Type.Content = function (type) {
    */
   this.getSourceId = function () {
     return this._sourceId;
+  };
+
+  /**
+   * Getter for this instance's root element, i.e. the
+   * element that contains this editor's text.
+   * @returns {Element}
+   */
+  this.getRoot = function () {
+    return this._root;
   };
 
   /**

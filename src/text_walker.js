@@ -17,7 +17,7 @@ Type.TextWalker = function () {
    */
   Type.TextWalker.offset = function (fromNode, toNode, fromOffset, toOffset) {
 
-    var dom = new Type.DomWalker(fromNode, 'text'),
+    var dom = new Type.DomWalker(fromNode, 'textual'),
       node = dom.next(true),
       offsetWalked = 0;
 
@@ -28,7 +28,8 @@ Type.TextWalker = function () {
       if (node === toNode) {
         return offsetWalked + toOffset - fromOffset;
       }
-      offsetWalked += node.nodeValue.trim().length;
+      //offsetWalked += node.nodeValue.trim().length;
+      offsetWalked += Type.TextWalker._textLength(node);
     } while (node = dom.next());
 
     return null;
@@ -45,7 +46,8 @@ Type.TextWalker = function () {
    */
   Type.TextWalker.nodeAt = function (fromNode, offset, startOffset) {
 
-    var walker = new Type.DomWalker(fromNode, 'text'),
+    var walker = new Type.DomWalker(fromNode, 'textual'),
+    //var walker = new Type.DomWalker(fromNode, 'text'),
       node = walker.first(),//Type.DomWalker.first(fromNode, 'text'),
       offsetWalked = 0,
       length;
@@ -57,13 +59,15 @@ Type.TextWalker = function () {
     //  return { node: fromNode, offset: offset };
     //}
 
-    if (offset >= 0 && offset <= node.nodeValue.trim().length) {
+    //if (offset >= 0 && offset <= node.nodeValue.trim().length) {
+    if (offset >= 0 && offset <= Type.TextWalker._textLength(node)) {
       return { node: node, offset: offset };
     }
 
     if (offset < 0) {
       while (node = walker.prev()) {
-        length = node.nodeValue.trim().length;
+        //length = node.nodeValue.trim().length;
+        length = Type.TextWalker._textLength(node);
         if (offsetWalked - length <= offset) {
           return { node: node, offset: length+(offset-offsetWalked) };
         }
@@ -72,7 +76,8 @@ Type.TextWalker = function () {
 
     } else {
       do {
-        length = node.nodeValue.trim().length;
+        //length = node.nodeValue.trim().length;
+        length = Type.TextWalker._textLength(node);
         if (offsetWalked + length >= offset) {
           return { node: node, offset: offset-offsetWalked };
         }
@@ -82,6 +87,14 @@ Type.TextWalker = function () {
 
     return null;
 
+  };
+
+  Type.TextWalker._textLength = function (node) {
+    if (node.nodeName.toLocaleLowerCase() === 'br') {
+      return 1;
+    } else {
+      return node.nodeValue.trim().length;
+    }
   };
 
   /**
