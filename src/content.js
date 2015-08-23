@@ -122,6 +122,38 @@ Type.Content = function (type) {
   };
 
   /**
+   * Formats a given text range
+   *
+   * @param {String} tag - The HTML tag the text should
+   *     be formatted with
+   * @param {Type.Range|number} range - The range of text
+   *     that should be formatted or a number that will be
+   *     the start offset of the formatting
+   * @param {number} [end] - If the second parameter that
+   *     was given is a start offset, this will be the end
+   *     offset in the text that will be formatted.
+   * @returns {Type.Content} - This instance
+   */
+  this.removeFormat = function (tag, range, end) {
+
+    // If positions instead of a range were given
+    if (arguments.length === 3) {
+      range = Type.Range.fromPositions(this._root, range, end);
+    }
+
+    // Change contents
+    var nodes = this._formatter.removeFormat(tag, range);
+
+    // Undo capabilities
+    //var formatting = new Type.Actions.Format.fromRange(this._sourceId, this._type, range, tag, nodes);
+    //this._undoManager.push(formatting);
+
+    // Chaining
+    return this;
+
+  };
+
+  /**
    * Getter for this content's source id
    * @returns {number}
    */

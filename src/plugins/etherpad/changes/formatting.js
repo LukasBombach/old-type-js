@@ -7,11 +7,12 @@ var Type = require('../../../core');
  *
  * @constructor
  */
-Type.Etherpad.Changeset.Changes.Formatting = function (command, offset, length) {
+Type.Etherpad.Changeset.Changes.Formatting = function (command, offset, length, remove) {
   this.command = command;
   this.start   = offset;
   this.length  = length;
   this.end     = offset + length;
+  this.remove  = !!remove;
 };
 
 /**
@@ -46,7 +47,11 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Formatting, Type.Etherpad.Chan
    * @returns {Type.Etherpad.Changeset.Changes.Insertion} - This instance
    */
   this.apply = function (content, localCaret) {
-    content.format(this._tagMap[this.command], this.start, this.end);
+    //if (!this.remove) {
+      content.format(this._tagMap[this.command], this.start, this.end);
+    //} else {
+    //  content.removeFormat(this._tagMap[this.command], this.start, this.end);
+    //}
     return this;
   };
 
@@ -56,11 +61,12 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Formatting, Type.Etherpad.Chan
 /**
  *
  * @param attrs
+ * @param offset
  * @param match
  * @returns {Type.Etherpad.Changeset.Changes.Formatting}
  */
 Type.Etherpad.Changeset.Changes.Formatting.fromAttrs = function (attrs, offset, match) {
-  return new Type.Etherpad.Changeset.Changes.Formatting(attrs[0][0], offset, parseInt(match.value));
+  return new Type.Etherpad.Changeset.Changes.Formatting(attrs[0][0], offset, parseInt(match.value), !attrs[0][1]);
 };
 
 

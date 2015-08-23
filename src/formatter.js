@@ -62,13 +62,14 @@ Type.Formatter = function (type) {
    */
   this.removeFormat = function (tag, range) {
 
-    var dom = this._type.createDomWalker(range.startContainer),
+    var startNode = this._getStartNode(tag, range),
+      dom = this._type.createDomWalker(startNode),
       next;
 
     do {
       Type.DomUtilities.removeTag(dom.getNode(), tag, false);
       next = dom.next();
-    } while(next && next !== range.endContainer);
+    } while(next && !next.contains(range.endContainer));// !== range.endContainer);
 
     return this;
 
@@ -90,7 +91,7 @@ Type.Formatter = function (type) {
     if (enclosingTag = typeRange.elementEnclosingStartAndEnd(tag)) {
       return this.removeInline(enclosingTag, typeRange);
 
-      // Otherwise add formatting to selected area
+    // Otherwise add formatting to selected area
     } else {
       startNode = this._getStartNode(tag, typeRange);
       endNode   = this._getEndNode(tag, typeRange);
