@@ -173,12 +173,12 @@ Type.Formatter = function (type) {
 
     Type.DomUtilities.unwrap(enclosingTag);
 
-    leftRange = Type.Range.load(this._type.getRoot(), tagPositions.start, selPositions.start);
+    leftRange = Type.Range.fromPositions(this._type.getRoot(), tagPositions.start, selPositions.start);
     if (!leftRange.isCollapsed()) {
       this.inline(tagName, leftRange);
     }
 
-    rightRange = Type.Range.load(this._type.getRoot(), selPositions.end, tagPositions.end);
+    rightRange = Type.Range.fromPositions(this._type.getRoot(), selPositions.end, tagPositions.end);
     if (!rightRange.isCollapsed()) {
       this.inline(tagName, rightRange);
     }
