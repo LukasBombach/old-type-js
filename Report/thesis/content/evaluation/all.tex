@@ -3,6 +3,54 @@
 \chapter{Evaluation \& Outlook}
 \label{ch:evaluation}
 
+The library of this thesis implements basic features or rich-text editing. Users can type inside an editor, format text, place and move a caret, draw a selection and copy and paste text. Many of the intended features,  have not been implemented. These features include:
+
+\begin{enumerate}
+\item Behavior of the enter key in lists and headlines.
+\item Contents pasted from the clipboard are not being sanitized.
+\item Lists cannot be added.
+\item Images cannot be added.
+\item Formatting does not allow for style and class attributes.
+\item Formatting commands do not distinguish between inline and block commands.
+\item Real-time collaboration is unstable.
+\end{enumerate}
+
+The basic system for all of these features could be implemented. These features are missing due to the many small tasks they require. On their own, these tasks are not very complex. 
+
+\begin{enumerate}
+\item For the behavior of the enter key, input filters must be implemented that check which element the caret is contained by and create either new list items or text paragraphs.
+\item To sanitize paste events, an input filter must be implemented that removes tags from pasted contents.
+\item Lists can already be inserted, but they cannot be removed 
+\item Images cannot be added.
+\item Formatting does not allow for style and class attributes.
+\item Formatting commands do not distinguish between inline and block commands.
+\item Real-time collaboration is unstable.
+\end{enumerate}
+
+
+
+
+
+To implement the desired behavior, input filters must be implemented, that check 
+
+
+Most of these features could not be implemented to to
+
+The lack of these features is primarily due to the com
+
+To enable lists, input filters must be implemented that will 
+
+Web developers can implement editors
+and extend
+etherpad shows such an extension
+
+
+Can be done after thesis
+Input module for lists
+
+
+
+
 Google's document editor has shown that it is possible to implement a rich text editor without editing APIs
 The resulting library of this thesis demonstrates a way to implement a rich-text editor on the web without using HTML editing APIs.
 The library includes most basic features of a rich-text editor
