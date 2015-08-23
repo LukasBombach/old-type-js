@@ -105,14 +105,31 @@ Type.Etherpad = function (type) {
    * @private
    */
   this._initEditor = function (contents, apool) {
-    var prefix = 'Z:' + contents.text.length.toString(36) + '>0',
-      appendix = '$',
-      changeset = prefix + contents.attribs + appendix;
+    //var prefix = 'Z:' + contents.text.length.toString(36) + '>0',
+    //  appendix = '$',
+    //  changeset = prefix + contents.attribs + appendix;
+    var changeset = this._initChangeset(contents);
     console.log(changeset);
     this._type.getRoot().innerHTML = Type.Etherpad.Util.nl2br(contents.text);
     this._content.applyChangeset(changeset, apool);
     return this;
-  }
+  };
+
+  /**
+   * Creates a regular changeset from the initial attributes of an Etherpad
+   * server.
+   *
+   * @param {{attribs: string, text: string}} contents - The contents
+   *     of the editor sent by the server
+   * @returns {string} - A regularly formatted changeset
+   * @private
+   */
+  this._initChangeset = function (contents) {
+    var prefix = 'Z:' + contents.text.length.toString(36) + '>0',
+      body = contents.attribs.replace(/\+/g, '='),
+      appendix = '$';
+      return prefix + body + appendix;
+  };
 
 }).call(Type.Etherpad.prototype);
 
