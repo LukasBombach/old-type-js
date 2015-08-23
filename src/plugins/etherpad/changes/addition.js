@@ -5,8 +5,8 @@ var Type = require('../../../core');
 /**
  * Creates a new Type.Etherpad.Changeset.Changes.Addition instance
  *
- * @param {number} delta - The relative movement
- * @param {number} [absolute] - The absolute text position
+ * @param {number} text - The contents of this addition
+ * @param {number} [length] - The length of the contents
  * @constructor
  */
 Type.Etherpad.Changeset.Changes.Addition = function (text, length) {

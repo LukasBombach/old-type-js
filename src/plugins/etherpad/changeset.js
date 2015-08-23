@@ -60,7 +60,7 @@ Type.Etherpad.Changeset = function () {
    * @param {string} str - A serialized changeset
    * @returns {Type.Etherpad.Changeset} - This instance
    */
-  this.addString = function (str) {
+  this.addString = function (str, apool) {
 
     var charbank = this._getCharbank(str),
       offsets = { absolute: 0, stack: []},
@@ -68,7 +68,7 @@ Type.Etherpad.Changeset = function () {
 
     while ((rawMatch = this._changesetRegex.exec(str)) !== null) {
       if (match = this._parseMatch(rawMatch))
-        this._addMatchToStack(offsets, charbank, match);
+        this._addMatchToStack(offsets, charbank, match, apool);
     }
 
     return this;
@@ -92,17 +92,17 @@ Type.Etherpad.Changeset = function () {
    *     A match as returned by _parseMatch
    * @private
    */
-  this._addMatchToStack = function (offset, charbank, match) {
+  this._addMatchToStack = function (offset, charbank, match, apool) {
 
     var delta;
+
+    this._mergeOrPush(this._createFromMatch(offset, charbank, match, apool));
 
     if (match.operator === '=') {
       delta = parseInt(match.value, 36);
       offset.absolute += delta;
       offset.stack.push(offset);
     }
-
-    this._mergeOrPush(this._createFromMatch(offset, charbank, match));
 
     return this;
 
@@ -113,15 +113,27 @@ Type.Etherpad.Changeset = function () {
    * @param offset
    * @param charbank
    * @param match
+   * @param apool
    * @returns {*}
    * @private
    */
-  this._createFromMatch = function (offset, charbank, match) {
+  this._createFromMatch = function (offset, charbank, match, apool) {
+
+    var attrs = this._getAttributesFromMatch(match, apool);
+
+    //if (!attrs.length && match.operator === '=') {
+    //  return Type.Etherpad.Changeset.Changes.Movement.fromOffsetObject(offset);
+    //}
+    //switch(attrs[0]) {
+    //}
+
+    //return Type.Etherpad.Changeset.Changes.Movement.fromOffsetObject(offset);
+
     switch(match.operator) {
       case '*':
-        return Type.Etherpad.Changeset.Changes.Command.fromAPool();
+        return Type.Etherpad.Changeset.Changes.Command.fromAPool(apool);
       case '=':
-        return Type.Etherpad.Changeset.Changes.Movement.fromOffsetObject(offset);
+        return this._operationOrMovement(offset, charbank, match, attrs);
       case '+':
         return new Type.Etherpad.Changeset.Changes.Insertion(offset.absolute, charbank);
       case '-':
@@ -129,6 +141,14 @@ Type.Etherpad.Changeset = function () {
       default:
         Type.Development.debug('Cannot match operator ' + match.operator, match);
         return null;
+    }
+  };
+
+  this._operationOrMovement = function (offset, charbank, match, attrs) {
+    if (!attrs.length) {
+      return Type.Etherpad.Changeset.Changes.Movement.fromOffsetObject(offset, match);
+    } else {
+      return Type.Etherpad.Changeset.Changes.Formatting.fromAttrs(attrs, offset.absolute, match);
     }
   };
 
@@ -155,6 +175,7 @@ Type.Etherpad.Changeset = function () {
 
   /**
    * Parses a regex match and returns a readable object
+   *
    * @param {Array|{index: number, input: string}} match - A
    *     RegEx match
    * @returns {{attrs: string, operator: string, value: string}}
@@ -173,6 +194,23 @@ Type.Etherpad.Changeset = function () {
       operator : match[3],
       value    : match[4]
     }
+  };
+
+  /**
+   * Returns the attributes from a match and an apool
+   *
+   * @param {{attrs: string, operator: string, value: string}} match - A
+   *     match parsed by this._parseMatch
+   * @param {{numToAttrib: array}} apool - An attribute pool from an
+   *     Etherpad server
+   * @returns {*[]}
+   * @private
+   */
+  this._getAttributesFromMatch = function (match, apool) {
+    var i;
+    if (!match.attrs.length) return [];
+    i = parseInt(match.attrs.substr(1));
+    return [apool.numToAttrib[i]]
   };
 
   /**
@@ -198,9 +236,9 @@ Type.Etherpad.Changeset = function () {
  * @param {string} str - A serialized changeset string
  * @returns {Type.Etherpad.Changeset}
  */
-Type.Etherpad.Changeset.fromString = function (str) {
+Type.Etherpad.Changeset.fromString = function (str, apool) {
   var changeset = new Type.Etherpad.Changeset();
-  changeset.addString(str);
+  changeset.addString(str, apool);
   return changeset;
 };
 

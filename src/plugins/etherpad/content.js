@@ -21,12 +21,12 @@ Type.Etherpad.Content = function (etherpad) {
   /**
    * Applies a change to the editor's contents
    *
-   * @param {{}} data - The data received from a NEW_CHANGES message
+   * @param {{newRev: number, changeset: string, apool:{}}} data - The data received from a NEW_CHANGES message
    * @returns {Type.Etherpad.Content} - This instance
    */
   this.updateContent = function(data) {
     this.revision = data.newRev;
-    this.applyChangeset(data.changeset);
+    this.applyChangeset(data.changeset, data.apool);
     return this;
   };
 
@@ -36,8 +36,8 @@ Type.Etherpad.Content = function (etherpad) {
    * @param {string} changesetString - A serialized Changeset
    * @returns {*}
    */
-  this.applyChangeset = function (changesetString) {
-    var changeset = new Type.Etherpad.Changeset.fromString(changesetString);
+  this.applyChangeset = function (changesetString, apool) {
+    var changeset = new Type.Etherpad.Changeset.fromString(changesetString, apool);
     changeset.apply(this._typeContent, this._localCaret);
     return this;
   }

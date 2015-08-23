@@ -7,10 +7,11 @@ var Type = require('../../../core');
  *
  * @constructor
  */
-Type.Etherpad.Changeset.Changes.Formatting = function (offset, length) {
-  this.start  = offset;
-  this.length = length;
-  this.end    = offset + length;
+Type.Etherpad.Changeset.Changes.Formatting = function (command, offset, length) {
+  this.command = command;
+  this.start   = offset;
+  this.length  = length;
+  this.end     = offset + length;
 };
 
 /**
@@ -23,20 +24,44 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Formatting, Type.Etherpad.Chan
 
   /**
    * Etherpad's serialized string for this operation
+   *
    * @type {string}
    */
-  this.op = '-';
+  this.op = '=';
 
   /**
-   * Maps Etherpad's formatting codes to readable formattings
+   * Maps Etherpad commands to tags to apply in the editor
    *
-   * @type {{0: string}}
+   * @type {{bold: string}}
    * @private
    */
-  this._formattingCodes = {
-    0 : 'strong'
+  this._tagMap = {
+    bold : 'strong'
+  };
+
+  /**
+   * @param {Type.Content} content - The content this changeset
+   *     should be applied to
+   * @param {Type.Caret} [localCaret] - The local user's caret
+   * @returns {Type.Etherpad.Changeset.Changes.Insertion} - This instance
+   */
+  this.apply = function (content, localCaret) {
+    content.format(this._tagMap[this.command], this.start, this.end);
+    return this;
   };
 
 }).call(Type.Etherpad.Changeset.Changes.Formatting.prototype);
+
+
+/**
+ *
+ * @param attrs
+ * @param match
+ * @returns {Type.Etherpad.Changeset.Changes.Formatting}
+ */
+Type.Etherpad.Changeset.Changes.Formatting.fromAttrs = function (attrs, offset, match) {
+  return new Type.Etherpad.Changeset.Changes.Formatting(attrs[0][0], offset, parseInt(match.value));
+};
+
 
 module.exports = Type.Etherpad.Changeset.Changes.Formatting;

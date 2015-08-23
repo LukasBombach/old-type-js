@@ -47,9 +47,9 @@ Type.Etherpad.Changeset.Changes.Movement.fromMatch = function (match) {
  * @param {{ absolute: number, stack: number[] }} offset - An object
  *     containing offset information
  */
-Type.Etherpad.Changeset.Changes.Movement.fromOffsetObject = function (offset) {
+Type.Etherpad.Changeset.Changes.Movement.fromOffsetObject = function (offset, match) {
   var delta = offset.stack[offset.stack.length -1];
-  return new Type.Etherpad.Changeset.Changes.Movement(delta, offset.absolute);
+  return new Type.Etherpad.Changeset.Changes.Movement(delta, offset.absolute + parseInt(match.value));
 };
 
 
