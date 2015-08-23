@@ -37,8 +37,10 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Formatting, Type.Etherpad.Chan
    * @private
    */
   this._tagMap = {
-    bold   : 'strong',
-    italic : 'em'
+    bold          : 'strong',
+    italic        : 'em',
+    underline     : 'u',
+    strikethrough : 's'
   };
 
   /**
