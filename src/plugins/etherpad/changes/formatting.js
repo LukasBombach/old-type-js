@@ -37,7 +37,8 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Formatting, Type.Etherpad.Chan
    * @private
    */
   this._tagMap = {
-    bold : 'strong'
+    bold   : 'strong',
+    italic : 'em'
   };
 
   /**
@@ -48,7 +49,7 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Formatting, Type.Etherpad.Chan
    */
   this.apply = function (content, localCaret) {
     //if (!this.remove) {
-      content.format(this._tagMap[this.command], this.start, this.end);
+    content.format(this._tagMap[this.command], this.start, this.end);
     //} else {
     //  content.removeFormat(this._tagMap[this.command], this.start, this.end);
     //}
