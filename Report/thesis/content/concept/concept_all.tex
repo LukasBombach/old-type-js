@@ -347,3 +347,23 @@ As discussed in \refsubsec{subsec:api_design_handling_use_cases}, the base class
 
 % and implement as many components as possible as plugins. In its core, the library could create an environment to allow plugins to register and interact with each other. This would 
 
+
+\chapter{Goals}
+\label{sec:concept_goals}
+
+The library of this thesis shall enable web developers to implement rich-text editors themselves. The following features shall be implemented:
+
+\paragraph{Writing and deleting text} Users of an editor shall be able to type inside the text using hardware as well as virtual keyboards. Behavior to support the users' input as discussed in \refsection{subsec:concept_native_imitation} shall be implemented for headings and lists.
+
+\paragraph{Text formatting} Users shall be able to format the text. It must be distinguished between inline and block formattings. Block formattings break the text flow and always create new lines before and after the formatted text. Block formattings include headings, paragraphs or quotations amongst others. Rich-text editors show a different behavior for applying block formattings as compared to inline formattings. Block formattings will change any text blocks (i.e. block-formatted parts of a text) affected by the formatting command into the format that is being applied, even if only a part of a text block has been affected. Inline formattings will strictly apply the formatting to the part of the text that has been selected to be formatted. The text shall be formattable with any HTML tag and HTML attributes.
+
+\paragraph{Caret} Users shall be able to control a caret with a mouse and the arrow keys on the keyboard.
+
+\paragraph{Selection} Users shall be able to create a text selection and copy its contents.
+
+\paragraph{Undo and redo} Users shall be able to use keyboard shortcuts to undo and redo changes they made.
+
+\paragraph{Clipboard control} Developers shall define which contents can be pasted from the clipboard and apply rules to remove unwanted formattings.
+
+\paragraph{Real-time collaboration} The library shall provide basic real-time collaboration between editors over the network.
+

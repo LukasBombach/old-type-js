@@ -1,6 +1,6 @@
 %!TEX root = ../../thesis.tex
 
-\chapter{Evaluation \& Outlook}
+\chapter{Evaluation}
 \label{ch:evaluation}
 
 The library of this thesis implements basic features or rich-text editing. Users can type inside an editor, format text, place and move a caret, draw a selection, use undo/redo commands and copy and paste text. Many of the intended features,  have not been implemented. These features include:
@@ -20,17 +20,21 @@ The basic system for all of these features could be implemented. These features 
 \begin{enumerate}
 \item For the behavior of the enter key, input filters must be implemented that check which element the caret is contained by and create either new list items or text paragraphs.
 \item To sanitize paste events, an input filter must be implemented that removes tags from pasted contents.
-\item Lists can already be inserted and edited, but they cannot be removed.
+\item Lists can already be inserted and edited, but they cannot be removed. The input filter that deletes text must also account for lists.
 \item To edit images, drag and drop capabilities need to be implemented.
 \item To allow formatting with style and class attributes, the tags with these attributes must be distinguished from tags with the same tag name, but different attributes.
-\item Block and inline formattings behave differently when being applied. To decide which type of formatting to apply, the tag name of the formatting command can be checked and a distinct algorithm for block formattings must be implemented.
-\item Basic real-time collaboration works
+\item Block and inline formattings behave differently when being applied. To decide which type of formatting to apply, the tag name of the formatting command must be checked and a distinct algorithm for block formattings must be implemented.
+\item Real-time collaboration has many edge cases which need to be accounted for and bugs need to be fixed.
 \end{enumerate}
+
+
 
 Web developers can implement editors
 and extend
 etherpad shows such an extension
 
+
+\chapter{Outlook}
 
 Can be done after thesis
 Input module for lists
