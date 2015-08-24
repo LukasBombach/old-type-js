@@ -12,11 +12,14 @@ The library of this thesis demonstrates a way to implement a web-based rich-text
 \item Create a selection.
 \item Copy and paste text.
 \item Use undo and redo commands.
+\item Real-time collaboration can be added though the Etherpad extension.
 \end{enumerate}
 
-Unfortunately, not all features are perfectly stable. 
+Unfortunately, not all features are perfectly stable and not all of the goals could be met. The collaboration with Etherpad throws errors on some formatting commands and the selection shows glitches. 
+Most importantly, formatting commands do not distinguish between inline and block formattings and tags to format the content with do not allow passing attributes. This means that text cannot be aligned, colored and sized and that links cannot be added yet.
+The best experience can be achieved on Google Chrome.
 
-The mentioned features run mostly stable in Google Chrome. Some of the intended features have not been implemented. These features include:
+
 
 
 %Basic features for rich-text editing have been implemented. Users can type inside an editor, format text, place and move a caret, create a selection, use undo/redo commands and copy and paste text. Developers can use the library to instantiate editable areas and manipulate its contents with an API.
