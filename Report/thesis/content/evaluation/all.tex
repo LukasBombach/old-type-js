@@ -3,15 +3,13 @@
 \chapter{Evaluation}
 \label{ch:evaluation}
 
-The library of this thesis implements basic features or rich-text editing. Users can type inside an editor, format text, place and move a caret, draw a selection, use undo/redo commands and copy and paste text. Many of the intended features,  have not been implemented. These features include:
+The library of this thesis implements basic features or rich-text editing. Users can type inside an editor, format text, place and move a caret, create a selection, use undo/redo commands and copy and paste text. Some of the intended features  have not been implemented. These features include:
 
 \begin{enumerate}
 \item Behavior of the enter key in lists and headlines.
 \item Contents pasted from the clipboard are not being sanitized.
 \item Lists cannot be edited.
-\item Images cannot be edited.
-\item Formatting does not allow for style and class attributes.
-\item Formatting commands do not distinguish between inline and block commands.
+\item Formatting does not allow for style and class attributes and do not distinguish between inline and block commands.
 \item Real-time collaboration is unstable.
 \end{enumerate}
 
@@ -21,7 +19,6 @@ The basic system for all of these features could be implemented. These features 
 \item For the behavior of the enter key, input filters must be implemented that check which element the caret is contained by and create either new list items or text paragraphs.
 \item To sanitize paste events, an input filter must be implemented that removes tags from pasted contents.
 \item Lists can already be inserted and edited, but they cannot be removed. The input filter that deletes text must also account for lists.
-\item To edit images, drag and drop capabilities need to be implemented.
 \item To allow formatting with style and class attributes, the tags with these attributes must be distinguished from tags with the same tag name, but different attributes.
 \item Block and inline formattings behave differently when being applied. To decide which type of formatting to apply, the tag name of the formatting command must be checked and a distinct algorithm for block formattings must be implemented.
 \item Real-time collaboration has many edge cases which need to be accounted for and bugs need to be fixed.
