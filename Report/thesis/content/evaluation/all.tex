@@ -16,31 +16,35 @@ The library of this thesis demonstrates a way to implement a web-based rich-text
 \end{enumerate}
 
 Unfortunately, not all features are perfectly stable and not all of the goals could be met. The collaboration with Etherpad throws errors on some formatting commands and the selection shows glitches. 
-Most importantly, formatting commands do not distinguish between inline and block formattings and tags to format the content with do not allow passing attributes. This means that text cannot be styled with CSS, which takes away many formatting options, and that links cannot be added yet.
-The best experience can be achieved on Google Chrome.
+Most importantly, formatting commands do not distinguish between inline and block formattings and tags, to format the content with, cannot contain attributes. This means that text cannot be styled with CSS, which takes away many formatting options, and that links cannot be added. The contents pasted from the clipboard cannot be sanitized yet.
+The best experience can be achieved on Google Chrome, other browsers require further testing.
 
+%%%%%%%%%%%%%
+%\item Contents pasted from the clipboard are not being sanitized.
+%\item Lists cannot be edited.
+%%%%%%%%%%%%%
 
 
 
 %Basic features for rich-text editing have been implemented. Users can type inside an editor, format text, place and move a caret, create a selection, use undo/redo commands and copy and paste text. Developers can use the library to instantiate editable areas and manipulate its contents with an API.
 % Unfortunately, not all features are perfectly stable. The mentioned features run mostly stable in Google Chrome. Some of the intended features have not been implemented. These features include:
 
-\begin{enumerate}
-\item Formatting does not allow for style and class attributes and do not distinguish between inline and block commands.
-\item Creating a text selection sometimes shows glitches.
-\item Behavior of the enter key in lists and headlines is not implemented.
-\item Contents pasted from the clipboard are not being sanitized.
-\item Lists cannot be edited.
-\item Real-time collaboration is unstable.
-\end{enumerate}
+%\begin{enumerate}
+%\item Formatting does not allow for style and class attributes and do not distinguish between inline and block commands.
+%\item Creating a text selection sometimes shows glitches.
+%\item Behavior of the enter key in lists and headlines is not implemented.
+%\item Contents pasted from the clipboard are not being sanitized.
+%\item Lists cannot be edited.
+%\item Real-time collaboration is unstable.
+%\end{enumerate}
 
-The basic system for all of these features could be implemented, but in particular, these tasks require many operations on the DOM, which has been the main difficulty of this thesis. In particular, not allowing style or class attributes for formattings means that text cannot be aligned, colored, sized and that links cannot be added.
+%The basic system for all of these features could be implemented, but in particular, these tasks require many operations on the DOM, which has been the main difficulty of this thesis. In particular, not allowing style or class attributes for formattings means that text cannot be aligned, colored, sized and that links cannot be added.
 
 % Generating and editing rich-text primarily means having to manipulate the DOM extensively and giving users as much freedom as possible means having to treat many edge-cases.
 
 % As discussed in \refsubsec{subsec:noapi_dis_formatting}, the same visual representation of a text can have many representations in the DOM. On top of that, browsers hide parts of the DOM, most importantly whitespace between texts, but keep its representation on the DOM level. These gaps have been very difficult to treat.
 
-The library lays a foundation to work with rich text and manage all components that are necessary for it. It provides a rich set of classes to improve and extend its functionality. The Etherpad extension, enabling real-time collaboration, that can be used with any editor implemented with the library, is an example of that.
+The library lays a foundation to work with rich text and manage all components that are necessary for it. It provides a rich set of classes to improve and extend its functionality. The Etherpad extension, enabling real-time collaboration that can be used with any editor implemented with the library, is an example of that.
 
 %The basic system for all of these features could be implemented. On their own, these tasks are not very complex, but they require many small tasks to function. , but they do require kleinteilige and mühselige work on the DOM.
 %All in all, manipulating the DOM has been the most strenuous and difficult task. The representation of the DOM does not necessarily match the representation of the contents as visible to the user. The same visual representation of a document can have man representations in the DOM. Furthermore, browsers hide whitespace. It has taken time to understand how to treat this effectively.
