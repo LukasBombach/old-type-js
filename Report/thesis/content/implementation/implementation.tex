@@ -906,7 +906,7 @@ Etherpad's technology can be used to enable real-time collaboration for Type. Wh
 
 Etherpad does not provide a documentation on its client--server protocol, but it can be reverse engineered. It is possible for third-party libraries to communicate with an Etherpad server alongside Etherpad's ''native'' clients, as long as a third-party library (like Type) conforms the protocol.
 
-Etherpad's collaboration functionality comes with a cost in file size for Type and may only be used in specific use cases. This is why this feature is implemented as an optional extensions (compare \refsection{sec:extensions}) in a separate file. To enable collaboration the designated JavaScript file needs to be added to the website.
+Etherpad's collaboration functionality comes with a cost in file size for Type and may only be used in specific use cases. This is why this feature is implemented as an optional extension (compare \refsection{sec:extensions}) in a separate file. To enable collaboration the designated JavaScript file needs to be added to the website.
 
 \begin{lstlisting}[language=html, caption=Enabling real-time collaboration to Type, label=lst:add_etherpad_html]
 <script src="type.js"></script>
@@ -920,9 +920,15 @@ var element = document.getElementById("myElement");
 var editor = Type.fromEtherpad(element, "http://example.com/editor/myEditorId");
 \end{lstlisting}
 
-The constructor used in line 2 of \reflisting{lst:etherpad_constructor} will connect to an Etherpad server and load the contents of a document and append them to the element given as first argument.
+The constructor used in line 2 of \reflisting{lst:etherpad_constructor} will connect to an Etherpad server and append the contents from the server to the element given as first parameter.
 
-\textit{Todo Will use the change listener to watch changes. Has an own class to serialize changesets. One class for pushing changes to the server. Uses caret class to display other collaborators. And has a class to apply incoming changes.}
+Type's implementation for collaboration is simpler than Etherpad's native implementation. The \code{EtherpadClient} class sends and receives changes to and from an Etherpad server. The \code{EtherpadChangeset} class translates changesets from the server to edit commands for the local editor and vice versa. A changeset can contain multiple commands. For every command there is class representing it. Text insertions are represented by the \code{Insertion} class, deletions are represented by the \code{Removal} class and formattings are represented by the \code{Formatting} class. Every class implements a function to apply its changes to the editor as well as to return a fragment of a changeset representing its change. 
+
+When a changeset will be received it will be translated to these classes and they will be applied to the editor. When the local user changes the contents, the according class will be instantiated and added to a \code{EtherpadChangeset} class. Every 500ms this changeset will be serialized and sent to the Etherpad server using the fragments as returned by the command instances.
+
+When a submitted change had to be merged with another change on the server, Type's client will receive a change like any other change from other clients and it will be applied to the local editor.
+
+%\textit{Todo Will use the change listener to watch changes. Has an own class to serialize changesets. One class for pushing changes to the server. Uses caret class to display other collaborators. And has a class to apply incoming changes.}
 
 This architecture provides an unobtrusive way to integrate real-time collaboration in the Type library. It does not depend on a specific implementation of an editor. Developers are free to implement any editor specific to their needs with integrated real-time collaboration.
 
