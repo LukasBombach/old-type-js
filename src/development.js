@@ -18,10 +18,11 @@ Type.Development = function () {
    * @param {...*} messages - Any number and type of arguments
    *     you want to pass to console.debug
    */
-  Type.Development.debug = function (messages) {
+  Type.Development.log = function (messages) {
     if (console && console.log) {
       console.log.apply(console, arguments)
     }
+    return Type.Development;
   };
 
   /**
@@ -35,6 +36,7 @@ Type.Development = function () {
     if (console && console.debug) {
       console.debug.apply(console, arguments)
     }
+    return Type.Development;
   };
 
 }).call(Type.Development);
