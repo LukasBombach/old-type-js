@@ -361,11 +361,11 @@ The input event implements an abstraction to either check for the \keystroke{ctr
 \subsection{Rich-text behavior}
 \label{subsec:re_behavior_implementation}
 
-As discussed in \refsubsec{subsec:concept_native_imitation}, most rich-text editors support the user with a common behavior reacting to the user's input. This behavior can be abstracted in a simple way using the input pipeline. The following paragraphs describe the rules and filters implemented by default. Further rules can easily be implemented and added to the input pipeline as input filters.
+As discussed in \refsubsec{subsec:concept_native_imitation}, most rich-text editors support the user with a common behavior reacting to the user's input. This behavior can be abstracted in a simple way using the input pipeline. The following paragraphs describe how the behavior discussed in section \ref{subsec:concept_native_imitation} can be implemented using filters. Being a ''nice-to-have''-feature, other filters was given more priority and these filers have not been implemented.% Further rules can easily be implemented and added to the input pipeline as input filters.
 
-\paragraph{Headlines} When a user presses \keystroke{enter} while the caret is located at the end of a headline, a new text paragraph will be created behind the headline and the caret will be placed inside it.
+\paragraph{Headlines} When a user presses \keystroke{enter} while the caret is located at the end of a headline, a new text paragraph can be created behind the headline and the caret can be placed inside it.
 
-\paragraph{Lists} Pressing \keystroke{enter} inside a list item creates a new list item behind the current item and the caret will be placed inside it.
+\paragraph{Lists} Pressing \keystroke{enter} inside a list item can create a new list item behind the current item and the caret can be placed inside it.
 
 \subsection{Filterring and transformation}
 

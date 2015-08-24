@@ -353,7 +353,7 @@ As discussed in \refsubsec{subsec:api_design_handling_use_cases}, the base class
 
 The library of this thesis shall enable web developers to implement rich-text editors themselves. The following features shall be implemented:
 
-\paragraph{Writing and deleting text} Users of an editor shall be able to type inside the text using hardware as well as virtual keyboards. Behavior to support the users' input as discussed in \refsection{subsec:concept_native_imitation} shall be implemented for headings and lists.
+\paragraph{Writing and deleting text} Users of an editor shall be able to type inside the text using hardware as well as virtual keyboards. Behavior to support the users' input as discussed in \refsection{subsec:concept_native_imitation} will be an optional ''nice-to-have'' requirement.
 
 \paragraph{Text formatting} Users shall be able to format the text. It must be distinguished between inline and block formattings. Block formattings break the text flow and always create new lines before and after the formatted text. Block formattings include headings, paragraphs and quotations amongst others. Rich-text editors often show a different behavior for applying block formattings as compared to inline formattings. Block formattings will change any text block (i.e. block-formatted parts of a text) affected by the formatting command into the format that is being applied, even if only a part of a text block has been affected. Inline formattings will strictly apply the formatting to the part of the text that has been selected to be formatted. The text shall be formattable with any HTML tag and HTML attributes.
 
