@@ -3,8 +3,24 @@
 \chapter{Evaluation}
 \label{ch:evaluation}
 
-The library of this thesis demonstrates a way to implement a web-based rich-text editor without using HTML editing APIs.
-Basic features for rich-text editing have been implemented. Users can type inside an editor, format text, place and move a caret, create a selection, use undo/redo commands and copy and paste text. Developers can use the library to instantiate editable areas and manipulate its contents with an API. Unfortunately, not all features are perfectly stable. The mentioned features run mostly stable in Google Chrome. Some of the intended features have not been implemented. These features include:
+The library of this thesis demonstrates a way to implement a web-based rich-text editor without using HTML editing APIs. Developers can instantiate editable areas and manipulate its contents with an API. They can enable their users to:
+
+\begin{enumerate}
+\item Type and delete text.
+\item Apply formattings.
+\item Place and move a caret.
+\item Create a selection.
+\item Copy and paste text.
+\item Use undo and redo commands.
+\end{enumerate}
+
+Unfortunately, not all features are perfectly stable. 
+
+The mentioned features run mostly stable in Google Chrome. Some of the intended features have not been implemented. These features include:
+
+
+%Basic features for rich-text editing have been implemented. Users can type inside an editor, format text, place and move a caret, create a selection, use undo/redo commands and copy and paste text. Developers can use the library to instantiate editable areas and manipulate its contents with an API.
+% Unfortunately, not all features are perfectly stable. The mentioned features run mostly stable in Google Chrome. Some of the intended features have not been implemented. These features include:
 
 \begin{enumerate}
 \item Formatting does not allow for style and class attributes and do not distinguish between inline and block commands.
@@ -44,7 +60,7 @@ The library lays a foundation to work with rich text and manage all components t
 
 \chapter{Outlook}
 
-The library implements basic features of rich-text editing. In order to distribute the library for productive use some features have to be completed and added.
+The library implements basic features of rich-text editing. In order to distribute the library for productive use some features will be completed and added.
 
 \section{Stability}
 
@@ -52,7 +68,7 @@ Currently, basic rich-text editing is possible, but is unstable in some edge cas
 
 \section{Features}
 
-The library only supports a very basic set of rich-text editing features. The features mentioned in the evaluation---distinction between block and inline formattings, input behavior, lists and clipboard sanitizing---need to be added. Above that, features known from other rich-text editors, especially adding media must be implemented.
+The library only supports a basic set of rich-text editing features. The features mentioned in the evaluation---distinction between block and inline formattings, input behavior, lists and clipboard sanitizing---need to be added. Above that, features known from other rich-text editors, especially adding media must be implemented.
 
 %, the next and most important step is to fix the existing bugs and ensure cross browser compatibility. The second step is to add the missing features mentioned in the evaluation and add further features to include media and other components. % Real-time collaboration is an advantage over most other existing editors and should be . %to offer a complete rich-text editing
 
@@ -63,7 +79,7 @@ The APIs the library uses for editing and formatting the text are available on m
 
 \section{MVC \& Document model}
 
-Towards the end of this thesis, Marijn Haverbeke, author of CodeMirror, started a crowd-funding campaign for supporting him to build a rich-text editor that does not rely on HTML editing APIs---called ProseMirror\footnote{\url{http://prosemirror.net/}, last checked on 08/24/2015}---just like library of this thesis. As discussed in \refsection{sec:mvc_architecture}, Type does not rely on an architecture that abstracts the contents of the editor from the DOM. ProseMirror, by contrast, takes this approach. This restricts working with the editor to the capabilities of the internal model of the document and might make extending the editor complicated. On the other hand, it allows for a very stable rendering of the contents and (as discussed) switching between HTML or Markdown output. It is good to see both approaches being realized. By contrasting both approaches in a practical manner it might be easier to decide which approach is better for which purposes.
+Towards the end of this thesis, Marijn Haverbeke, author of CodeMirror, started a crowd-funding campaign for supporting him to build a rich-text editor that does not rely on HTML editing APIs---called ProseMirror\footnote{\url{http://prosemirror.net/}, last checked on 08/24/2015}---just like the library of this thesis. As discussed in \refsection{sec:mvc_architecture}, Type does not rely on an architecture that abstracts the contents of the editor from the DOM. ProseMirror, by contrast, takes this approach. This restricts working with the editor to the capabilities of the internal model of the document and might make extending the editor complicated. On the other hand, it allows for a very stable rendering of the contents and (as discussed) switching between HTML or Markdown output. It is good to see both approaches being realized. By contrasting both approaches in a practical manner it might be easier to decide which approach is better for which purposes.
 
 
 %Can be done after thesis
