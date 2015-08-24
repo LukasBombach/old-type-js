@@ -15,7 +15,9 @@ Basic features for rich-text editing have been implemented. Users can type insid
 \item Real-time collaboration is unstable.
 \end{enumerate}
 
-The basic system for all of these features could be implemented, but in particular, these tasks require many operations on the DOM, which has been the main difficulty of this thesis. Generating and editing rich-text primarily means having to manipulate the DOM extensively and giving users as much freedom as possible means having to treat many edge-cases. In particular, not allowing style or class attributes for formattings means that text cannot be aligned, colored, sized and that links cannot be added.
+The basic system for all of these features could be implemented, but in particular, these tasks require many operations on the DOM, which has been the main difficulty of this thesis. In particular, not allowing style or class attributes for formattings means that text cannot be aligned, colored, sized and that links cannot be added.
+
+% Generating and editing rich-text primarily means having to manipulate the DOM extensively and giving users as much freedom as possible means having to treat many edge-cases.
 
 % As discussed in \refsubsec{subsec:noapi_dis_formatting}, the same visual representation of a text can have many representations in the DOM. On top of that, browsers hide parts of the DOM, most importantly whitespace between texts, but keep its representation on the DOM level. These gaps have been very difficult to treat.
 
