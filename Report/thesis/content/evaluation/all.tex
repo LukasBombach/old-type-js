@@ -85,6 +85,9 @@ The library only supports a basic set of rich-text editing features. The goals t
 
 The APIs the library uses for editing and formatting the text are available on mobile browsers, but interaction with touch devices has not been implemented. It should not be difficult to add support for touch events and thereby add mobile support for the library.
 
+\section{Bi-directional text support}
+
+The library does not support bi-directional text yet. The Unicode Consortium published an algorithm \cite{UBA} on how to derive the visual order from a unicode string containing bi-directional text, which can be used to move the caret accordingly.
 
 \section{Markdown editing}
 
