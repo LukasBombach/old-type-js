@@ -12,3 +12,6 @@ test/run/index.js.map
 
 # System
 .DS_Store
+
+# Masters thesis
+Report/thesis/code

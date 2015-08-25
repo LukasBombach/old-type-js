@@ -12,11 +12,12 @@ The library of this thesis demonstrates a way to implement a web-based rich-text
 \item Create a selection.
 \item Copy and paste text.
 \item Use undo and redo commands.
-\item Real-time collaboration can be added though the Etherpad extension.
 \end{enumerate}
 
-Unfortunately, not all features are perfectly stable and not all of the goals could be met. The collaboration with Etherpad throws errors for changes after new lines and on some formatting commands. 
-On the client side, the selection shows glitches and formatting commands are not do not fully implemented. The do not distinguish between inline and block formattings and tags, to format the content with, cannot contain attributes. This means that text cannot be styled with CSS, which takes away many formatting options, and that links cannot be added. The contents pasted from the clipboard cannot be sanitized yet.
+Unfortunately, not all features are perfectly stable and not all of the goals could be met. On the client side, the selection shows glitches and formatting commands are not fully implemented. They do not distinguish between inline and block formattings and tags, to format the content with, cannot contain attributes. This means that text cannot be styled with CSS, which takes away many formatting options, and that links cannot be added. The contents pasted from the clipboard cannot be sanitized yet.
+
+An editor that is connected to an Etherpad server will add strings sent from other clients as well as remove text that has been removed by others. It can receive text formattings, although this throws errors in some cases. Text that has been added and removed locally will be added and removed on other clients, although the algorithm breaks on new lines (i.e. text cannot be changed after a new line) and formattings will not be sent.
+
 The best experience can be achieved on Google Chrome, other browsers require further testing.
 
 %%%%%%%%%%%%%
@@ -43,6 +44,8 @@ The best experience can be achieved on Google Chrome, other browsers require fur
 % Generating and editing rich-text primarily means having to manipulate the DOM extensively and giving users as much freedom as possible means having to treat many edge-cases.
 
 % As discussed in \refsubsec{subsec:noapi_dis_formatting}, the same visual representation of a text can have many representations in the DOM. On top of that, browsers hide parts of the DOM, most importantly whitespace between texts, but keep its representation on the DOM level. These gaps have been very difficult to treat.
+
+\
 
 The library lays a foundation to work with rich text and manage all components that are necessary for it. It provides a rich set of classes to improve and extend its functionality. The Etherpad extension, enabling real-time collaboration that can be used with any editor implemented with the library, is an example of that.
 
