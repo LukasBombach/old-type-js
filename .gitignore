@@ -1,6 +1,6 @@
 # Project
 #dev/
-dist/
+#dist/
 node_modules/
 test/run/index.js
 src/type.js.map

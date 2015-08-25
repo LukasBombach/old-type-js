@@ -2,12 +2,6 @@
 
 Lets you implement your own wysiwyg editor.
 
-## About
-
-A JavaScript library by Lukas Bombach.
-
-See the [project homepage](http://LukasBombach.github.io/type).
-
 ## Installation
 
 Include `type.js` on your website.
