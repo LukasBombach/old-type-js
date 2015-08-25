@@ -107,7 +107,7 @@ var element = document.getElementById("myElement");
 var editor = new Type(element, { paste: "text" });
 \end{lstlisting}
 
-The \code{editor} instance variable now offers methods to format, insert and remove text, manipulate the caret and the selection, dynamically change settings and control undo/redo capabilities as well as trigger clipboard commands. The complete API is listed in Figure ABC. For example, to format the characters 10 to 20 as bold and move the caret behind the formatted text, the following methods can be executed:
+The \code{editor} instance variable now offers methods to format, insert and remove text, manipulate the caret and the selection, dynamically change settings and control undo/redo capabilities as well as trigger clipboard commands. The complete API is listed in tables \ref{table:instance_api_caret_command} through \ref{table:instance_api_options_command}. For example, to format the characters 10 to 20 as bold and move the caret behind the formatted text, the following methods can be executed:
 
 \begin{lstlisting}[language=JavaScript, caption=Example commands to format text, label=lst:type_format_example]
 editor.selection(10, 20);
