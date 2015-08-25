@@ -6,6 +6,7 @@
 }*/
 
 
+
 .typejs-selection {
   position: absolute;
   background: rgba(253, 108, 93, 0.6);
@@ -13,13 +14,26 @@
 }
 
 .typejs-input {
-  background: #fff;
+
+  /*background: #fff;
   border: 1px solid #0658b5;
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  width: 160px;
-  height: 100px;
+  position: absolute;
+  width: 10px;
+  height: 10px;*/
+
+  /*bottom: 10px;
+  right: 10px;*/
+
+  width: 4px;
+  height: 4px;
+  position: absolute;
+  bottom: auto;
+  right:  auto;
+  border: none;
+  background: transparent;
+  overflow: hidden;
+  opacity: 0.00001;
+
 }
 
 .tk-freight-text-pro {

@@ -17,9 +17,7 @@ Type.Input = function (type) {
   this._writer = type.getWriter();
   this._caret = type.getCaret();
   this._selection = this._type.getSelection();
-
   this._el = this._createElement();
-
   this._elStyle = this._el.style;
   this._caretStyle = this._caret.caretEl.style;
 
@@ -144,11 +142,13 @@ Type.Input = function (type) {
     }
 
     function startDraggingSelection(e) {
-      e.preventDefault();
-      self._caret._hide();
-      self._selection.beginAt(e.clientX, e.clientY);
-      document.addEventListener('mousemove', dragSelection, false);
-      document.addEventListener('mouseup', stopDraggingSelection, false);
+      if (e.which === 1) {
+        e.preventDefault();
+        self._caret._hide();
+        self._selection.beginAt(e.clientX, e.clientY);
+        document.addEventListener('mousemove', dragSelection, false);
+        document.addEventListener('mouseup', stopDraggingSelection, false);
+      }
     }
 
     function caret(e) {
@@ -163,6 +163,16 @@ Type.Input = function (type) {
       self._selection.selectWordAt(e.clientX, e.clientY);
     }
 
+    function contextmenu(e) {
+      if (e.which === 3) {
+        self._moveCaretToMousePosition(e.clientX, e.clientY);
+        self._caret._blink();
+        self._moveElToPosition(e.clientX - 3, e.clientY - 3);
+        self._el.focus();
+      }
+    }
+
+    this._type.getRoot().addEventListener('contextmenu', contextmenu, false);
     this._type.getRoot().addEventListener('mousedown', startDraggingSelection, false);
     this._type.getRoot().addEventListener('mouseup', caret, false);
     this._type.getRoot().addEventListener('dblclick', selectWord, false);
@@ -251,6 +261,19 @@ Type.Input = function (type) {
       this._caret.moveTo(range.startContainer, range.startOffset);
       this._caret._blink();
     }
+    return this;
+  };
+
+  /**
+   *
+   * @param x
+   * @param y
+   * @returns {*}
+   * @private
+   */
+  this._moveElToPosition = function(x, y) {
+    this._el.style.left = x + 'px';
+    this._el.style.top = y + 'px';
     return this;
   };
 
