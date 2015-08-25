@@ -139,6 +139,9 @@ Type.Input = function (type) {
     function stopDraggingSelection() {
       document.removeEventListener('mousemove', dragSelection, false);
       document.removeEventListener('mouseup', stopDraggingSelection, false);
+      self._el.innerHTML = '';
+      self._el.appendChild(self._selection.getContent());
+      document.execCommand('selectAll', false, null);
     }
 
     function startDraggingSelection(e) {
@@ -164,17 +167,12 @@ Type.Input = function (type) {
     }
 
     function contextmenu(e) {
-      var content;
       if (e.which === 3) {
         self._moveCaretToMousePosition(e.clientX, e.clientY);
         self._caret._blink();
         self._moveElToPosition(e.clientX - 3, e.clientY - 3);
         self._el.focus();
-        if (content = self._selection.getContent()) {
-          self._el.innerHTML = '';
-          self._el.appendChild(content);
-          document.execCommand('selectAll', false, null);
-        }
+        document.execCommand('selectAll', false, null);
       }
     }
 
