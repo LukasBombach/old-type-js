@@ -50,11 +50,9 @@ Type.OOP.inherits(Type.Etherpad.Changeset.Changes.Formatting, Type.Etherpad.Chan
    * @returns {Type.Etherpad.Changeset.Changes.Insertion} - This instance
    */
   this.apply = function (content, localCaret) {
-    //if (!this.remove) {
-    content.format(this._tagMap[this.command], this.start, this.end);
-    //} else {
-    //  content.removeFormat(this._tagMap[this.command], this.start, this.end);
-    //}
+    if (this.command !== 'author') {
+      content.format(this._tagMap[this.command], this.start, this.end);
+    }
     return this;
   };
 

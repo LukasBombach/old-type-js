@@ -11,8 +11,10 @@ var Type = require('../../core');
 Type.Etherpad.Client = function (etherpad) {
   this._etherpad = etherpad;
   this._msgHandlers = {};
+  this._accepted = true;
   this._lastSent = Date.now();
   this._changeset = new Type.Etherpad.Changeset();
+  this.registerMessageHandler('ACCEPT_COMMIT',  this._acceptCommit.bind(this));
 };
 
 (function () {
@@ -23,6 +25,14 @@ Type.Etherpad.Client = function (etherpad) {
    * @private
    */
   this._defaultUrl = 'http://localhost:9001/';
+
+  /**
+   * The interval in which chagesets will be sent
+   * 
+   * @type {number}
+   * @private
+   */
+  this._debounceTime = 0;
 
   /**
    * Connects to an Etherpad server
@@ -86,7 +96,8 @@ Type.Etherpad.Client = function (etherpad) {
 
     this._changeset._mergeOrPush(change);
 
-    if (Date.now() - 500 > this._lastSent) {
+    if (this._accepted && Date.now() - this._debounceTime > this._lastSent) {
+      this._accepted = false;
       root = this._etherpad.getContent().getRoot();
       changestr = this._changeset.getString(root);
       this._sendChangeset(changestr);
@@ -98,6 +109,21 @@ Type.Etherpad.Client = function (etherpad) {
 
   };
 
+  /**
+   *
+   * @param msg
+   * @private
+   */
+  this._acceptCommit = function (msg) {
+    this._etherpad.getContent().setRevision(msg.newRev);
+    this._accepted = true;
+  };
+
+  /**
+   *
+   * @param changeset
+   * @private
+   */
   this._sendChangeset = function (changeset) {
     this._sendMessage({
       type: "USER_CHANGES",
