@@ -160,6 +160,8 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
       change += this._operations[i].getLength() || 0;
     }
 
+    if (change < 0) change += 3;
+
     if (typeof base === 'string') {
       return base.length + change;
     }

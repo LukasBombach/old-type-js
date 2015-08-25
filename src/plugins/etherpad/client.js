@@ -28,7 +28,7 @@ Type.Etherpad.Client = function (etherpad) {
 
   /**
    * The interval in which chagesets will be sent
-   * 
+   *
    * @type {number}
    * @private
    */
