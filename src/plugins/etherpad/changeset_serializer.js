@@ -33,7 +33,7 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
 
     changeset  = this._baseLengthString(base);
     changeset += this._lengthChangeString();
-    changeset += this._operationString(this._operations[0]);
+    changeset += this._operationString(this._operations[0], null, base);
 
     for (i = 1; i < len; i += 1) {
       changeset += this._operationString(this._operations[i], this._operations[i-1]);
@@ -81,11 +81,11 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
    * @returns {string} - The serialized string for the operation
    * @private
    */
-  this._operationString = function (operation, prev) {
+  this._operationString = function (operation, prev, base) {
 
     var offset, hack, operatorSnd;
 
-    offset = this._offsetString(operation, prev);
+    offset = this._offsetString(operation, prev, base);
     hack = operation.op == '+' ? '*0' : '';
 
     if(/^[\n\r]+$/.test(operation.text || '')) {
@@ -139,9 +139,23 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
    *     relative to is prev operation
    * @private
    */
-  this._offsetString = function (operation, prev) {
+  this._offsetString = function (operation, prev, base) {
     var offset = operation.start - (prev ? prev.start : 0);
     return offset > 0 ? '=' + offset.toString(36) : '';
+  };
+
+  /**
+   *
+   * @param str
+   * @returns {Array}
+   * @private
+   */
+  this._getNlIndices = function (str) {
+    var regex = /[\n]/gi, result, indices = [];
+    while ( (result = regex.exec(str)) ) {
+      indices.push(result.index);
+    }
+    return indices;
   };
 
   /**
