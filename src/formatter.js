@@ -196,7 +196,7 @@ Type.Formatter = function (type) {
    * @private
    */
   this.block = function (cmd, typeRange, params) {
-    return this;
+    return this.inline.apply(this, arguments);
   };
 
   /**

@@ -38,6 +38,8 @@ require('./actions/insert');
 require('./actions/remove');
 require('./actions/format');
 
+require('./core_api');
+
 // Packaging Etherpad for development and demo
 require('./plugins/etherpad/type.etherpad');
 require('./plugins/etherpad/util');
