@@ -164,11 +164,17 @@ Type.Input = function (type) {
     }
 
     function contextmenu(e) {
+      var content;
       if (e.which === 3) {
         self._moveCaretToMousePosition(e.clientX, e.clientY);
         self._caret._blink();
         self._moveElToPosition(e.clientX - 3, e.clientY - 3);
         self._el.focus();
+        if (content = self._selection.getContent()) {
+          self._el.innerHTML = '';
+          self._el.appendChild(content);
+          document.execCommand('selectAll', false, null);
+        }
       }
     }
 

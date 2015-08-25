@@ -50,6 +50,15 @@ Type.Selection = function (type) {
   };
 
   /**
+   * Returns the contents of the selection or null if there is no selection
+   *
+   * @returns {DocumentFragment}
+   */
+  this.getContent = function () {
+    return this._range ? this._range.cloneContents() : null;
+  };
+
+  /**
    * todo we should really use type ranges and much of this implementation should go there
    * todo this does not work when spanning over multiple text nodes (for instance in case of formatting)
    * todo since multiple nodes making up a single text or sometimes even words, maybe there should be an abstraction and layer / class for this
