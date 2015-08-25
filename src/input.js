@@ -30,6 +30,32 @@ Type.Input = function (type) {
 
 (function () {
 
+  /**
+   * Adds a filter to the input pipeline
+   *
+   * @param {String} name - An identifier for the filter
+   * @param {Object} filter - A filter
+   * @returns {Type.Input}
+   */
+  this.addFilter = function (name, filter) {
+    this._filters = this._filters || {};
+    this._filters[name] = filter;
+    return this;
+  };
+
+  /**
+   * Removes a filter from the input pipeline
+   *
+   * @param {String} name - An identifier for the filter
+   * @returns {Type.Input}
+   */
+  this.removeFilter = function (name) {
+    this._filters = this._filters || {};
+    if (this._filters.name) {
+      delete this._filters.name;
+    }
+    return this;
+  };
 
   /**
    * Getter for this instance's content.
@@ -179,6 +205,7 @@ Type.Input = function (type) {
    *
    * @param filter
    * @param {Type.Events.Input} e
+   * @returns {Type.Events.Input}
    * @private
    */
   this._processFilter = function (filter, e) {
