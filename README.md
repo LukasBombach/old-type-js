@@ -4,7 +4,7 @@ Lets you implement your own wysiwyg editor.
 
 ## Installation
 
-Include `type.js` from the `dist.js` on your website.
+Include `type.min.js` from the `dist.js` on your website.
 
 ## Basic usage:
 
@@ -19,8 +19,7 @@ Include `type.js` from the `dist.js` on your website.
 
 1. Install node js
 2. Install gulp `npm install gulp -g`
-3. Run `gulp build`
-3. Run `gulp uglify`
+3. Run `gulp uglify` to build a minified file
 
 ## License
 
