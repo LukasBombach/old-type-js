@@ -142,14 +142,6 @@ Type.Etherpad.Changeset = function () {
 
     var attrs = this._getAttributesFromMatch(match, apool);
 
-    //if (!attrs.length && match.operator === '=') {
-    //  return Type.Etherpad.Changeset.Changes.Movement.fromOffsetObject(offset);
-    //}
-    //switch(attrs[0]) {
-    //}
-
-    //return Type.Etherpad.Changeset.Changes.Movement.fromOffsetObject(offset);
-
     switch(match.operator) {
       case '*':
         return Type.Etherpad.Changeset.Changes.Command.fromAPool(apool);
@@ -165,6 +157,15 @@ Type.Etherpad.Changeset = function () {
     }
   };
 
+  /**
+   *
+   * @param offset
+   * @param charbank
+   * @param match
+   * @param attrs
+   * @returns {Type.Etherpad.Changeset.Changes.Formatting}
+   * @private
+   */
   this._operationOrMovement = function (offset, charbank, match, attrs) {
     if (!attrs.length) {
       return Type.Etherpad.Changeset.Changes.Movement.fromOffsetObject(offset, match);
