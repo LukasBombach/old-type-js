@@ -11,6 +11,8 @@ var Type = require('../../core');
 Type.Etherpad.Client = function (etherpad) {
   this._etherpad = etherpad;
   this._msgHandlers = {};
+  this._lastSent = Date.now();
+  this._changeset = new Type.Etherpad.Changeset();
 };
 
 (function () {
@@ -75,6 +77,52 @@ Type.Etherpad.Client = function (etherpad) {
   };
 
   /**
+   *
+   * @param change
+   */
+  this.send = function (change) {
+
+    var root, changestr;
+
+    this._changeset._mergeOrPush(change);
+
+    if (Date.now() - 500 > this._lastSent) {
+      root = this._etherpad.getContent().getRoot();
+      changestr = this._changeset.getString(root);
+      this._sendChangeset(changestr);
+      this._changeset = new Type.Etherpad.Changeset();
+      this._lastSent = Date.now();
+    }
+
+    return this;
+
+  };
+
+  this._sendChangeset = function (changeset) {
+    this._sendMessage({
+      type: "USER_CHANGES",
+      baseRev: this._etherpad.getContent().getRevision(),
+      changeset: changeset,
+      apool: {
+        nextNum: 1,
+        numToAttrib: {0: ["author", this._userId]}
+      }
+    });
+  };
+
+  /**
+   *
+   * @param msg
+   */
+  this._sendMessage = function(msg) {
+    this._socket.json.send({
+      type: 'COLLABROOM',
+      component: 'pad',
+      data: msg
+    });
+  };
+
+  /**
    * Will call the message handlers registered for Etherpad messages
    * @param {Object} response - The message from the server
    * @returns {Type.Etherpad.Client} - This instance
@@ -120,7 +168,7 @@ Type.Etherpad.Client = function (etherpad) {
    * @private
    */
   this._init = function(data) {
-    this._revision = data.collab_client_vars.rev;
+    this._etherpad.getContent().setRevision(data.collab_client_vars.rev);
     this._userId = data.userId;
     if (this._onInitHandler) {
       this._onInitHandler(data.collab_client_vars.initialAttributedText, data.collab_client_vars.apool);

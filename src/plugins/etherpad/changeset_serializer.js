@@ -153,11 +153,18 @@ Type.Etherpad.ChangesetSerializer = function (changeset) {
    * @private
    */
   this._lengthFor = function (base) {
+
+    var change = 0, len, i;
+    len = this._operations.length;
+    for (i=0; i < len; i += 1) {
+      change += this._operations[i].getLength() || 0;
+    }
+
     if (typeof base === 'string') {
-      return base.length;
+      return base.length + change;
     }
     if (base.textContent) {
-      return base.textContent.length - 1;
+      return base.textContent.length - 1 + change;
     }
     return null;
   };

@@ -36,19 +36,14 @@
 <div id="document" class="page">
 </div>
 
-<!--<script src="../src/plugins/Etherpad/vendor/socket.io.js"></script>-->
-<script src="./assets/mousetrap.min.js"></script>
 <script src="./assets/socket.io.js"></script>
 <script src="./../dist/type.js"></script>
 <script>
 
-  var el = document.getElementById('document');
-
-  var type = new Type.fromEtherpad(el, 'test3');
-
+  var root = document.getElementById('document');
+  var type = new Type.fromEtherpad(root, 'type');
 
 </script>
-<!--<script src="assets/titlecaret.js"></script>-->
 
 </body>
 </html>

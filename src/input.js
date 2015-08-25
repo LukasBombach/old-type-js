@@ -116,8 +116,8 @@ Type.Input = function (type) {
    * @private
    */
   this._bindInputEvents = function () {
-    this._el.addEventListener('input', function () {
-      this._onInput();
+    this._el.addEventListener('input', function (e) {
+      this._onInput(e);
     }.bind(this), false);
     return this;
   };
@@ -197,10 +197,8 @@ Type.Input = function (type) {
    * @private
    */
   this._processFilterPipeline = function (e) {
-
     var inputEvent = Type.Events.Input.fromKeyDown(e),
       name;
-
     for (name in this._filters) {
       if (this._filters.hasOwnProperty(name)) {
         this._processFilter(this._filters[name], inputEvent);
@@ -210,9 +208,14 @@ Type.Input = function (type) {
         }
       }
     }
-
+    if (!inputEvent.canceled) {
+      if (this._el.textContent.length > 2) {
+        this._type.trigger('paste', [inputEvent]);
+      } else {
+        this._type.trigger('input', [inputEvent]);
+      }
+    }
     return inputEvent;
-
   };
 
   /**
@@ -235,18 +238,12 @@ Type.Input = function (type) {
 
   /**
    *
+   * @param {InputEvent} e
    * @returns {Type.Input}
    * @private
    */
-  this._onInput = function () {
-
-    //this._writer.insertText(this._caret.textNode, this._caret.offset, this._el.textContent);
-
-    //var insertion = new Type.Actions.Insert(this._type, this._caret.textNode, this._caret.offset, this._el.textContent);
-    //this._content.execute(insertion);
-
+  this._onInput = function (e) {
     this._content.insert(this._caret.textNode, this._caret.offset, this._el.textContent);
-
     this._caret._setOffset(this._caret.offset + this._el.textContent.length); // todo better api
     this._el.innerHTML = '';
     return this;

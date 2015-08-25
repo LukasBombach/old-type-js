@@ -14,6 +14,7 @@ Type.Etherpad = function (type) {
   this.options(type.options('etherpad') || {});
 
   this._type = type;
+  this._caret = type.getCaret();
 
   this._client = new Type.Etherpad.Client(this);
   this._client.onInit(this._initEditor.bind(this));
@@ -96,6 +97,14 @@ Type.Etherpad = function (type) {
   };
 
   /**
+   * Getter for the Etherpad content
+   * @returns {Type.Etherpad.Content}
+   */
+  this.getContent = function () {
+    return this._content;
+  };
+
+  /**
    * Will load the pad contents from an Etherpad connection message
    * to the Type editor contents.
    *
@@ -105,13 +114,41 @@ Type.Etherpad = function (type) {
    * @private
    */
   this._initEditor = function (contents, apool) {
-    //var prefix = 'Z:' + contents.text.length.toString(36) + '>0',
-    //  appendix = '$',
-    //  changeset = prefix + contents.attribs + appendix;
     var changeset = this._initChangeset(contents);
-    console.log(changeset);
+    Type.Development.log(changeset);
     this._type.getRoot().innerHTML = Type.Etherpad.Util.nl2br(contents.text);
     this._content.applyChangeset(changeset, apool);
+    this._startSending();
+    return this;
+  };
+
+  /**
+   * Listens to Type Events and sends changesets to the connected Etherpad
+   * Server.
+   *
+   * @returns {Type.Etherpad} - This instance
+   * @private
+   */
+  this._startSending = function () {
+    this._type.on('input', function (e) {
+
+      var char, insertion, deletion, offset;
+
+      char = String.fromCharCode(e.keyCode);
+      char = e.shift ? char : char.toLowerCase();
+      Type.Development.log(char, e.keyCode);
+
+      if (e.keyCode == 8 || e.keyCode == 46) {
+        offset = this._caret.getOffset();
+        deletion = new Type.Etherpad.Changeset.Changes.Removal(offset, 1);
+        this._client.send(deletion);
+      } else if(/[a-zA-Z]/.test(char)) {
+        offset = this._caret.getOffset();
+        insertion = new Type.Etherpad.Changeset.Changes.Insertion(offset, char);
+        this._client.send(insertion);
+      }
+
+    }.bind(this));
     return this;
   };
 

@@ -41,7 +41,32 @@ Type.Etherpad.Content = function (etherpad) {
     var changeset = new Type.Etherpad.Changeset.fromString(changesetString, apool, this._root.textContent);
     changeset.apply(this._typeContent, this._localCaret);
     return this;
-  }
+  };
+
+  /**
+   * Getter for the document revision
+   * @returns {number}
+   */
+  this.getRevision = function () {
+    return this.revision;
+  };
+
+  /**
+   * Setter for the document revision
+   * @returns {Type.Etherpad.Content} - This instance
+   */
+  this.setRevision = function (rev) {
+    this.revision = rev;
+    return this;
+  };
+
+  /**
+   * Getter for the root element
+   * @returns {number}
+   */
+  this.getRoot = function () {
+    return this._root;
+  };
 
 }).call(Type.Etherpad.Content.prototype);
 

@@ -47,10 +47,9 @@ Input.Filter.Remove = function (type, input) {
     }
 
     this._caret.setOffset(newOffset);
-    //this._writer.remove(range);
     this._content.remove(range);
 
-    e.cancel();
+    //e.cancel();
 
   };
 

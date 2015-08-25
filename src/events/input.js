@@ -59,6 +59,16 @@ Type.Events.Input.keyDownNames = {
 };
 
 /**
+ * Factory to create a {Type.Events.Input} from an {InputEvent}
+ *
+ * @param {InputEvent} e
+ * @returns {Type.Events.Input}
+ */
+Type.Events.Input.fromInput = function (e) {
+  return Type.Events.Input.fromKeyDown(e);
+};
+
+/**
  * Factory to create a {Type.Events.Input} from a {KeyboardEvent}
  *
  * @param {KeyboardEvent} e
