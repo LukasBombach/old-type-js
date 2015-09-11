@@ -1,5 +1,5 @@
 
-> ## Update
+> # Update
 > This project was part of my master's thesis and remains unaltered for the moment.
 > I have made some big updates and major improvements to this library and I will continue to work
 > on this project for the moment in this repository:
@@ -8,6 +8,8 @@
 # Type js
 
 Lets you implement your own wysiwyg editor.
+
+Please check [https://github.com/LukasBombach/new-type-js](https://github.com/LukasBombach/new-type-js)
 
 ## Installation
 
